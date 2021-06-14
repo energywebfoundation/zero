@@ -13,9 +13,16 @@ Given('the provided username: {string} does not exist in system database', (user
   console.log(username)
 });
 
+Given('the user has committed at least three submissions errors', () => {
 
-When('the user submit the information', () => {});
+});
+
+
+When('the user submits the information', () => {});
 
 Then('The system redirects the user to the corresponding dashboard', () => {});
 
 Then('The system presents to the user the corresponding error message', () => {});
+
+Then('the system should block the user account', () => {});
+
