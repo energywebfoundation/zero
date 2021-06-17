@@ -1,94 +1,116 @@
+<h1 align="center">
+  <br>
+  <a href="https://www.energyweb.org/"><img src="https://www.energyweb.org/wp-content/uploads/2019/04/logo-brand.png" alt="EnergyWeb" width="150"></a>
+  <br>
+  EnergyWeb Zero
+  <br>
+  <br>
+</h1>
+
+**Zero** description.
+
+<p align="center">
+  <img src="https:s//github.com/energywebfoundation/origin/actions/workflows/deploy-master.yml/badge.svg" />
+</p>
+
+:construction: Documentation available at [https://energy-web-foundation-origin.readthedocs-hosted.com/en/latest/](https://energy-web-foundation-origin.readthedocs-hosted.com/en/latest/) :construction:
+
+## Table of Contents
+
+-   [Table of Contents](#table-of-contents)
+-   [Packages](#packages)
+    -   [Applications, Infrastructure and Demo](#applications-infrastructure-and-demo)
+    -   [Packages types](#packages-types)
+        -   [Stable](#stable)
+        -   [Canary](#canary)
+        -   [Preview](#preview)
+-   [Installation](#installation)
+-   [Build](#build)
+-   [Test](#test)
+-   [Run demo](#run-demo)
+    -   [Preparation](#preparation)
+    -   [Running](#running)
+    -   [Heroku environment provisioning](#heroku-environment-provisioning)
+-   [Energy Attribute Certificates](#energy-attribute-certificates)
+-   [Key modules and components](#key-modules-and-components)
+    -   [Key repositories](#key-repositories)
+    -   [Other components](#other-components)
+-   [Deployment](#deployment)
+-   [Contribution guidelines](#contribution-guidelines)
 
 
-# EnergyWebZero
 
-This project was generated using [Nx](https://nx.dev).
+#### Stable
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+Stable versions of Zero are built during `release` branch build.
 
-🔎 **Smart, Extensible Build Framework**
+#### Canary
 
-## Adding capabilities to your workspace
+Canary versions of Zero are are built during `master` branch builds. Canary reflects current state of the `master` branch, they should be a working versions considers as `alpha`
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+Install using `yarn add @energyweb/{package}@canary`
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+#### Preview
 
-Below are our core plugins:
+Preview versions of  Zero are built on a special `preview` branch, this is mostly used as interal tool for tests, demos, discussions.
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+Install using `yarn add @energyweb/{package}@preview`
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+## Preparation
 
-## Generate an application
+1. Make sure you are using latest Node LTS 
+2. Make sure you have Java runtime installed
+3. Install [Postgres](https://www.postgresql.org/download/) 12.x+ and create a new database named `zero`.
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+We recommend using Docker based setup as follows (requires psql command line tool installed):
 
-> You can use any of the plugins above to generate applications as well.
+```
+docker pull postgres
+docker run --name origin-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres
+```
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+4. Make sure you have created a `.env` file in the root of the monorepo and that all necessary variables are set.
+   Use [`.env.example`](.env.example) as an example of how the `.env` file should look.
 
-## Generate a library
+## Installation
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@energy-web-zero/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+```shell
+yarn
+```
 
 ## Build
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```shell
+yarn build
+```
 
-## Running unit tests
+## Test
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+```shell
+yarn e2e
+```
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+## Run demo
+```shell
+yarn start
+```
 
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+Visit the UI at: http://localhost:3000.
 
 
+## Deployment
 
-## ☁ Nx Cloud
+For deployment instructions please refer to [Deployment](https://github.com/energywebfoundation/origin/wiki/Zero-Deployment) wiki page.
 
-### Distributed Computation Caching & Distributed Task Execution
+## Contribution guidelines
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+If you want to contribute to Zero, be sure to follow classic open source contribution guidelines (described below).
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+1. Commiting a change
+    - Fork the repository
+    - Make a change to repo code
+    - Commit the change to the `master` branch
+2. Pull request
+    - Open a pull request from your fork `master` branch
+    - Request code reviews from [@arkadiuszsz](https://github.com/arkadiuszsz)
+    - Once the PR is approved and the build passes, it will be merged to the master branch

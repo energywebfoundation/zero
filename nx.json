@@ -25,6 +25,27 @@
     "zero-e2e": {
       "tags": [],
       "implicitDependencies": ["zero"]
+    },
+    "zero-api": {
+      "tags": []
+    },
+    "ui-forms": {
+      "tags": []
+    },
+    "ui-core": {
+      "tags": []
+    },
+    "ui-theme": {
+      "tags": []
+    },
+    "store-configure": {
+      "tags": []
+    },
+    "store-app-shared-state": {
+      "tags": []
+    },
+    "localization": {
+      "tags": []
     }
   }
 }
