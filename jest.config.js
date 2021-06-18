@@ -1,4 +1,5 @@
 module.exports = {
+  setupFilesAfterEnv: ['jest-extended'],
   projects: [
     '<rootDir>/apps/zero',
     '<rootDir>/apps/zero-api',
@@ -9,5 +10,7 @@ module.exports = {
     '<rootDir>/libs/store/configure',
     '<rootDir>/libs/store/app-shared-state',
     '<rootDir>/libs/localization',
+    '<rootDir>/libs/buyer',
+    '<rootDir>/libs/seller',
   ],
 };

@@ -19,33 +19,39 @@
     }
   },
   "projects": {
-    "zero": {
+    "buyer": {
       "tags": []
     },
-    "zero-e2e": {
-      "tags": [],
-      "implicitDependencies": ["zero"]
-    },
-    "zero-api": {
+    "localization": {
       "tags": []
     },
-    "ui-forms": {
-      "tags": []
-    },
-    "ui-core": {
-      "tags": []
-    },
-    "ui-theme": {
-      "tags": []
-    },
-    "store-configure": {
+    "seller": {
       "tags": []
     },
     "store-app-shared-state": {
       "tags": []
     },
-    "localization": {
+    "store-configure": {
       "tags": []
+    },
+    "ui-core": {
+      "tags": []
+    },
+    "ui-forms": {
+      "tags": []
+    },
+    "ui-theme": {
+      "tags": []
+    },
+    "zero": {
+      "tags": []
+    },
+    "zero-api": {
+      "tags": []
+    },
+    "zero-e2e": {
+      "tags": [],
+      "implicitDependencies": ["zero"]
     }
   }
 }

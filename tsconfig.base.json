@@ -15,14 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@energyweb/zero-forms": ["libs/ui/forms/src/index.ts"],
-      "@energyweb/zero-ui": ["libs/ui/core/src/index.ts"],
-      "@energyweb/zero-theme": ["libs/ui/theme/src/index.ts"],
-      "@energy-web-zero/store/configure": ["libs/store/configure/src/index.ts"],
+      "@energy-web-zero/buyer": ["libs/buyer/src/index.ts"],
+      "@energy-web-zero/localization": ["libs/localization/src/index.ts"],
+      "@energy-web-zero/seller": ["libs/seller/src/index.ts"],
       "@energy-web-zero/store/app-shared-state": [
         "libs/store/app-shared-state/src/index.ts"
       ],
-      "@energy-web-zero/localization": ["libs/localization/src/index.ts"]
+      "@energy-web-zero/store/configure": ["libs/store/configure/src/index.ts"],
+      "@energyweb/zero-forms": ["libs/ui/forms/src/index.ts"],
+      "@energyweb/zero-theme": ["libs/ui/theme/src/index.ts"],
+      "@energyweb/zero-ui": ["libs/ui/core/src/index.ts"]
     },
     "resolveJsonModule": true
   },
