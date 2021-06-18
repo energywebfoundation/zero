@@ -23,6 +23,233 @@
     }
   },
   "projects": {
+    "buyer": {
+      "root": "libs/buyer",
+      "sourceRoot": "libs/buyer/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/buyer/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/buyer"],
+          "options": {
+            "jestConfig": "libs/buyer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "localization": {
+      "root": "libs/localization",
+      "sourceRoot": "libs/localization/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/localization/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/localization"],
+          "options": {
+            "jestConfig": "libs/localization/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "seller": {
+      "root": "libs/seller",
+      "sourceRoot": "libs/seller/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/seller/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/seller"],
+          "options": {
+            "jestConfig": "libs/seller/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "store-app-shared-state": {
+      "root": "libs/store/app-shared-state",
+      "sourceRoot": "libs/store/app-shared-state/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/store/app-shared-state/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/app-shared-state"],
+          "options": {
+            "jestConfig": "libs/store/app-shared-state/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "store-configure": {
+      "root": "libs/store/configure",
+      "sourceRoot": "libs/store/configure/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/store/configure/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/configure"],
+          "options": {
+            "jestConfig": "libs/store/configure/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ui-core": {
+      "root": "libs/ui/core",
+      "sourceRoot": "libs/ui/core/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/core",
+            "tsConfig": "libs/ui/core/tsconfig.lib.json",
+            "project": "libs/ui/core/package.json",
+            "entryFile": "libs/ui/core/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/ui/core/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/core/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/core"],
+          "options": {
+            "jestConfig": "libs/ui/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ui-forms": {
+      "root": "libs/ui/forms",
+      "sourceRoot": "libs/ui/forms/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/forms",
+            "tsConfig": "libs/ui/forms/tsconfig.lib.json",
+            "project": "libs/ui/forms/package.json",
+            "entryFile": "libs/ui/forms/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/ui/forms/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/forms/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/forms"],
+          "options": {
+            "jestConfig": "libs/ui/forms/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ui-theme": {
+      "root": "libs/ui/theme",
+      "sourceRoot": "libs/ui/theme/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/theme",
+            "tsConfig": "libs/ui/theme/tsconfig.lib.json",
+            "project": "libs/ui/theme/package.json",
+            "entryFile": "libs/ui/theme/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/ui/theme/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/theme/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/theme"],
+          "options": {
+            "jestConfig": "libs/ui/theme/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "zero": {
       "root": "apps/zero",
       "sourceRoot": "apps/zero/src",
@@ -96,32 +323,6 @@
         }
       }
     },
-    "zero-e2e": {
-      "root": "apps/zero-e2e",
-      "sourceRoot": "apps/zero-e2e/src",
-      "projectType": "application",
-      "targets": {
-        "e2e": {
-          "executor": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/zero-e2e/cypress.json",
-            "tsConfig": "apps/zero-e2e/tsconfig.e2e.json",
-            "devServerTarget": "zero:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "zero:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/zero-e2e/**/*.{js,ts}"]
-          }
-        }
-      }
-    },
     "zero-api": {
       "root": "apps/zero-api",
       "sourceRoot": "apps/zero-api/src",
@@ -172,187 +373,28 @@
         }
       }
     },
-    "ui-forms": {
-      "root": "libs/ui/forms",
-      "sourceRoot": "libs/ui/forms/src",
-      "projectType": "library",
+    "zero-e2e": {
+      "root": "apps/zero-e2e",
+      "sourceRoot": "apps/zero-e2e/src",
+      "projectType": "application",
       "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
           "options": {
-            "outputPath": "dist/libs/ui/forms",
-            "tsConfig": "libs/ui/forms/tsconfig.lib.json",
-            "project": "libs/ui/forms/package.json",
-            "entryFile": "libs/ui/forms/src/index.ts",
-            "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/forms/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
+            "cypressConfig": "apps/zero-e2e/cypress.json",
+            "tsConfig": "apps/zero-e2e/tsconfig.e2e.json",
+            "devServerTarget": "zero:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "zero:serve:production"
+            }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/ui/forms/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/forms"],
-          "options": {
-            "jestConfig": "libs/ui/forms/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "ui-core": {
-      "root": "libs/ui/core",
-      "sourceRoot": "libs/ui/core/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/core",
-            "tsConfig": "libs/ui/core/tsconfig.lib.json",
-            "project": "libs/ui/core/package.json",
-            "entryFile": "libs/ui/core/src/index.ts",
-            "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/core/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/core/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/core"],
-          "options": {
-            "jestConfig": "libs/ui/core/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "ui-theme": {
-      "root": "libs/ui/theme",
-      "sourceRoot": "libs/ui/theme/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/theme",
-            "tsConfig": "libs/ui/theme/tsconfig.lib.json",
-            "project": "libs/ui/theme/package.json",
-            "entryFile": "libs/ui/theme/src/index.ts",
-            "external": ["react/jsx-runtime", "@emotion/styled/base"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/theme/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/theme/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/theme"],
-          "options": {
-            "jestConfig": "libs/ui/theme/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "store-configure": {
-      "root": "libs/store/configure",
-      "sourceRoot": "libs/store/configure/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/store/configure/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/store/configure"],
-          "options": {
-            "jestConfig": "libs/store/configure/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "store-app-shared-state": {
-      "root": "libs/store/app-shared-state",
-      "sourceRoot": "libs/store/app-shared-state/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/store/app-shared-state/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/store/app-shared-state"],
-          "options": {
-            "jestConfig": "libs/store/app-shared-state/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "localization": {
-      "root": "libs/localization",
-      "sourceRoot": "libs/localization/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/localization/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/localization"],
-          "options": {
-            "jestConfig": "libs/localization/jest.config.js",
-            "passWithNoTests": true
+            "lintFilePatterns": ["apps/zero-e2e/**/*.{js,ts}"]
           }
         }
       }
