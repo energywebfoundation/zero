@@ -27,7 +27,10 @@
     "prepare": "husky install",
     "publish:canary": "",
     "publish:preview": "",
-    "publish:release": ""
+    "publish:release": "",
+    "db:migrate:recreate-initial": "rm -rf prisma/migrations/* && prisma migrate dev --create-only --skip-seed -n initial && git add prisma/migrations/* && prisma generate",
+    "db:migrate:reset": "prisma migrate reset",
+    "db:migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@emotion/react": "11.1.5",
