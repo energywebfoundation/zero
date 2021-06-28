@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.3-alpine
+    restart: unless-stopped
+    container_name: ew-zero-db
+    ports:
+      - '5432:5432'
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zero
+
+volumes:
+  postgres-data:
