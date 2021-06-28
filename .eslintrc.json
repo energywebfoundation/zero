@@ -30,7 +30,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript", "plugin:rxjs/recommended","plugin:lodash/recommended","plugin:lodash-fp/recommended"],
-      "rules": {}
+      "rules": {
+        "lodash/prefer-noop":"off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

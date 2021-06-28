@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SellerLandingPage should match snap 1`] = `
+<body>
+  <div>
+    <div
+      class="css-0"
+    >
+      <h1>
+        Welcome to SellerLandingPage!
+      </h1>
+    </div>
+  </div>
+</body>
+`;

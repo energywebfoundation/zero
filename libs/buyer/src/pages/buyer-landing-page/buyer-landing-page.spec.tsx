@@ -10,6 +10,18 @@ describe('BuyerLandingPage', () => {
 
   it('should match snap', () => {
     const { baseElement } = render(<BuyerLandingPage />);
-    expect(baseElement).toMatchInlineSnapshot();
+    expect(baseElement).toMatchInlineSnapshot(`
+      <body>
+        <div>
+          <div
+            class="css-0"
+          >
+            <h1>
+              Welcome to BuyerLandingPage!
+            </h1>
+          </div>
+        </div>
+      </body>
+    `);
   });
 });
