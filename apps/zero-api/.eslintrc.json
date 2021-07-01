@@ -4,7 +4,11 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "lodash/prefer-constant": "off",
+        "lodash-fp/prefer-constant": "off",
+        "lodash/prefer-lodash-method": "off"
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
