@@ -140,6 +140,7 @@
     "typescript": "~4.3.2"
   },
   "cypress-cucumber-preprocessor": {
-    "nonGlobalStepDefinitions": true
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "./src/integration"
   }
 }
