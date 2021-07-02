@@ -1,0 +1,31 @@
+{
+  "translation": {
+    "common": {
+      "welcomeToZero": "Bienvenida a Zero!",
+      "aGlobalSearchEngineForRenevableEnergy": "un motor de búsqueda global de Energías Renovables"
+    },
+    "buyerLandingPage": {
+      "callToAction": "Empieza ahora!"
+    },
+    "sellerLandingPage": {
+      "callToAction": "Crear una cuenta"
+    },
+    "auth": {
+      "register": "Registrarse"
+    },
+    "navigation": {
+      "sellOnZero": "Vender en Zero",
+      "searches": "Búsquedas",
+      "productList": "Lista de productos"
+    },
+    "components": {
+      "LanguageSelect": {
+        "en": "Ing",
+        "tr": "Tur",
+        "es": "Esp",
+        "de": "Ale",
+        "vi": "Viet"
+      }
+    }
+  }
+}

@@ -1,4 +1,8 @@
 import { combineEpics } from 'redux-observable';
-import { appEpic } from './app/App.effects';
+import appStateEpics from './appState/appState.epics';
+import navigationEpics from './navigation/navigation.epics';
 
-export const rootEpic = combineEpics(appEpic);
+export * from './appState';
+export * from './navigation';
+
+export const rootEpic = combineEpics(appStateEpics, navigationEpics);

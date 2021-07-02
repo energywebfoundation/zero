@@ -29,7 +29,8 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript", "plugin:rxjs/recommended","plugin:lodash/recommended","plugin:lodash-fp/recommended"],
+      "extends": ["plugin:@nrwl/nx/typescript", "plugin:rxjs/recommended"
+      ],
       "rules": {
         "lodash/prefer-noop":"off"
       }

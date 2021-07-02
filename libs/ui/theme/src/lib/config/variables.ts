@@ -7,21 +7,22 @@ const $purpleExtraLight = '#F6EFFF';
 const $green = '#00D08A';
 
 const $textColorDefault = '#a8a8a8';
-const $simpleTextColor = '#000';
+const $simpleTextColor = '#fff';
 
 const $bodyBackgroundColor = '#ffffff';
-const $mainBackgroundColor = '#272727';
+const $mainBackgroundColor = '#ffffff';
 const $fieldIconColor = '#ffffff';
 
 const $fontFamilyPrimary = 'Rajdhani';
 const $fontFamilySecondary = 'Rajdhani';
 
-const $fontSize = 12;
+const $fontSize = 14;
 
 export type UiThemeVariables = {
   primaryColor: string;
   primaryColorDark: string;
   primaryColorDim: string;
+  secondaryColor: string;
   textColorDefault: string;
   simpleTextColor: string;
   bodyBackgroundColor: string;
@@ -36,6 +37,7 @@ export const variables: UiThemeVariables = {
   primaryColor: $purpleExtraDark,
   primaryColorDark: $purpleDark,
   primaryColorDim: $purple,
+  secondaryColor: $green,
   textColorDefault: $textColorDefault,
   simpleTextColor: $simpleTextColor,
   bodyBackgroundColor: $bodyBackgroundColor,

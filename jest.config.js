@@ -12,5 +12,7 @@ module.exports = {
     '<rootDir>/libs/localization',
     '<rootDir>/libs/buyer',
     '<rootDir>/libs/seller',
+    '<rootDir>/libs/zero-ui-assets',
+    '<rootDir>/libs/ui/utils',
   ],
 };

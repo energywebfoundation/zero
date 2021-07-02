@@ -1,3 +1,35 @@
 {
-  "translation": {}
+  "translation": {
+    "buyerLandingPage": {
+      "callToAction": "Get started now!",
+      "welcomeToZero": "Welcome to Zero!",
+      "aGlobalSearchEngineForRenevableEnergy": "a global search engine for buying Renevable Energy"
+    },
+    "sellerLandingPage": {
+      "callToAction": "Create account",
+      "whatIsZero": "What is Zero?",
+      "zeroIsGlobalSearchEngineForRenewableEnergy": "Zero is global search engine for Renevable Energy"
+    },
+    "auth": {
+      "register": "Sign in"
+    },
+    "navigation": {
+      "searchOnZero": "Search on Zero",
+      "sellOnZero": "Sell on Zero",
+      "searches": "Searches",
+      "productList": "Product list",
+      "facilities": "Facilities",
+      "products": "Products",
+      "clientRequests": "Client requests"
+    },
+    "components": {
+      "LanguageSelect": {
+        "en": "Eng",
+        "tr": "Tur",
+        "es": "Spa",
+        "de": "Ger",
+        "vi": "Viet"
+      }
+    }
+  }
 }
