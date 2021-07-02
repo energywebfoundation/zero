@@ -4,10 +4,22 @@ import { enUS, plPL } from '@material-ui/core/locale';
 import { IStyleConfig } from '../utils/makeThemeConfig';
 
 const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1340,
+      xl: 1920,
+    },
+  },
   palette: {
     primary: {
       main: styleConfig.PRIMARY_COLOR,
       contrastText: styleConfig.SIMPLE_TEXT_COLOR,
+    },
+    secondary: {
+      main: styleConfig.SECONDARY_COLOR,
     },
     background: {
       paper: styleConfig.MAIN_BACKGROUND_COLOR,
@@ -18,13 +30,24 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       secondary: styleConfig.TEXT_COLOR_DEFAULT,
       disabled: styleConfig.TEXT_COLOR_DEFAULT,
     },
-    mode: 'dark',
   },
   typography: {
     fontFamily: styleConfig.FONT_FAMILY_PRIMARY,
     fontSize: styleConfig.FONT_SIZE,
+    button: { textTransform: 'none' },
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: { boxShadow: 'none' },
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to apply
+        disableRipple: true, // No more ripple, on the whole application 💣!
+      },
+    },
     MuiFilledInput: {
       styleOverrides: {
         root: {
@@ -61,9 +84,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
-          textTransform: 'uppercase',
-        },
+        root: {},
         contained: {
           '&.Mui-disabled': {
             color: styleConfig.TEXT_COLOR_DEFAULT,

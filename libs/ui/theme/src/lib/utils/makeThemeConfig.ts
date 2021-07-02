@@ -9,6 +9,7 @@ export interface IStyleConfig {
   PRIMARY_COLOR_DIM: string;
   TEXT_COLOR_DEFAULT: string;
   SIMPLE_TEXT_COLOR: string;
+  SECONDARY_COLOR: string;
   MAIN_BACKGROUND_COLOR: string;
   FIELD_ICON_COLOR: string;
   WHITE: string;
@@ -31,6 +32,7 @@ export function createStyleConfig(
     PRIMARY_COLOR: themeVariables.primaryColor ?? DEFAULT_COLOR,
     PRIMARY_COLOR_DARK: themeVariables.primaryColorDark ?? DEFAULT_COLOR,
     PRIMARY_COLOR_DIM: themeVariables.primaryColorDim ?? DEFAULT_COLOR,
+    SECONDARY_COLOR: themeVariables.secondaryColor ?? DEFAULT_COLOR,
     TEXT_COLOR_DEFAULT: themeVariables.textColorDefault ?? DEFAULT_COLOR,
     SIMPLE_TEXT_COLOR: themeVariables.simpleTextColor ?? DEFAULT_COLOR,
     MAIN_BACKGROUND_COLOR: themeVariables.mainBackgroundColor ?? DEFAULT_COLOR,

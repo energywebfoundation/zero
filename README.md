@@ -10,10 +10,10 @@
 **Zero** description.
 
 <p align="center">
-  <img src="https:s//github.com/energywebfoundation/origin/actions/workflows/deploy-master.yml/badge.svg" />
+  <img src="https:s//github.com/energywebfoundation/zero/actions/workflows/deploy-master.yml/badge.svg" />
 </p>
 
-:construction: Documentation available at [https://energy-web-foundation-origin.readthedocs-hosted.com/en/latest/](https://energy-web-foundation-origin.readthedocs-hosted.com/en/latest/) :construction:
+:construction: Documentation available at [https://energy-web-foundation-zero.readthedocs-hosted.com/en/latest/](https://energy-web-foundation-zero.readthedocs-hosted.com/en/latest/) :construction:
 
 ## Table of Contents
 
@@ -66,7 +66,7 @@ We recommend using Docker based setup as follows (requires psql command line too
 
 ```
 docker pull postgres
-docker run --name origin-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres
+docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres
 ```
 
 4. Make sure you have created a `.env` file in the root of the monorepo and that all necessary variables are set.
@@ -100,7 +100,7 @@ Visit the UI at: http://localhost:3000.
 
 ## Deployment
 
-For deployment instructions please refer to [Deployment](https://github.com/energywebfoundation/origin/wiki/Zero-Deployment) wiki page.
+For deployment instructions please refer to [Deployment](https://github.com/energywebfoundation/zero/wiki/Zero-Deployment) wiki page.
 
 ## Contribution guidelines
 
