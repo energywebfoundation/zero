@@ -5,6 +5,8 @@ import * as bcrypt  from 'bcryptjs';
 const prisma = new PrismaClient()
 
 async function main(){
+  await prisma.user.deleteMany();
+
   await prisma.user.create({
     data: {
       name: "Test User 1",
