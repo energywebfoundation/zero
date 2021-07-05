@@ -15,7 +15,13 @@ model User {
   email     String?  @unique
   firstName String
   lastName  String
+  role      Role
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  Seller
+  Buyer
 }

@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 
-import { User } from '@prisma/client';
+import { User, Role } from '@prisma/client';
+import { IsEnum } from 'class-validator';
 
 export class UserEntity implements User {
   @ApiProperty({ example: 1 })
@@ -15,6 +16,10 @@ export class UserEntity implements User {
 
   @ApiProperty({ example: 'Smith' })
   lastName: string;
+
+  @ApiProperty({ enum: Role, enumName: 'Role'})
+  @IsEnum(Role)
+  role: Role
 
   @Exclude()
   password: string;

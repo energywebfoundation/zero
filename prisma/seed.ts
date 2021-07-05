@@ -12,6 +12,7 @@ async function main(){
       firstName: "Test User 1",
       lastName: "Test User 1",
       email: "testuser1@foo.bar",
+      role: "Seller",
       password: await bcrypt.hash('test', 8)
     }
   });
@@ -21,6 +22,7 @@ async function main(){
       firstName: "Test User 1",
       lastName: "Test User 1",
       email: "testuser2@foo.bar",
+      role: "Buyer",
       password: await bcrypt.hash('test', 8)
     }
   });
