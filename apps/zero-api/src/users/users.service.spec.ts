@@ -7,12 +7,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 describe('UsersService', () => {
   let service: UsersService;
   const testData1: CreateUserDto = {
-    name: 'test name1',
+    firstName: 'test first name 1',
+    lastName: 'test last name 1',
     email: 'test-email1@foo.bar',
     password: 'test password 1'
   };
   const testData2: CreateUserDto = {
-      name: 'test name2',
+    firstName: 'test first name 2',
+    lastName: 'test last name 2',
       email: 'test-email2@foo.bar',
       password: 'test password 2'
     };

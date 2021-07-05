@@ -12,14 +12,16 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<UserEntity> | null {
     const {
       email,
-      name,
+      firstName,
+      lastName,
       password
     } = createUserDto;
 
     const data = await this.prisma.user.create({
       data: {
         email,
-        name,
+        firstName,
+        lastName,
         password: await bcrypt.hash(password, 8)
       }
     });

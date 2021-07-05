@@ -15,7 +15,8 @@ describe('UsersController', () => {
   let prisma: PrismaService;
 
   const validPayload: CreateUserDto = {
-    name: 'test name',
+    firstName: 'test first name',
+    lastName: 'test last name',
     email: 'test-email@foo.bar',
     password: 'a secret'
   };
@@ -63,12 +64,13 @@ describe('UsersController', () => {
     const userCreated = res.body as Omit<UserEntity, 'password'>;
 
     expect(userCreated.id).toBeDefined();
-    expect(userCreated.name).toEqual(validPayload.name);
+    expect(userCreated.firstName).toEqual(validPayload.firstName);
     expect(userCreated.email).toEqual(validPayload.email);
 
     const dbRecord = await prisma.user.findUnique({ where: { id: userCreated.id } });
     expect(dbRecord).toBeDefined();
-    expect(dbRecord.name).toEqual(validPayload.name);
+    expect(dbRecord.firstName).toEqual(validPayload.firstName);
+    expect(dbRecord.lastName).toEqual(validPayload.lastName);
     expect(dbRecord.email).toEqual(validPayload.email);
   });
 
@@ -94,8 +96,19 @@ describe('UsersController', () => {
     expect((await prisma.user.findMany()).length).toEqual(0);
   });
 
-  it('should not accept payloads with an empty name', async function() {
-    const payload: CreateUserDto = { ...validPayload, name: '' };
+  it('should not accept payloads with an empty firstName', async function() {
+    const payload: CreateUserDto = { ...validPayload, firstName: '' };
+
+    await request(app.getHttpServer())
+      .post('/users')
+      .send(payload)
+      .expect(HttpStatus.BAD_REQUEST);
+
+    expect((await prisma.user.findMany()).length).toEqual(0);
+  });
+
+  it('should not accept payloads with an empty lastName', async function() {
+    const payload: CreateUserDto = { ...validPayload, lastName: '' };
 
     await request(app.getHttpServer())
       .post('/users')

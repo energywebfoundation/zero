@@ -9,7 +9,8 @@ async function main(){
 
   await prisma.user.create({
     data: {
-      name: "Test User 1",
+      firstName: "Test User 1",
+      lastName: "Test User 1",
       email: "testuser1@foo.bar",
       password: await bcrypt.hash('test', 8)
     }
@@ -17,7 +18,8 @@ async function main(){
 
   await prisma.user.create({
     data: {
-      name: "Test User 2",
+      firstName: "Test User 1",
+      lastName: "Test User 1",
       email: "testuser2@foo.bar",
       password: await bcrypt.hash('test', 8)
     }

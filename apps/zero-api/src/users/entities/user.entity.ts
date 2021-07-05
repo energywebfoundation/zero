@@ -10,8 +10,11 @@ export class UserEntity implements User {
   @ApiProperty({ example: 'testuser1@foo.bar' })
   email: string;
 
-  @ApiProperty({ example: 'Test User 1' })
-  name: string;
+  @ApiProperty({ example: 'John' })
+  firstName: string;
+
+  @ApiProperty({ example: 'Smith' })
+  lastName: string;
 
   @Exclude()
   password: string;
