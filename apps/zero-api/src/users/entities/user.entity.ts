@@ -16,6 +16,12 @@ export class UserEntity implements User {
   @Exclude()
   password: string;
 
+  @Exclude()
+  createdAt: Date;
+
+  @Exclude()
+  updatedAt: Date;
+
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }
