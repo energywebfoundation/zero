@@ -1,6 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, NotFoundException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as _ from "lodash";
 
 @Injectable()
 export class NoDataInterceptor implements NestInterceptor {
@@ -8,8 +9,7 @@ export class NoDataInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        // eslint-disable-next-line lodash/prefer-is-nil
-        if (data === null || data === undefined) {
+        if (_.isNil(data)) {
           throw new NotFoundException();
         }
 
