@@ -47,11 +47,13 @@ describe('UsersController', () => {
   });
 
   beforeEach(async () => {
+    await prisma.emailConfirmation.deleteMany();
     await prisma.user.deleteMany();
     expect((await prisma.user.findMany()).length).toEqual(0);
   });
 
   afterEach(async () => {
+    await prisma.emailConfirmation.deleteMany();
     await prisma.user.deleteMany();
     expect((await prisma.user.findMany()).length).toEqual(0);
   });

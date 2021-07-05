@@ -45,6 +45,7 @@ describe('UsersService', () => {
   });
 
   beforeEach(async () => {
+    await prisma.emailConfirmation.deleteMany();
     await prisma.user.deleteMany();
   });
 
@@ -62,6 +63,7 @@ describe('UsersService', () => {
       const newUserFetched = await service.findOne(newUser.id);
 
       expect(newUserFetched.email).toEqual(testData1.email);
+      expect(newUserFetched.emailConfirmed).toEqual(false);
     });
 
     it('should create record with hashed password', async function() {

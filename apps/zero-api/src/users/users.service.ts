@@ -117,4 +117,8 @@ export class UsersService {
 
     return tokenRecord;
   }
+
+  async confirmEmail(token: string) {
+    await this.prisma.emailConfirmation.findUnique({where: {id: token}});
+  }
 }
