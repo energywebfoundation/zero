@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Role } from '@prisma/client'
+import { UserRole } from '@prisma/client'
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -11,14 +11,14 @@ describe('UsersService', () => {
     firstName: 'test first name 1',
     lastName: 'test last name 1',
     email: 'test-email1@foo.bar',
-    role: Role.Buyer,
+    userRole: UserRole.Buyer,
     password: 'test password 1'
   };
   const testData2: CreateUserDto = {
     firstName: 'test first name 2',
     lastName: 'test last name 2',
     email: 'test-email2@foo.bar',
-    role: Role.Seller,
+    userRole: UserRole.Seller,
     password: 'test password 2'
     };
 

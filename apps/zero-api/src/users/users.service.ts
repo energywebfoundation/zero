@@ -15,7 +15,7 @@ export class UsersService {
       firstName,
       lastName,
       password,
-      role
+      userRole
     } = createUserDto;
 
     const data = await this.prisma.user.create({
@@ -23,7 +23,7 @@ export class UsersService {
         email,
         firstName,
         lastName,
-        role,
+        userRole,
         password: await bcrypt.hash(password, 8)
       }
     });

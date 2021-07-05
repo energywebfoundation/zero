@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
 import { UserEntity } from './entities/user.entity';
-import { Role } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -19,7 +19,7 @@ describe('UsersController', () => {
     firstName: 'test first name',
     lastName: 'test last name',
     email: 'test-email@foo.bar',
-    role: Role.Seller,
+    userRole: UserRole.Seller,
     password: 'a secret'
   };
 
