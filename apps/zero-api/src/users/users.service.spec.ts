@@ -23,13 +23,15 @@ describe('UsersService', () => {
     password: 'test password 2'
     };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UsersService, PrismaService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+  })
 
+  beforeEach(async () => {
     await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)))
   });
 
@@ -94,5 +96,17 @@ describe('UsersService', () => {
     const userUpdated = await service.update(user.id, testData2);
 
     expect(bcrypt.compare(testData2.password, userUpdated.password)).toBeTruthy();
+  });
+
+  it('should find user by email', async function() {
+    await service.create(testData1);
+
+    expect(await service.findByEmail(testData1.email)).toBeDefined();
+  });
+
+  it('should nod find any users for non existing email', async function() {
+    await service.create(testData1);
+
+    expect(await service.findByEmail('fake@email.com')).toBeNull();
   });
 });
