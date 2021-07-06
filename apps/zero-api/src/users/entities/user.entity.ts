@@ -17,7 +17,7 @@ export class UserEntity implements User {
   @ApiProperty({ example: 'Smith' })
   lastName: string;
 
-  @ApiProperty({ enum: UserRole, enumName: 'Role'})
+  @ApiProperty({ enum: UserRole, enumName: 'UserRole'})
   @IsEnum(UserRole)
   userRole: UserRole
 
