@@ -8,7 +8,9 @@ import {
   ValidationPipe,
   UseInterceptors,
   ClassSerializerInterceptor,
-  UseFilters
+  UseFilters,
+  Patch,
+  NotFoundException
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +18,7 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -41,10 +44,17 @@ export class UsersController {
     return await this.usersService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  @ApiOkResponse({ type: UserEntity })
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const existingUser = await this.usersService.findOne(+id);
+
+    if (!existingUser) {
+      throw new NotFoundException();
+    }
+
+    return await this.usersService.update(+id, updateUserDto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

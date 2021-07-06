@@ -55,84 +55,111 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should accept valid payload and create a user', async function() {
-    const res = await request(app.getHttpServer())
-      .post('/users')
-      .send(validPayload)
-      .expect(HttpStatus.CREATED);
+  describe('when creating a user', function() {
+    it('should accept valid payload and create a user', async function() {
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED);
 
-    expect(res).toBeDefined();
+      expect(res).toBeDefined();
 
-    const userCreated = res.body as Omit<UserEntity, 'password'>;
+      const userCreated = res.body as Omit<UserEntity, 'password'>;
 
-    expect(userCreated.id).toBeDefined();
-    expect(userCreated.firstName).toEqual(validPayload.firstName);
-    expect(userCreated.email).toEqual(validPayload.email);
+      expect(userCreated.id).toBeDefined();
+      expect(userCreated.firstName).toEqual(validPayload.firstName);
+      expect(userCreated.email).toEqual(validPayload.email);
 
-    const dbRecord = await prisma.user.findUnique({ where: { id: userCreated.id } });
-    expect(dbRecord).toBeDefined();
-    expect(dbRecord.firstName).toEqual(validPayload.firstName);
-    expect(dbRecord.lastName).toEqual(validPayload.lastName);
-    expect(dbRecord.email).toEqual(validPayload.email);
+      const dbRecord = await prisma.user.findUnique({ where: { id: userCreated.id } });
+      expect(dbRecord).toBeDefined();
+      expect(dbRecord.firstName).toEqual(validPayload.firstName);
+      expect(dbRecord.lastName).toEqual(validPayload.lastName);
+      expect(dbRecord.email).toEqual(validPayload.email);
+    });
+
+    it('should not accept payloads with invalid email', async function() {
+      const payload: CreateUserDto = { ...validPayload, email: 'this is not a valid email' };
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect((await prisma.user.findMany()).length).toEqual(0);
+    });
+
+    it('should not accept payloads with an empty password', async function() {
+      const payload: CreateUserDto = { ...validPayload, password: '' };
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect((await prisma.user.findMany()).length).toEqual(0);
+    });
+
+    it('should not accept payloads with an empty firstName', async function() {
+      const payload: CreateUserDto = { ...validPayload, firstName: '' };
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect((await prisma.user.findMany()).length).toEqual(0);
+    });
+
+    it('should not accept payloads with an empty lastName', async function() {
+      const payload: CreateUserDto = { ...validPayload, lastName: '' };
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect((await prisma.user.findMany()).length).toEqual(0);
+    });
+
+    it('should respond with correct user record', async function() {
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED);
+
+      const userCreated = res.body as Omit<UserEntity, 'password'>;
+
+      const userFetched = (await request(app.getHttpServer())
+        .get(`/users/${userCreated.id}`)
+        .send(validPayload)
+        .expect(HttpStatus.OK)).body as Omit<UserEntity, 'password'>;
+
+      expect(userCreated.email).toEqual(userFetched.email);
+    });
   });
 
-  it('should not accept payloads with invalid email', async function() {
-    const payload: CreateUserDto = { ...validPayload, email: 'this is not a valid email' };
+  describe('when updating a user', function() {
+    it('should not update an email', async function() {
+      const newUser: UserEntity | null = (await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body as UserEntity;
 
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(payload)
-      .expect(HttpStatus.BAD_REQUEST);
+      expect(newUser).toBeDefined();
 
-    expect((await prisma.user.findMany()).length).toEqual(0);
-  });
+      const updateResponseBody = (await request(app.getHttpServer())
+        .patch(`/users/${newUser.id}`)
+        .send({ email: 'modified@email.com' })
+        .expect(HttpStatus.OK)).body;
 
-  it('should not accept payloads with an empty password', async function() {
-    const payload: CreateUserDto = { ...validPayload, password: '' };
+      expect(updateResponseBody.email).not.toEqual('modified@email.com');
 
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(payload)
-      .expect(HttpStatus.BAD_REQUEST);
+      const updatedUser: UserEntity | null = (await request(app.getHttpServer())
+        .get(`/users/${newUser.id}`)
+        .expect(HttpStatus.OK)).body as UserEntity;
 
-    expect((await prisma.user.findMany()).length).toEqual(0);
-  });
-
-  it('should not accept payloads with an empty firstName', async function() {
-    const payload: CreateUserDto = { ...validPayload, firstName: '' };
-
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(payload)
-      .expect(HttpStatus.BAD_REQUEST);
-
-    expect((await prisma.user.findMany()).length).toEqual(0);
-  });
-
-  it('should not accept payloads with an empty lastName', async function() {
-    const payload: CreateUserDto = { ...validPayload, lastName: '' };
-
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(payload)
-      .expect(HttpStatus.BAD_REQUEST);
-
-    expect((await prisma.user.findMany()).length).toEqual(0);
-  });
-
-  it('should respond with correct user record', async function() {
-    const res = await request(app.getHttpServer())
-      .post('/users')
-      .send(validPayload)
-      .expect(HttpStatus.CREATED);
-
-    const userCreated = res.body as Omit<UserEntity, 'password'>;
-
-    const userFetched = (await request(app.getHttpServer())
-      .get(`/users/${userCreated.id}`)
-      .send(validPayload)
-      .expect(HttpStatus.OK)).body as Omit<UserEntity, 'password'>;
-
-    expect(userCreated.email).toEqual(userFetched.email);
+      expect(updatedUser).toBeDefined();
+      expect(updatedUser.email).not.toEqual("modified@email.com")
+    });
   });
 });
