@@ -11,8 +11,17 @@ generator client {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String? @unique
-  name     String
-  password String
+  id        Int      @id @default(autoincrement())
+  email     String?  @unique
+  firstName String
+  lastName  String
+  userRole  UserRole
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  Seller
+  Buyer
 }
