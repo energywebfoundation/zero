@@ -24,7 +24,7 @@ export class UsersService {
         firstName,
         lastName,
         userRole,
-        password: await bcrypt.hash(password, 8)
+        password: await this.hashPassword(password)
       }
     });
 
@@ -41,11 +41,32 @@ export class UsersService {
     return new UserEntity(data);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const {
+      firstName,
+      lastName,
+      password,
+      userRole
+    } = updateUserDto;
+
+    const data = await this.prisma.user.update({
+      where: { id },
+      data: {
+        firstName,
+        lastName,
+        password: password ? await this.hashPassword(password) : undefined,
+        userRole
+      }
+    });
+
+    return new UserEntity(data);
   }
 
   async remove(id: number) {
-    await this.prisma.user.delete({where: {id}});
+    await this.prisma.user.delete({ where: { id } });
+  }
+
+  private async hashPassword(password) {
+    return await bcrypt.hash(password, 8);
   }
 }
