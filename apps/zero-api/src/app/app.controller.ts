@@ -2,7 +2,7 @@ import { Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from 
 
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDataDTO } from '../auth/login-data.dto';
 import { LoginReturnDataDTO } from '../auth/login-return-data.dto';
 import { AuthService } from '../auth/auth.service';
@@ -18,6 +18,7 @@ export class AppController {
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
+  @ApiTags('auth')
   @ApiBody({ type: LoginDataDTO })
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ status: HttpStatus.OK, type: LoginReturnDataDTO })

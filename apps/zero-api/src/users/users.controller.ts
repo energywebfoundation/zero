@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
@@ -28,18 +28,21 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiTags('users')
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
 
   @Get(':id')
+  @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id') id: string): Promise<UserEntity> {
     return await this.usersService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const existingUser = await this.usersService.findOne(+id);
