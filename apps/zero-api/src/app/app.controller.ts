@@ -2,7 +2,7 @@ import { Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from 
 
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDataDTO } from '../auth/login-data.dto';
 import { LoginReturnDataDTO } from '../auth/login-return-data.dto';
 import { AuthService } from '../auth/auth.service';
@@ -21,7 +21,8 @@ export class AppController {
   @ApiTags('auth')
   @ApiBody({ type: LoginDataDTO })
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ status: HttpStatus.OK, type: LoginReturnDataDTO })
+  @ApiOkResponse({ type: LoginReturnDataDTO })
+  @ApiUnauthorizedResponse({ description: 'unauthorized' })
   async login(@Request() req): Promise<LoginReturnDataDTO> {
     return this.authService.login(req.user);
   }
