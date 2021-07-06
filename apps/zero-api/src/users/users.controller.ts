@@ -33,11 +33,6 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
-
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id') id: string): Promise<UserEntity> {
@@ -55,9 +50,4 @@ export class UsersController {
 
     return await this.usersService.update(+id, updateUserDto);
   }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(+id);
-  // }
 }
