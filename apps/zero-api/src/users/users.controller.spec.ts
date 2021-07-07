@@ -19,7 +19,7 @@ describe('UsersController', () => {
     firstName: 'test first name',
     lastName: 'test last name',
     email: 'test-email@foo.bar',
-    userRole: UserRole.Seller,
+    roles: [UserRole.seller],
     password: 'a secret'
   };
 

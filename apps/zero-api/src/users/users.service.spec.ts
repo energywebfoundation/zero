@@ -12,14 +12,14 @@ describe('UsersService', () => {
     firstName: 'test first name 1',
     lastName: 'test last name 1',
     email: 'test-email1@foo.bar',
-    userRole: UserRole.Buyer,
+    roles: [UserRole.buyer],
     password: 'test password 1'
   };
   const testData2: CreateUserDto = {
     firstName: 'test first name 2',
     lastName: 'test last name 2',
     email: 'test-email2@foo.bar',
-    userRole: UserRole.Seller,
+    roles: [UserRole.seller],
     password: 'test password 2'
     };
 
