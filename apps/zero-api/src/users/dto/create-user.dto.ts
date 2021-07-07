@@ -18,6 +18,7 @@ export class CreateUserDto {
   lastName: string;
 
   @ApiProperty({ example: [UserRole.seller, UserRole.buyer] })
+    // TODO: annotate this to have proper OAS and data validation
   roles: UserRole[]
 
   @ApiProperty({ example: 'test' })
