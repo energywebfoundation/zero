@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('seller', 'buyer');
+CREATE TYPE "UserRole" AS ENUM ('seller', 'buyer', 'admin');
 
 -- CreateTable
 CREATE TABLE "User" (

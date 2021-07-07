@@ -24,4 +24,5 @@ model User {
 enum UserRole {
   seller
   buyer
+  admin
 }
