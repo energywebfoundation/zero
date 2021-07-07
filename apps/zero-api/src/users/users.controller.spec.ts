@@ -159,7 +159,7 @@ describe('UsersController', () => {
         .expect(HttpStatus.OK)).body as UserEntity;
 
       expect(updatedUser).toBeDefined();
-      expect(updatedUser.email).not.toEqual("modified@email.com")
+      expect(updatedUser.email).not.toEqual('modified@email.com');
     });
   });
 });

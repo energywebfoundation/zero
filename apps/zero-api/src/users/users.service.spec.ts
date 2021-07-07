@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcryptjs';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@prisma/client';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -21,18 +21,18 @@ describe('UsersService', () => {
     email: 'test-email2@foo.bar',
     roles: [UserRole.seller],
     password: 'test password 2'
-    };
+  };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, PrismaService],
+      providers: [UsersService, PrismaService]
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-  })
+  });
 
   beforeEach(async () => {
-    await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)))
+    await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)));
   });
 
   it('should be defined', () => {
@@ -45,7 +45,7 @@ describe('UsersService', () => {
     expect(newUser).toBeDefined();
     expect(newUser.id).toBeDefined();
 
-    const newUserFetched = await service.findOne(newUser.id)
+    const newUserFetched = await service.findOne(newUser.id);
 
     expect(newUserFetched.email).toEqual(testData1.email);
   });
@@ -70,15 +70,15 @@ describe('UsersService', () => {
   it('email address should be unique', async function() {
     await service.create(testData1);
 
-    await service.create({...testData2, email: testData1.email}).then(() => {
+    await service.create({ ...testData2, email: testData1.email }).then(() => {
       throw('Promise should be rejected');
     }).catch((err) => {
       expect(err).toBeDefined();
-      expect(err).toHaveProperty('code')
-      expect(err).toHaveProperty('stack')
-      expect(err).toHaveProperty('message')
+      expect(err).toHaveProperty('code');
+      expect(err).toHaveProperty('stack');
+      expect(err).toHaveProperty('message');
       expect(err.code).toEqual('P2002');
-    })
+    });
   });
 
   it('should update existing user', async function() {
