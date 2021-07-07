@@ -16,7 +16,7 @@ export class UserEntity implements User {
   @ApiProperty({ example: 'Smith' })
   lastName: string;
 
-  @ApiProperty({example: [UserRole.seller, UserRole.buyer]})
+  @ApiProperty({ isArray: true, enum: UserRole, enumName: 'UserRole' })
   roles: UserRole[]
 
   @Exclude()

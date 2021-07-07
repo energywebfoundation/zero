@@ -17,9 +17,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   lastName: string;
 
-  @ApiProperty({ example: [UserRole.seller, UserRole.buyer] })
-    // TODO: annotate this to have proper OAS and data validation
-  roles: UserRole[]
+  @ApiProperty({ isArray: true, enum: UserRole, enumName: 'UserRole' })
+  // TODO: annotate this to have proper data validation
+  roles: UserRole[];
 
   @ApiProperty({ example: 'test' })
   @IsString()
