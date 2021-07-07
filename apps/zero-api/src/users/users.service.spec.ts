@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcryptjs';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@prisma/client';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -12,27 +12,27 @@ describe('UsersService', () => {
     firstName: 'test first name 1',
     lastName: 'test last name 1',
     email: 'test-email1@foo.bar',
-    userRole: UserRole.Buyer,
+    roles: [UserRole.buyer],
     password: 'test password 1'
   };
   const testData2: CreateUserDto = {
     firstName: 'test first name 2',
     lastName: 'test last name 2',
     email: 'test-email2@foo.bar',
-    userRole: UserRole.Seller,
+    roles: [UserRole.seller],
     password: 'test password 2'
-    };
+  };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, PrismaService],
+      providers: [UsersService, PrismaService]
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-  })
+  });
 
   beforeEach(async () => {
-    await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)))
+    await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)));
   });
 
   it('should be defined', () => {
@@ -45,7 +45,7 @@ describe('UsersService', () => {
     expect(newUser).toBeDefined();
     expect(newUser.id).toBeDefined();
 
-    const newUserFetched = await service.findOne(newUser.id)
+    const newUserFetched = await service.findOne(newUser.id);
 
     expect(newUserFetched.email).toEqual(testData1.email);
   });
@@ -67,18 +67,28 @@ describe('UsersService', () => {
     expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
   });
 
+  it('should create a user with multiple roles', async function() {
+    const newUser = await service.create({ ...testData1, roles: [UserRole.seller, UserRole.buyer, UserRole.admin] });
+    expect(newUser.roles.length).toEqual(3);
+    expect(newUser.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
+
+    const newUserRecord = await service.findOne(newUser.id);
+    expect(newUserRecord.roles.length).toEqual(3);
+    expect(newUserRecord.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
+  });
+
   it('email address should be unique', async function() {
     await service.create(testData1);
 
-    await service.create({...testData2, email: testData1.email}).then(() => {
+    await service.create({ ...testData2, email: testData1.email }).then(() => {
       throw('Promise should be rejected');
     }).catch((err) => {
       expect(err).toBeDefined();
-      expect(err).toHaveProperty('code')
-      expect(err).toHaveProperty('stack')
-      expect(err).toHaveProperty('message')
+      expect(err).toHaveProperty('code');
+      expect(err).toHaveProperty('stack');
+      expect(err).toHaveProperty('message');
       expect(err.code).toEqual('P2002');
-    })
+    });
   });
 
   it('should update existing user', async function() {

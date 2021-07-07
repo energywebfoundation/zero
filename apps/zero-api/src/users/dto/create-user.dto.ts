@@ -17,9 +17,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   lastName: string;
 
-  @ApiProperty({ enum: UserRole, enumName: 'UserRole'})
-  @IsEnum(UserRole)
-  userRole: UserRole
+  @ApiProperty({ isArray: true, enum: UserRole, enumName: 'UserRole' })
+  @IsEnum(UserRole, {each: true})
+  roles: UserRole[];
 
   @ApiProperty({ example: 'test' })
   @IsString()

@@ -19,7 +19,7 @@ describe('UsersController', () => {
     firstName: 'test first name',
     lastName: 'test last name',
     email: 'test-email@foo.bar',
-    userRole: UserRole.Seller,
+    roles: [UserRole.seller],
     password: 'a secret'
   };
 
@@ -121,6 +121,30 @@ describe('UsersController', () => {
       expect((await prisma.user.findMany()).length).toEqual(0);
     });
 
+    it('should not accept invalid user role', async function() {
+      const payload = { ...validPayload, roles: ['fake role'] };
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect((await prisma.user.findMany()).length).toEqual(0);
+    });
+
+    it('should accept multiple roles', async function() {
+      const payload = { ...validPayload, roles: [UserRole.seller, UserRole.buyer] };
+
+      const newUserData = (await request(app.getHttpServer())
+        .post('/users')
+        .send(payload)
+        .expect(HttpStatus.CREATED)).body;
+
+      expect(newUserData.roles.length).toEqual(2);
+
+      expect((await prisma.user.findUnique({ where: { id: newUserData.id } })).roles.sort()).toEqual([UserRole.seller, UserRole.buyer].sort());
+    });
+
     it('should respond with correct user record', async function() {
       const res = await request(app.getHttpServer())
         .post('/users')
@@ -159,7 +183,7 @@ describe('UsersController', () => {
         .expect(HttpStatus.OK)).body as UserEntity;
 
       expect(updatedUser).toBeDefined();
-      expect(updatedUser.email).not.toEqual("modified@email.com")
+      expect(updatedUser.email).not.toEqual('modified@email.com');
     });
   });
 });

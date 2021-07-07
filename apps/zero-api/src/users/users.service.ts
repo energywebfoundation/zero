@@ -15,7 +15,7 @@ export class UsersService {
       firstName,
       lastName,
       password,
-      userRole
+      roles
     } = createUserDto;
 
     const data = await this.prisma.user.create({
@@ -23,7 +23,7 @@ export class UsersService {
         email,
         firstName,
         lastName,
-        userRole,
+        roles,
         password: await this.hashPassword(password)
       }
     });
@@ -52,7 +52,7 @@ export class UsersService {
       firstName,
       lastName,
       password,
-      userRole
+      roles
     } = updateUserDto;
 
     const data = await this.prisma.user.update({
@@ -61,7 +61,7 @@ export class UsersService {
         firstName,
         lastName,
         password: password ? await this.hashPassword(password) : undefined,
-        userRole
+        roles
       }
     });
 

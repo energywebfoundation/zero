@@ -55,7 +55,7 @@ describe('AppController', () => {
         lastName: 'Smith',
         email: 'john.smith@foo.bar',
         password: validPassword,
-        userRole: UserRole.Seller
+        roles: [UserRole.seller],
       });
     });
 
