@@ -67,6 +67,16 @@ describe('UsersService', () => {
     expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
   });
 
+  it('should create a user with multiple roles', async function() {
+    const newUser = await service.create({ ...testData1, roles: [UserRole.seller, UserRole.buyer, UserRole.admin] });
+    expect(newUser.roles.length).toEqual(3);
+    expect(newUser.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
+
+    const newUserRecord = await service.findOne(newUser.id);
+    expect(newUserRecord.roles.length).toEqual(3);
+    expect(newUserRecord.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
+  });
+
   it('email address should be unique', async function() {
     await service.create(testData1);
 
