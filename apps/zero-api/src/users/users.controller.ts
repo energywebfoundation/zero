@@ -10,7 +10,8 @@ import {
   ClassSerializerInterceptor,
   UseFilters,
   Patch,
-  NotFoundException
+  NotFoundException,
+  UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,7 @@ import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/guards';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -37,6 +39,7 @@ export class UsersController {
   @Get(':id')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string): Promise<UserEntity> {
     return await this.usersService.findOne(+id);
   }
@@ -44,6 +47,7 @@ export class UsersController {
   @Patch(':id')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const existingUser = await this.usersService.findOne(+id);
 
