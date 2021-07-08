@@ -5,20 +5,17 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
+import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  const config = new DocumentBuilder()
-    .setTitle('Energy Web Zero API')
-    .setVersion('0.3')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
+   const document = SwaggerModule.createDocument(app, getSwaggerDocumentationConfig());
   SwaggerModule.setup('swagger', app, document, { customSiteTitle: 'Swagger documentation for Energy Web Zero API' });
 
   const port = process.env.PORT || 3333;
