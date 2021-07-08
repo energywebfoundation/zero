@@ -21,6 +21,7 @@ import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -30,6 +31,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Public()
   @ApiTags('users')
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
@@ -40,7 +42,6 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
-  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string): Promise<UserEntity> {
     return await this.usersService.findOne(+id);
   }
@@ -49,7 +50,6 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
-  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const existingUser = await this.usersService.findOne(+id);
 

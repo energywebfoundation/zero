@@ -6,18 +6,21 @@ import { ApiBody, ApiOkResponse, ApiUnauthorizedResponse, ApiTags } from '@nestj
 import { LoginDataDTO } from '../auth/login-data.dto';
 import { LoginResponseDataDto } from '../auth/login-response-data.dto';
 import { AuthService } from '../auth/auth.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService, private authService: AuthService) {}
 
   @Get()
+  @Public()
   getData() {
     return this.appService.getData();
   }
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
+  @Public()
   @ApiTags('auth')
   @ApiBody({ type: LoginDataDTO })
   @HttpCode(HttpStatus.OK)
