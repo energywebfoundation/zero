@@ -4,6 +4,11 @@ import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 
+export interface IJWTPayload {
+  id: number;
+  sub: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService) {}
@@ -19,7 +24,7 @@ export class AuthService {
   }
 
   async login(user: UserEntity) {
-    const payload = {
+    const payload: IJWTPayload = {
       sub: user.email,
       id: user.id
     };
