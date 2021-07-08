@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
@@ -37,6 +37,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
   @UseGuards(JwtAuthGuard)
@@ -45,6 +46,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
   @UseGuards(JwtAuthGuard)
