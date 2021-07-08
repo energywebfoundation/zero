@@ -35,7 +35,7 @@ describe('AuthService', () => {
       lastName: 'Smith',
       email: 'john.smith@foo.bar',
       password,
-      userRole: UserRole.Seller
+      roles: [UserRole.seller]
     });
 
     expect(await authService.validateUser(user.email, password)).toBeDefined();
