@@ -152,13 +152,10 @@ describe('UsersController', () => {
         .expect(HttpStatus.CREATED);
 
       const userCreated = res.body as Omit<UserEntity, 'password'>;
+      expect(userCreated.email).toEqual(validPayload.email);
 
-      const userFetched = (await request(app.getHttpServer())
-        .get(`/users/${userCreated.id}`)
-        .send(validPayload)
-        .expect(HttpStatus.OK)).body as Omit<UserEntity, 'password'>;
-
-      expect(userCreated.email).toEqual(userFetched.email);
+      const userDbRecord = await prisma.user.findUnique({ where: { email: validPayload.email } });
+      expect(userDbRecord.email).toEqual(validPayload.email);
     });
   });
 
@@ -171,19 +168,24 @@ describe('UsersController', () => {
 
       expect(newUser).toBeDefined();
 
+      const accessToken = (await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          username: validPayload.email,
+          password: validPayload.password
+        })
+        .expect(HttpStatus.OK)).body.accessToken;
+
       const updateResponseBody = (await request(app.getHttpServer())
         .patch(`/users/${newUser.id}`)
         .send({ email: 'modified@email.com' })
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatus.OK)).body;
 
       expect(updateResponseBody.email).not.toEqual('modified@email.com');
 
-      const updatedUser: UserEntity | null = (await request(app.getHttpServer())
-        .get(`/users/${newUser.id}`)
-        .expect(HttpStatus.OK)).body as UserEntity;
-
-      expect(updatedUser).toBeDefined();
-      expect(updatedUser.email).not.toEqual('modified@email.com');
+      const userUpdatedDbRecord = await prisma.user.findUnique({ where: { id: newUser.id } });
+      expect(userUpdatedDbRecord.email).not.toEqual('modified@email.com');
     });
   });
 });

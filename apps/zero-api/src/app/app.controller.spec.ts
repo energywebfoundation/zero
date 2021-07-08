@@ -76,7 +76,7 @@ describe('AppController', () => {
 
       const tokenDecoded = jwtService.verify(res.body.accessToken);
       expect(tokenDecoded).toBeDefined();
-      expect(tokenDecoded.email).toEqual(user.email);
+      expect(tokenDecoded.sub).toEqual(user.email);
     });
 
     it('should not accept invalid password for a known user', async function() {

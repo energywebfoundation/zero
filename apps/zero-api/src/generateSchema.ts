@@ -1,8 +1,9 @@
 import { AppModule } from './app/app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { Test } from '@nestjs/testing';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 
 export const generateSchema = async () => {
   const module = await Test.createTestingModule({
@@ -13,12 +14,7 @@ export const generateSchema = async () => {
 
   app.setGlobalPrefix('api');
 
-  const config = new DocumentBuilder()
-    .setTitle('Energy Web Zero API')
-    .setVersion('0.3')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, getSwaggerDocumentationConfig());
 
   writeFileSync(resolve(__dirname, '..', 'swagger.json'), JSON.stringify(document, null, 2));
 };
