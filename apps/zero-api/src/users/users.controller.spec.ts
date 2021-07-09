@@ -188,4 +188,56 @@ describe('UsersController', () => {
       expect(userUpdatedDbRecord.email).not.toEqual('modified@email.com');
     });
   });
+
+  describe('when roles protected endpoint requested', function() {
+    let newSellerUserEmail: string, newAdminUserEmail: string;
+
+    beforeAll(async function () {
+      await prisma.user.deleteMany();
+    })
+
+    beforeEach(async function() {
+      newSellerUserEmail = (await request(app.getHttpServer())
+        .post('/users')
+        .send({ ...validPayload, email: 'seller@foobar.com', roles: [UserRole.seller] })
+        .expect(HttpStatus.CREATED)).body.email;
+      expect(newSellerUserEmail).toBeDefined();
+
+      newAdminUserEmail = (await request(app.getHttpServer())
+        .post('/users')
+        .send({ ...validPayload, email: 'admin@foobar.com', roles: [UserRole.admin] })
+        .expect(HttpStatus.CREATED)).body.email;
+      expect(newAdminUserEmail).toBeDefined();
+    });
+
+    it('should respond if logged-in user has a required role', async function() {
+      const accessToken: string = (await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          username: newAdminUserEmail,
+          password: validPayload.password
+        })
+        .expect(HttpStatus.OK)).body.accessToken;
+
+      await request(app.getHttpServer())
+        .get('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.OK);
+    });
+
+    it('should deny access if logged-in user does not have a required role', async function() {
+      const accessToken: string = (await request(app.getHttpServer())
+          .post('/auth/login')
+          .send({
+            username: newSellerUserEmail,
+            password: validPayload.password
+          })
+          .expect(HttpStatus.OK)).body.accessToken;
+
+      await request(app.getHttpServer())
+        .get('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.FORBIDDEN);
+    });
+  });
 });
