@@ -5,10 +5,9 @@
   "modifyObstructiveCode": false,
   "pluginsFile": "./src/plugins/index",
   "supportFile": "./src/support/index.ts",
-  "video": true,
+  "video": false,
   "videosFolder": "../../dist/cypress/apps/zero-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/zero-e2e/screenshots",
   "chromeWebSecurity": false,
   "testFiles": "**/*.{feature,features}"
-
 }
