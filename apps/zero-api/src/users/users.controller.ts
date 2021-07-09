@@ -20,6 +20,8 @@ import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/decorators/public.decorator';
+import { RequiredRoles } from '../auth/decorators/required-roles.decorator';
+import { UserRole } from '@prisma/client';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -27,6 +29,15 @@ import { Public } from '../auth/decorators/public.decorator';
 @UseFilters(PrismaClientExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  @ApiBearerAuth('access-token')
+  @RequiredRoles(UserRole.admin)
+  @ApiTags('users')
+  @ApiOkResponse({ type: UserEntity, isArray: true })
+  async getAll() {
+    return await this.usersService.findAll();
+  }
 
   @Post()
   @Public()

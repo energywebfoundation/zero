@@ -12,6 +12,7 @@ import { UserRole } from '@prisma/client';
 
 describe('UsersController', () => {
   let app: INestApplication;
+  let httpServer;
   let controller: UsersController;
   let prisma: PrismaService;
 
@@ -32,6 +33,8 @@ describe('UsersController', () => {
 
     app = module.createNestApplication();
     await app.init();
+
+    httpServer = app.getHttpServer();
 
     controller = module.get<UsersController>(UsersController);
     prisma = module.get<PrismaService>(PrismaService);
@@ -168,18 +171,13 @@ describe('UsersController', () => {
 
       expect(newUser).toBeDefined();
 
-      const accessToken = (await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: validPayload.email,
-          password: validPayload.password
-        })
-        .expect(HttpStatus.OK)).body.accessToken;
+      const accessToken = await logInUser(app, validPayload.email, validPayload.password);
+      expect(accessToken).toBeDefined();
 
-      const updateResponseBody = (await request(app.getHttpServer())
+      const updateResponseBody = (await request(httpServer)
         .patch(`/users/${newUser.id}`)
         .send({ email: 'modified@email.com' })
-        .set('Authorization', `Bearer ${accessToken}`)
+        .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.OK)).body;
 
       expect(updateResponseBody.email).not.toEqual('modified@email.com');
@@ -188,4 +186,57 @@ describe('UsersController', () => {
       expect(userUpdatedDbRecord.email).not.toEqual('modified@email.com');
     });
   });
+
+  describe('when roles protected endpoint requested', function() {
+    let newSellerUserEmail: string, newAdminUserEmail: string;
+
+    beforeAll(async function () {
+      await prisma.user.deleteMany();
+    })
+
+    beforeEach(async function() {
+      newSellerUserEmail = (await request(httpServer)
+        .post('/users')
+        .send({ ...validPayload, email: 'seller@foobar.com', roles: [UserRole.seller] })
+        .expect(HttpStatus.CREATED)).body.email;
+      expect(newSellerUserEmail).toBeDefined();
+
+      newAdminUserEmail = (await request(httpServer)
+        .post('/users')
+        .send({ ...validPayload, email: 'admin@foobar.com', roles: [UserRole.admin] })
+        .expect(HttpStatus.CREATED)).body.email;
+      expect(newAdminUserEmail).toBeDefined();
+    });
+
+    it('should respond if logged-in user has a required role', async function() {
+      const accessToken = await logInUser(app, newAdminUserEmail, validPayload.password);
+      expect(accessToken).toBeDefined();
+
+      await request(httpServer)
+        .get('/users')
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK);
+    });
+
+    it('should deny access if logged-in user does not have a required role', async function() {
+      const accessToken = await logInUser(app, newSellerUserEmail, validPayload.password);
+      expect(accessToken).toBeDefined();
+
+      await request(httpServer)
+        .get('/users')
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.FORBIDDEN);
+    });
+  });
 });
+
+async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
+  return (await request(app.getHttpServer())
+    .post('/auth/login')
+    .send({ username, password })
+    .expect(HttpStatus.OK)).body.accessToken
+}
+
+function getAuthBearerHeader(token: string): {Authorization : string} {
+  return {Authorization: `Bearer ${token}`}
+}
