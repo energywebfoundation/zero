@@ -190,9 +190,9 @@ describe('UsersController', () => {
   describe('when roles protected endpoint requested', function() {
     let newSellerUserEmail: string, newAdminUserEmail: string;
 
-    beforeAll(async function () {
+    beforeAll(async function() {
       await prisma.user.deleteMany();
-    })
+    });
 
     beforeEach(async function() {
       newSellerUserEmail = (await request(httpServer)
@@ -234,9 +234,9 @@ async function logInUser(app: INestApplication, username: string, password: stri
   return (await request(app.getHttpServer())
     .post('/auth/login')
     .send({ username, password })
-    .expect(HttpStatus.OK)).body.accessToken
+    .expect(HttpStatus.OK)).body.accessToken;
 }
 
-function getAuthBearerHeader(token: string): {Authorization : string} {
-  return {Authorization: `Bearer ${token}`}
+function getAuthBearerHeader(token: string): { Authorization: string } {
+  return { Authorization: `Bearer ${token}` };
 }
