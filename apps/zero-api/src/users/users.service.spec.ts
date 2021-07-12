@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcryptjs';
 import * as _ from 'lodash';
 import { UsersService } from './users.service';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole } from '@prisma/client';
+import { PrismaModule } from '../prisma/prisma.module';
 
 describe('UsersService', () => {
+  let module: TestingModule;
   let service: UsersService;
   const testData1: CreateUserDto = {
     firstName: 'test first name 1',
@@ -24,12 +25,17 @@ describe('UsersService', () => {
   };
 
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, PrismaService]
+    module = await Test.createTestingModule({
+      imports: [PrismaModule],
+      providers: [UsersService]
     }).compile();
 
     service = module.get<UsersService>(UsersService);
   });
+
+  afterAll(async () => {
+    await module.close();
+  })
 
   beforeEach(async () => {
     await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)));

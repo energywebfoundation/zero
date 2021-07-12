@@ -37,6 +37,10 @@ describe('AppController', () => {
     await prisma.user.deleteMany();
   });
 
+  afterAll(async () => {
+    await app?.close();
+  });
+
   describe('getData', () => {
     it('should return "Welcome to zero-api!"', () => {
       const appController = module.get<AppController>(AppController);

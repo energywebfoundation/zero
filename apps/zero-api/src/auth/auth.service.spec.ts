@@ -8,12 +8,13 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { UsersModule } from '../users/users.module';
 
 describe('AuthService', () => {
+  let module: TestingModule;
   let authService: AuthService;
   let prismaService: PrismaService;
   let usersService: UsersService;
 
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [AuthModule, PrismaModule, UsersModule]
     }).compile();
 
@@ -22,6 +23,10 @@ describe('AuthService', () => {
     usersService = module.get<UsersService>(UsersService);
 
     await prismaService.user.deleteMany();
+  })
+
+  afterAll(async () => {
+    await module.close();
   })
 
   it('should be defined', () => {

@@ -1,17 +1,22 @@
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppService } from './app.service';
 
 describe('AppService', () => {
+  let module: TestingModule;
   let service: AppService;
 
   beforeAll(async () => {
-    const app = await Test.createTestingModule({
+   module = await Test.createTestingModule({
       providers: [AppService],
     }).compile();
 
-    service = app.get<AppService>(AppService);
+    service = module.get<AppService>(AppService);
   });
+
+  afterAll(async () => {
+    await module.close();
+  })
 
   describe('getData', () => {
     it('should return "Welcome to zero-api!"', () => {
