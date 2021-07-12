@@ -30,7 +30,8 @@
     "publish:release": "",
     "db:migrate:recreate-initial": "rm -rf prisma/migrations/* && prisma migrate dev --create-only --skip-seed -n initial && git add prisma/migrations/* && prisma generate",
     "db:migrate:reset": "prisma migrate reset",
-    "db:migrate:deploy": "prisma migrate deploy"
+    "db:migrate:deploy": "prisma migrate deploy",
+    "swagger:schema:generate": "cd apps/zero-api && TS_NODE_PROJECT=tsconfig.app.json ts-node src/generateSchema.ts"
   },
   "dependencies": {
     "@emotion/react": "11.1.5",
