@@ -228,6 +228,40 @@ describe('UsersController', () => {
         .expect(HttpStatus.FORBIDDEN);
     });
   });
+
+  describe('when "me" endpoint requested ', function() {
+    beforeAll(async function() {
+      await prisma.user.deleteMany();
+    });
+
+    it('should deny access when no access token provided', async function() {
+      await request(httpServer)
+        .get('/users/me')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('should respond with a data of the logged in user', async function() {
+      const newUserId = (await request(httpServer)
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body.id;
+
+      await request(httpServer)
+        .post('/users')
+        .send({ ...validPayload, email: 'another@email.com' })
+        .expect(HttpStatus.CREATED);
+
+      const accessToken = await logInUser(app, validPayload.email, validPayload.password);
+
+      const data = (await request(httpServer)
+        .get('/users/me')
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK)).body;
+
+      expect(data.email).toEqual(validPayload.email);
+      expect(data.id).toEqual(newUserId);
+    });
+  });
 });
 
 async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {

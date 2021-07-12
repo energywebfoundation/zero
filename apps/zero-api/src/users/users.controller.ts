@@ -23,6 +23,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/decorators/public.decorator';
 import { RequiredRoles } from '../auth/decorators/required-roles.decorator';
 import { UserRole } from '@prisma/client';
+import { User } from './decorators/user.decorator';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -46,6 +47,14 @@ export class UsersController {
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
+  }
+
+  @Get('me')
+  @ApiBearerAuth('access-token')
+  @ApiTags('users')
+  @ApiOkResponse({ type: UserEntity })
+  async me(@User() user: UserEntity): Promise<UserEntity>{
+    return await this.usersService.findOne(user.id);
   }
 
   @Get(':id')
