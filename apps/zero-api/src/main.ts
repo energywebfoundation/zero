@@ -15,8 +15,13 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-   const document = SwaggerModule.createDocument(app, getSwaggerDocumentationConfig());
-  SwaggerModule.setup('swagger', app, document, { customSiteTitle: 'Swagger documentation for Energy Web Zero API' });
+  const document = SwaggerModule.createDocument(app, getSwaggerDocumentationConfig());
+  SwaggerModule.setup('swagger', app, document, {
+    customSiteTitle: 'Swagger documentation for Energy Web Zero API',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   const port = process.env.PORT || 3333;
   await app.listen(port, () => {
