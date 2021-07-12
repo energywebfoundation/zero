@@ -20,6 +20,20 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "File" (
+    "id" TEXT NOT NULL,
+    "filename" TEXT NOT NULL,
+    "mimetype" TEXT NOT NULL,
+    "ownerId" INTEGER NOT NULL,
+    "uploadedAt" TIMESTAMP(3) NOT NULL,
+    "processingCompletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Draft" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
@@ -58,6 +72,9 @@ CREATE TABLE "EmailConfirmation" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "File" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Draft" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
