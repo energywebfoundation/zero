@@ -11,6 +11,7 @@ import {
   UseFilters,
   Patch,
   NotFoundException,
+  ParseIntPipe
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -51,16 +52,16 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
-  async findOne(@Param('id') id: string): Promise<UserEntity> {
-    return await this.usersService.findOne(+id);
+  async findOne(@Param('id', new ParseIntPipe()) id: number): Promise<UserEntity> {
+    return await this.usersService.findOne(id);
   }
 
   @Patch(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const existingUser = await this.usersService.findOne(+id);
+  async update(@Param('id', new ParseIntPipe()) id: number, @Body() updateUserDto: UpdateUserDto) {
+    const existingUser = await this.usersService.findOne(id);
 
     if (!existingUser) {
       throw new NotFoundException();
