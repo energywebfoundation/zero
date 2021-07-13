@@ -1,30 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { CreateDraftDto } from './dto/create-draft.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { PrismaService } from '../prisma/prisma.service';
-
+import { DraftDto } from './dto/draft.dto';
 
 @Injectable()
 export class DraftsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createDraftDto: CreateDraftDto) {
-    return 'This action adds a new draft';
+  async create(userId, createDraftDto: CreateDraftDto) {
+    const {
+      draftType,
+      data
+    } = createDraftDto;
+
+    const newRow = await this.prisma.draft.create({
+      data: {
+        data,
+        draftType,
+        userId
+      }
+    });
+
+    return new DraftDto(newRow);
   }
 
   findAll() {
-    return `This action returns all drafts`;
+    throw new NotImplementedException('DraftsService.findAll() method is not implemented');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} draft`;
+  async findAllForUser(userId: number) {
+    const rows = await this.prisma.draft.findMany({ where: { userId } });
+
+    return rows.map(row => new DraftDto(row));
   }
 
-  update(id: number, updateDraftDto: UpdateDraftDto) {
-    return `This action updates a #${id} draft`;
+  async findOne(id: number) {
+    const row = await this.prisma.draft.findUnique({ where: { id } });
+    if (!row) return null;
+
+    return new DraftDto(row);
+  }
+
+  async update(id: number, updateDraftDto: UpdateDraftDto) {
+    return new DraftDto(await this.prisma.draft.update({ where: { id }, data: updateDraftDto }));
   }
 
   remove(id: number) {
-    return `This action removes a #${id} draft`;
+    return this.prisma.draft.deleteMany({ where: { id } });
   }
 }

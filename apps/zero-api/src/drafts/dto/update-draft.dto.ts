@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { CreateDraftDto } from './create-draft.dto';
+import { OmitType, PartialType } from '@nestjs/swagger';
 
-export class UpdateDraftDto extends PartialType(CreateDraftDto) {}
+export class UpdateDraftDto extends PartialType(OmitType(CreateDraftDto, ['draftType'])) {}
