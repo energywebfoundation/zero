@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDraftDto } from './dto/create-draft.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
+import { PrismaService } from '../prisma/prisma.service';
+
 
 @Injectable()
 export class DraftsService {
+  constructor(private prisma: PrismaService) {}
+
   create(createDraftDto: CreateDraftDto) {
     return 'This action adds a new draft';
   }
