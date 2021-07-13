@@ -14,4 +14,9 @@ export class PrismaService extends PrismaClient
   async onModuleDestroy() {
     await this.$disconnect();
   }
+
+  async clearDatabase() {
+    await this.draft.deleteMany();
+    await this.user.deleteMany();
+  }
 }

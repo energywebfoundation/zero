@@ -38,6 +38,8 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
     prisma = module.get<PrismaService>(PrismaService);
+
+    await prisma.clearDatabase();
   });
 
   afterAll(async () => {

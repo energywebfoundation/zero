@@ -22,7 +22,7 @@ describe('AuthService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
 
-    await prismaService.user.deleteMany();
+    await prismaService.clearDatabase();
   })
 
   afterAll(async () => {

@@ -34,7 +34,7 @@ describe('AppController', () => {
     usersService = module.get<UsersService>(UsersService);
     jwtService = module.get<JwtService>(JwtService);
 
-    await prisma.user.deleteMany();
+    await prisma.clearDatabase();
   });
 
   afterAll(async () => {
