@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/guards';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { DraftsModule } from '../drafts/drafts.module';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { DraftsModule } from '../drafts/drafts.module';
     PrismaModule,
     UsersModule,
     AuthModule,
-    DraftsModule
+    DraftsModule,
+    FilesModule
   ],
   controllers: [AppController],
   providers: [
