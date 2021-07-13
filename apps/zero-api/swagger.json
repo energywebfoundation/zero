@@ -553,6 +553,45 @@
           "users"
         ]
       }
+    },
+    "/api/files": {
+      "post": {
+        "operationId": "FilesController_uploadFiles",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadFileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileMetadataDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
     }
   },
   "info": {
@@ -837,6 +876,52 @@
             "type": "object"
           }
         }
+      },
+      "UploadFileDto": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        },
+        "required": [
+          "files"
+        ]
+      },
+      "FileMetadataDto": {
+        "type": "object",
+        "properties": {
+          "fieldname": {
+            "type": "string",
+            "example": "files"
+          },
+          "originalname": {
+            "type": "string",
+            "example": "MyProof.pdf"
+          },
+          "mimetype": {
+            "type": "string",
+            "example": "application/pdf"
+          },
+          "processed": {
+            "type": "boolean",
+            "example": true
+          },
+          "error": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        },
+        "required": [
+          "fieldname",
+          "originalname",
+          "mimetype",
+          "processed"
+        ]
       }
     }
   }
