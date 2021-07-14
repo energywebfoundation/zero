@@ -7,7 +7,7 @@ import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 
 export const generateSchema = async () => {
   const module = await Test.createTestingModule({
-    imports: [AppModule]
+    imports: [AppModule],
   }).compile();
 
   const app = module.createNestApplication(null, { logger: false });
@@ -16,7 +16,10 @@ export const generateSchema = async () => {
 
   const document = SwaggerModule.createDocument(app, getSwaggerDocumentationConfig());
 
-  writeFileSync(resolve(__dirname, '..', 'swagger.json'), JSON.stringify(document, null, 2));
+  writeFileSync(
+    resolve(__dirname, '/../zero/', 'swagger.json'),
+    JSON.stringify(document, null, 2)
+  );
 };
 
 generateSchema().catch((err) => {

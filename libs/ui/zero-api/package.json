@@ -1,0 +1,7 @@
+{
+  "name": "@energyweb/zero-ui-api",
+  "version": "0.0.1",
+  "dependencies": {
+    "notistack": "^1.0.9"
+  }
+}

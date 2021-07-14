@@ -14,11 +14,10 @@ export interface IStyleConfig {
   FIELD_ICON_COLOR: string;
   WHITE: string;
   FONT_FAMILY_PRIMARY: string;
-  FONT_FAMILY_SECONDARY: string;
   FONT_SIZE: number;
+  INPUT_BACKGROUND_COLOR: string;
+  INPUT_TEXT_COLOR: string;
 }
-
-const DEFAULT_COLOR = variables.primaryColor;
 
 export interface IThemeConfiguration {
   styleConfig: IStyleConfig;
@@ -29,18 +28,19 @@ export function createStyleConfig(
   themeVariables: UiThemeVariables
 ): IStyleConfig {
   return {
-    PRIMARY_COLOR: themeVariables.primaryColor ?? DEFAULT_COLOR,
-    PRIMARY_COLOR_DARK: themeVariables.primaryColorDark ?? DEFAULT_COLOR,
-    PRIMARY_COLOR_DIM: themeVariables.primaryColorDim ?? DEFAULT_COLOR,
-    SECONDARY_COLOR: themeVariables.secondaryColor ?? DEFAULT_COLOR,
-    TEXT_COLOR_DEFAULT: themeVariables.textColorDefault ?? DEFAULT_COLOR,
-    SIMPLE_TEXT_COLOR: themeVariables.simpleTextColor ?? DEFAULT_COLOR,
-    MAIN_BACKGROUND_COLOR: themeVariables.mainBackgroundColor ?? DEFAULT_COLOR,
-    FIELD_ICON_COLOR: themeVariables.fieldIconColor ?? DEFAULT_COLOR,
+    PRIMARY_COLOR: themeVariables.primaryColor,
+    PRIMARY_COLOR_DARK: themeVariables.primaryColorDark,
+    PRIMARY_COLOR_DIM: themeVariables.primaryColorDim,
+    SECONDARY_COLOR: themeVariables.secondaryColor,
+    TEXT_COLOR_DEFAULT: themeVariables.textColorDefault,
+    SIMPLE_TEXT_COLOR: themeVariables.simpleTextColor,
+    MAIN_BACKGROUND_COLOR: themeVariables.mainBackgroundColor,
+    FIELD_ICON_COLOR: themeVariables.fieldIconColor,
     WHITE: 'rgb(255,255,255)',
     FONT_FAMILY_PRIMARY: themeVariables.fontFamilyPrimary,
-    FONT_FAMILY_SECONDARY: themeVariables.fontFamilySecondary,
     FONT_SIZE: themeVariables.fontSize,
+    INPUT_BACKGROUND_COLOR: themeVariables.inputBackgroundColor,
+    INPUT_TEXT_COLOR: themeVariables.inputTextColor,
   };
 }
 

@@ -1,5 +1,13 @@
 {
   "translation": {
+    "authLoginPage": {
+      "headText": "Welcome back!",
+      "subHeadText": "To login, please enter your email and password"
+    },
+    "authSignUpPage": {
+      "headText": "User registration",
+      "subHeadText": "To create account please fill out all fields"
+    },
     "buyerLandingPage": {
       "callToAction": "Get started now!",
       "welcomeToZero": "Welcome to Zero!",
@@ -11,7 +19,8 @@
       "zeroIsGlobalSearchEngineForRenewableEnergy": "Zero is global search engine for Renevable Energy"
     },
     "auth": {
-      "register": "Sign in"
+      "signIn": "Sign in",
+      "signUp": "Sign up"
     },
     "navigation": {
       "searchOnZero": "Search on Zero",
@@ -29,6 +38,37 @@
         "es": "Spa",
         "de": "Ger",
         "vi": "Viet"
+      },
+      "PasswordStrengthInfo": {
+        "veryWeak": "Very weak",
+        "weak": "Weak",
+        "stillWeak": "Still Weak",
+        "almostOk": "Almost ok",
+        "good": "Good"
+      }
+    },
+    "forms": {
+      "cancelBtnText": "Cancel",
+      "submitBtnText": "Submit",
+      "AuthLoginForm": {
+        "email": "Email",
+        "password": "Password",
+        "createAccountBtnText": "Create account",
+        "resetPasswordBtnText": "Forget the password?",
+        "submitBtnText": "Login"
+      },
+      "AuthSignUpForm": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirm": "Confirm password",
+        "userRole": {
+          "options": {
+            "buyer": "I want to BUY RE Products",
+            "seller": "I want to SELL RE Products"
+          }
+        }
       }
     }
   }

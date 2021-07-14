@@ -40,6 +40,9 @@
     "store-configure": {
       "tags": []
     },
+    "ui-auth": {
+      "tags": []
+    },
     "ui-core": {
       "tags": []
     },
@@ -54,6 +57,9 @@
       "tags": []
     },
     "ui-utils": {
+      "tags": []
+    },
+    "ui-zero-api": {
       "tags": []
     },
     "zero": {

@@ -8,37 +8,9 @@ import LanguageSelect, {
 import { useTopNavBarStyles } from './top-nav-bar.styles';
 
 import PersonAddAlt1Outlined from '@material-ui/icons/PersonAddAlt1Outlined';
-import ShoppingCartOutlined from '@material-ui/icons/ShoppingCartOutlined';
-import SearchOutlined from '@material-ui/icons/SearchOutlined';
-import ListOutlined from '@material-ui/icons/ListOutlined';
-import FlashOn from '@material-ui/icons/FlashOn';
-import SvgIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import PeopleOutlineOutlined from '@material-ui/icons/PeopleOutlineOutlined';
-import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
-
-export enum IconTypeEnum {
-  PersonAddAlt1Outlined = 'PersonAddAlt1Outlined',
-  ShoppingCartOutlined = 'ShoppingCartOutlined',
-  SearchOutlined = 'SearchOutlined',
-  ListOutlined = 'ListOutlined',
-  FlashOn = 'FlashOn',
-  PeopleOutlineOutlined = 'PeopleOutlineOutlined',
-  VerifiedUserOutlined = 'VerifiedUserOutlined',
-}
-
-const getIconByIconType = (iconType: IconTypeEnum): typeof SvgIcon => {
-  const iconTypesMap: { [k in IconTypeEnum]: typeof SvgIcon } = {
-    [IconTypeEnum.PersonAddAlt1Outlined]: PersonAddAlt1Outlined,
-    [IconTypeEnum.ShoppingCartOutlined]: ShoppingCartOutlined,
-    [IconTypeEnum.SearchOutlined]: SearchOutlined,
-    [IconTypeEnum.ListOutlined]: ListOutlined,
-    [IconTypeEnum.FlashOn]: FlashOn,
-    [IconTypeEnum.VerifiedUserOutlined]: VerifiedUserOutlined,
-    [IconTypeEnum.PeopleOutlineOutlined]: PeopleOutlineOutlined,
-  };
-
-  return iconTypesMap[iconType];
-};
+import NavLinkItem, { IconTypeEnum } from '../nav-link-item/nav-link-item';
+import { PersonOutline } from '@material-ui/icons';
+import NotificationAreaContainer from '../../../containers/notification-area-container/notification-area-container';
 
 export interface PrimaryNavigationItem {
   url: string;
@@ -63,6 +35,7 @@ export interface TopNavBarProps {
   secondaryNavigationItemList: SecondaryNavigationItem[];
   handleLanguageChange: (language: AppLanguageEnum) => void;
   handleNavigate: (url: string) => void;
+  hidden?: boolean;
 }
 
 export const TopNavBar = memo(
@@ -72,10 +45,18 @@ export const TopNavBar = memo(
     logo,
     handleLanguageChange,
     handleNavigate,
+    hidden,
   }: TopNavBarProps) => {
     const styles = useTopNavBarStyles();
+    const isAuthenticated = false;
     return (
-      <AppBar className={styles.root} color={'primary'} position="static">
+      <AppBar
+        style={{ display: hidden ? 'none' : 'unset' }}
+        hidden={hidden}
+        className={styles.root}
+        color={'primary'}
+        position="static"
+      >
         <Toolbar disableGutters>
           <Box>
             {sideNavToogleEnabled && (
@@ -128,13 +109,12 @@ export const TopNavBar = memo(
                 color={'#9B95BD'}
               />
             </Box>
-            <IconLink
-              icon={PersonAddAlt1Outlined}
-              url={'register'}
-              handleNavigate={handleNavigate}
-              translateKey={'auth.register'}
-            />
-
+            <Box>
+              <AuthLinksSection
+                isAuthenticated={isAuthenticated}
+                handleNavigate={handleNavigate}
+              />
+            </Box>
             <Box
               alignItems={'center'}
               height={'100%'}
@@ -146,33 +126,32 @@ export const TopNavBar = memo(
             </Box>
           </Box>
         </Toolbar>
+        <NotificationAreaContainer />
       </AppBar>
     );
   }
 );
 TopNavBar.displayName = 'TopNavBar';
 
-interface NavLinkItemProps extends PrimaryNavigationItem {
-  handleNavigate: (url: string) => void;
-}
-
-const NavLinkItem: FC<NavLinkItemProps> = ({
-  translateKey,
-  text,
-  url,
-  iconType,
-  handleNavigate,
-}) => (
-  <Box>
-    <IconLink
-      key={url}
-      translateKey={translateKey}
-      icon={getIconByIconType(iconType)}
-      url={url}
-      text={text}
-      handleNavigate={handleNavigate}
-    />
-  </Box>
-);
-
 export default TopNavBar;
+
+const AuthLinksSection: FC<{
+  isAuthenticated: boolean;
+  handleNavigate: (url: string) => void;
+}> = ({ isAuthenticated, handleNavigate }) => {
+  return !isAuthenticated ? (
+    <IconLink
+      icon={PersonOutline}
+      url={'auth/sign-in'}
+      handleNavigate={handleNavigate}
+      translateKey={'auth.signIn'}
+    />
+  ) : (
+    <IconLink
+      icon={PersonAddAlt1Outlined}
+      url={'auth/sign-up'}
+      handleNavigate={handleNavigate}
+      translateKey={'auth.signUp'}
+    />
+  );
+};

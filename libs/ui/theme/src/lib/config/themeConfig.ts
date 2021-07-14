@@ -23,7 +23,6 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     background: {
       paper: styleConfig.MAIN_BACKGROUND_COLOR,
-      default: 'rgb(244,67,54)',
     },
     text: {
       primary: styleConfig.SIMPLE_TEXT_COLOR,
@@ -48,16 +47,33 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
         disableRipple: true, // No more ripple, on the whole application 💣!
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          color: styleConfig.PRIMARY_COLOR,
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: { height: '50px' },
+      },
+    },
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          backgroundColor: styleConfig.MAIN_BACKGROUND_COLOR,
-          borderRadius: 5,
+          color: styleConfig.INPUT_TEXT_COLOR,
+          backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
+          borderRadius: '5px 5px',
           '&.Mui-disabled': {
-            backgroundColor: styleConfig.MAIN_BACKGROUND_COLOR,
+            backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
+          },
+          '&.Mui-error': {
+            border: '1px solid',
+            borderColor: '#DA2042',
           },
           '&.Mui-focused': {
-            backgroundColor: styleConfig.MAIN_BACKGROUND_COLOR,
+            backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           },
         },
       },
@@ -148,12 +164,8 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
         root: {
           color: styleConfig.SIMPLE_TEXT_COLOR,
         },
-        h5: {
-          fontFamily: styleConfig.FONT_FAMILY_SECONDARY,
-        },
-        body1: {
-          fontFamily: styleConfig.FONT_FAMILY_SECONDARY,
-        },
+        h5: {},
+        body1: {},
         gutterBottom: {
           marginBottom: '1rem',
         },
