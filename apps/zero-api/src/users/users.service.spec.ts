@@ -5,10 +5,13 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('UsersService', () => {
   let module: TestingModule;
   let service: UsersService;
+  let prisma: PrismaService;
+
   const testData1: CreateUserDto = {
     firstName: 'test first name 1',
     lastName: 'test last name 1',
@@ -31,6 +34,9 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    prisma = module.get<PrismaService>(PrismaService);
+
+    await prisma.clearDatabase()
   });
 
   afterAll(async () => {
@@ -38,7 +44,7 @@ describe('UsersService', () => {
   })
 
   beforeEach(async () => {
-    await Promise.all((await service.findAll()).map(async (user) => await service.remove(user.id)));
+    await prisma.user.deleteMany();
   });
 
   it('should be defined', () => {

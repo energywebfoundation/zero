@@ -16,13 +16,28 @@ model User {
   firstName String
   lastName  String
   roles     UserRole[]
+  drafts    Draft[]
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Draft {
+  id        Int       @id @default(autoincrement())
+  User      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  data      Json
+  draftType DraftType
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 enum UserRole {
   seller
   buyer
   admin
+}
+
+enum DraftType {
+  facility
 }
