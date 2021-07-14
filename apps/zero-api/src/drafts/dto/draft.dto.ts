@@ -1,5 +1,6 @@
 import { Draft, DraftType, Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class DraftDto implements Draft {
   @ApiProperty({ example: 1 })
@@ -13,6 +14,12 @@ export class DraftDto implements Draft {
 
   @ApiProperty({ enum: DraftType, enumName: 'DraftType' })
   draftType: DraftType
+
+  @Exclude()
+  createdAt: Date;
+
+  @Exclude()
+  updatedAt: Date;
 
   constructor(partial: Partial<DraftDto>) {
     Object.assign(this, partial);
