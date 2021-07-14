@@ -11,7 +11,10 @@
       "callToAction": "Crear una cuenta"
     },
     "auth": {
-      "register": "Registrarse"
+      "auth": {
+        "signIn": "Registrarse",
+        "signUp": "Inscribirse"
+      }
     },
     "navigation": {
       "sellOnZero": "Vender en Zero",

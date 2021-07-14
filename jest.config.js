@@ -14,5 +14,7 @@ module.exports = {
     '<rootDir>/libs/seller',
     '<rootDir>/libs/zero-ui-assets',
     '<rootDir>/libs/ui/utils',
+    '<rootDir>/libs/ui/auth',
+    '<rootDir>/libs/ui/zero-api',
   ],
 };
