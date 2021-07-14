@@ -552,7 +552,8 @@
             "outputPath": "dist/apps/zero-api",
             "main": "apps/zero-api/src/main.ts",
             "tsConfig": "apps/zero-api/tsconfig.app.json",
-            "assets": ["apps/zero-api/src/assets"]
+            "assets": ["apps/zero-api/src/assets"],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {
