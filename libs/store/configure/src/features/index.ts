@@ -8,7 +8,7 @@ export * from './navigationState';
 export * from './authState';
 
 export const rootEpic = combineEpics(
-  appStateEpics,
   navigationStateEpics,
+  appStateEpics,
   authStateEpics
 );

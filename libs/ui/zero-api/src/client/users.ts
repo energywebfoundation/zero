@@ -15,7 +15,9 @@ import type {
   CreateUserDto,
   UpdateUserDto
 } from './energyWebZeroAPI.schemas'
+import usersControllerGetAllMutator from '../response-type'
 import usersControllerCreateMutator from '../response-type'
+import usersControllerMeMutator from '../response-type'
 import usersControllerFindOneMutator from '../response-type'
 import usersControllerUpdateMutator from '../response-type'
 
@@ -32,6 +34,38 @@ type SecondParameter<T extends (...args: any) => any> = T extends (
 ) => any
   ? P
   : never;
+
+export const usersControllerGetAll = <TData = UserEntity[]>(
+    
+ options?: SecondParameter<typeof usersControllerGetAllMutator>) => {
+      return usersControllerGetAllMutator<TData>(
+      {url: `/api/users`, method: 'get'
+    },
+      // eslint-disable-next-line
+// @ts-ignore
+ options);
+    }
+  
+
+export const getUsersControllerGetAllQueryKey = () => [`/api/users`]
+
+    
+export const useUsersControllerGetAll = <TQueryFnData = AsyncReturnType<typeof usersControllerGetAll, UserEntity[]>, TError = unknown, TData = TQueryFnData>(
+  options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof usersControllerGetAllMutator>}
+
+  ) => {
+
+  const {query: queryOptions, request: requestOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getUsersControllerGetAllQueryKey();
+
+  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => usersControllerGetAll<TQueryFnData>(requestOptions), queryOptions )
+
+  return {
+    queryKey,
+    ...query
+  }
+}
 
 export const usersControllerCreate = <TData = UserEntity>(
     createUserDto: CreateUserDto,
@@ -60,8 +94,40 @@ export const usersControllerCreate = <TData = UserEntity>(
         return  usersControllerCreate<TData>(data,requestOptions)
       }, mutationOptions)
     }
-    export const usersControllerFindOne = <TData = UserEntity>(
-    id: string,
+    export const usersControllerMe = <TData = UserEntity>(
+    
+ options?: SecondParameter<typeof usersControllerMeMutator>) => {
+      return usersControllerMeMutator<TData>(
+      {url: `/api/users/me`, method: 'get'
+    },
+      // eslint-disable-next-line
+// @ts-ignore
+ options);
+    }
+  
+
+export const getUsersControllerMeQueryKey = () => [`/api/users/me`]
+
+    
+export const useUsersControllerMe = <TQueryFnData = AsyncReturnType<typeof usersControllerMe, UserEntity>, TError = unknown, TData = TQueryFnData>(
+  options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof usersControllerMeMutator>}
+
+  ) => {
+
+  const {query: queryOptions, request: requestOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getUsersControllerMeQueryKey();
+
+  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => usersControllerMe<TQueryFnData>(requestOptions), queryOptions )
+
+  return {
+    queryKey,
+    ...query
+  }
+}
+
+export const usersControllerFindOne = <TData = UserEntity>(
+    id: number,
  options?: SecondParameter<typeof usersControllerFindOneMutator>) => {
       return usersControllerFindOneMutator<TData>(
       {url: `/api/users/${id}`, method: 'get'
@@ -72,11 +138,11 @@ export const usersControllerCreate = <TData = UserEntity>(
     }
   
 
-export const getUsersControllerFindOneQueryKey = (id: string,) => [`/api/users/${id}`]
+export const getUsersControllerFindOneQueryKey = (id: number,) => [`/api/users/${id}`]
 
     
 export const useUsersControllerFindOne = <TQueryFnData = AsyncReturnType<typeof usersControllerFindOne, UserEntity>, TError = unknown, TData = TQueryFnData>(
- id: string, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof usersControllerFindOneMutator>}
+ id: number, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof usersControllerFindOneMutator>}
 
   ) => {
 
@@ -93,7 +159,7 @@ export const useUsersControllerFindOne = <TQueryFnData = AsyncReturnType<typeof 
 }
 
 export const usersControllerUpdate = <TData = UserEntity>(
-    id: string,
+    id: number,
     updateUserDto: UpdateUserDto,
  options?: SecondParameter<typeof usersControllerUpdateMutator>) => {
       return usersControllerUpdateMutator<TData>(
@@ -110,11 +176,11 @@ export const usersControllerUpdate = <TData = UserEntity>(
     export const useUsersControllerUpdate = <TData = AsyncReturnType<typeof usersControllerUpdate,UserEntity>,
     TError = unknown,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{id: string;data: UpdateUserDto}, TContext>, request?: SecondParameter<typeof usersControllerUpdateMutator>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{id: number;data: UpdateUserDto}, TContext>, request?: SecondParameter<typeof usersControllerUpdateMutator>}
 ) => {
       const {mutation: mutationOptions, request: requestOptions} = options || {}
 
-      return useMutation<TData, TError, {id: string;data: UpdateUserDto}, TContext>((props) => {
+      return useMutation<TData, TError, {id: number;data: UpdateUserDto}, TContext>((props) => {
         const {id,data} = props || {};
 
         return  usersControllerUpdate<TData>(id,data,requestOptions)

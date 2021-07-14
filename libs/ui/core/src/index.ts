@@ -1,3 +1,5 @@
+export * from './components/top-bar-user-profile/top-bar-user-profile';
+export * from './containers/top-bar-user-profile-container/top-bar-user-profile-container';
 export * from './containers/notification-area-container/notification-area-container';
 export * from './components/password-strength-info/password-strength-info';
 export * from './components/generic-form-submit-button/generic-form-submit-button';

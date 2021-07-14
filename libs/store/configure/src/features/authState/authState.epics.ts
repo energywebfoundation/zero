@@ -1,21 +1,26 @@
 import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
 import { RootState } from '../../Providers/StoreProvider';
-import { Action } from '@reduxjs/toolkit';
 import { EMPTY, Observable } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { authStateActions } from './authState.slice';
+import * as localforage from 'localforage';
+import { AnyAction } from '@reduxjs/toolkit';
 
-export const userIsAuthenticatedEpic$: Epic = (
+export const afterUserTokenIsSet$: Epic = (
   action$,
   state$: StateObservable<RootState>
-): Observable<Action> =>
+): Observable<AnyAction> =>
   action$.pipe(
-    ofType(authStateActions.setIsAuthenticated.match),
-    tap((value) => {
-      console.log('user is authenticated');
+    ofType(authStateActions.setToken),
+    tap(async ({ payload }) => {
+      console.log(payload);
+      if (!(await localforage.getItem('token'))) {
+        localforage.setItem('token', payload);
+        console.log('token is persisted');
+      }
     }),
     mergeMap(() => EMPTY)
   );
 
-const authStateEpics = combineEpics(userIsAuthenticatedEpic$);
+const authStateEpics = combineEpics(afterUserTokenIsSet$);
 export default authStateEpics;

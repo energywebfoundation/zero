@@ -5,21 +5,19 @@ import { useLocation, useNavigate } from 'react-router-dom';
 /* eslint-disable-next-line */
 export interface TopNavBarContainerProps {}
 
-export const TopNavBarContainer = (props: TopNavBarContainerProps) => {
+export const TopNavBarContainer = () => {
   const {
-    selectors: { prmiaryNavigation, secondaryNavigation },
+    selectors: { isAuthenticated, prmiaryNavigation, secondaryNavigation },
     actions: { changeLanguage },
   } = useTopNavContainerEffects();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location, location.pathname.includes('auth/'));
   return (
     <TopNavBar
+      isAuthenticated={isAuthenticated}
       hidden={location.pathname.includes('auth/')}
       secondaryNavigationItemList={secondaryNavigation}
-      handleNavigate={(url) => {
-        navigate(url);
-      }}
+      handleNavigate={(url) => navigate(url)}
       handleLanguageChange={(language) => changeLanguage(language)}
       logo={<Logo />}
       primaryNavigationItemList={prmiaryNavigation}

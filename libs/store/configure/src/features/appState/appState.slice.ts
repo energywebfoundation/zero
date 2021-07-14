@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppLanguageEnum } from '@energyweb/zero-ui';
 import { push } from 'connected-react-router';
-import { UserRoleEnum } from '../../Providers/StoreProvider';
+import { UserRole } from '@energyweb/zero-ui-api';
 interface IAppState {
   appLanguage: AppLanguageEnum;
-  userRoles: UserRoleEnum[];
+  userRoles: UserRole[];
   isAuthenticated: boolean;
+}
+
+enum AppLanguageEnum {
+  English = 'en',
+  German = 'de',
+  Spanish = 'es',
+  Turkish = 'tr',
+  Vietnamese = 'vi',
 }
 
 const initialState: IAppState = {

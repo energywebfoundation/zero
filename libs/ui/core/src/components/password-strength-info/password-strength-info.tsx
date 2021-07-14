@@ -22,8 +22,8 @@ export enum PasswordStrengthScoreEnum {
   VeryWeak,
   Weak,
   StillWeak,
-  AlmostOk,
   Good,
+  Strong,
 }
 
 const scoreToClassName = (
@@ -34,9 +34,8 @@ const scoreToClassName = (
     case PasswordStrengthScoreEnum.VeryWeak:
     case PasswordStrengthScoreEnum.Weak:
       return classNameMap.weak;
-    case PasswordStrengthScoreEnum.AlmostOk:
-      return classNameMap.soso;
     case PasswordStrengthScoreEnum.Good:
+    case PasswordStrengthScoreEnum.Strong:
       return classNameMap.ok;
     default:
       return classNameMap.weak;

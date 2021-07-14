@@ -61,7 +61,7 @@
     "dayjs": "^1.10.6",
     "dayjs-recur": "^1.0.0",
     "document-register-element": "1.13.1",
-    "history": "^5.0.0",
+    "history": "5.0.0",
     "i18next": "^20.3.1",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-icu": "2.0.3",

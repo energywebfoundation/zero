@@ -11,14 +11,16 @@ import { useAuthLoginPageEffects } from './auth-login-page.effects';
 /* eslint-disable-next-line */
 export interface AuthLoginPageProps {}
 
-const StyledAuthLoginPage = styled.div``;
+const StyledAuthLoginPage = styled.div`
+  margin-top: 15vh;
+`;
 
 export const AuthLoginPage = () => {
   const { t } = useTranslation();
   const { handleFormSubmitFn } = useAuthLoginPageEffects();
   return (
     <StyledAuthLoginPage>
-      <Box my={'40px'} textAlign={'center'}>
+      <Box mb={'40px'} textAlign={'center'}>
         <Logo transform={'scale(1.2)'} />
       </Box>
       <Grid container justifyContent={'center'}>

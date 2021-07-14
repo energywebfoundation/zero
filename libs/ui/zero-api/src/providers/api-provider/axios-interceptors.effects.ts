@@ -1,23 +1,29 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { useEffectOnce } from 'react-use';
+import { useEffect, useRef } from 'react';
 
-export const useAxiosInterceptors = () => {
-  useEffectOnce(() => {
-    const token = 'abcdef';
-    axios.interceptors.request.use(
-      (config: AxiosRequestConfig): AxiosRequestConfig => {
-        config.baseURL = process.env.NX_BACKEND_URL;
-        console.log(config);
-        config.headers.Authorization = `Bearer ${token}`;
-        return config;
-      }
-    );
+export const useAxiosInterceptors = (token: string | null) => {
+  axios.defaults.baseURL = process.env.NX_BACKEND_URL;
+  const isTokenHeaderSet = useRef(false);
 
-    axios.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        return Promise.reject(error);
-      }
-    );
-  });
+  useEffect(() => {
+    if (token) {
+      axios.interceptors.request.use(
+        (config: AxiosRequestConfig): AxiosRequestConfig => {
+          config.baseURL = process.env.NX_BACKEND_URL;
+          config.headers.Authorization = `Bearer ${token}`;
+          return config;
+        }
+      );
+
+      axios.interceptors.response.use(
+        (response) => response,
+        async (error) => {
+          return Promise.reject(error);
+        }
+      );
+      isTokenHeaderSet.current = true;
+    }
+  }, [token]);
+
+  return isTokenHeaderSet.current;
 };

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { FC, ReactElement } from 'react';
 import { createEpicMiddleware } from 'redux-observable';
 import logger from 'redux-logger';
-import { connectRouter } from 'connected-react-router';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { authStateSlice, rootEpic } from '../features';
 import { navigationStateSlice, appStateSlice } from '../features';
@@ -11,21 +11,15 @@ import { navigationStateSlice, appStateSlice } from '../features';
 export const history = createBrowserHistory();
 
 const epicMiddleware = createEpicMiddleware();
-
-export enum UserRoleEnum {
-  Buyer = 'Buyer',
-  Seller = 'Seller',
-}
-
 export const store = configureStore({
   reducer: {
     appState: appStateSlice.reducer,
     navigationState: navigationStateSlice.reducer,
-    routerState: connectRouter(history),
+    router: connectRouter(history),
     authState: authStateSlice.reducer,
   },
   devTools: true,
-  middleware: [epicMiddleware, logger],
+  middleware: [epicMiddleware, logger, routerMiddleware(history)],
 });
 
 interface StoreProviderProps {

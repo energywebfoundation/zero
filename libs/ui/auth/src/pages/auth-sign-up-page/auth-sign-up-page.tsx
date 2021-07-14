@@ -11,7 +11,9 @@ import AuthSignUpForm from '../../components/auth-sign-up-form/auth-sign-up-form
 /* eslint-disable-next-line */
 export interface AuthSIgnUpPageProps {}
 
-const StyledAuthSIgnUpPage = styled.div``;
+const StyledAuthSIgnUpPage = styled.div`
+  margin-top: 15vh;
+`;
 
 export const AuthSignUpPage = () => {
   const { t } = useTranslation();
@@ -20,7 +22,7 @@ export const AuthSignUpPage = () => {
     <StyledAuthSIgnUpPage>
       <Grid container justifyContent={'center'}>
         <Grid item sm={8}>
-          <Box my={'40px'} textAlign={'center'}>
+          <Box mb={'40px'} textAlign={'center'}>
             <Logo transform={'scale(1.2)'} />
           </Box>
           <GenericFormCard>

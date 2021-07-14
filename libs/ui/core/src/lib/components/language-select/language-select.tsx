@@ -1,6 +1,6 @@
 import { FormControl, MenuItem, Select } from '@material-ui/core';
 import { useStyles } from './language-select.style';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import map from 'lodash/fp/map';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ export interface LanguageSelectProps {
   handleLanguageChange: (language: AppLanguageEnum) => void;
 }
 
-export const LanguageSelect = (props: LanguageSelectProps) => {
+export const LanguageSelect: FC<LanguageSelectProps> = () => {
   const { t } = useTranslation();
   const styles = useStyles();
   const [language, setLanguage] = useState<AppLanguageEnum>(

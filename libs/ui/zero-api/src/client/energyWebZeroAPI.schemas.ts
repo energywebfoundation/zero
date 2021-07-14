@@ -22,20 +22,20 @@ export const UserRole = {
   admin: 'admin' as UserRole,
 };
 
-export interface CreateUserDto {
-  email: string;
-  firstName: string;
-  lastName: string;
-  roles: UserRole[];
-  password: string;
-}
-
 export interface UserEntity {
   id: number;
   email: string;
   firstName: string;
   lastName: string;
   roles: UserRole[];
+}
+
+export interface CreateUserDto {
+  email: string;
+  firstName: string;
+  lastName: string;
+  roles: UserRole[];
+  password: string;
 }
 
 export interface UpdateUserDto {

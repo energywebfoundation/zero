@@ -11,8 +11,10 @@ import PersonAddAlt1Outlined from '@material-ui/icons/PersonAddAlt1Outlined';
 import NavLinkItem, { IconTypeEnum } from '../nav-link-item/nav-link-item';
 import { PersonOutline } from '@material-ui/icons';
 import NotificationAreaContainer from '../../../containers/notification-area-container/notification-area-container';
+import TopBarUserProfileContainer from '../../../containers/top-bar-user-profile-container/top-bar-user-profile-container';
 
 export interface PrimaryNavigationItem {
+  isEnabled: boolean;
   url: string;
   text?: string;
   iconType: IconTypeEnum;
@@ -36,6 +38,7 @@ export interface TopNavBarProps {
   handleLanguageChange: (language: AppLanguageEnum) => void;
   handleNavigate: (url: string) => void;
   hidden?: boolean;
+  isAuthenticated: boolean;
 }
 
 export const TopNavBar = memo(
@@ -46,9 +49,9 @@ export const TopNavBar = memo(
     handleLanguageChange,
     handleNavigate,
     hidden,
+    isAuthenticated,
   }: TopNavBarProps) => {
     const styles = useTopNavBarStyles();
-    const isAuthenticated = false;
     return (
       <AppBar
         style={{ display: hidden ? 'none' : 'unset' }}
@@ -114,6 +117,7 @@ export const TopNavBar = memo(
                 isAuthenticated={isAuthenticated}
                 handleNavigate={handleNavigate}
               />
+              <TopBarUserProfileContainer />
             </Box>
             <Box
               alignItems={'center'}
@@ -146,12 +150,5 @@ const AuthLinksSection: FC<{
       handleNavigate={handleNavigate}
       translateKey={'auth.signIn'}
     />
-  ) : (
-    <IconLink
-      icon={PersonAddAlt1Outlined}
-      url={'auth/sign-up'}
-      handleNavigate={handleNavigate}
-      translateKey={'auth.signUp'}
-    />
-  );
+  ) : null;
 };

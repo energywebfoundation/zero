@@ -42,9 +42,10 @@
       "PasswordStrengthInfo": {
         "veryWeak": "Very weak",
         "weak": "Weak",
-        "stillWeak": "Still Weak",
         "almostOk": "Almost ok",
-        "good": "Good"
+        "goodPassword": "Good password!",
+        "strongPassword": "Strong password"
+
       }
     },
     "forms": {

@@ -6,8 +6,7 @@ import { ValidationError } from 'yup';
 yup.addMethod(yup.string, 'passwordStrength', function (args) {
   console.log(args);
   const { message } = args;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // eslint-disable-next-line
   return this.test('passwordStrength', message, function testFn(value):
     | boolean
     | ValidationError {

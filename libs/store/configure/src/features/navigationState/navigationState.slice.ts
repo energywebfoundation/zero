@@ -41,7 +41,7 @@ export const navigationStateActions = {
 
 export const navigationStateSelectors = {
   prmiaryNavigation: (state: RootState) =>
-    state.navigationState.prmiaryNavigation,
+    state.navigationState.prmiaryNavigation.filter((el) => el.isEnabled),
   secondaryNavigation: (state: RootState) =>
     state.navigationState.secondaryNavigation,
 };
