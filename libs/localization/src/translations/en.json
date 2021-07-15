@@ -46,6 +46,12 @@
         "goodPassword": "Good password!",
         "strongPassword": "Strong password"
 
+      },
+      "TopBarUserProfile": {
+        "welcome": "Welcome",
+        "logout": "Logout",
+        "profile": "Profile",
+        "myAccount": "My account"
       }
     },
     "forms": {

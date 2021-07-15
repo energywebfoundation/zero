@@ -155,7 +155,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     MuiMenuItem: {
       styleOverrides: {
         root: {
-          color: styleConfig.SIMPLE_TEXT_COLOR,
+          color: styleConfig.PRIMARY_COLOR,
         },
       },
     },

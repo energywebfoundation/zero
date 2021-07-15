@@ -8,10 +8,24 @@ export interface TopBarUserProfileContainerProps {}
 const StyledTopBarUserProfileContainer = styled.div``;
 
 export function TopBarUserProfileContainer() {
-  const { selectors } = useTopBarUserProfileContainerEffects();
+  const {
+    selectors,
+    handlers: {
+      logoutHandler,
+      navigateToMyAccountHandler,
+      navigateToProfileHandler,
+    },
+  } = useTopBarUserProfileContainerEffects();
   return (
     <StyledTopBarUserProfileContainer>
-      {/*<TopBarUserProfile data={selectors.userProfileData} />*/}
+      {selectors.isAuthenticated && (
+        <TopBarUserProfile
+          logoutHandler={logoutHandler}
+          navigateToMyAccountHandler={navigateToMyAccountHandler}
+          navigateToProfileHandler={navigateToProfileHandler}
+          data={selectors.userProfileData}
+        />
+      )}
     </StyledTopBarUserProfileContainer>
   );
 }

@@ -5,10 +5,12 @@ import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { authStateActions } from '@energy-web-zero/store-configure';
+import { useSnackbar } from 'notistack';
 
 export const useAuthLoginPageEffects = () => {
   const { mutateAsync } = useAppControllerLogin();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleFormSubmitFn: TGenericFormSubmitHandlerFn<AuthLoginFormFields> = useCallback(
     (loginData: AuthLoginFormFields) => {
@@ -19,6 +21,7 @@ export const useAuthLoginPageEffects = () => {
           dispatch(authStateActions.setToken(accessToken));
         })
         .catch((reason) => {
+          // enqueueSnackbar('Wrong email or password');
           console.log(reason);
         });
     },

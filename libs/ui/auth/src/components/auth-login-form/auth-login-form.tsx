@@ -6,9 +6,8 @@ import {
   GenericFormSubmitButton,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui';
-import Grid from '@material-ui/core/Grid';
 import { authLoginFormSchema } from './auth-login-form.schema';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { authLoginFormFields } from './auth-login-form-fields';
 import { useNavigate } from 'react-router-dom';

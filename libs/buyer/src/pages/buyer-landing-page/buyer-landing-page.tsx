@@ -8,7 +8,9 @@ import { useTranslation } from 'react-i18next';
 export interface BuyerLandingPageProps {}
 
 export const BuyerLandingPage = () => {
-  const { navigateToSignupPage } = useBuyerLandingPageEffects();
+  const {
+    handlers: { navigateToSignupPageHandler },
+  } = useBuyerLandingPageEffects();
   const { t } = useTranslation();
   return (
     <Box width={'100%'} textAlign={'center'}>
@@ -34,7 +36,7 @@ export const BuyerLandingPage = () => {
       </Box>
       <Box>
         <CallToActionButton
-          onClick={navigateToSignupPage}
+          onClick={navigateToSignupPageHandler}
           translateKey={'buyerLandingPage.callToAction'}
         />
       </Box>
