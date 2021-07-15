@@ -23,7 +23,14 @@ ReactDOM.render(
       <StoreProvider>
         <ApiProvider>
           <UiTheme>
-            <SnackbarProvider>
+            <SnackbarProvider
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              autoHideDuration={20}
+              maxSnack={10}
+            >
               <App />
             </SnackbarProvider>
           </UiTheme>

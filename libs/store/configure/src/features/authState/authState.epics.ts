@@ -13,8 +13,7 @@ export const afterUserTokenIsSet$: Epic = (
   action$.pipe(
     ofType(authStateActions.setToken),
     tap(async ({ payload }) => {
-      console.log(payload);
-      if (!(await localforage.getItem('token'))) {
+      if (payload && !(await localforage.getItem('token'))) {
         localforage.setItem('token', payload);
         console.log('token is persisted');
       }

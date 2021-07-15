@@ -32,7 +32,7 @@ export const IconLink = ({
       <Button
         style={{ color: 'white' }}
         variant={'text'}
-        endIcon={<Icon sx={{ ml: '10px' }} color={'secondary'} />}
+        endIcon={<Icon color={'secondary'} />}
         onClick={() => handleNavigate(url)}
       >
         {text ?? (translateKey && t(translateKey))}

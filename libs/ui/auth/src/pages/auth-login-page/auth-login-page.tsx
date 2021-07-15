@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Grid, Typography } from '@material-ui/core';
 import AuthLoginForm from '../../components/auth-login-form/auth-login-form';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { Logo } from '@energy-web-zero/zero-ui-assets';
 import Box from '@material-ui/system/Box/Box';
 import { GenericFormCard } from '@energyweb/zero-ui';

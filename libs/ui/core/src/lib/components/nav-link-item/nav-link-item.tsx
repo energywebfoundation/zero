@@ -36,7 +36,9 @@ const getIconByIconType = (iconType: IconTypeEnum): typeof SvgIcon => {
   return iconTypesMap[iconType];
 };
 
-const StyledNavLinkItem = styled.div``;
+const StyledNavLinkItem = styled.div`
+  margin-right: 20px;
+`;
 
 interface NavLinkItemProps extends PrimaryNavigationItem {
   handleNavigate: (url: string) => void;

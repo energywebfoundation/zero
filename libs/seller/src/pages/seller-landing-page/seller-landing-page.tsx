@@ -6,7 +6,9 @@ import { useSellerLandingPageEffects } from './seller-landing-page.effects';
 export interface SellerLandingPageProps {}
 
 export const SellerLandingPage = (props: SellerLandingPageProps) => {
-  useSellerLandingPageEffects();
+  const {
+    handlers: { navigateToSignupPageHandler },
+  } = useSellerLandingPageEffects();
   const { t } = useTranslation();
   return (
     <Box width={'100%'} textAlign={'center'}>
@@ -31,7 +33,10 @@ export const SellerLandingPage = (props: SellerLandingPageProps) => {
         </Typography>
       </Box>
       <Box my={'40px'}>
-        <CallToActionButton translateKey={'sellerLandingPage.callToAction'} />
+        <CallToActionButton
+          onClick={navigateToSignupPageHandler}
+          translateKey={'sellerLandingPage.callToAction'}
+        />
       </Box>
     </Box>
   );
