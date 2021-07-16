@@ -262,6 +262,58 @@ describe('UsersController', () => {
       expect(data.id).toEqual(newUserId);
     });
   });
+
+  describe('PUT /users/:id/password', function() {
+    let user1: UserEntity, user2: UserEntity;
+    let accessToken1: string;
+
+    beforeEach(async () => {
+      user1 = (await request(httpServer)
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body;
+
+      accessToken1 = await logInUser(app, user1.email, validPayload.password);
+    });
+
+    it('should change password when valid old password provided', async function() {
+      await request(httpServer)
+        .put(`/users/${user1.id}/password`)
+        .send({
+          oldPassword: validPayload.password,
+          newPassword: 'new pass'
+        })
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.OK);
+    });
+
+    it('should forbid to change password when invalid old password provided', async function() {
+      await request(httpServer)
+        .put(`/users/${user1.id}/password`)
+        .send({
+          oldPassword: 'invalid password',
+          newPassword: 'new pass'
+        })
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('should forbid when changing password to other user', async function() {
+      user2 = (await request(httpServer)
+        .post('/users')
+        .send({ ...validPayload, email: 'another@email.com' })
+        .expect(HttpStatus.CREATED)).body;
+
+      await request(httpServer)
+        .put(`/users/${user2.id}/password`)
+        .send({
+          oldPassword: validPayload.password,
+          newPassword: 'new pass'
+        })
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN);
+    });
+  });
 });
 
 async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -74,5 +74,14 @@ export class UsersService {
 
   private async hashPassword(password) {
     return await bcrypt.hash(password, 8);
+  }
+
+  async checkPassword(id, password) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return await bcrypt.compare(password, user.password);
   }
 }

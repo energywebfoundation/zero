@@ -11,11 +11,11 @@ import {
   UseFilters,
   Patch,
   NotFoundException,
-  ParseIntPipe
+  ParseIntPipe, Put, ForbiddenException
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
@@ -24,6 +24,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { RequiredRoles } from '../auth/decorators/required-roles.decorator';
 import { UserRole } from '@prisma/client';
 import { User } from './decorators/user.decorator';
+import { PasswordChangeDto } from './dto/password-change.dto';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -53,7 +54,7 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiTags('users')
   @ApiOkResponse({ type: UserEntity })
-  async me(@User() user: UserEntity): Promise<UserEntity>{
+  async me(@User() user: UserEntity): Promise<UserEntity> {
     return await this.usersService.findOne(user.id);
   }
 
@@ -77,5 +78,26 @@ export class UsersController {
     }
 
     return await this.usersService.update(+id, updateUserDto);
+  }
+
+  @Put('/:id/password')
+  @ApiBearerAuth('access-token')
+  @ApiTags('users')
+  @ApiOkResponse({ type: UserEntity })
+  @ApiForbiddenResponse()
+  async passwordChange(
+    @User() user: UserEntity,
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() passwordChangeDTO: PasswordChangeDto
+  ) {
+    if (user.id !== id) throw new ForbiddenException();
+
+    if (!(await this.usersService.checkPassword(id, passwordChangeDTO.oldPassword))) {
+      throw new ForbiddenException();
+    }
+
+    return this.usersService.update(id, {
+      password: passwordChangeDTO.newPassword
+    });
   }
 }
