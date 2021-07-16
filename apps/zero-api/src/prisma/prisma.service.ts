@@ -17,6 +17,7 @@ export class PrismaService extends PrismaClient
 
   async clearDatabase() {
     await this.draft.deleteMany();
+    await this.passwordReset.deleteMany();
     await this.user.deleteMany();
   }
 }
