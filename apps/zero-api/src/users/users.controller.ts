@@ -11,7 +11,9 @@ import {
   UseFilters,
   Patch,
   NotFoundException,
-  ParseIntPipe, Put, ForbiddenException
+  ParseIntPipe,
+  ForbiddenException,
+  Put
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,6 +27,8 @@ import { RequiredRoles } from '../auth/decorators/required-roles.decorator';
 import { UserRole } from '@prisma/client';
 import { User } from './decorators/user.decorator';
 import { PasswordChangeDto } from './dto/password-change.dto';
+import { PasswordResetInitDto } from './dto/password-reset-init.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -99,5 +103,36 @@ export class UsersController {
     return this.usersService.update(id, {
       password: passwordChangeDTO.newPassword
     });
+  }
+
+  @Post('password-reset-init')
+  @Public()
+  @ApiTags('users')
+  @ApiOkResponse()
+  async resetPasswordInitialize(@Body() passwordResetInitDto: PasswordResetInitDto) {
+    const userId: number = (await this.usersService.findByEmail(passwordResetInitDto.email))?.id;
+
+    if (userId) {
+      await this.usersService.passwordResetInitialize(userId, 3600); // TODO: get from .env
+    }
+
+    return { status: 'OK' };
+  }
+
+  @Put('password-reset')
+  @Public()
+  @ApiTags('users')
+  async resetPassword(@Body() body: PasswordResetDto) {
+
+    const res = await this.usersService.validatePasswordReset(body.token)
+
+    if (!res) {
+      throw new ForbiddenException();
+    }
+
+    await this.usersService.update(res.userId, {password: body.newPassword});
+    await this.usersService.passwordResetInvalidate(body.token);
+
+    return { status: 'OK' };
   }
 }

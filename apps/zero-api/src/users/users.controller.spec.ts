@@ -314,6 +314,78 @@ describe('UsersController', () => {
         .expect(HttpStatus.FORBIDDEN);
     });
   });
+
+  describe('POST /users/password-reset-init', function() {
+    let user: UserEntity;
+
+    beforeEach(async function() {
+      await prisma.passwordReset.deleteMany();
+      user = (await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body;
+    });
+
+    it('should accept request and create a token for existing user', async function() {
+      await request(httpServer)
+        .post('/users/password-reset-init')
+        .send({ email: validPayload.email })
+        .expect(HttpStatus.CREATED);
+
+      const allRecords = await prisma.passwordReset.findMany();
+
+      expect(allRecords.length).toEqual(1);
+
+      const tokenRecord = allRecords[0];
+
+      expect(tokenRecord.userId).toEqual(user.id);
+      expect(tokenRecord.usedAt).toBeNull();
+    });
+
+    it('should accept request and not create any token for non-existing user', async function() {
+      await request(httpServer)
+        .post('/users/password-reset-init')
+        .send({ email: 'fake@email.com' })
+        .expect(HttpStatus.CREATED);
+
+      const allRecords = await prisma.passwordReset.findMany();
+
+      expect(allRecords.length).toEqual(0);
+    });
+  });
+
+  describe('PUT /users/password-reset', function() {
+    let user: UserEntity, token: string;
+
+    beforeEach(async function() {
+      await prisma.passwordReset.deleteMany();
+      user = (await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body;
+
+      await request(httpServer)
+        .post('/users/password-reset-init')
+        .send({ email: validPayload.email })
+        .expect(HttpStatus.CREATED);
+
+      token = (await prisma.passwordReset.findFirst({ orderBy: { createdAt: 'desc' } })).id;
+    });
+
+    it('should accept request with valid token provided and change the password', async function() {
+      await request(httpServer)
+        .put('/users/password-reset')
+        .send({ token, newPassword: 'new password' })
+        .expect(HttpStatus.OK);
+    });
+
+    it('should not accept request with invalid token', async function() {
+      await request(httpServer)
+        .put('/users/password-reset')
+        .send({ token: 'invalid token', newPassword: 'new password' })
+        .expect(HttpStatus.FORBIDDEN);
+    });
+  });
 });
 
 async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
