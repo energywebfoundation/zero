@@ -161,6 +161,35 @@
           "newPassword"
         ]
       },
+      "PasswordResetInitDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@email.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "PasswordResetDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "22c026e5-2f67-4ccd-9299-c79b91cb9438"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "my new password XYZ#@"
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ]
+      },
       "DraftType": {
         "type": "string",
         "enum": [
@@ -469,6 +498,54 @@
             "access-token": []
           }
         ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/password-reset-init": {
+      "post": {
+        "operationId": "UsersController_resetPasswordInitialize",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordResetInitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/password-reset": {
+      "put": {
+        "operationId": "UsersController_resetPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordResetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
         "tags": [
           "users"
         ]
