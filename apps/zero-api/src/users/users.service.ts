@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserEntity } from './entities/user.entity';
+import { PasswordReset } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -42,7 +43,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<UserEntity> | null {
-    const data = await this.prisma.user.findUnique(({where: {email}}));
+    const data = await this.prisma.user.findUnique(({ where: { email } }));
     if (!data) return null;
     return new UserEntity(data);
   }
@@ -83,5 +84,37 @@ export class UsersService {
     }
 
     return await bcrypt.compare(password, user.password);
+  }
+
+  async passwordResetInitialize(userId: number, ttl: number): Promise<string> {
+    const expiresAt = new Date(new Date().getTime() + ttl * 1000); // TODO: set in .env
+    const newItem = await this.prisma.passwordReset.create({ data: { userId, expiresAt } });
+
+    return newItem.id;
+  }
+
+  async passwordResetInvalidate(token) {
+    const tokenRecord = await this.prisma.passwordReset.findUnique({ where: { id: token } });
+
+    if (!tokenRecord || tokenRecord.usedAt || tokenRecord.expiresAt < new Date()) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.passwordReset.update({
+      where: { id: token },
+      data: { usedAt: new Date() }
+    });
+  }
+
+  async validatePasswordReset(token: string): Promise<PasswordReset | null> {
+    const tokenRecord = await this.prisma.passwordReset.findUnique({ where: { id: token } });
+
+    if (tokenRecord === null) return null;
+
+    if (tokenRecord.expiresAt < new Date()) return null;
+
+    if (tokenRecord.usedAt) return null;
+
+    return tokenRecord;
   }
 }

@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole, User } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
@@ -167,4 +167,121 @@ describe('UsersService', () => {
         });
     });
   });
+
+  describe('passwordResetInitialize()', function() {
+    let user: User;
+
+    beforeEach(async () => {
+      user = await service.create(testData1);
+    });
+
+    it('should create a new token for existing user', async function() {
+      const token = await service.passwordResetInitialize(user.id, 3600);
+      expect(token).toBeDefined();
+
+      const dbRecord = await prisma.passwordReset.findMany({ where: { id: token } });
+
+      expect(dbRecord).not.toBeNull();
+      expect(dbRecord.length).toEqual(1);
+      expect(dbRecord[0].id).toEqual(token);
+      expect(dbRecord[0].userId).toEqual(user.id);
+    });
+
+    it('should forbid to create a new token for non-existing user', async function() {
+      await service.passwordResetInitialize(user.id + 1, 3600)
+        .then(() => {
+          throw new Error('Should be rejected');
+        })
+        .catch((err) => {
+          expect(err.code).toEqual('P2003'); // foreign key constraint fail
+        });
+    });
+  });
+
+  describe('passwordResetInvalidate()', function() {
+    let user: User, token: string;
+
+    beforeEach(async () => {
+      user = await service.create(testData1);
+      token = await service.passwordResetInitialize(user.id, 3600);
+    });
+
+    it('should set usedAt field to current time for existing token', async function() {
+      await service.passwordResetInvalidate(token);
+
+      expect(new Date((await prisma.passwordReset.findUnique({ where: { id: token } })).updatedAt).getTime()).toBeLessThanOrEqual(new Date().getTime());
+    });
+
+    it('should reject for invalid token', async function() {
+      await service.passwordResetInvalidate('invalid token')
+        .then(() => {
+          throw new Error('Should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err).toBeInstanceOf(NotFoundException);
+        });
+    });
+
+    it('should reject when token expired', async function() {
+      const expiredToken = await service.passwordResetInitialize(user.id, 2);
+
+      await delay(2010);
+
+      await service.passwordResetInvalidate(expiredToken)
+        .then(() => {
+          throw new Error('Should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+        });
+    });
+
+    it('should reject when already used', async function() {
+      await service.passwordResetInvalidate(token);
+
+      await service.passwordResetInvalidate(token)
+        .then(() => {
+          throw new Error('Should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+        });
+    });
+  });
+
+  describe('validatePasswordReset()', function() {
+    let user: User, token: string;
+
+    beforeEach(async () => {
+      user = await service.create(testData1);
+      token = await service.passwordResetInitialize(user.id, 3600);
+    });
+
+    it('should resolve to true for existing and not expired password resed token', async function() {
+      expect(await service.validatePasswordReset(token)).not.toBeNull();
+    });
+
+    it('should resolve to false for non-existing token', async function() {
+      expect(await service.validatePasswordReset('non existing token')).toBeNull();
+    });
+
+    it('should resolve to false for expired token', async function() {
+      const expiredToken = await service.passwordResetInitialize(user.id, 2);
+
+      await delay(2010);
+
+      expect(await service.validatePasswordReset(expiredToken)).toBeNull();
+    });
+
+    it('should resolve to false if already used', async function() {
+      await service.passwordResetInvalidate(token);
+
+      expect(await service.validatePasswordReset(token)).toBeNull();
+    });
+  });
 });
+
+async function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
