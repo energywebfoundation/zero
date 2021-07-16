@@ -36,12 +36,12 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
 
-    await prisma.clearDatabase()
+    await prisma.clearDatabase();
   });
 
   afterAll(async () => {
     await module.close();
-  })
+  });
 
   beforeEach(async () => {
     await prisma.user.deleteMany();
@@ -51,84 +51,92 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create user', async function() {
-    const newUser = await service.create(testData1);
+  describe('create()', function() {
+    it('should create user', async function() {
+      const newUser = await service.create(testData1);
 
-    expect(newUser).toBeDefined();
-    expect(newUser.id).toBeDefined();
+      expect(newUser).toBeDefined();
+      expect(newUser.id).toBeDefined();
 
-    const newUserFetched = await service.findOne(newUser.id);
+      const newUserFetched = await service.findOne(newUser.id);
 
-    expect(newUserFetched.email).toEqual(testData1.email);
-  });
+      expect(newUserFetched.email).toEqual(testData1.email);
+    });
 
-  it('should fetch all users created', async function() {
-    const u1 = await service.create(testData1);
-    const u2 = await service.create(testData2);
+    it('should create record with hashed password', async function() {
+      const newUser = await service.create(testData1);
+      expect(newUser.password).not.toEqual(testData1.password);
+      expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
+    });
 
-    const users = await service.findAll();
+    it('should create a user with multiple roles', async function() {
+      const newUser = await service.create({ ...testData1, roles: [UserRole.seller, UserRole.buyer, UserRole.admin] });
+      expect(newUser.roles.length).toEqual(3);
+      expect(newUser.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
 
-    expect(users.length).toEqual(2);
-    expect(u1.email).toEqual(testData1.email);
-    expect(u2.email).toEqual(testData2.email);
-  });
+      const newUserRecord = await service.findOne(newUser.id);
+      expect(newUserRecord.roles.length).toEqual(3);
+      expect(newUserRecord.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
+    });
 
-  it('should create record with hashed password', async function() {
-    const newUser = await service.create(testData1);
-    expect(newUser.password).not.toEqual(testData1.password);
-    expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
-  });
+    it('should reject already registered email address', async function() {
+      await service.create(testData1);
 
-  it('should create a user with multiple roles', async function() {
-    const newUser = await service.create({ ...testData1, roles: [UserRole.seller, UserRole.buyer, UserRole.admin] });
-    expect(newUser.roles.length).toEqual(3);
-    expect(newUser.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
-
-    const newUserRecord = await service.findOne(newUser.id);
-    expect(newUserRecord.roles.length).toEqual(3);
-    expect(newUserRecord.roles.sort()).toEqual([UserRole.seller, UserRole.buyer, UserRole.admin].sort());
-  });
-
-  it('email address should be unique', async function() {
-    await service.create(testData1);
-
-    await service.create({ ...testData2, email: testData1.email }).then(() => {
-      throw('Promise should be rejected');
-    }).catch((err) => {
-      expect(err).toBeDefined();
-      expect(err).toHaveProperty('code');
-      expect(err).toHaveProperty('stack');
-      expect(err).toHaveProperty('message');
-      expect(err.code).toEqual('P2002');
+      await service.create({ ...testData2, email: testData1.email }).then(() => {
+        throw('Promise should be rejected');
+      }).catch((err) => {
+        expect(err).toBeDefined();
+        expect(err).toHaveProperty('code');
+        expect(err).toHaveProperty('stack');
+        expect(err).toHaveProperty('message');
+        expect(err.code).toEqual('P2002');
+      });
     });
   });
 
-  it('should update existing user', async function() {
-    const user = await service.create(testData1);
+  describe('findAll()', function() {
+    it('should fetch all users created', async function() {
+      const u1 = await service.create(testData1);
+      const u2 = await service.create(testData2);
 
-    const userUpdated = await service.update(user.id, testData2);
-    expect(userUpdated).toBeDefined();
+      const users = await service.findAll();
 
-    const keysToMatch = _.omit(Object.keys(testData1), ['password', 'createdAt', 'updatedAt']);
-    expect(_.pick(testData2, keysToMatch)).toMatchObject(_.pick(testData2, keysToMatch));
+      expect(users.length).toEqual(2);
+      expect(u1.email).toEqual(testData1.email);
+      expect(u2.email).toEqual(testData2.email);
+    });
   });
 
-  it('should hash password when updating a user', async function() {
-    const user = await service.create(testData1);
-    const userUpdated = await service.update(user.id, testData2);
+  describe('update()', function() {
+    it('should update existing user', async function() {
+      const user = await service.create(testData1);
 
-    expect(bcrypt.compare(testData2.password, userUpdated.password)).toBeTruthy();
+      const userUpdated = await service.update(user.id, testData2);
+      expect(userUpdated).toBeDefined();
+
+      const keysToMatch = _.omit(Object.keys(testData1), ['password', 'createdAt', 'updatedAt']);
+      expect(_.pick(testData2, keysToMatch)).toMatchObject(_.pick(testData2, keysToMatch));
+    });
+
+    it('should hash password', async function() {
+      const user = await service.create(testData1);
+      const userUpdated = await service.update(user.id, testData2);
+
+      expect(bcrypt.compare(testData2.password, userUpdated.password)).toBeTruthy();
+    });
   });
 
-  it('should find user by email', async function() {
-    await service.create(testData1);
+  describe('findByEmail()', function() {
+    it('should find user by email', async function() {
+      await service.create(testData1);
 
-    expect(await service.findByEmail(testData1.email)).toBeDefined();
-  });
+      expect(await service.findByEmail(testData1.email)).toBeDefined();
+    });
 
-  it('should nod find any users for non existing email', async function() {
-    await service.create(testData1);
+    it('should nod find any users for non existing email', async function() {
+      await service.create(testData1);
 
-    expect(await service.findByEmail('fake@email.com')).toBeNull();
+      expect(await service.findByEmail('fake@email.com')).toBeNull();
+    });
   });
 });
