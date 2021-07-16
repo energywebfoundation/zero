@@ -60,7 +60,7 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('when creating a user', function() {
+  describe('POST /users', function() {
     it('should accept valid payload and create a user', async function() {
       const res = await request(app.getHttpServer())
         .post('/users')
@@ -164,7 +164,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('when updating a user', function() {
+  describe('PATCH /users/:id', function() {
     it('should not update an email', async function() {
       const newUser: UserEntity | null = (await request(app.getHttpServer())
         .post('/users')
@@ -189,7 +189,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('when roles protected endpoint requested', function() {
+  describe('GET /users', function() {
     let newSellerUserEmail: string, newAdminUserEmail: string;
 
     beforeAll(async function() {
@@ -210,28 +210,26 @@ describe('UsersController', () => {
       expect(newAdminUserEmail).toBeDefined();
     });
 
-    it('should respond if logged-in user has a required role', async function() {
-      const accessToken = await logInUser(app, newAdminUserEmail, validPayload.password);
-      expect(accessToken).toBeDefined();
+    it('should require an admin role', async function() {
+      const adminAccessToken = await logInUser(app, newAdminUserEmail, validPayload.password);
+      expect(adminAccessToken).toBeDefined();
+
+      const sellerAccessToken = await logInUser(app, newSellerUserEmail, validPayload.password);
+      expect(sellerAccessToken).toBeDefined();
 
       await request(httpServer)
         .get('/users')
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(adminAccessToken))
         .expect(HttpStatus.OK);
-    });
-
-    it('should deny access if logged-in user does not have a required role', async function() {
-      const accessToken = await logInUser(app, newSellerUserEmail, validPayload.password);
-      expect(accessToken).toBeDefined();
 
       await request(httpServer)
         .get('/users')
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(sellerAccessToken))
         .expect(HttpStatus.FORBIDDEN);
     });
   });
 
-  describe('when "me" endpoint requested ', function() {
+  describe('GET /users/me', function() {
     beforeAll(async function() {
       await prisma.user.deleteMany();
     });
