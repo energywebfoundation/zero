@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
 import { UserEntity } from './entities/user.entity';
-import { UserRole } from '@prisma/client';
+import { UserRole, EmailConfirmation } from '@prisma/client';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -386,6 +386,57 @@ describe('UsersController', () => {
         .put('/users/password-reset')
         .send({ token: 'invalid token', newPassword: 'new password' })
         .expect(HttpStatus.FORBIDDEN);
+    });
+  });
+
+  describe('PUT /users/email-confirmation', function() {
+    let user: UserEntity, emailConfirmation: EmailConfirmation;
+    beforeEach(async function() {
+      user = await (await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body;
+
+      emailConfirmation = await prisma.emailConfirmation.findFirst({ where: { userId: user.id } });
+    });
+
+    it('should accept valid token and update db records', async function() {
+      await request(app.getHttpServer())
+        .put('/users/email-confirmation')
+        .send({ token: emailConfirmation.id })
+        .expect(HttpStatus.OK);
+    });
+
+    it('should reject invalid token', async function() {
+      await request(app.getHttpServer())
+        .put('/users/email-confirmation')
+        .send({ token: 'invalid token' })
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should reject expired token', async function() {
+
+      await prisma.emailConfirmation.update({
+        where: { id: emailConfirmation.id },
+        data: { expiresAt: new Date(Date.now() - 1000) }
+      });
+
+      await request(app.getHttpServer())
+        .put('/users/email-confirmation')
+        .send({ token: emailConfirmation.id })
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should reject already used token', async function() {
+      await request(app.getHttpServer())
+        .put('/users/email-confirmation')
+        .send({ token: emailConfirmation.id })
+        .expect(HttpStatus.OK);
+
+      await request(app.getHttpServer())
+        .put('/users/email-confirmation')
+        .send({ token: emailConfirmation.id })
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 });

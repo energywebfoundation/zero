@@ -17,7 +17,14 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
@@ -29,6 +36,7 @@ import { User } from './decorators/user.decorator';
 import { PasswordChangeDto } from './dto/password-change.dto';
 import { PasswordResetInitDto } from './dto/password-reset-init.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
+import { UpdateEmailConfirmationDto } from './dto/update-email-confirmation.dto';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -132,6 +140,17 @@ export class UsersController {
 
     await this.usersService.update(res.userId, {password: body.newPassword});
     await this.usersService.passwordResetInvalidate(body.token);
+
+    return { status: 'OK' };
+  }
+
+  @Put('email-confirmation')
+  @Public()
+  @ApiTags('users')
+  @ApiOkResponse()
+  @ApiNotFoundResponse({ description: 'Invalid token provided' })
+  async confirmEmail(@Body() confirmEmailDto: UpdateEmailConfirmationDto) {
+    await this.usersService.confirmEmail(confirmEmailDto.token);
 
     return { status: 'OK' };
   }
