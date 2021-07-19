@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotFoundException } from '@nestjs/common';
 
 describe('UsersService', () => {
   let module: TestingModule;
@@ -137,6 +138,33 @@ describe('UsersService', () => {
       await service.create(testData1);
 
       expect(await service.findByEmail('fake@email.com')).toBeNull();
+    });
+  });
+
+  describe('checkPassword()', function() {
+    it('should resolve to true for a correct password', async function() {
+      const u1 = await service.create(testData1);
+
+      expect(await service.checkPassword(u1.id, testData1.password)).toEqual(true);
+    });
+
+    it('should resolve to false for incorrect password', async function() {
+      const u1 = await service.create(testData1);
+
+      expect(await service.checkPassword(u1.id, 'incorrect pass')).toEqual(false);
+    });
+
+    it('should reject with NotFoundException for non existing user', async function() {
+      const u1 = await service.create(testData1);
+
+      await service.checkPassword(u1.id + 1, testData1.password)
+        .then(() => {
+          throw new Error('It should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err).toBeInstanceOf(NotFoundException);
+        });
     });
   });
 });
