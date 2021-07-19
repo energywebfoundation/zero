@@ -122,6 +122,19 @@ export class UsersService {
   }
 
   async confirmEmail(token: string) {
-    await this.prisma.emailConfirmation.findUnique({where: {id: token}});
+    const emailConfirmation = await this.prisma.emailConfirmation.findUnique({ where: { id: token } });
+
+    if (
+      !emailConfirmation ||
+      emailConfirmation.confirmedAt ||
+      !emailConfirmation.valid ||
+      emailConfirmation.expiresAt.getTime() < Date.now()
+    ) throw new NotFoundException();
+
+    await this.prisma.$transaction([
+      this.prisma.user.update({ where: { id: emailConfirmation.userId }, data: { emailConfirmed: true } }),
+      this.prisma.emailConfirmation.update({ where: { id: emailConfirmation.id }, data: { confirmedAt: new Date() } }),
+      this.prisma.emailConfirmation.updateMany({ where: { userId: emailConfirmation.userId }, data: { valid: false } })
+    ]);
   }
 }

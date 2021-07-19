@@ -7,6 +7,7 @@ import { UserRole, User, EmailConfirmation } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
+import { UserEntity } from './entities/user.entity';
 
 describe('UsersService', () => {
   let module: TestingModule;
@@ -108,7 +109,7 @@ describe('UsersService', () => {
         actualTTL = Math.round((emailConfirmationRecords[0].expiresAt.getTime() - emailConfirmationRecords[0].createdAt.getTime()) / 1000);
       expect(actualTTL).toEqual(expectedTTL);
 
-      expect(emailConfirmationRecords[0].confirmed === false);
+      expect(emailConfirmationRecords[0].confirmedAt).toEqual(null)
     });
   });
 
@@ -295,6 +296,67 @@ describe('UsersService', () => {
       await service.passwordResetInvalidate(token);
 
       expect(await service.validatePasswordReset(token)).toBeNull();
+    });
+  });
+
+  describe('confirmEmail()', function() {
+    let user: UserEntity, emailConfirmation: EmailConfirmation;
+
+    beforeEach(async function() {
+      user = await service.create(testData1);
+      emailConfirmation = await prisma.emailConfirmation.findFirst({ where: { userId: user.id } });
+    });
+
+    it('should accept valid token', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+    });
+
+
+    it('should update User.emailConfirmed and emailConfirmationRecord.confirmed fields', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+
+      const userRecord: User = await prisma.user.findUnique({ where: { id: user.id } });
+      expect(userRecord.emailConfirmed).toEqual(true);
+
+      const emailConfirmationRecord: EmailConfirmation = await prisma.emailConfirmation.findUnique({ where: { id: emailConfirmation.id } });
+      expect(emailConfirmationRecord.confirmedAt.getTime() - Date.now()).toBeLessThanOrEqual(1000);
+    });
+
+    it('should reject invalid token', async function() {
+      await service.confirmEmail('invalid token')
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
+    });
+
+    it('should reject expired token', async function() {
+      await prisma.emailConfirmation.update({where: {id: emailConfirmation.id}, data: {expiresAt: new Date(Date.now() - 1000)}});
+
+      await service.confirmEmail(emailConfirmation.id)
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
+    });
+
+    it('should reject already used token', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+
+      await service.confirmEmail(emailConfirmation.id)
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
     });
   });
 });
