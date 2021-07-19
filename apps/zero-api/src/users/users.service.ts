@@ -25,12 +25,11 @@ export class UsersService {
         firstName,
         lastName,
         roles,
-        password: await this.hashPassword(password),
-        emailConfirmation: {
-          create: [{ expiresAt: new Date(new Date().getTime() + (parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400) * 1000) }]
-        }
+        password: await this.hashPassword(password)
       }
     });
+
+    await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
 
     return new UserEntity(data);
   }
@@ -119,6 +118,20 @@ export class UsersService {
     if (tokenRecord.usedAt) return null;
 
     return tokenRecord;
+  }
+
+  async createEmailConfirmation(userId: number, ttl: number): Promise<string> {
+    const [oldRecords, newRecord] = await this.prisma.$transaction([
+      this.prisma.emailConfirmation.updateMany({ where: { userId }, data: { valid: false } }),
+      this.prisma.emailConfirmation.create({
+        data: {
+          userId,
+          expiresAt: new Date(new Date().getTime() + ttl * 1000)
+        }
+      })
+    ]);
+
+    return newRecord.id;
   }
 
   async confirmEmail(token: string) {

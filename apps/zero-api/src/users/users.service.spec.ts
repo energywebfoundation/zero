@@ -299,6 +299,53 @@ describe('UsersService', () => {
     });
   });
 
+  describe('createEmailConfirmation()', function() {
+    let user: User, token: string;
+
+    beforeEach(async function() {
+      user = await service.create(testData1);
+      token = await service.createEmailConfirmation(user.id, 10);
+      expect(token).toBeDefined();
+    });
+
+    it('should create a db record', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+      expect(dbRecord).toBeDefined();
+    });
+
+    it('should create db record with correct userId', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+      expect(dbRecord.userId).toEqual(user.id);
+    });
+
+    it('should create db record with correct expiration and valid', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+
+      const expirationExpected = new Date(Date.now() + 10000).getTime();
+      const expirationActual = dbRecord.expiresAt.getTime();
+      expect(Math.abs(expirationExpected - expirationActual)).toBeLessThanOrEqual(1000);
+
+      expect(dbRecord.valid).toEqual(true);
+    });
+
+    it('should invalidate all previous tokens', async function() {
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+
+      const records = await prisma.emailConfirmation.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      expect(records[0].valid).toEqual(true);
+
+      expect(records.filter(r => r.valid).length).toEqual(1);
+      expect(records.filter(r => !r.valid).length).toEqual(5);
+    });
+  });
+
   describe('confirmEmail()', function() {
     let user: UserEntity, emailConfirmation: EmailConfirmation;
 
