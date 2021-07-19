@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole, User } from '@prisma/client';
+import { UserRole, User, EmailConfirmation } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
@@ -94,6 +94,21 @@ describe('UsersService', () => {
         expect(err).toHaveProperty('message');
         expect(err.code).toEqual('P2002');
       });
+    });
+
+    it('should create EmailConfirmation entity with correct expiration set', async function() {
+      const user = await service.create(testData1);
+
+      const emailConfirmationRecords: EmailConfirmation[] = await prisma.emailConfirmation.findMany();
+
+      expect(emailConfirmationRecords.length).toEqual(1);
+      expect(emailConfirmationRecords[0].userId).toEqual(user.id);
+
+      const expectedTTL = parseInt(process.env.EMAIL_CONFIRMATION_TTL),
+        actualTTL = Math.round((emailConfirmationRecords[0].expiresAt.getTime() - emailConfirmationRecords[0].createdAt.getTime()) / 1000);
+      expect(actualTTL).toEqual(expectedTTL);
+
+      expect(emailConfirmationRecords[0].confirmed === false);
     });
   });
 

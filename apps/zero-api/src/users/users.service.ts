@@ -25,7 +25,10 @@ export class UsersService {
         firstName,
         lastName,
         roles,
-        password: await this.hashPassword(password)
+        password: await this.hashPassword(password),
+        emailConfirmation: {
+          create: [{ expiresAt: new Date(new Date().getTime() + (parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400) * 1000) }]
+        }
       }
     });
 
