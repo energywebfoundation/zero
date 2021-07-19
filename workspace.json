@@ -130,6 +130,46 @@
         }
       }
     },
+    "ui-account": {
+      "root": "libs/ui/account",
+      "sourceRoot": "libs/ui/account/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/account",
+            "tsConfig": "libs/ui/account/tsconfig.lib.json",
+            "project": "libs/ui/account/package.json",
+            "entryFile": "libs/ui/account/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/ui/account/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/account/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/account"],
+          "options": {
+            "jestConfig": "libs/ui/account/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "ui-auth": {
       "root": "libs/ui/auth",
       "sourceRoot": "libs/ui/auth/src",

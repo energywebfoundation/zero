@@ -1,4 +1,11 @@
-import { AppBar, Box, Divider, IconButton, Toolbar } from '@material-ui/core';
+import {
+  AppBar,
+  Box,
+  Container,
+  Divider,
+  IconButton,
+  Toolbar,
+} from '@material-ui/core';
 import Menu from '@material-ui/icons/Menu';
 import { FC, memo, ReactElement } from 'react';
 import IconLink from '../icon-link/icon-link';
@@ -54,83 +61,86 @@ export const TopNavBar = memo(
     const styles = useTopNavBarStyles();
     return (
       <AppBar
-        style={{ display: hidden ? 'none' : 'unset' }}
+        style={{
+          display: hidden ? 'none' : 'unset',
+        }}
         hidden={hidden}
         className={styles.root}
-        color={'primary'}
         position="static"
       >
-        <Toolbar disableGutters>
-          <Box>
-            {sideNavToogleEnabled && (
-              <IconButton color="secondary" aria-label="menu" sx={{ mr: 2 }}>
-                <Menu />
-              </IconButton>
-            )}
-            {logo ?? <Box>{logo}</Box>}
-          </Box>
-          <Box
-            flexGrow={1}
-            mx={'45px'}
-            justifyItems={'space-between'}
-            display={'flex'}
-          >
-            <Box flexGrow={1} display={'flex'}>
-              {primaryNavigationItemList
-                .filter((el) => el.align === 'left')
-                .map((navLinkItem) => (
-                  <NavLinkItem
-                    {...navLinkItem}
-                    key={navLinkItem.url}
-                    handleNavigate={handleNavigate}
-                  />
-                ))}
-            </Box>
-            <Box justifyContent={'flex-end'} display={'flex'}>
-              {primaryNavigationItemList
-                .filter((el) => el.align === 'right')
-                .map((navLinkItem) => (
-                  <NavLinkItem
-                    {...navLinkItem}
-                    key={navLinkItem.url}
-                    handleNavigate={handleNavigate}
-                  />
-                ))}
-            </Box>
-          </Box>
-          <Box
-            alignItems={'center'}
-            justifyContent={'flex-end'}
-            display={'flex'}
-            textAlign={'end'}
-          >
-            <Box mr={'45px'}>
-              <Divider
-                sx={{ height: 48 }}
-                orientation={'vertical'}
-                flexItem
-                color={'#9B95BD'}
-              />
-            </Box>
+        <Container fixed>
+          <Toolbar disableGutters>
             <Box>
-              <AuthLinksSection
-                isAuthenticated={isAuthenticated}
-                handleNavigate={handleNavigate}
-              />
-              <TopBarUserProfileContainer />
+              {sideNavToogleEnabled && (
+                <IconButton color="secondary" aria-label="menu" sx={{ mr: 2 }}>
+                  <Menu />
+                </IconButton>
+              )}
+              {logo ?? <Box>{logo}</Box>}
+            </Box>
+            <Box
+              flexGrow={1}
+              mx={'45px'}
+              justifyItems={'space-between'}
+              display={'flex'}
+            >
+              <Box flexGrow={1} display={'flex'}>
+                {primaryNavigationItemList
+                  .filter((el) => el.align === 'left')
+                  .map((navLinkItem) => (
+                    <NavLinkItem
+                      {...navLinkItem}
+                      key={navLinkItem.url}
+                      handleNavigate={handleNavigate}
+                    />
+                  ))}
+              </Box>
+              <Box justifyContent={'flex-end'} display={'flex'}>
+                {primaryNavigationItemList
+                  .filter((el) => el.align === 'right')
+                  .map((navLinkItem) => (
+                    <NavLinkItem
+                      {...navLinkItem}
+                      key={navLinkItem.url}
+                      handleNavigate={handleNavigate}
+                    />
+                  ))}
+              </Box>
             </Box>
             <Box
               alignItems={'center'}
-              height={'100%'}
-              ml={'40px'}
-              minWidth={'50px'}
               justifyContent={'flex-end'}
+              display={'flex'}
+              textAlign={'end'}
             >
-              <LanguageSelect handleLanguageChange={handleLanguageChange} />
+              <Box mr={'45px'}>
+                <Divider
+                  sx={{ height: 48 }}
+                  orientation={'vertical'}
+                  flexItem
+                  color={'#9B95BD'}
+                />
+              </Box>
+              <Box>
+                <AuthLinksSection
+                  isAuthenticated={isAuthenticated}
+                  handleNavigate={handleNavigate}
+                />
+                <TopBarUserProfileContainer />
+              </Box>
+              <Box
+                alignItems={'center'}
+                height={'100%'}
+                ml={'40px'}
+                minWidth={'50px'}
+                justifyContent={'flex-end'}
+              >
+                <LanguageSelect handleLanguageChange={handleLanguageChange} />
+              </Box>
             </Box>
-          </Box>
-        </Toolbar>
-        <NotificationAreaContainer />
+          </Toolbar>
+          <NotificationAreaContainer />
+        </Container>
       </AppBar>
     );
   }

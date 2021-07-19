@@ -2,6 +2,7 @@
   "name": "@energyweb/zero-ui-api",
   "version": "0.0.1",
   "dependencies": {
+    "@trellisorg/make-buildable": "^0.0.10",
     "notistack": "^1.0.9"
   }
 }

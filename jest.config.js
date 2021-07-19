@@ -16,5 +16,6 @@ module.exports = {
     '<rootDir>/libs/ui/utils',
     '<rootDir>/libs/ui/auth',
     '<rootDir>/libs/ui/zero-api',
+    '<rootDir>/libs/ui/account',
   ],
 };

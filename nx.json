@@ -40,6 +40,9 @@
     "store-configure": {
       "tags": []
     },
+    "ui-account": {
+      "tags": []
+    },
     "ui-auth": {
       "tags": []
     },

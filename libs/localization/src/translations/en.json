@@ -18,6 +18,24 @@
       "whatIsZero": "What is Zero?",
       "zeroIsGlobalSearchEngineForRenewableEnergy": "Zero is global search engine for Renevable Energy"
     },
+    "accountSellerDashboardPage": {
+      "GuideCard-1": {
+        "headText": "1. Setup your public page",
+        "subHeadText": "Upload your inventory through manual or automatic means",
+        "btnText": "Edit seller page"
+      },
+      "GuideCard-2": {
+        "headText": "2. Add facilities and products",
+        "subHeadText": "Tell buyers who you are by providing practical information about your business",
+        "btnText": "Add facilities"
+      },
+      "GuideCard-3": {
+        "headText": "3. Review & reply to customer's RFPs",
+        "subHeadText": "Read through the Requests For Proposals that buyers have posted while searching for their needs",
+        "btnText": "View RFPs",
+        "disabledInfoText": "only available once you complete the other 2 steps"
+      }
+    },
     "auth": {
       "signIn": "Sign in",
       "signUp": "Sign up"
