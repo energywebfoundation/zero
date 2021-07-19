@@ -21,7 +21,7 @@ export const useAuthLoginPageEffects = () => {
           dispatch(authStateActions.setToken(accessToken));
         })
         .catch((reason) => {
-          // enqueueSnackbar('Wrong email or password');
+          alert('Wrong email or password');
           console.log(reason);
         });
     },

@@ -24,6 +24,7 @@
         "libs/store/app-shared-state/src/index.ts"
       ],
       "@energy-web-zero/ui-auth": ["libs/ui/auth/src/index.ts"],
+      "@energy-web-zero/ui/account": ["libs/ui/account/src/index.ts"],
       "@energy-web-zero/zero-ui-assets": ["libs/zero-ui-assets/src/index.ts"],
       "@energyweb/zero-forms": ["libs/ui/forms/src/index.ts"],
       "@energyweb/zero-theme": ["libs/ui/theme/src/index.ts"],

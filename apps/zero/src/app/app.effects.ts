@@ -11,8 +11,8 @@ import { useSnackbar } from 'notistack';
 
 export const useAppEffects = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const authToken = useSelector(authStateSelectors.token);
   const { isFetched, data } = useUsersControllerMe({
     query: { enabled: Boolean(authToken) },

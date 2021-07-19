@@ -7,21 +7,25 @@ import PageNotFoundPage from '../pages/page-not-found/page-not-found-page';
 import TopNavBarContainer from '../containers/top-nav-bar-container/top-nav-bar-container';
 import { AuthPage } from '@energy-web-zero/ui-auth';
 import { useAppEffects } from './app.effects';
+import { AccountPage } from '@energy-web-zero/ui/account';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AppProps {}
 
 const App: FC<AppProps> = () => {
   useAppEffects();
   return (
-    <Container fixed>
+    <>
       <TopNavBarContainer />
-      <Routes>
-        <Route path={'auth/*'} element={<AuthPage />} />
-        <Route path={'sellers'} element={<SellerLandingPage />} />
-        <Route path={'buyers'} element={<BuyerLandingPage />} />
-        <Route path={'*'} element={<PageNotFoundPage />} />
-      </Routes>
-    </Container>
+      <Container fixed>
+        <Routes>
+          <Route path={'auth/*'} element={<AuthPage />} />
+          <Route path={'sellers'} element={<SellerLandingPage />} />
+          <Route path={'buyers'} element={<BuyerLandingPage />} />
+          <Route path={'account/*'} element={<AccountPage />} />
+          <Route path={'*'} element={<PageNotFoundPage />} />
+        </Routes>
+      </Container>
+    </>
   );
 };
 

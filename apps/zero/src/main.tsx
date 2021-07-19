@@ -9,6 +9,8 @@ import { StoreProvider } from '@energy-web-zero/store-configure';
 import { ApiProvider } from '@energyweb/zero-ui-api';
 import { SnackbarProvider } from 'notistack';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { css, Global } from '@emotion/react';
+import { Helmet } from 'react-helmet';
 
 localforage.config({
   driver: localforage.LOCALSTORAGE,
@@ -23,6 +25,16 @@ ReactDOM.render(
       <StoreProvider>
         <ApiProvider>
           <UiTheme>
+            <Global
+              styles={css`
+                body {
+                  background: #2d1155;
+                }
+              `}
+            />
+            <Helmet>
+              <title>Energy Web Zero</title>
+            </Helmet>
             <SnackbarProvider
               anchorOrigin={{
                 vertical: 'top',
