@@ -5,5 +5,6 @@ export function getSwaggerDocumentationConfig() {
     .setTitle('Energy Web Zero API')
     .setVersion('0.3')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
+    .addServer(`http://localhost:${process.env.PORT || 3333}`)
     .build();
 }

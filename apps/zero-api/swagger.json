@@ -7,7 +7,11 @@
     "contact": {}
   },
   "tags": [],
-  "servers": [],
+  "servers": [
+    {
+      "url": "http://localhost:3333"
+    }
+  ],
   "components": {
     "securitySchemes": {
       "access-token": {
