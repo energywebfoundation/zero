@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
@@ -25,7 +24,7 @@ describe('AppController', () => {
     module = await Test.createTestingModule({
       controllers: [AppController],
       imports: [AuthModule, PrismaModule, UsersModule],
-      providers: [AppService]
+      providers: []
     }).compile();
 
     app = module.createNestApplication();
@@ -40,15 +39,6 @@ describe('AppController', () => {
 
   afterAll(async () => {
     await app?.close();
-  });
-
-  describe('getData', () => {
-    it('should return "Welcome to zero-api!"', () => {
-      const appController = module.get<AppController>(AppController);
-      expect(appController.getData()).toEqual({
-        message: 'Welcome to zero-api!'
-      });
-    });
   });
 
   describe('auth/login endpoint', function() {

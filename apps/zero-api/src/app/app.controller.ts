@@ -1,6 +1,5 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 
-import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiOkResponse, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDataDTO } from '../auth/login-data.dto';
@@ -10,13 +9,7 @@ import { Public } from '../auth/decorators/public.decorator';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private authService: AuthService) {}
-
-  @Get()
-  @Public()
-  getData() {
-    return this.appService.getData();
-  }
+  constructor(private authService: AuthService) {}
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
