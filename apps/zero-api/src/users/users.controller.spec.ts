@@ -8,13 +8,15 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
 import { UserEntity } from './entities/user.entity';
-import { UserRole, EmailConfirmation } from '@prisma/client';
+import { User, UserRole, EmailConfirmation } from '@prisma/client';
+import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
 
 describe('UsersController', () => {
   let app: INestApplication;
   let httpServer;
   let controller: UsersController;
   let prisma: PrismaService;
+  let usersService: UsersService;
 
   const validPayload: CreateUserDto = {
     firstName: 'test first name',
@@ -37,6 +39,7 @@ describe('UsersController', () => {
     httpServer = app.getHttpServer();
 
     controller = module.get<UsersController>(UsersController);
+    usersService = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
 
     await prisma.clearDatabase();
@@ -168,10 +171,7 @@ describe('UsersController', () => {
 
   describe('PATCH /users/:id', function() {
     it('should not update an email', async function() {
-      const newUser: UserEntity | null = (await request(app.getHttpServer())
-        .post('/users')
-        .send(validPayload)
-        .expect(HttpStatus.CREATED)).body as UserEntity;
+      const newUser = await createAndActivateUser(usersService, prisma, validPayload as User);
 
       expect(newUser).toBeDefined();
 
@@ -199,17 +199,21 @@ describe('UsersController', () => {
     });
 
     beforeEach(async function() {
-      newSellerUserEmail = (await request(httpServer)
-        .post('/users')
-        .send({ ...validPayload, email: 'seller@foobar.com', roles: [UserRole.seller] })
-        .expect(HttpStatus.CREATED)).body.email;
-      expect(newSellerUserEmail).toBeDefined();
+      const newSellerUser = await createAndActivateUser(usersService, prisma, {
+        ...validPayload,
+        email: 'seller@foobar.com',
+        roles: [UserRole.seller]
+      } as User);
+      expect(newSellerUser).toBeDefined();
+      newSellerUserEmail = newSellerUser.email;
 
-      newAdminUserEmail = (await request(httpServer)
-        .post('/users')
-        .send({ ...validPayload, email: 'admin@foobar.com', roles: [UserRole.admin] })
-        .expect(HttpStatus.CREATED)).body.email;
-      expect(newAdminUserEmail).toBeDefined();
+      const newAdminUser = await createAndActivateUser(usersService, prisma, {
+        ...validPayload,
+        email: 'admin@foobar.com',
+        roles: [UserRole.admin]
+      } as User);
+      expect(newAdminUser).toBeDefined();
+      newAdminUserEmail = newAdminUser.email;
     });
 
     it('should require an admin role', async function() {
@@ -243,10 +247,7 @@ describe('UsersController', () => {
     });
 
     it('should respond with a data of the logged in user', async function() {
-      const newUserId = (await request(httpServer)
-        .post('/users')
-        .send(validPayload)
-        .expect(HttpStatus.CREATED)).body.id;
+      const newUserId = (await createAndActivateUser(usersService, prisma, validPayload as User)).id;
 
       await request(httpServer)
         .post('/users')
@@ -270,11 +271,7 @@ describe('UsersController', () => {
     let accessToken1: string;
 
     beforeEach(async () => {
-      user1 = (await request(httpServer)
-        .post('/users')
-        .send(validPayload)
-        .expect(HttpStatus.CREATED)).body;
-
+      user1 = (await createAndActivateUser(usersService, prisma, validPayload as User));
       accessToken1 = await logInUser(app, user1.email, validPayload.password);
     });
 
@@ -487,13 +484,4 @@ describe('UsersController', () => {
   });
 });
 
-async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
-  return (await request(app.getHttpServer())
-    .post('/auth/login')
-    .send({ username, password })
-    .expect(HttpStatus.OK)).body.accessToken;
-}
 
-function getAuthBearerHeader(token: string): { Authorization: string } {
-  return { Authorization: `Bearer ${token}` };
-}

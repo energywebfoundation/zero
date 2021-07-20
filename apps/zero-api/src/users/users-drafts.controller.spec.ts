@@ -6,11 +6,12 @@ import { UsersDraftsController } from './users-drafts.controller';
 import { DraftsService } from '../drafts/drafts.service';
 import { UsersService } from './users.service';
 import { UserEntity } from './entities/user.entity';
-import { UserRole, DraftType } from '@prisma/client';
+import { User, UserRole, DraftType } from '@prisma/client';
 import * as request from 'supertest';
 import { DraftDto } from '../drafts/dto/draft.dto';
 import { CreateDraftDto } from '../drafts/dto/create-draft.dto';
 import { UpdateDraftDto } from '../drafts/dto/update-draft.dto';
+import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
 
 describe('UsersDraftsController', function() {
   let app: INestApplication;
@@ -45,23 +46,23 @@ describe('UsersDraftsController', function() {
     await prisma.clearDatabase();
 
 
-    user1 = await usersService.create({
+    user1 = await createAndActivateUser(usersService, prisma, {
       firstName: 'test first name 1',
       lastName: 'test last name 1',
       email: 'test-email1@foo.bar',
       roles: [UserRole.seller],
       password: password1
-    });
+    } as User);
 
     accessToken1 = await logInUser(app, user1.email, password1);
 
-    user2 = await usersService.create({
+    user2 = await createAndActivateUser(usersService, prisma,{
       firstName: 'test first name 2',
       lastName: 'test last name 2',
       email: 'test-email2@foo.bar',
       roles: [UserRole.seller],
       password: password2
-    });
+    } as User);
   });
 
   afterAll(async () => {
@@ -260,14 +261,3 @@ describe('UsersDraftsController', function() {
     });
   });
 });
-
-async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
-  return (await request(app.getHttpServer())
-    .post('/auth/login')
-    .send({ username, password })
-    .expect(HttpStatus.OK)).body.accessToken;
-}
-
-function getAuthBearerHeader(token: string): { Authorization: string } {
-  return { Authorization: `Bearer ${token}` };
-}

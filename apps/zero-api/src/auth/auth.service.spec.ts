@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
-import {UserRole} from '@prisma/client'
+import { User, UserRole } from '@prisma/client';
 import { AuthModule } from './auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UsersModule } from '../users/users.module';
+import { createAndActivateUser } from '../../test/helpers';
 
 describe('AuthService', () => {
   let module: TestingModule;
@@ -35,13 +36,13 @@ describe('AuthService', () => {
 
   it('should validate a user', async function() {
     const password = 'test password';
-    const user = await usersService.create({
+    const user = await createAndActivateUser(usersService, prismaService, {
       firstName: 'John',
       lastName: 'Smith',
       email: 'john.smith@foo.bar',
       password,
       roles: [UserRole.seller]
-    });
+    } as User);
 
     expect(await authService.validateUser(user.email, password)).toBeDefined();
     expect(await authService.validateUser('incorrect@email.com', password)).toBeNull();
