@@ -7,15 +7,13 @@
   <br>
 </h1>
 
-**Zero** description.
-
 <p align="center">
   <img src="https:s//github.com/energywebfoundation/zero/actions/workflows/deploy-master.yml/badge.svg" />
 </p>
 
 :construction: Documentation available at [https://energy-web-foundation-zero.readthedocs-hosted.com/en/latest/](https://energy-web-foundation-zero.readthedocs-hosted.com/en/latest/) :construction:
 
-## Table of Contents
+# Table of Contents
 
 -   [Table of Contents](#table-of-contents)
 -   [Packages](#packages)
@@ -38,35 +36,35 @@
 -   [Deployment](#deployment)
 -   [Contribution guidelines](#contribution-guidelines)
 
+# Versions
 
-
-#### Stable
+## Stable
 
 Stable versions of Zero are built during `release` branch build.
 
-#### Canary
+## Canary
 
 Canary versions of Zero are are built during `master` branch builds. Canary reflects current state of the `master` branch, they should be a working versions considers as `alpha`
 
 Install using `yarn add @energyweb/{package}@canary`
 
-#### Preview
+## Preview
 
 Preview versions of  Zero are built on a special `preview` branch, this is mostly used as interal tool for tests, demos, discussions.
 
 Install using `yarn add @energyweb/{package}@preview`
 
+# Running locally
+
 ## Preparation
 
-1. Make sure you are using latest Node LTS 
-2. Make sure you have Java runtime installed
-3. Install [Postgres](https://www.postgresql.org/download/) 12.x+ and create a new database named `zero`.
+- Make sure you are using latest Node LTS
+- Install [Postgres](https://www.postgresql.org/download/) 13.x+ and create a new database named `zero`.
 
    We recommend using Docker based setup as follows (requires psql command line tool installed):
 
 ```
-docker pull postgres
-docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres
+docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres:13.3-alpine
 ```
 
 4. Use your preferred SMTP server and set SMTP_URL environment variable accordingly, or run local SMTP mocking server as
@@ -79,16 +77,10 @@ docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zer
 6. Make sure you have created a `.env` file in the root of the monorepo and that all necessary variables are set.
    Use [`.env.example`](.env.example) as an example of how the `.env` file should look.
 
-## Installation
+## Install dependencies
 
 ```shell
 yarn
-```
-
-## Build
-
-```shell
-yarn build
 ```
 
 ## Test
@@ -102,12 +94,14 @@ yarn e2e
 yarn start
 ```
 
-Visit the UI at: http://localhost:3000.
+## Build
 
+```shell
+yarn build
+```
 
-## Deployment
-
-For deployment instructions please refer to [Deployment](https://github.com/energywebfoundation/zero/wiki/Zero-Deployment) wiki page.
+Visit the UI at: http://localhost:3000 to access user interface or http://localhost:3333/swagger to access Swagger
+rendered document.
 
 ## Contribution guidelines
 
