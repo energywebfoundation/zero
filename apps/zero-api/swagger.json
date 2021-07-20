@@ -195,6 +195,23 @@
           "newPassword"
         ]
       },
+      "CreateEmailConfirmationDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "testuser1@foo.bar"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
       "UpdateEmailConfirmationDto": {
         "type": "object",
         "properties": {
@@ -569,6 +586,31 @@
       }
     },
     "/api/users/email-confirmation": {
+      "post": {
+        "operationId": "UsersController_createEmailConfirmation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailConfirmationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "403": {
+            "description": "unregistered email or incorrect password"
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
       "put": {
         "operationId": "UsersController_confirmEmail",
         "parameters": [],

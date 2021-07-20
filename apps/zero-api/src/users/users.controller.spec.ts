@@ -389,6 +389,52 @@ describe('UsersController', () => {
     });
   });
 
+  describe('POST /users/email-confirmation', function() {
+    let user: UserEntity;
+    beforeEach(async function() {
+      user = await (await request(app.getHttpServer())
+        .post('/users')
+        .send(validPayload)
+        .expect(HttpStatus.CREATED)).body;
+    });
+
+    it('should accept request for exisiting email and correct password', async function() {
+      await request(app.getHttpServer())
+        .post('/users/email-confirmation')
+        .send({ email: validPayload.email, password: validPayload.password })
+        .expect(HttpStatus.CREATED);
+    });
+
+    it('should reject request for non-existing email', async function() {
+      await request(app.getHttpServer())
+        .post('/users/email-confirmation')
+        .send({ email: 'invalid@email.com', password: validPayload.password })
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('should reject request for incorrect password', async function() {
+      await request(app.getHttpServer())
+        .post('/users/email-confirmation')
+        .send({ email: validPayload.email, password: 'invalid password' })
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('should create correct db record', async function() {
+      await request(app.getHttpServer())
+        .post('/users/email-confirmation')
+        .send({ email: validPayload.email, password: validPayload.password })
+        .expect(HttpStatus.CREATED);
+
+      const dbRecord: EmailConfirmation = await prisma.emailConfirmation.findFirst();
+      expect(dbRecord).toBeDefined();
+      expect(dbRecord.userId).toEqual(user.id);
+
+      const expirationExpected = new Date(Date.now() + parseInt(process.env.EMAIL_CONFIRMATION_TTL) * 1000).getTime();
+      const expirationActual = dbRecord.expiresAt.getTime();
+      expect(Math.abs(expirationExpected - expirationActual)).toBeLessThanOrEqual(1000);
+    });
+  });
+
   describe('PUT /users/email-confirmation', function() {
     let user: UserEntity, emailConfirmation: EmailConfirmation;
     beforeEach(async function() {
