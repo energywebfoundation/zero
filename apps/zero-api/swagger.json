@@ -77,6 +77,10 @@
             "items": {
               "$ref": "#/components/schemas/UserRole"
             }
+          },
+          "emailConfirmed": {
+            "type": "boolean",
+            "example": false
           }
         },
         "required": [
@@ -84,7 +88,8 @@
           "email",
           "firstName",
           "lastName",
-          "roles"
+          "roles",
+          "emailConfirmed"
         ]
       },
       "CreateUserDto": {
@@ -188,6 +193,35 @@
         "required": [
           "token",
           "newPassword"
+        ]
+      },
+      "CreateEmailConfirmationDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "testuser1@foo.bar"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UpdateEmailConfirmationDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "22c026e5-2f67-4ccd-9299-c79b91cb9438"
+          }
+        },
+        "required": [
+          "token"
         ]
       },
       "DraftType": {
@@ -544,6 +578,58 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/email-confirmation": {
+      "post": {
+        "operationId": "UsersController_createEmailConfirmation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailConfirmationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "403": {
+            "description": "unregistered email or incorrect password"
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "operationId": "UsersController_confirmEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmailConfirmationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "Invalid token provided"
           }
         },
         "tags": [

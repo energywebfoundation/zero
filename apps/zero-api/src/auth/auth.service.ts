@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../users/entities/user.entity';
@@ -16,7 +16,13 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<UserEntity> {
     const user = await this.usersService.findByEmail(email);
 
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (!user) return null;
+
+    if (!user.emailConfirmed) {
+      throw new HttpException('email not confirmed', HttpStatus.FORBIDDEN);
+    }
+
+    if (await bcrypt.compare(password, user.password)) {
       return new UserEntity(user);
     }
 

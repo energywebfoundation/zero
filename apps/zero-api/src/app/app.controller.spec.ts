@@ -7,11 +7,12 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
-import { UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { UserEntity } from '../users/entities/user.entity';
 import * as request from 'supertest';
 import { JwtService } from '@nestjs/jwt';
+import { createAndActivateUser } from '../../test/helpers';
 
 describe('AppController', () => {
   let module: TestingModule;
@@ -54,13 +55,13 @@ describe('AppController', () => {
     const validPassword = 'valid pass';
     let user: UserEntity;
     beforeAll(async () => {
-      user = await usersService.create({
+      user = await createAndActivateUser(usersService, prisma, {
         firstName: 'John',
         lastName: 'Smith',
         email: 'john.smith@foo.bar',
         password: validPassword,
         roles: [UserRole.seller],
-      });
+      } as User);
     });
 
     it('should accept valid username and password', async function() {
@@ -97,6 +98,23 @@ describe('AppController', () => {
         .post('/auth/login')
         .send({ username: 'fake@email.com', password: validPassword })
         .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(res.body.accessToken).toBeUndefined();
+    });
+
+    it('should not accept not user with not confirmed email', async function() {
+      await usersService.create({
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'john.smith2@foo.bar',
+        password: validPassword,
+        roles: [UserRole.seller]
+      });
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ username: 'john.smith2@foo.bar', password: validPassword })
+        .expect(HttpStatus.FORBIDDEN);
 
       expect(res.body.accessToken).toBeUndefined();
     });

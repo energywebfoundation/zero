@@ -12,6 +12,7 @@ CREATE TABLE "User" (
     "lastName" TEXT NOT NULL,
     "roles" "UserRole"[],
     "password" TEXT NOT NULL,
+    "emailConfirmed" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -42,6 +43,19 @@ CREATE TABLE "PasswordReset" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "EmailConfirmation" (
+    "id" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "valid" BOOLEAN NOT NULL DEFAULT true,
+    "confirmedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
@@ -50,3 +64,6 @@ ALTER TABLE "Draft" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE
 
 -- AddForeignKey
 ALTER TABLE "PasswordReset" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EmailConfirmation" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

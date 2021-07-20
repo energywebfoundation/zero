@@ -3,10 +3,11 @@ import * as bcrypt from 'bcryptjs';
 import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole, User } from '@prisma/client';
+import { UserRole, User, EmailConfirmation } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
+import { UserEntity } from './entities/user.entity';
 
 describe('UsersService', () => {
   let module: TestingModule;
@@ -45,6 +46,7 @@ describe('UsersService', () => {
   });
 
   beforeEach(async () => {
+    await prisma.emailConfirmation.deleteMany();
     await prisma.user.deleteMany();
   });
 
@@ -62,6 +64,7 @@ describe('UsersService', () => {
       const newUserFetched = await service.findOne(newUser.id);
 
       expect(newUserFetched.email).toEqual(testData1.email);
+      expect(newUserFetched.emailConfirmed).toEqual(false);
     });
 
     it('should create record with hashed password', async function() {
@@ -92,6 +95,21 @@ describe('UsersService', () => {
         expect(err).toHaveProperty('message');
         expect(err.code).toEqual('P2002');
       });
+    });
+
+    it('should create EmailConfirmation entity with correct expiration set', async function() {
+      const user = await service.create(testData1);
+
+      const emailConfirmationRecords: EmailConfirmation[] = await prisma.emailConfirmation.findMany();
+
+      expect(emailConfirmationRecords.length).toEqual(1);
+      expect(emailConfirmationRecords[0].userId).toEqual(user.id);
+
+      const expectedTTL = parseInt(process.env.EMAIL_CONFIRMATION_TTL),
+        actualTTL = Math.round((emailConfirmationRecords[0].expiresAt.getTime() - emailConfirmationRecords[0].createdAt.getTime()) / 1000);
+      expect(actualTTL).toEqual(expectedTTL);
+
+      expect(emailConfirmationRecords[0].confirmedAt).toEqual(null)
     });
   });
 
@@ -278,6 +296,114 @@ describe('UsersService', () => {
       await service.passwordResetInvalidate(token);
 
       expect(await service.validatePasswordReset(token)).toBeNull();
+    });
+  });
+
+  describe('createEmailConfirmation()', function() {
+    let user: User, token: string;
+
+    beforeEach(async function() {
+      user = await service.create(testData1);
+      token = await service.createEmailConfirmation(user.id, 10);
+      expect(token).toBeDefined();
+    });
+
+    it('should create a db record', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+      expect(dbRecord).toBeDefined();
+    });
+
+    it('should create db record with correct userId', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+      expect(dbRecord.userId).toEqual(user.id);
+    });
+
+    it('should create db record with correct expiration and valid', async function() {
+      const dbRecord = await prisma.emailConfirmation.findUnique({ where: { id: token } });
+
+      const expirationExpected = new Date(Date.now() + 10000).getTime();
+      const expirationActual = dbRecord.expiresAt.getTime();
+      expect(Math.abs(expirationExpected - expirationActual)).toBeLessThanOrEqual(1000);
+
+      expect(dbRecord.valid).toEqual(true);
+    });
+
+    it('should invalidate all previous tokens', async function() {
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+      await service.createEmailConfirmation(user.id, 10);
+
+      const records = await prisma.emailConfirmation.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      expect(records[0].valid).toEqual(true);
+
+      expect(records.filter(r => r.valid).length).toEqual(1);
+      expect(records.filter(r => !r.valid).length).toEqual(5);
+    });
+  });
+
+  describe('confirmEmail()', function() {
+    let user: UserEntity, emailConfirmation: EmailConfirmation;
+
+    beforeEach(async function() {
+      user = await service.create(testData1);
+      emailConfirmation = await prisma.emailConfirmation.findFirst({ where: { userId: user.id } });
+    });
+
+    it('should accept valid token', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+    });
+
+
+    it('should update User.emailConfirmed and emailConfirmationRecord.confirmed fields', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+
+      const userRecord: User = await prisma.user.findUnique({ where: { id: user.id } });
+      expect(userRecord.emailConfirmed).toEqual(true);
+
+      const emailConfirmationRecord: EmailConfirmation = await prisma.emailConfirmation.findUnique({ where: { id: emailConfirmation.id } });
+      expect(emailConfirmationRecord.confirmedAt.getTime() - Date.now()).toBeLessThanOrEqual(1000);
+    });
+
+    it('should reject invalid token', async function() {
+      await service.confirmEmail('invalid token')
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
+    });
+
+    it('should reject expired token', async function() {
+      await prisma.emailConfirmation.update({where: {id: emailConfirmation.id}, data: {expiresAt: new Date(Date.now() - 1000)}});
+
+      await service.confirmEmail(emailConfirmation.id)
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
+    });
+
+    it('should reject already used token', async function() {
+      await service.confirmEmail(emailConfirmation.id);
+
+      await service.confirmEmail(emailConfirmation.id)
+        .then(() => {
+          throw new Error('should be rejected');
+        })
+        .catch((err) => {
+          expect(err).toBeDefined();
+          expect(err.response.statusCode).toEqual(404);
+        });
     });
   });
 });

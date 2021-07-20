@@ -27,6 +27,7 @@ describe('DraftsService', () => {
   });
 
   beforeEach(async () => {
+    await prisma.emailConfirmation.deleteMany();
     await prisma.draft.deleteMany();
     await prisma.user.deleteMany();
 

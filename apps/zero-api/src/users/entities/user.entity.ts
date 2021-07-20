@@ -22,6 +22,9 @@ export class UserEntity implements User {
   @Exclude()
   password: string;
 
+  @ApiProperty({ example: false })
+  emailConfirmed: boolean;
+
   @Exclude()
   createdAt: Date;
 

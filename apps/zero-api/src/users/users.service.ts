@@ -29,6 +29,8 @@ export class UsersService {
       }
     });
 
+    await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
+
     return new UserEntity(data);
   }
 
@@ -116,5 +118,36 @@ export class UsersService {
     if (tokenRecord.usedAt) return null;
 
     return tokenRecord;
+  }
+
+  async createEmailConfirmation(userId: number, ttl: number): Promise<string> {
+    const [oldRecords, newRecord] = await this.prisma.$transaction([
+      this.prisma.emailConfirmation.updateMany({ where: { userId }, data: { valid: false } }),
+      this.prisma.emailConfirmation.create({
+        data: {
+          userId,
+          expiresAt: new Date(new Date().getTime() + ttl * 1000)
+        }
+      })
+    ]);
+
+    return newRecord.id;
+  }
+
+  async confirmEmail(token: string) {
+    const emailConfirmation = await this.prisma.emailConfirmation.findUnique({ where: { id: token } });
+
+    if (
+      !emailConfirmation ||
+      emailConfirmation.confirmedAt ||
+      !emailConfirmation.valid ||
+      emailConfirmation.expiresAt.getTime() < Date.now()
+    ) throw new NotFoundException();
+
+    await this.prisma.$transaction([
+      this.prisma.user.update({ where: { id: emailConfirmation.userId }, data: { emailConfirmed: true } }),
+      this.prisma.emailConfirmation.update({ where: { id: emailConfirmation.id }, data: { confirmedAt: new Date() } }),
+      this.prisma.emailConfirmation.updateMany({ where: { userId: emailConfirmation.userId }, data: { valid: false } })
+    ]);
   }
 }
