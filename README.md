@@ -15,26 +15,18 @@
 
 # Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Packages](#packages)
-    -   [Applications, Infrastructure and Demo](#applications-infrastructure-and-demo)
-    -   [Packages types](#packages-types)
-        -   [Stable](#stable)
-        -   [Canary](#canary)
-        -   [Preview](#preview)
--   [Installation](#installation)
--   [Build](#build)
--   [Test](#test)
--   [Run demo](#run-demo)
-    -   [Preparation](#preparation)
-    -   [Running](#running)
-    -   [Heroku environment provisioning](#heroku-environment-provisioning)
--   [Energy Attribute Certificates](#energy-attribute-certificates)
--   [Key modules and components](#key-modules-and-components)
-    -   [Key repositories](#key-repositories)
-    -   [Other components](#other-components)
--   [Deployment](#deployment)
--   [Contribution guidelines](#contribution-guidelines)
+- [Table of Contents](#table-of-contents)
+- [Versions](#versions)
+  * [Stable](#stable)
+  * [Canary](#canary)
+  * [Preview](#preview)
+- [Running locally](#running-locally)
+  * [Preparation](#preparation)
+  * [Install dependencies](#install-dependencies)
+  * [Test](#test)
+  * [Run demo](#run-demo)
+  * [Build](#build)
+- [Contribution guidelines](#contribution-guidelines)
 
 # Versions
 
