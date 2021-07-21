@@ -40,7 +40,13 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap()
+  .then(() => logger.log('all done'))
+  .catch(err => {
+    logger.error(err);
+    console.log(err);
+    process.exit(1);
+  });
 
 function getLogLevelsFromEnv(): LogLevel[] {
   const allowedLogLevels: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
