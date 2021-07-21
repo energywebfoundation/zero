@@ -11,7 +11,7 @@ import { AppModule } from './app/app.module';
 import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 import {intersection} from 'lodash';
 
-const logger = new Logger('bootstrap', true);
+const logger = new Logger('bootstrap', { timestamp: true });
 
 logger.log('starting');
 
