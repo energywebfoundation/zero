@@ -11,13 +11,17 @@ import { AppModule } from './app/app.module';
 import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 import {intersection} from 'lodash';
 
+const logger = new Logger('bootstrap', true);
+
+logger.log('starting');
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     logger: getLogLevelsFromEnv()
   });
 
-  const logger = new Logger('bootstrap');
+  logger.log(`LOG_LEVELS=${getLogLevelsFromEnv().join()}`);
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
