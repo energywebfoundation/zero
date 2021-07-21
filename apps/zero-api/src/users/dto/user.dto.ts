@@ -3,7 +3,7 @@ import { Exclude } from 'class-transformer';
 
 import { User, UserRole } from '@prisma/client';
 
-export class UserEntity implements User {
+export class UserDto implements User {
   @ApiProperty({ example: 1 })
   id: number;
 
@@ -31,7 +31,7 @@ export class UserEntity implements User {
   @Exclude()
   updatedAt: Date;
 
-  constructor(partial: Partial<UserEntity>) {
+  constructor(partial: Partial<UserDto>) {
     Object.assign(this, partial);
   }
 

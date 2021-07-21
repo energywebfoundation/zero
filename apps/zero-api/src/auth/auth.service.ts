@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserDto } from '../users/dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 
 export interface IJWTPayload {
@@ -13,7 +13,7 @@ export interface IJWTPayload {
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService) {}
 
-  async validateUser(email: string, password: string): Promise<UserEntity> {
+  async validateUser(email: string, password: string): Promise<UserDto> {
     const user = await this.usersService.findByEmail(email);
 
     if (!user) return null;
@@ -23,13 +23,13 @@ export class AuthService {
     }
 
     if (await bcrypt.compare(password, user.password)) {
-      return new UserEntity(user);
+      return new UserDto(user);
     }
 
     return null;
   }
 
-  async login(user: UserEntity) {
+  async login(user: UserDto) {
     const payload: IJWTPayload = {
       sub: user.email,
       id: user.id

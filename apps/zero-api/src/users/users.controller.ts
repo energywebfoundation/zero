@@ -25,7 +25,7 @@ import {
   ApiOkResponse,
   ApiTags
 } from '@nestjs/swagger';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -50,7 +50,7 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @RequiredRoles(UserRole.admin)
   @ApiTags('users')
-  @ApiOkResponse({ type: UserEntity, isArray: true })
+  @ApiOkResponse({ type: UserDto, isArray: true })
   async getAll() {
     return await this.usersService.findAll();
   }
@@ -58,7 +58,7 @@ export class UsersController {
   @Post()
   @Public()
   @ApiTags('users')
-  @ApiCreatedResponse({ type: UserEntity })
+  @ApiCreatedResponse({ type: UserDto })
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
@@ -66,23 +66,23 @@ export class UsersController {
   @Get('me')
   @ApiBearerAuth('access-token')
   @ApiTags('users')
-  @ApiOkResponse({ type: UserEntity })
-  async me(@User() user: UserEntity): Promise<UserEntity> {
+  @ApiOkResponse({ type: UserDto })
+  async me(@User() user: UserDto): Promise<UserDto> {
     return await this.usersService.findOne(user.id);
   }
 
   @Get(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('users')
-  @ApiOkResponse({ type: UserEntity })
-  async findOne(@Param('id', new ParseIntPipe()) id: number): Promise<UserEntity> {
+  @ApiOkResponse({ type: UserDto })
+  async findOne(@Param('id', new ParseIntPipe()) id: number): Promise<UserDto> {
     return await this.usersService.findOne(id);
   }
 
   @Patch(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('users')
-  @ApiOkResponse({ type: UserEntity })
+  @ApiOkResponse({ type: UserDto })
   async update(@Param('id', new ParseIntPipe()) id: number, @Body() updateUserDto: UpdateUserDto) {
     const existingUser = await this.usersService.findOne(id);
 
@@ -96,10 +96,10 @@ export class UsersController {
   @Put('/:id/password')
   @ApiBearerAuth('access-token')
   @ApiTags('users')
-  @ApiOkResponse({ type: UserEntity })
+  @ApiOkResponse({ type: UserDto })
   @ApiForbiddenResponse()
   async passwordChange(
-    @User() user: UserEntity,
+    @User() user: UserDto,
     @Param('id', new ParseIntPipe()) id: number,
     @Body() passwordChangeDTO: PasswordChangeDto
   ) {
@@ -151,7 +151,7 @@ export class UsersController {
   @ApiOkResponse()
   @ApiForbiddenResponse({ description: 'unregistered email or incorrect password' })
   async createEmailConfirmation(@Body() createEmailConfirmation: CreateEmailConfirmationDto) {
-    const user: UserEntity = await this.usersService.findByEmail(createEmailConfirmation.email);
+    const user: UserDto = await this.usersService.findByEmail(createEmailConfirmation.email);
 
     if (!user) throw new ForbiddenException();
 

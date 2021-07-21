@@ -8,7 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserDto } from '../users/dto/user.dto';
 import * as request from 'supertest';
 import { JwtService } from '@nestjs/jwt';
 import { createAndActivateUser } from '../../test/helpers';
@@ -43,7 +43,7 @@ describe('AppController', () => {
 
   describe('auth/login endpoint', function() {
     const validPassword = 'valid pass';
-    let user: UserEntity;
+    let user: UserDto;
     beforeAll(async () => {
       user = await createAndActivateUser(usersService, prisma, {
         firstName: 'John',

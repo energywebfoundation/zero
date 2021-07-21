@@ -15,7 +15,7 @@ import { DraftsService } from '../drafts/drafts.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { DraftDto } from '../drafts/dto/draft.dto';
 import { User } from './decorators/user.decorator';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 import { CreateDraftDto } from '../drafts/dto/create-draft.dto';
 import { UpdateDraftDto } from '../drafts/dto/update-draft.dto';
 
@@ -34,7 +34,7 @@ export class UsersDraftsController {
   @ApiTags('users')
   @ApiOkResponse({ type: DraftDto, isArray: true })
   findAll(
-    @User() user: UserEntity,
+    @User() user: UserDto,
     @Param('userId', new ParseIntPipe()) userId: number
   ) {
     if (user.id !== userId) throw new ForbiddenException();
@@ -48,7 +48,7 @@ export class UsersDraftsController {
   @ApiTags('users')
   @ApiCreatedResponse({ type: DraftDto })
   create(
-    @User() user: UserEntity, @Body() createDraftDto: CreateDraftDto,
+    @User() user: UserDto, @Body() createDraftDto: CreateDraftDto,
     @Param('userId', new ParseIntPipe()) userId: number
   ) {
     if (user.id !== userId) throw new ForbiddenException();
@@ -61,7 +61,7 @@ export class UsersDraftsController {
   @ApiTags('users')
   @ApiOkResponse({ type: DraftDto })
   async findOne(
-    @User() user: UserEntity,
+    @User() user: UserDto,
     @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number
   ) {
@@ -79,7 +79,7 @@ export class UsersDraftsController {
   @ApiTags('users')
   @ApiOkResponse({ type: DraftDto })
   async update(
-    @User() user: UserEntity,
+    @User() user: UserDto,
     @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updateDraftDto: UpdateDraftDto
@@ -98,7 +98,7 @@ export class UsersDraftsController {
   @ApiTags('users')
   @ApiOkResponse()
   async remove(
-    @User() user: UserEntity,
+    @User() user: UserDto,
     @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number
   ) {

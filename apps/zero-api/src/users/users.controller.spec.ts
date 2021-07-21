@@ -7,7 +7,7 @@ import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 import { User, UserRole, EmailConfirmation } from '@prisma/client';
 import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
 
@@ -74,7 +74,7 @@ describe('UsersController', () => {
 
       expect(res).toBeDefined();
 
-      const userCreated = res.body as Omit<UserEntity, 'password'>;
+      const userCreated = res.body as Omit<UserDto, 'password'>;
 
       expect(userCreated.id).toBeDefined();
       expect(userCreated.firstName).toEqual(validPayload.firstName);
@@ -161,7 +161,7 @@ describe('UsersController', () => {
         .send(validPayload)
         .expect(HttpStatus.CREATED);
 
-      const userCreated = res.body as Omit<UserEntity, 'password'>;
+      const userCreated = res.body as Omit<UserDto, 'password'>;
       expect(userCreated.email).toEqual(validPayload.email);
 
       const userDbRecord = await prisma.user.findUnique({ where: { email: validPayload.email } });
@@ -267,7 +267,7 @@ describe('UsersController', () => {
   });
 
   describe('PUT /users/:id/password', function() {
-    let user1: UserEntity, user2: UserEntity;
+    let user1: UserDto, user2: UserDto;
     let accessToken1: string;
 
     beforeEach(async () => {
@@ -315,7 +315,7 @@ describe('UsersController', () => {
   });
 
   describe('POST /users/password-reset-init', function() {
-    let user: UserEntity;
+    let user: UserDto;
 
     beforeEach(async function() {
       await prisma.passwordReset.deleteMany();
@@ -354,7 +354,7 @@ describe('UsersController', () => {
   });
 
   describe('PUT /users/password-reset', function() {
-    let user: UserEntity, token: string;
+    let user: UserDto, token: string;
 
     beforeEach(async function() {
       await prisma.passwordReset.deleteMany();
@@ -387,7 +387,7 @@ describe('UsersController', () => {
   });
 
   describe('POST /users/email-confirmation', function() {
-    let user: UserEntity;
+    let user: UserDto;
     beforeEach(async function() {
       user = await (await request(app.getHttpServer())
         .post('/users')
@@ -433,7 +433,7 @@ describe('UsersController', () => {
   });
 
   describe('PUT /users/email-confirmation', function() {
-    let user: UserEntity, emailConfirmation: EmailConfirmation;
+    let user: UserDto, emailConfirmation: EmailConfirmation;
     beforeEach(async function() {
       user = await (await request(app.getHttpServer())
         .post('/users')

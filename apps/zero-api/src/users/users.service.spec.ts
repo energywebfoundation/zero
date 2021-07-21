@@ -7,7 +7,7 @@ import { UserRole, User, EmailConfirmation } from '@prisma/client';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 
 describe('UsersService', () => {
   let module: TestingModule;
@@ -347,7 +347,7 @@ describe('UsersService', () => {
   });
 
   describe('confirmEmail()', function() {
-    let user: UserEntity, emailConfirmation: EmailConfirmation;
+    let user: UserDto, emailConfirmation: EmailConfirmation;
 
     beforeEach(async function() {
       user = await service.create(testData1);

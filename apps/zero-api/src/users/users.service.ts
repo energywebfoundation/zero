@@ -3,14 +3,14 @@ import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 import { PasswordReset } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> | null {
+  async create(createUserDto: CreateUserDto): Promise<UserDto> | null {
     const {
       email,
       firstName,
@@ -31,23 +31,23 @@ export class UsersService {
 
     await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
 
-    return new UserEntity(data);
+    return new UserDto(data);
   }
 
   async findAll() {
-    return (await this.prisma.user.findMany()).map((row) => new UserEntity(row));
+    return (await this.prisma.user.findMany()).map((row) => new UserDto(row));
   }
 
-  async findOne(id: number): Promise<UserEntity> | null {
+  async findOne(id: number): Promise<UserDto> | null {
     const data = await this.prisma.user.findUnique({ where: { id } });
     if (!data) return null;
-    return new UserEntity(data);
+    return new UserDto(data);
   }
 
-  async findByEmail(email: string): Promise<UserEntity> | null {
+  async findByEmail(email: string): Promise<UserDto> | null {
     const data = await this.prisma.user.findUnique(({ where: { email } }));
     if (!data) return null;
-    return new UserEntity(data);
+    return new UserDto(data);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -68,7 +68,7 @@ export class UsersService {
       }
     });
 
-    return new UserEntity(data);
+    return new UserDto(data);
   }
 
   async remove(id: number) {

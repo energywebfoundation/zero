@@ -5,7 +5,7 @@ import { AppModule } from '../app/app.module';
 import { UsersDraftsController } from './users-drafts.controller';
 import { DraftsService } from '../drafts/drafts.service';
 import { UsersService } from './users.service';
-import { UserEntity } from './entities/user.entity';
+import { UserDto } from './dto/user.dto';
 import { User, UserRole, DraftType } from '@prisma/client';
 import * as request from 'supertest';
 import { DraftDto } from '../drafts/dto/draft.dto';
@@ -21,7 +21,7 @@ describe('UsersDraftsController', function() {
   let usersService: UsersService;
   let draftsService: DraftsService;
 
-  let user1: UserEntity, user2: UserEntity;
+  let user1: UserDto, user2: UserDto;
   let accessToken1: string
 
   const password1 = 'pass1', password2 = 'pass2';

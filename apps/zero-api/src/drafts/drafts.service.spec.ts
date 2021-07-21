@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole, DraftType } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { DraftDto } from './dto/draft.dto';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserDto } from '../users/dto/user.dto';
 
 describe('DraftsService', () => {
   let module: TestingModule;
@@ -116,7 +116,7 @@ describe('DraftsService', () => {
   });
 
   describe('findAllForUser()', function() {
-    let anotherUser: UserEntity;
+    let anotherUser: UserDto;
     beforeEach(async () => {
       const data = {
         draftType: DraftType.facility,
