@@ -511,6 +511,21 @@
             }
           }
         },
+        "docker-image-build" : {
+          "builder": "@nrwl/workspace:run-commands",
+          "options" : {
+            "parallel" : false,
+            "commands" : [
+              "nx build zero",
+              "cp ./apps/zero/Dockerfile ./dist/apps/zero/",
+              "cp -R ./apps/zero/bin ./dist/apps/zero/bin",
+              "cp -R ./apps/zero/nginx ./dist/apps/zero/nginx",
+              "docker tag zero-ui:latest zero-ui:previous",
+              "docker build ./dist/apps/zero/ -t zero-ui",
+              "rm -r ./dist/apps/zero/Dockerfile ./dist/apps/zero/bin ./dist/apps/zero/nginx"
+            ]
+          }
+        },
         "serve": {
           "executor": "@nrwl/web:dev-server",
           "options": {
