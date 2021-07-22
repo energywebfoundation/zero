@@ -11,7 +11,7 @@ import { AppModule } from './app/app.module';
 import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 import {intersection} from 'lodash';
 
-const logger = new Logger('bootstrap', true);
+const logger = new Logger('bootstrap', { timestamp: true });
 
 logger.log('starting');
 
@@ -40,7 +40,13 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap()
+  .then(() => logger.log('all done'))
+  .catch(err => {
+    logger.error(err);
+    console.log(err);
+    process.exit(1);
+  });
 
 function getLogLevelsFromEnv(): LogLevel[] {
   const allowedLogLevels: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
