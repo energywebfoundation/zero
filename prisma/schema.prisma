@@ -12,7 +12,7 @@ generator client {
 
 model User {
   id                Int                 @id @default(autoincrement())
-  email             String?             @unique
+  email             String              @unique
   firstName         String
   lastName          String
   roles             UserRole[]

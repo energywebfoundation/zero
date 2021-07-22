@@ -7,7 +7,7 @@ CREATE TYPE "DraftType" AS ENUM ('facility');
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "email" TEXT,
+    "email" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "roles" "UserRole"[],
