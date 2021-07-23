@@ -1,20 +1,17 @@
 import {
-  BadRequestException,
   ClassSerializerInterceptor,
   Controller,
-  HttpException,
   Logger,
   Post,
-  UploadedFiles,
+  UploadedFile,
   UseFilters,
   UseInterceptors,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
-import { pick } from 'lodash';
 import * as multer from 'multer';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
@@ -24,7 +21,7 @@ import { FileMetadataDto } from './dto/file-metadata.dto';
 import { User } from '../users/decorators/user.decorator';
 import { UserDto } from '../users/dto/user.dto';
 
-const filesInterceptor = AnyFilesInterceptor({
+const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
   //  This is a temporary storage for files to be processed
   storage: multer.diskStorage({}),
@@ -56,47 +53,17 @@ export class FilesController {
   @ApiTags('files')
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UploadFileDto })
-  @ApiCreatedResponse({ isArray: true, type: FileMetadataDto })
+  @ApiCreatedResponse({ type: FileMetadataDto })
   @UseInterceptors(filesInterceptor)
   async uploadFiles(
     @User() user: UserDto,
-    @UploadedFiles() files: Express.Multer.File[]
-  ): Promise<FileMetadataDto[]> {
-    if (files.length === 0) {
-      this.logger.warn(`${user.email} is trying to upload 0 files`);
-      throw new BadRequestException('at least one file required');
-    }
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<FileMetadataDto> {
+    this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
 
-    this.logger.debug(`${user.email} is uploading ${files.length} file(s)`);
+    const newFileRecord = await this.filesService.addFile(file, user.id);
 
-    const finalResults: FileMetadataDto[] = await Promise.all(files.map(async (file) => {
-      let result: FileMetadataDto = { ...pick(file, ['fieldname', 'originalname', 'mimetype']), processed: false };
-
-      if (this.supportedMimeTypes.includes(file.mimetype)) {
-        const fileAddingResult: { id?: string; processed: boolean, err?: string } = await this.filesService.addFile(file, user.id)
-          .then((result) => ({
-            id: result.id,
-            processed: true
-          }))
-          .catch((err) => ({
-            processed: false,
-            err: err.message
-          }));
-
-        result = { ...result, ...fileAddingResult };
-      } else {
-        this.logger.warn(`${user.email} is trying to upload unsupported mimetype (${file.mimetype})`);
-        result = { ...result, ...{ processed: false, err: 'unsupported mimetype' } };
-      }
-
-      return result;
-    }));
-
-    if (finalResults.filter(r => r.processed === false).length > 0) {
-      this.logger.error(`files not processed: ${JSON.stringify(finalResults.filter(r => r.processed === false))}`);
-      throw new HttpException(finalResults, 207);
-    }
-
-    return finalResults;
+    this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
+    return new FileMetadataDto(newFileRecord);
   }
 }

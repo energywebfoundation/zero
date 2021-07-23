@@ -574,10 +574,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FileMetadataDto"
-                  }
+                  "$ref": "#/components/schemas/FileMetadataDto"
                 }
               }
             }
@@ -880,47 +877,50 @@
       "UploadFileDto": {
         "type": "object",
         "properties": {
-          "files": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "binary"
-            }
+          "file": {
+            "type": "string",
+            "format": "binary"
           }
         },
         "required": [
-          "files"
+          "file"
         ]
       },
       "FileMetadataDto": {
         "type": "object",
         "properties": {
-          "fieldname": {
+          "id": {
             "type": "string",
-            "example": "files"
+            "example": "5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60"
           },
-          "originalname": {
+          "filename": {
             "type": "string",
-            "example": "MyProof.pdf"
+            "example": "agreement.pdf"
           },
           "mimetype": {
             "type": "string",
             "example": "application/pdf"
           },
-          "processed": {
-            "type": "boolean",
-            "example": true
+          "ownerId": {
+            "type": "number",
+            "example": 1
           },
-          "error": {
-            "type": "string",
-            "example": "Internal Server Error"
+          "uploadedAt": {
+            "type": "object",
+            "example": "2021-07-25T23:25:13.185Z"
+          },
+          "processingCompletedAt": {
+            "type": "object",
+            "example": "2021-07-25T23:25:14.168Z"
           }
         },
         "required": [
-          "fieldname",
-          "originalname",
+          "id",
+          "filename",
           "mimetype",
-          "processed"
+          "ownerId",
+          "uploadedAt",
+          "processingCompletedAt"
         ]
       }
     }
