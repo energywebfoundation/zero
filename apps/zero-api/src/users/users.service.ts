@@ -29,7 +29,7 @@ export class UsersService {
       }
     });
 
-    await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
+    await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400);
 
     return new UserDto(data);
   }
