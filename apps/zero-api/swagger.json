@@ -589,6 +589,41 @@
           "files"
         ]
       }
+    },
+    "/api/files/{id}/metadata": {
+      "get": {
+        "operationId": "FilesController_getFileMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
     }
   },
   "info": {
@@ -907,11 +942,11 @@
           },
           "uploadedAt": {
             "type": "object",
-            "example": "2021-07-25T23:25:13.185Z"
+            "example": "2021-07-26T10:30:22.588Z"
           },
           "processingCompletedAt": {
             "type": "object",
-            "example": "2021-07-25T23:25:14.168Z"
+            "example": "2021-07-26T10:30:23.571Z"
           }
         },
         "required": [

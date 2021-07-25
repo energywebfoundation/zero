@@ -1,7 +1,10 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  Get,
   Logger,
+  Param,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UseFilters,
@@ -13,7 +16,7 @@ import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import * as multer from 'multer';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UploadFileDto } from './dto/upload-file.dto';
@@ -65,5 +68,15 @@ export class FilesController {
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return new FileMetadataDto(newFileRecord);
+  }
+
+  @Get(':id/metadata')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ type: FileMetadataDto })
+  async getFileMetadata(
+    @Param('id', new ParseUUIDPipe()) id: string
+  ): Promise<FileMetadataDto> {
+    return new FileMetadataDto(await this.filesService.getFileMetadata(id));
   }
 }

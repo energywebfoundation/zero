@@ -4,7 +4,7 @@ import { FilesService } from './files.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { resolve } from 'path';
+import { basename, resolve } from 'path';
 import { AppModule } from '../app/app.module';
 import {
   createAndActivateUser,
@@ -13,8 +13,9 @@ import {
   logInUser,
   removeFolderContent
 } from '../../test/helpers';
-import { User, UserRole } from '@prisma/client';
+import { File, User, UserRole } from '@prisma/client';
 import { UsersService } from '../users/users.service';
+import { FileMetadataDto } from './dto/file-metadata.dto';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -91,6 +92,37 @@ describe('FilesController', () => {
 
       expect((await prisma.file.findUnique({ where: { id: newFileId } }))).not.toBeNull();
       expect(await fileExists(resolve(process.env.FILES_STORAGE, newFileId))).toEqual(true);
+    });
+  });
+
+  describe('GET /files/:id/metadata', function() {
+    const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
+    let fileId: string;
+
+    beforeAll(async function() {
+      expect(await fileExists(testFilePath)).toEqual(true);
+      fileId = (await request(httpServer)
+        .post('/files')
+        .attach('file', testFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+    });
+
+    it('should respond with correct file metadata', async function() {
+      const body: FileMetadataDto = (await request(httpServer)
+        .get(`/files/${fileId}/metadata`)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK)).body;
+
+      expect(body.id).toEqual(fileId);
+      expect(body.ownerId).toEqual(user.id);
+      expect(body.filename).toEqual(basename(testFilePath));
+    });
+
+    it('should require logged in user', async function() {
+      await request(httpServer)
+        .get(`/files/${fileId}/metadata`)
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 });
