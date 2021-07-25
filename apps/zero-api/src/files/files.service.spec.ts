@@ -78,6 +78,25 @@ describe('FilesService', () => {
       expect(await fileExists(resolve(destinationFolder, res.id))).toEqual(true);
     });
   });
+
+  describe('getFileMetadata()', function() {
+    let file;
+
+    beforeEach(async function() {
+      const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      file = await service.addFile(uploadedFile, user.id);
+    });
+
+    it('should return existing file metadata record', async function() {
+      const entity = await service.getFileMetadata(file.id);
+      expect(entity).not.toBeNull();
+      expect(entity.ownerId).toEqual(user.id);
+    });
+
+    it('should return null when invalid file id provided', async function() {
+      expect(await service.getFileMetadata('ecd9a4be-4cb4-4e68-84c8-5fdc701e1b2d')).toEqual(null);
+    });
+  });
 });
 
 async function createUploadedFile(testFile: string, temporaryFolder: string): Promise<Express.Multer.File> {

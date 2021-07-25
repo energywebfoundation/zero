@@ -9,6 +9,7 @@ import { tmpdir } from 'os';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
 import { copyFile, rename, unlink } from 'fs/promises';
+import { File } from '@prisma/client';
 
 @Injectable()
 export class FilesService {
@@ -68,5 +69,9 @@ export class FilesService {
       this.logger.error(err);
       throw err;
     }
+  }
+
+  async getFileMetadata(fileId: string): Promise<File> {
+    return this.prisma.file.findUnique({ where: { id: fileId } });
   }
 }
