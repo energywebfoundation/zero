@@ -553,6 +553,166 @@
           "users"
         ]
       }
+    },
+    "/api/users/{userId}/files": {
+      "get": {
+        "operationId": "UsersFilesController_getUserFilesMetadata",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileMetadataDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/files": {
+      "post": {
+        "operationId": "FilesController_uploadFiles",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadFileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
+    },
+    "/api/files/{id}/metadata": {
+      "get": {
+        "operationId": "FilesController_getFileMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
+    },
+    "/api/files/{id}": {
+      "get": {
+        "operationId": "FilesController_getFileContent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "binary file content"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
+    },
+    "/api/files/images/{id}": {
+      "get": {
+        "operationId": "FilesController_getImage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "files"
+        ]
+      }
     }
   },
   "info": {
@@ -837,6 +997,80 @@
             "type": "object"
           }
         }
+      },
+      "FileType": {
+        "type": "string",
+        "enum": [
+          "facility",
+          "sustainability",
+          "company",
+          "product"
+        ]
+      },
+      "FileMetadataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60"
+          },
+          "filename": {
+            "type": "string",
+            "example": "agreement.pdf"
+          },
+          "mimetype": {
+            "type": "string",
+            "example": "application/pdf"
+          },
+          "ownerId": {
+            "type": "number",
+            "example": 1
+          },
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "meta": {
+            "type": "object",
+            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
+          },
+          "uploadedAt": {
+            "type": "object",
+            "example": "2021-07-26T10:30:22.588Z"
+          },
+          "processingCompletedAt": {
+            "type": "object",
+            "example": "2021-07-26T10:30:23.571Z"
+          }
+        },
+        "required": [
+          "id",
+          "filename",
+          "mimetype",
+          "ownerId",
+          "fileType",
+          "uploadedAt",
+          "processingCompletedAt"
+        ]
+      },
+      "UploadFileDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "meta": {
+            "type": "string",
+            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
+          }
+        },
+        "required": [
+          "file",
+          "fileType"
+        ]
       }
     }
   }
