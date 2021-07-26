@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FilesService } from './files.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { tmpdir } from 'os';
-import { resolve } from 'path';
+import { basename, resolve } from 'path';
 import { Express } from 'express';
 import { createAndActivateUser, createUploadedFile, fileExists, removeFolderContent } from '../../test/helpers';
 import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
+import { ReadStream } from 'fs';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -94,6 +95,22 @@ describe('FilesService', () => {
 
     it('should return null when invalid file id provided', async function() {
       expect(await service.getFileMetadata('ecd9a4be-4cb4-4e68-84c8-5fdc701e1b2d')).toEqual(null);
+    });
+  });
+
+  describe('getFileContentStream()', function() {
+    let file;
+
+    beforeEach(async function() {
+      const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      file = await service.addFile(uploadedFile, user.id);
+    });
+
+    it('should return a file stream', async function() {
+      const stream = await service.getFileContentStream(file.id);
+      expect(stream).not.toBeNull();
+      expect(stream).toBeInstanceOf(ReadStream);
+      expect(basename(stream.path as string)).toEqual(file.id);
     });
   });
 

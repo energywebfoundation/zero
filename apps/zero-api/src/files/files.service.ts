@@ -8,8 +8,9 @@ import { Multer } from 'multer';
 import { tmpdir } from 'os';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
-import { copyFile, rename, unlink } from 'fs/promises';
+import { copyFile, rename, stat, unlink } from 'fs/promises';
 import { File } from '@prisma/client';
+import { createReadStream, ReadStream } from 'fs';
 
 @Injectable()
 export class FilesService {
@@ -79,4 +80,27 @@ export class FilesService {
     return this.prisma.file.findMany({ where: { ownerId: userId } });
   }
 
+  async getFileContentStream(id): Promise<ReadStream> {
+    const filePath = resolve(this.filesStorage, id);
+    this.logger.debug(`creating read stream for ${id} located at ${filePath}`);
+
+    await stat(filePath).catch((err) => {
+      this.logger.error(`error accessing file ${filePath}`);
+      this.logger.error(err);
+      return Promise.reject(err);
+    });
+
+    return new Promise((resolve, reject) => {
+      const stream = createReadStream(filePath)
+        .on('open', () => {
+          this.logger.debug(`read stream for ${id} opened`);
+          resolve(stream);
+        })
+        .on('error', (err) => {
+          this.logger.error(`read stream error for ${id}`);
+          this.logger.error(err);
+          reject(err);
+        });
+    });
+  }
 }
