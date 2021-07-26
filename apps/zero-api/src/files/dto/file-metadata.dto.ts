@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { File } from '@prisma/client';
 
-export class FileMetadataDto {
+export class FileMetadataDto implements File {
   @ApiProperty({ example: '5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60' })
   id: string;
 
@@ -21,10 +22,10 @@ export class FileMetadataDto {
   processingCompletedAt;
 
   @Exclude()
-  createdAt?: Date;
+  createdAt: Date;
 
   @Exclude()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   constructor(partial: Partial<FileMetadataDto>) {
     Object.assign(this, partial);
