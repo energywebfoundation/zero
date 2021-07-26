@@ -3,8 +3,9 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { User } from '@prisma/client';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { readdir, stat, unlink } from 'fs/promises';
-import { resolve } from 'path';
+import { copyFile, readdir, stat, unlink } from 'fs/promises';
+import { basename, resolve } from 'path';
+import { Express } from 'express';
 
 export async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
   return (await request(app.getHttpServer())
@@ -31,4 +32,24 @@ export async function fileExists(path) {
 export async function removeFolderContent(path) {
   const files = await readdir(path);
   await Promise.all(files.map(file => unlink(resolve(path, file))));
+}
+
+export async function createUploadedFile(testFile: string, temporaryFolder: string): Promise<Express.Multer.File> {
+  const filename = basename(testFile);
+  const uploadedPath = resolve(temporaryFolder, filename);
+
+  await copyFile(testFile, uploadedPath);
+
+  return {
+    fieldname: 'file',
+    originalname: filename,
+    encoding: '7bit',
+    mimetype: 'application/pdf',
+    destination: temporaryFolder,
+    filename,
+    path: uploadedPath,
+    size: (await stat(testFile)).size,
+    buffer: null,
+    stream: null
+  };
 }

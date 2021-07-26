@@ -2,12 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FilesService } from './files.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { tmpdir } from 'os';
-import { basename, resolve } from 'path';
+import { resolve } from 'path';
 import { Express } from 'express';
-import { copyFile, stat } from 'fs/promises';
-import { createAndActivateUser, fileExists, removeFolderContent } from '../../test/helpers';
+import { createAndActivateUser, createUploadedFile, fileExists, removeFolderContent } from '../../test/helpers';
 import { UsersService } from '../users/users.service';
-import { File, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -137,23 +136,3 @@ describe('FilesService', () => {
     });
   });
 });
-
-async function createUploadedFile(testFile: string, temporaryFolder: string): Promise<Express.Multer.File> {
-  const filename = basename(testFile);
-  const uploadedPath = resolve(temporaryFolder, filename);
-
-  await copyFile(testFile, uploadedPath);
-
-  return {
-    fieldname: 'file',
-    originalname: filename,
-    encoding: '7bit',
-    mimetype: 'application/pdf',
-    destination: temporaryFolder,
-    filename,
-    path: uploadedPath,
-    size: (await stat(testFile)).size,
-    buffer: null,
-    stream: null
-  };
-}

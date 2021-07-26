@@ -554,6 +554,44 @@
         ]
       }
     },
+    "/api/users/{userId}/files": {
+      "get": {
+        "operationId": "UsersFilesController_getUserFilesMetadata",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileMetadataDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/api/files": {
       "post": {
         "operationId": "FilesController_uploadFiles",
@@ -909,18 +947,6 @@
           }
         }
       },
-      "UploadFileDto": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "type": "string",
-            "format": "binary"
-          }
-        },
-        "required": [
-          "file"
-        ]
-      },
       "FileMetadataDto": {
         "type": "object",
         "properties": {
@@ -956,6 +982,18 @@
           "ownerId",
           "uploadedAt",
           "processingCompletedAt"
+        ]
+      },
+      "UploadFileDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "required": [
+          "file"
         ]
       }
     }
