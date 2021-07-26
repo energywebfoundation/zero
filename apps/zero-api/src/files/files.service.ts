@@ -9,7 +9,7 @@ import { tmpdir } from 'os';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
 import { copyFile, rename, stat, unlink } from 'fs/promises';
-import { File } from '@prisma/client';
+import { File, FileType, Prisma } from '@prisma/client';
 import { createReadStream, ReadStream } from 'fs';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class FilesService {
     mkdirp.sync(this.filesStorage);
   }
 
-  async addFile(file: Express.Multer.File, owner: number): Promise<File> {
+  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<File> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
@@ -32,6 +32,8 @@ export class FilesService {
         data: {
           filename: file.originalname,
           ownerId: owner,
+          fileType,
+          meta,
           mimetype: file.mimetype,
           uploadedAt: new Date()
         }

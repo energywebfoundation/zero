@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
@@ -71,11 +73,23 @@ export class FilesController {
   @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor, filesInterceptor)
   async uploadFiles(
     @User() user: UserDto,
+    @Body() body: UploadFileDto,
     @UploadedFile() file: Express.Multer.File
   ): Promise<FileMetadataDto> {
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
+    this.logger.debug(`form fields: ${JSON.stringify(body)}`);
 
-    const newFileRecord = await this.filesService.addFile(file, user.id);
+    let meta;
+
+    if (!isNil(body.meta)) {
+      try {
+        meta = JSON.parse(body.meta);
+      } catch (err) {
+        throw new BadRequestException(`invalid "meta" field value: ${err}`);
+      }
+    }
+
+    const newFileRecord = await this.filesService.addFile(file, user.id, body.fileType, meta);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return new FileMetadataDto(newFileRecord);

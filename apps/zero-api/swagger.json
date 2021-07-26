@@ -998,6 +998,15 @@
           }
         }
       },
+      "FileType": {
+        "type": "string",
+        "enum": [
+          "facility",
+          "sustainability",
+          "company",
+          "product"
+        ]
+      },
       "FileMetadataDto": {
         "type": "object",
         "properties": {
@@ -1017,6 +1026,13 @@
             "type": "number",
             "example": 1
           },
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "meta": {
+            "type": "object",
+            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
+          },
           "uploadedAt": {
             "type": "object",
             "example": "2021-07-26T10:30:22.588Z"
@@ -1031,6 +1047,7 @@
           "filename",
           "mimetype",
           "ownerId",
+          "fileType",
           "uploadedAt",
           "processingCompletedAt"
         ]
@@ -1041,10 +1058,18 @@
           "file": {
             "type": "string",
             "format": "binary"
+          },
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "meta": {
+            "type": "string",
+            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
           }
         },
         "required": [
-          "file"
+          "file",
+          "fileType"
         ]
       }
     }

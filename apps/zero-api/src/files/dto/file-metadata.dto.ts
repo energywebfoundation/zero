@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { File } from '@prisma/client';
+import { File, FileType, Prisma } from '@prisma/client';
 
 export class FileMetadataDto implements File {
   @ApiProperty({ example: '5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60' })
@@ -14,6 +14,12 @@ export class FileMetadataDto implements File {
 
   @ApiProperty({ example: 1 })
   ownerId: number;
+
+  @ApiProperty({ enum: FileType, enumName: 'FileType' })
+  fileType: FileType;
+
+  @ApiPropertyOptional({ example: '{ "field1": "value", "field2" : [1, 2, 3] }' })
+  meta: Prisma.JsonValue;
 
   @ApiProperty({ example: new Date() })
   uploadedAt;

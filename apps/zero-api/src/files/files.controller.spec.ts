@@ -13,7 +13,7 @@ import {
   logInUser,
   removeFolderContent
 } from '../../test/helpers';
-import { User, UserRole } from '@prisma/client';
+import { FileType, User, UserRole } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { FileMetadataDto } from './dto/file-metadata.dto';
 import { stat } from 'fs/promises';
@@ -78,6 +78,7 @@ describe('FilesController', () => {
     it('should require logged in user', async function() {
       await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
         .attach('file', testFilePath)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -85,6 +86,8 @@ describe('FilesController', () => {
     it('should create a file', async function() {
       const newFileId: string = (await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
@@ -104,6 +107,8 @@ describe('FilesController', () => {
       expect(await fileExists(testFilePath)).toEqual(true);
       fileId = (await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
@@ -135,6 +140,8 @@ describe('FilesController', () => {
       expect(await fileExists(testFilePath)).toEqual(true);
       fileId = (await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
@@ -176,12 +183,16 @@ describe('FilesController', () => {
       expect(await fileExists(testImageFilePath)).toEqual(true);
       imageFileId = (await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testImageFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
 
       pdfFileId = (await request(httpServer)
         .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testPdfFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
