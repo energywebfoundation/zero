@@ -26,6 +26,7 @@ import { FileMetadataDto } from './dto/file-metadata.dto';
 import { User } from '../users/decorators/user.decorator';
 import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
+import { Public } from '../auth/decorators/public.decorator';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -52,6 +53,11 @@ export class FilesController {
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
+  private readonly imagesMimeTypes = [
+    'image/jpeg',
+    'image/png'
   ];
 
   constructor(private readonly filesService: FilesService) {}
@@ -97,6 +103,28 @@ export class FilesController {
     const fileMetadata = await this.filesService.getFileMetadata(id);
 
     if (isNil(fileMetadata)) {
+      throw new NotFoundException();
+    }
+
+    res.setHeader('Content-Type', fileMetadata.mimetype);
+    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
+
+    const stream = await this.filesService.getFileContentStream(id);
+
+    stream.pipe(res);
+  }
+
+  @Get('/images/:id')
+  @Public()
+  @ApiTags('files')
+  @ApiOkResponse()
+  async getImage(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Res() res: Response
+  ) {
+    const fileMetadata = await this.filesService.getFileMetadata(id);
+
+    if (isNil(fileMetadata) || this.imagesMimeTypes.indexOf(fileMetadata.mimetype) < 0) {
       throw new NotFoundException();
     }
 

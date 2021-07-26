@@ -165,4 +165,71 @@ describe('FilesController', () => {
         .expect(HttpStatus.NOT_FOUND);
     });
   });
+
+  describe('GET /files/images/:id', function() {
+    const testImageFilePath = resolve(__dirname, '../../test/test-files/jash.jpeg');
+    const testPdfFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
+
+    let imageFileId: string, pdfFileId: string;
+
+    beforeAll(async function() {
+      expect(await fileExists(testImageFilePath)).toEqual(true);
+      imageFileId = (await request(httpServer)
+        .post('/files')
+        .attach('file', testImageFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+
+      pdfFileId = (await request(httpServer)
+        .post('/files')
+        .attach('file', testPdfFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+    });
+
+
+    describe('when no access token provided', function() {
+      it('should respond with an image file content', async function() {
+        const { body } = await request(httpServer)
+          .get(`/files/images/${imageFileId}`)
+          .expect(HttpStatus.OK);
+
+        expect(body).toBeDefined();
+        expect(body).not.toBeNull();
+        expect(Buffer.isBuffer(body)).toEqual(true);
+        expect(body.length).toEqual((await stat(testImageFilePath)).size);
+      });
+
+      it('should respond with 404 Not Found when non-image file requested', async function() {
+        const { body } = await request(httpServer)
+          .get(`/files/images/${pdfFileId}`)
+          .expect(HttpStatus.NOT_FOUND);
+
+        expect(body);
+      });
+    });
+
+    describe('whan valid access token provided', function() {
+      it('should respond with an image file content', async function() {
+        const { body } = await request(httpServer)
+          .get(`/files/images/${imageFileId}`)
+          .set(getAuthBearerHeader(accessToken))
+          .expect(HttpStatus.OK);
+
+        expect(body).toBeDefined();
+        expect(body).not.toBeNull();
+        expect(Buffer.isBuffer(body)).toEqual(true);
+        expect(body.length).toEqual((await stat(testImageFilePath)).size);
+      });
+
+      it('should respond with 404 Not Found when non-image file requested', async function() {
+        const { body } = await request(httpServer)
+          .get(`/files/images/${pdfFileId}`)
+          .set(getAuthBearerHeader(accessToken))
+          .expect(HttpStatus.NOT_FOUND);
+
+        expect(body);
+      });
+    });
+  });
 });
