@@ -101,6 +101,7 @@ export class FilesController {
     }
 
     res.setHeader('Content-Type', fileMetadata.mimetype);
+    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
 
     const stream = await this.filesService.getFileContentStream(id);
 
