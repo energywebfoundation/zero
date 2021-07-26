@@ -74,4 +74,9 @@ export class FilesService {
   async getFileMetadata(fileId: string): Promise<File> {
     return this.prisma.file.findUnique({ where: { id: fileId } });
   }
+
+  async getUserFilesMetadata(userId: number): Promise<File[]> {
+    return this.prisma.file.findMany({ where: { ownerId: userId } });
+  }
+
 }

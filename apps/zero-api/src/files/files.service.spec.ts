@@ -7,7 +7,7 @@ import { Express } from 'express';
 import { copyFile, stat } from 'fs/promises';
 import { createAndActivateUser, fileExists, removeFolderContent } from '../../test/helpers';
 import { UsersService } from '../users/users.service';
-import { User, UserRole } from '@prisma/client';
+import { File, User, UserRole } from '@prisma/client';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -95,6 +95,45 @@ describe('FilesService', () => {
 
     it('should return null when invalid file id provided', async function() {
       expect(await service.getFileMetadata('ecd9a4be-4cb4-4e68-84c8-5fdc701e1b2d')).toEqual(null);
+    });
+  });
+
+  describe('getUserFilesMetadata()', function() {
+    let anotherUser: User;
+
+    beforeAll(async function() {
+      anotherUser = await createAndActivateUser(usersService, prismaService, {
+        firstName: 'test first name 2',
+        lastName: 'test last name 2',
+        email: 'test-email2@foo.bar',
+        roles: [UserRole.seller],
+        password: 'a secret 2'
+      } as User);
+    });
+
+    beforeEach(async function() {
+
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), anotherUser.id)
+
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user.id)
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user.id)
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user.id)
+    });
+
+    afterEach(async function() {
+      await prismaService.file.deleteMany();
+      await removeFolderContent(destinationFolder);
+    });
+
+    it('should return existing files metadata records of a user', async function() {
+      const files = await service.getUserFilesMetadata(user.id);
+      expect(files).not.toBeNull();
+      expect(files.length).toEqual(3);
+    });
+
+    it('should not return files metadata of other user', async function() {
+      const files = await service.getUserFilesMetadata(user.id);
+      expect(files.filter(f => f.ownerId === user.id).length).toEqual(3);
     });
   });
 });
