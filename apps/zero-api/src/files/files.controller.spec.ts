@@ -13,9 +13,10 @@ import {
   logInUser,
   removeFolderContent
 } from '../../test/helpers';
-import { File, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { FileMetadataDto } from './dto/file-metadata.dto';
+import { stat } from 'fs/promises';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -123,6 +124,45 @@ describe('FilesController', () => {
       await request(httpServer)
         .get(`/files/${fileId}/metadata`)
         .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('GET /files/:id', function() {
+    const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
+    let fileId: string;
+
+    beforeAll(async function() {
+      expect(await fileExists(testFilePath)).toEqual(true);
+      fileId = (await request(httpServer)
+        .post('/files')
+        .attach('file', testFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+    });
+
+    it('should require valid authorization header', async function() {
+      await request(httpServer)
+        .get(`/files/${fileId}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+
+    it('should respond with a file content of an existing file', async function() {
+      const { body } = await request(httpServer)
+        .get(`/files/${fileId}`)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK);
+
+      expect(body).toBeDefined();
+      expect(body).not.toBeNull();
+      expect(Buffer.isBuffer(body)).toEqual(true);
+      expect(body.length).toEqual((await stat(testFilePath)).size);
+    });
+
+    it('should respond with 404 Not Found for non-existing fileId', async function() {
+      await request(httpServer)
+        .get(`/files/00000000-0000-0000-0000-000000000000`)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 });

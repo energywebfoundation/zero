@@ -3,9 +3,11 @@ import {
   Controller,
   Get,
   Logger,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
+  Res,
   UploadedFile,
   UseFilters,
   UseInterceptors,
@@ -14,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
+import { Express, Response } from 'express';
 import * as multer from 'multer';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
@@ -23,6 +25,7 @@ import { UploadFileDto } from './dto/upload-file.dto';
 import { FileMetadataDto } from './dto/file-metadata.dto';
 import { User } from '../users/decorators/user.decorator';
 import { UserDto } from '../users/dto/user.dto';
+import { isNil } from '@nestjs/common/utils/shared.utils';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -36,7 +39,9 @@ const filesInterceptor = FileInterceptor('file', {
 
 @Controller('files')
 @UsePipes(ValidationPipe)
-@UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
+// WARNING
+// ClassSerializerInterceptor, NoDataInterceptor applied per endpoint
+// Because they collide with getFileContent()
 @UseFilters(PrismaClientExceptionFilter)
 export class FilesController {
   private readonly logger = new Logger(FilesController.name, { timestamp: true });
@@ -57,7 +62,7 @@ export class FilesController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UploadFileDto })
   @ApiCreatedResponse({ type: FileMetadataDto })
-  @UseInterceptors(filesInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor, filesInterceptor)
   async uploadFiles(
     @User() user: UserDto,
     @UploadedFile() file: Express.Multer.File
@@ -74,9 +79,31 @@ export class FilesController {
   @ApiBearerAuth('access-token')
   @ApiTags('files')
   @ApiOkResponse({ type: FileMetadataDto })
+  @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
   async getFileMetadata(
     @Param('id', new ParseUUIDPipe()) id: string
   ): Promise<FileMetadataDto> {
     return new FileMetadataDto(await this.filesService.getFileMetadata(id));
+  }
+
+  @Get(':id')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ description: 'binary file content' })
+  async getFileContent(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Res() res: Response
+  ) {
+    const fileMetadata = await this.filesService.getFileMetadata(id);
+
+    if (isNil(fileMetadata)) {
+      throw new NotFoundException();
+    }
+
+    res.setHeader('Content-Type', fileMetadata.mimetype);
+
+    const stream = await this.filesService.getFileContentStream(id);
+
+    stream.pipe(res);
   }
 }

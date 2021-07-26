@@ -662,6 +662,34 @@
           "files"
         ]
       }
+    },
+    "/api/files/{id}": {
+      "get": {
+        "operationId": "FilesController_getFileContent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "binary file content"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      }
     }
   },
   "info": {
