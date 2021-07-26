@@ -32,6 +32,8 @@ model File {
   mimetype              String
   owner                 User      @relation(fields: [ownerId], references: [id])
   ownerId               Int
+  fileType              FileType
+  meta                  Json?
   uploadedAt            DateTime
   processingCompletedAt DateTime?
   createdAt             DateTime  @default(now())
@@ -79,4 +81,11 @@ enum UserRole {
 
 enum DraftType {
   facility
+}
+
+enum FileType {
+  facility
+  sustainability
+  company
+  product
 }
