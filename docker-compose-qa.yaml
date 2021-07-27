@@ -7,6 +7,8 @@ services:
 #    ports:
 #      - '5432:5432'
 #      - '5433:5432'
+    volumes:
+    - qa-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -42,9 +44,16 @@ services:
       - db
     ports:
       - '3333:3333'
+    volumes:
+    - qa-backend-temp:/tmp
+    - qa-backend-uploaded_files:/uploaded-files
     environment:
       LOG_LEVELS: "log,error,warn,debug,verbose"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
       JWT_SECRET: "secret"
       JWT_TTL: "24h"
 
+volumes:
+  qa-db-data:
+  qa-backend-temp:
+  qa-backend-uploaded_files:
