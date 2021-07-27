@@ -84,25 +84,31 @@ export class FilesService {
 
   async getFileContentStream(id): Promise<ReadStream> {
     const filePath = resolve(this.filesStorage, id);
-    this.logger.debug(`creating read stream for ${id} located at ${filePath}`);
 
     await stat(filePath).catch((err) => {
-      this.logger.error(`error accessing file ${filePath}`);
       this.logger.error(err);
       return Promise.reject(err);
     });
 
     return new Promise((resolve, reject) => {
+      this.logger.debug(`creating read stream for ${id} located at ${filePath}`);
       const stream = createReadStream(filePath)
         .on('open', () => {
-          this.logger.debug(`read stream for ${id} opened`);
+          this.logger.debug(`read stream for ${id} [OPEN]`);
           resolve(stream);
         })
         .on('error', (err) => {
           this.logger.error(`read stream error for ${id}`);
           this.logger.error(err);
+          stream.close();
           reject(err);
-        });
+        })
+        .on('ready', () => this.logger.debug(`read stream for ${id} [READY]`))
+        .on('pause', () => this.logger.debug(`read stream for ${id} [PAUSE]`))
+        .on('resume', () => this.logger.debug(`read stream for ${id} [RESUME]`))
+        .on('data', (data) => this.logger.debug(`read stream for ${id} [DATA] (${data.length} bytes)`))
+        .on('end', () => this.logger.debug(`read stream for ${id} [END]`))
+        .on('close', () => this.logger.debug(`read stream for ${id} [CLOSE]`));
     });
   }
 }
