@@ -27,6 +27,8 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    profiles:
+      - debug
     ports:
       - '5555:5555'
     environment:
