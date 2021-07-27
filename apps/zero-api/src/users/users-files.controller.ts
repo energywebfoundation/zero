@@ -39,7 +39,6 @@ export class UsersFilesController {
   ): Promise<FileMetadataDto[]> {
     if (user.id !== userId) throw new ForbiddenException();
 
-    const records = await this.filesService.getUserFilesMetadata(userId);
-    return records.map(r => new FileMetadataDto(r));
+    return this.filesService.getUserFilesMetadata(userId);
   }
 }

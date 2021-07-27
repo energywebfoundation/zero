@@ -93,7 +93,7 @@ export class FilesController {
     const newFileRecord = await this.filesService.addFile(file, user.id, body.fileType, meta);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
-    return new FileMetadataDto(newFileRecord);
+    return newFileRecord;
   }
 
   @Get(':id/metadata')
@@ -104,7 +104,7 @@ export class FilesController {
   async getFileMetadata(
     @Param('id', new ParseUUIDPipe()) id: string
   ): Promise<FileMetadataDto> {
-    return new FileMetadataDto(await this.filesService.getFileMetadata(id));
+    return await this.filesService.getFileMetadata(id);
   }
 
   @Get(':id')

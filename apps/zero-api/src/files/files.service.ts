@@ -11,6 +11,8 @@ import * as mkdirp from 'mkdirp';
 import { copyFile, rename, stat, unlink } from 'fs/promises';
 import { File, FileType, Prisma } from '@prisma/client';
 import { createReadStream, ReadStream } from 'fs';
+import { FileMetadataDto } from './dto/file-metadata.dto';
+import { isNil } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class FilesService {
@@ -24,7 +26,7 @@ export class FilesService {
     mkdirp.sync(this.filesStorage);
   }
 
-  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<File> {
+  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
@@ -67,7 +69,7 @@ export class FilesService {
         data: { processingCompletedAt: new Date() }
       });
 
-      return fileRecord;
+      return new FileMetadataDto(fileRecord);
     } catch (err) {
       this.logger.error(err);
       throw err;
@@ -78,8 +80,8 @@ export class FilesService {
     return this.prisma.file.findUnique({ where: { id: fileId } });
   }
 
-  async getUserFilesMetadata(userId: number): Promise<File[]> {
-    return this.prisma.file.findMany({ where: { ownerId: userId } });
+  async getUserFilesMetadata(userId: number): Promise<FileMetadataDto[]> {
+    return (await this.prisma.file.findMany({ where: { ownerId: userId } })).map(r => new FileMetadataDto(r));
   }
 
   async getFileContentStream(id): Promise<ReadStream> {

@@ -125,6 +125,13 @@ describe('FilesController', () => {
       expect(body.filename).toEqual(basename(testFilePath));
     });
 
+    it('should respond with 404 Not Found for non-existing fileId', async function() {
+      await request(httpServer)
+        .get(`/files/00000000-0000-0000-0000-000000000000/metadata`)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
     it('should require logged in user', async function() {
       await request(httpServer)
         .get(`/files/${fileId}/metadata`)

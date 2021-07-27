@@ -146,6 +146,16 @@ describe('UsersDraftsController', function() {
       expect(draft.id).toEqual(user1Draft.id);
     });
 
+    it('should respond with 404 NotFound if non-existing draftId requested', async function() {
+      const user1Draft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
+
+      (await request(httpServer)
+        .get(`/users/${user1.id}/drafts/123`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.NOT_FOUND))
+    });
+
     it('should deny access to other user\' draft', async function() {
       await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
       const user2Draft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
