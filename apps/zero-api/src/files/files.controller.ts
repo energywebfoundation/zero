@@ -4,6 +4,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
@@ -123,9 +124,14 @@ export class FilesController {
     res.setHeader('Content-Type', fileMetadata.mimetype);
     res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
 
-    const stream = await this.filesService.getFileContentStream(id);
+    try {
+      const stream = await this.filesService.getFileContentStream(id);
 
-    stream.pipe(res);
+      stream.pipe(res);
+    } catch (err) {
+      this.logger.error(err);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Get('/images/:id')
