@@ -124,8 +124,24 @@ export class FilesController {
     res.setHeader('Content-Type', fileMetadata.mimetype);
     res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
 
+    let responseFinished = false;
+
     try {
       const stream = await this.filesService.getFileContentStream(id);
+
+      res
+        .on('finish', () => {
+          this.logger.debug(`response writeable stream for file ${id} [FINISH]`);
+          responseFinished = true;
+        })
+        .on('close', () => {
+          this.logger.debug(`response writeable stream for file ${id} [CLOSE]`);
+          if (!responseFinished) {
+            this.logger.warn(`incomplete response for  file ${id}`);
+            this.logger.warn(`closing file content read stream explicitly`);
+            stream.close();
+          }
+        });
 
       stream.pipe(res);
     } catch (err) {
