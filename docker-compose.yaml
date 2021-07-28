@@ -7,6 +7,8 @@ services:
 #    ports:
 #      - '5432:5432'
 #      - '5433:5432'
+    volumes:
+    - qa-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -27,6 +29,8 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    profiles:
+      - debug
     ports:
       - '5555:5555'
     environment:
@@ -40,9 +44,38 @@ services:
       - db
     ports:
       - '3333:3333'
+    volumes:
+    - qa-backend-temp:/tmp
+    - qa-backend-uploaded_files:/uploaded-files
     environment:
       LOG_LEVELS: "log,error,warn,debug,verbose"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
       JWT_SECRET: "secret"
       JWT_TTL: "24h"
 
+  db-migrate-deploy:
+    image: zero-api
+    restart: on-failure
+    profiles:
+      - migrate-deploy
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
+    command: /bin/sh -c "prisma migrate deploy"
+
+  db-migrate-reset:
+    image: zero-api
+    restart: on-failure
+    profiles:
+      - migrate-reset
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
+    command: /bin/sh -c "prisma migrate reset --skip-seed --force"
+
+volumes:
+  qa-db-data:
+  qa-backend-temp:
+  qa-backend-uploaded_files:
