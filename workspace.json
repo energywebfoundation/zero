@@ -516,7 +516,7 @@
           "options" : {
             "parallel" : false,
             "commands" : [
-              "nx build zero",
+              "nx build zero --prod",
               "cp ./apps/zero/Dockerfile ./dist/apps/zero/",
               "cp -R ./apps/zero/bin ./dist/apps/zero/bin",
               "cp -R ./apps/zero/nginx ./dist/apps/zero/nginx",
@@ -589,7 +589,7 @@
           "options" : {
             "parallel" : false,
             "commands" : [
-              "nx build zero-api",
+              "nx build zero-api --prod",
               "cp -R ./prisma ./dist/apps/zero-api/prisma",
               "cp ./apps/zero-api/Dockerfile ./dist/apps/zero-api/",
               "docker tag zero-api:latest zero-api:previous || exit 0",
