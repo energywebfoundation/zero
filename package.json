@@ -10,6 +10,8 @@
     "build:docker": "nx run-many --target=docker-image-build --projects=zero,zero-api && yarn docker:tag:canary",
     "docker:tag:canary": "docker tag zero-ui:latest zero-ui:canary && docker tag zero-ui:latest zero-ui:canary.$(date \"+%Y%m%d%H%M%S\") && docker tag zero-api:latest zero-api:canary && docker tag zero-api:latest zero-api:canary.$(date \"+%Y%m%d%H%M%S\")",
     "test": "nx test",
+    "test:zero": "nx run zero:test",
+    "test:zero-api": "nx run zero-api:test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
@@ -33,6 +35,7 @@
     "publish:release": "",
     "db:migrate:recreate-initial": "rm -rf prisma/migrations/* && prisma migrate dev --create-only --skip-seed -n initial && git add prisma/migrations/* && prisma generate",
     "db:migrate:reset": "prisma migrate reset",
+    "db:migrate:ci": "prisma migrate reset --skip-generate --skip-seed --force",
     "db:migrate:deploy": "prisma migrate deploy",
     "swagger:schema:generate": "cd apps/zero-api && TS_NODE_PROJECT=tsconfig.app.json ts-node src/generateSchema.ts"
   },
