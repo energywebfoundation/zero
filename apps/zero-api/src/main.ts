@@ -17,8 +17,12 @@ logger.log('starting');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: true,
     logger: getLogLevelsFromEnv()
+  });
+
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || '*',
+    maxAge: parseInt(process.env.CORS_MAX_AGE) || 60
   });
 
   logger.log(`LOG_LEVELS=${getLogLevelsFromEnv().join()}`);

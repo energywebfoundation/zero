@@ -52,6 +52,8 @@ services:
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
       JWT_SECRET: "secret"
       JWT_TTL: "24h"
+      CORS_ORIGIN: "http://localhost:8080"
+      CORS_MAX_AGE: 60
 
   db-migrate-deploy:
     image: zero-api
