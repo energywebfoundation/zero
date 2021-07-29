@@ -12,7 +12,6 @@ import { copyFile, rename, stat, unlink } from 'fs/promises';
 import { File, FileType, Prisma } from '@prisma/client';
 import { createReadStream, ReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
-import { isNil } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class FilesService {

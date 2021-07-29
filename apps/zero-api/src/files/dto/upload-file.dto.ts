@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { FileType, Prisma } from '@prisma/client';
+import { FileType } from '@prisma/client';
 import { IsEnum, IsOptional } from 'class-validator';
 
 export class UploadFileDto {

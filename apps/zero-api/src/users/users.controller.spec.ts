@@ -354,14 +354,14 @@ describe('UsersController', () => {
   });
 
   describe('PUT /users/password-reset', function() {
-    let user: UserDto, token: string;
+    let token: string;
 
     beforeEach(async function() {
       await prisma.passwordReset.deleteMany();
-      user = (await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/users')
         .send(validPayload)
-        .expect(HttpStatus.CREATED)).body;
+        .expect(HttpStatus.CREATED);
 
       await request(httpServer)
         .post('/users/password-reset-init')

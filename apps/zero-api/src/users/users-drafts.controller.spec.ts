@@ -147,7 +147,7 @@ describe('UsersDraftsController', function() {
     });
 
     it('should respond with 404 NotFound if non-existing draftId requested', async function() {
-      const user1Draft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
       await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       (await request(httpServer)

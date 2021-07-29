@@ -121,6 +121,7 @@ export class UsersService {
   }
 
   async createEmailConfirmation(userId: number, ttl: number): Promise<string> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [oldRecords, newRecord] = await this.prisma.$transaction([
       this.prisma.emailConfirmation.updateMany({ where: { userId }, data: { valid: false } }),
       this.prisma.emailConfirmation.create({
