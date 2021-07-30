@@ -1,7 +1,6 @@
 FROM node:lts-alpine
 ENV FILES_STORAGE=/uploaded-files
 VOLUME ["/tmp", "/uploaded-files", "/root"]
-RUN mkdir /uploaded-files
 WORKDIR /app
 RUN yarn global add prisma
 COPY ./package.json .
