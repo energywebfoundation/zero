@@ -121,6 +121,21 @@ export class UsersService {
     const expiresAt = new Date(new Date().getTime() + ttl * 1000); // TODO: set in .env
     const newItem = await this.prisma.passwordReset.create({ data: { userId, expiresAt } });
 
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    this.logger.debug(`sending password reset email message to ${user.email}`);
+    const url = `${process.env.UI_BASE_URL}/auth/reset-password#token=${encodeURIComponent(newItem.id)}`;
+
+    await this.emailService.send({
+      to: {
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        address: user.email
+      },
+      subject: 'EW Zero - password reset',
+      text: `Please open the following link in your web browser to initialize password reset procedure: ${url}`,
+      html: `Please click the <a href='${url}'>link</a> to initialize password reset procedure. Or paste the following to your web browser address bar: ${url}`
+    });
+
     return newItem.id;
   }
 

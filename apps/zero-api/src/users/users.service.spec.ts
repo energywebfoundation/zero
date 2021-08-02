@@ -239,6 +239,25 @@ describe('UsersService', () => {
       expect(dbRecord[0].userId).toEqual(user.id);
     });
 
+    it('should send password reset email message', async function() {
+      await mailhogClient.deleteAll();
+      const token = await service.passwordResetInitialize(user.id, 3600);
+      expect(token).toBeDefined();
+
+      const messages = await mailhogClient.messages();
+      expect(messages.items.length).toEqual(1);
+
+      const message = messages.items[0];
+
+      const passwordResetUrl = `${process.env.UI_BASE_URL}/auth/reset-password#token=${encodeURIComponent(token)}`;
+
+      expect(message.to).toEqual(`${user.firstName} ${user.lastName} <${user.email}>`);
+      expect(message.subject).toEqual('EW Zero - password reset');
+
+      expect(message.text.search(passwordResetUrl)).toBeGreaterThanOrEqual(0);
+      expect(message.html.search(passwordResetUrl)).toBeGreaterThanOrEqual(0);
+    });
+
     it('should forbid to create a new token for non-existing user', async function() {
       await service.passwordResetInitialize(user.id + 1, 3600)
         .then(() => {
