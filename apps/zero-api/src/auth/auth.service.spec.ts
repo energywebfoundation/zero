@@ -4,9 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
 import { AuthModule } from './auth.module';
-import { PrismaModule } from '../prisma/prisma.module';
-import { UsersModule } from '../users/users.module';
 import { createAndActivateUser } from '../../test/helpers';
+import { AppModule } from '../app/app.module';
 
 describe('AuthService', () => {
   let module: TestingModule;
@@ -16,7 +15,7 @@ describe('AuthService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [AuthModule, PrismaModule, UsersModule]
+      imports: [AppModule, AuthModule]
     }).compile();
 
     authService = module.get<AuthService>(AuthService);

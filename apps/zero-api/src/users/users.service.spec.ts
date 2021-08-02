@@ -8,11 +8,14 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
+import { EmailModule } from '../email/email.module';
+import * as mailhog from 'mailhog';
 
 describe('UsersService', () => {
   let module: TestingModule;
   let service: UsersService;
   let prisma: PrismaService;
+  let mailhogClient;
 
   const testData1: CreateUserDto = {
     firstName: 'test first name 1',
@@ -31,18 +34,26 @@ describe('UsersService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [PrismaModule],
+      imports: [PrismaModule, EmailModule],
       providers: [UsersService]
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
 
+    mailhogClient = mailhog({
+      port: 8025,
+      host: 'localhost',
+      protocol: 'http:',
+      basePath: '/api'
+    });
+
     await prisma.clearDatabase();
   });
 
   afterAll(async () => {
     await module.close();
+    await mailhogClient.deleteAll();
   });
 
   beforeEach(async () => {
@@ -71,6 +82,29 @@ describe('UsersService', () => {
       const newUser = await service.create(testData1);
       expect(newUser.password).not.toEqual(testData1.password);
       expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
+    });
+
+    it('should send email confirmation email', async function() {
+      await mailhogClient.deleteAll();
+      const newUser = await service.create(testData1);
+
+      const messages = await mailhogClient.messages();
+      expect(messages.items.length).toEqual(1);
+
+      const message = messages.items[0];
+
+      expect(message.to).toEqual(`${newUser.firstName} ${newUser.lastName} <${newUser.email}>`);
+      expect(message.subject).toEqual('EW Zero - confirm email address');
+
+      const token = (await prisma.emailConfirmation.findFirst({
+        where: { userId: newUser.id },
+        orderBy: { createdAt: 'desc' }
+      })).id;
+
+      const confirmationUrl = `${process.env.UI_BASE_URL}/auth/confirm-email#token=${token}`;
+
+      expect(message.text.search(confirmationUrl)).toBeGreaterThanOrEqual(0);
+      expect(message.html.search(confirmationUrl)).toBeGreaterThanOrEqual(0);
     });
 
     it('should create a user with multiple roles', async function() {

@@ -5,6 +5,7 @@ import { User, UserRole, DraftType } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { DraftDto } from './dto/draft.dto';
 import { UserDto } from '../users/dto/user.dto';
+import { AppModule } from '../app/app.module';
 
 describe('DraftsService', () => {
   let module: TestingModule;
@@ -16,7 +17,8 @@ describe('DraftsService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      providers: [DraftsService, PrismaService, UsersService]
+      imports: [AppModule],
+      providers: []
     }).compile();
 
     service = module.get<DraftsService>(DraftsService);

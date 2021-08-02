@@ -1,14 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto/user.dto';
 import { PasswordReset } from '@prisma/client';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(UsersService.name, { timestamp: true });
+
+  constructor(private prisma: PrismaService, private emailService: EmailService) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> | null {
     const {
@@ -29,7 +32,33 @@ export class UsersService {
       }
     });
 
-    await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400);
+
+    const emailConfirmationToken = await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400);
+
+    this.logger.debug(`sending confirmation email to ${data.email}`);
+    const url = `${process.env.UI_BASE_URL}/auth/confirm-email#token=${encodeURIComponent(emailConfirmationToken)}`;
+
+    await this.emailService.send({
+      to: {
+        name: `${data.firstName} ${data.lastName}`.trim(),
+        address: data.email
+      },
+      subject: 'EW Zero - confirm email address',
+      text: `Please open following link in your web browser to confirm you have registered a new account at EW Zero with ${data.email} address: ${url}`,
+      html: `Please click the following <a href='${url}'>link</a> to confirm you have registered a new account at EW Zero with ${data.email} address. Or copy the following to your web browser address bar: ${url}`
+    }).catch(async (err) => {
+      this.logger.error(`error sending email address confirmation message to ${data.email}`);
+      this.logger.error(err.toString());
+      this.logger.debug(JSON.stringify(err));
+
+      // updating record to make it possible to register once again
+      await this.prisma.user.update({
+        data: { email: `${data.email} fail ${new Date().toISOString()}` },
+        where: { email: data.email }
+      });
+
+      throw err;
+    });
 
     return new UserDto(data);
   }
