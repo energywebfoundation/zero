@@ -14,6 +14,12 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: zero
 
+  mailserver:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - 8025:8025
+
   ui:
     image: zero-ui
     restart: unless-stopped
@@ -50,6 +56,8 @@ services:
     environment:
       LOG_LEVELS: "log,error,warn,debug,verbose"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
+      SMTP_URL: "smtp://mailserver:1025"
+      UI_BASE_URL: "http://localhost:8080"
       JWT_SECRET: "secret"
       JWT_TTL: "24h"
       CORS_ORIGIN: "http://localhost:8080"
