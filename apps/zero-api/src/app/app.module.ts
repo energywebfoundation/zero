@@ -11,6 +11,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { DraftsModule } from '../drafts/drafts.module';
 import { FilesModule } from '../files/files.module';
 import { HttpLoggerMiddleware } from '../middlewares/http-logger.middleware';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { HttpLoggerMiddleware } from '../middlewares/http-logger.middleware';
     UsersModule,
     AuthModule,
     DraftsModule,
-    FilesModule
+    FilesModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [

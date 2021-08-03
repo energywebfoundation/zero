@@ -2,9 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
 import { AuthModule } from '../auth/auth.module';
-import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
-import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
 import { HttpStatus, INestApplication } from '@nestjs/common';
@@ -12,6 +10,7 @@ import { UserDto } from '../users/dto/user.dto';
 import * as request from 'supertest';
 import { JwtService } from '@nestjs/jwt';
 import { createAndActivateUser } from '../../test/helpers';
+import { AppModule } from './app.module';
 
 describe('AppController', () => {
   let module: TestingModule;
@@ -23,7 +22,7 @@ describe('AppController', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       controllers: [AppController],
-      imports: [AuthModule, PrismaModule, UsersModule],
+      imports: [AppModule, AuthModule],
       providers: []
     }).compile();
 
