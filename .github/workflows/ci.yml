@@ -72,6 +72,7 @@ jobs:
           JWT_SECRET: secret
           EMAIL_CONFIRMATION_TTL: 3600
           DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/zero"
+          SMTP_URL: "smtp://localhost:1025"
 
 # Disabled until UI tests are fixed
 #      - name: Run UI tests
