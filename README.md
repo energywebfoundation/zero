@@ -62,14 +62,21 @@ Install using `yarn add @energyweb/{package}@preview`
 2. Make sure you have Java runtime installed
 3. Install [Postgres](https://www.postgresql.org/download/) 12.x+ and create a new database named `zero`.
 
-We recommend using Docker based setup as follows (requires psql command line tool installed):
+   We recommend using Docker based setup as follows (requires psql command line tool installed):
 
 ```
 docker pull postgres
 docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zero -d -p 5432:5432 postgres
 ```
 
-4. Make sure you have created a `.env` file in the root of the monorepo and that all necessary variables are set.
+4. Use your preferred SMTP server and set SMTP_URL environment variable accordingly, or run local SMTP mocking server as
+   a Docker container: `docker run --name zero-smtp -d -p 1025:1025 -p 8025:8025 mailhog/mailhog:latest` and
+   set `SMTP_URL=smtp://localhost:1025`.
+   You can access the web interface exposed by it on http://localhost:8025/ to see what emails are sent by EW Zero
+   backend.
+
+
+6. Make sure you have created a `.env` file in the root of the monorepo and that all necessary variables are set.
    Use [`.env.example`](.env.example) as an example of how the `.env` file should look.
 
 ## Installation
