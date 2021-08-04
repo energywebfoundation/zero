@@ -39,7 +39,7 @@ export class EmailService {
       }
 
     } catch (err) {
-      this.logger.error(`error while sending email: subject=${sendMailOptions.subject} to=${sendMailOptions.to}`);
+      this.logger.error(`error while sending email: subject=${sendMailOptions.subject} to=${JSON.stringify(sendMailOptions.to)}`);
       this.logger.error(err.toString());
       this.logger.error(JSON.stringify(err));
       throw err;
