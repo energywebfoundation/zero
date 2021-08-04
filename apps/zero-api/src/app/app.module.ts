@@ -31,7 +31,7 @@ import * as Joi from 'joi';
         PORT: Joi.number().default(3333),
 
         DATABASE_URL: Joi.string()
-          .uri({ allowRelative: false, scheme: 'postgres' })
+          .uri({ allowRelative: false, scheme: 'postgresql' })
           .default('postgresql://postgres:postgres@localhost:5432/zero'),
 
         SMTP_URL: Joi.string()
@@ -50,7 +50,7 @@ import * as Joi from 'joi';
         JWT_TTL: Joi.string().default('24h'),
         EMAIL_CONFIRMATION_TTL: Joi.number().min(0).default(86400),
         FILES_STORAGE: Joi.string().default('./uploaded-files'),
-        UPLOADED_FILE_SIZE_LIMIT: Joi.number().min(1000000),
+        UPLOADED_FILE_SIZE_LIMIT: Joi.number().min(10000),
         CORS_ORIGIN: Joi.string().default('*'),
         CORS_MAX_AGE: Joi.number().default(60)
       })
