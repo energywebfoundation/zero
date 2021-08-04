@@ -4,12 +4,11 @@ import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole, User, EmailConfirmation } from '@prisma/client';
-import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
-import { EmailModule } from '../email/email.module';
 import * as mailhog from 'mailhog';
+import { AppModule } from '../app/app.module';
 
 describe('UsersService', () => {
   let module: TestingModule;
@@ -34,8 +33,8 @@ describe('UsersService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [PrismaModule, EmailModule],
-      providers: [UsersService]
+      imports: [AppModule],
+      providers: []
     }).compile();
 
     service = module.get<UsersService>(UsersService);
