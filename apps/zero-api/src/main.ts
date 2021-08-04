@@ -10,6 +10,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 import {intersection} from 'lodash';
+import { PrismaService } from './prisma/prisma.service';
 
 const logger = new Logger('bootstrap', { timestamp: true });
 const webserverLogger = new Logger('webserver', { timestamp: true });
@@ -47,6 +48,17 @@ async function bootstrap() {
   const server = app.getHttpServer();
 
   server.on('connection', connectionHandler);
+
+  const prisma = app.get<PrismaService>(PrismaService);
+
+  prisma.$on('beforeExit', async function() {
+    logger.log('Prisma client "beforeExit" event, initiating shut down routine');
+
+    // hacky way of enabling shutdown hooks because prisma handles stop signals itself
+    logger.debug('awaiting application closed');
+    await app.close();
+    logger.debug('application closed');
+  });
 }
 
 bootstrap()
