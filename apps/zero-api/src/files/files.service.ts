@@ -17,7 +17,7 @@ import { FileMetadataDto } from './dto/file-metadata.dto';
 export class FilesService {
   private readonly logger = new Logger(FilesService.name, { timestamp: true });
 
-  private readonly filesStorage = resolve(process.env.FILES_STORAGE || tmpdir());
+  private readonly filesStorage = resolve(process.env.FILES_STORAGE);
 
   constructor(private prisma: PrismaService) {
     this.logger.debug('instantiating');
