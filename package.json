@@ -75,6 +75,7 @@
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-icu": "2.0.3",
     "immer": "^9.0.5",
+    "joi": "^17.4.2",
     "localforage": "^1.9.0",
     "lodash": "^4.17.21",
     "mkdirp": "^1.0.4",

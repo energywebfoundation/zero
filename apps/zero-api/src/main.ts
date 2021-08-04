@@ -21,8 +21,8 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || '*',
-    maxAge: parseInt(process.env.CORS_MAX_AGE) || 60
+    origin: process.env.CORS_ORIGIN,
+    maxAge: parseInt(process.env.CORS_MAX_AGE)
   });
 
   logger.log(`LOG_LEVELS=${getLogLevelsFromEnv().join()}`);
@@ -38,7 +38,7 @@ async function bootstrap() {
     },
   });
 
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT;
   await app.listen(port, () => {
     logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
@@ -54,7 +54,7 @@ bootstrap()
 
 function getLogLevelsFromEnv(): LogLevel[] {
   const allowedLogLevels: LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
-  const envLogLevels = (process.env.LOG_LEVELS || 'error,warn,debug,verbose').split(',') as LogLevel[];
+  const envLogLevels = (process.env.LOG_LEVELS).split(',') as LogLevel[];
 
   return intersection(allowedLogLevels, envLogLevels) as LogLevel[]
 }

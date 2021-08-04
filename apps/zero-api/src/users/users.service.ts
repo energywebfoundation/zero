@@ -33,7 +33,7 @@ export class UsersService {
     });
 
 
-    const emailConfirmationToken = await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400);
+    const emailConfirmationToken = await this.createEmailConfirmation(data.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
 
     this.logger.debug(`sending confirmation email to ${data.email}`);
     const url = `${process.env.UI_BASE_URL}/auth/confirm-email#token=${encodeURIComponent(emailConfirmationToken)}`;
