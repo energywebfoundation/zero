@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, LogLevel } from '@nestjs/common';
+import { INestApplication, Logger, LogLevel } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 
@@ -17,8 +17,10 @@ const webserverLogger = new Logger('webserver', { timestamp: true });
 
 logger.log('starting');
 
+let app: INestApplication;
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  app = await NestFactory.create(AppModule, {
     logger: getLogLevelsFromEnv()
   });
 
@@ -66,7 +68,17 @@ bootstrap()
   .catch(err => {
     logger.error(err);
     console.log(err);
-    process.exit(1);
+
+    if (app) {
+      logger.debug('calling app.close()');
+      app.close().then(() => {
+        logger.debug('exiting process with code 1 after app.close()');
+        process.exit(1);
+      });
+    } else {
+      logger.debug('app is undefined, exiting process with code 1');
+      process.exit(1);
+    }
   });
 
 function getLogLevelsFromEnv(): LogLevel[] {
