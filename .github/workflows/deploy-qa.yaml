@@ -3,7 +3,7 @@ name: Deploy QA
 on:
   push:
     branches:
-      - chore/github-actions-qa-deploy
+      - chore/github-actions-qa-deployment
 
 jobs:
   cancel-previous:
