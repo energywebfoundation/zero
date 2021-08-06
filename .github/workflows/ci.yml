@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 jobs:
   cancel-previous:
@@ -18,10 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [cancel-previous]
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     services:
       db:
         image: postgres:13
@@ -35,6 +32,11 @@ jobs:
           --health-retries 10
         ports:
         - 5432:5432
+      mailhog:
+        image: mailhog/mailhog
+        ports:
+          - 1025:1025
+          - 8025:8025
     steps:
       - uses: actions/checkout@v2
 
@@ -71,6 +73,7 @@ jobs:
           JWT_SECRET: secret
           EMAIL_CONFIRMATION_TTL: 3600
           DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/zero"
+          SMTP_URL: "smtp://localhost:1025"
 
 # Disabled until UI tests are fixed
 #      - name: Run UI tests

@@ -213,7 +213,7 @@ describe('UsersDraftsController', function() {
       const anotherUsersDraft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       const body = (await request(httpServer)
-        .put(`/users/${user1.id}/drafts/${anotherUsersDraft.id + 1}`)
+        .put(`/users/${user1.id}/drafts/${anotherUsersDraft.id}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND)).body;

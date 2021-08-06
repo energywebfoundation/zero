@@ -13,6 +13,16 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: zero
+    networks:
+      zero:
+
+  mailserver:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - 8025:8025
+    networks:
+      zero:
 
   ui:
     image: zero-ui
@@ -36,6 +46,8 @@ services:
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
     command: prisma studio
+    networks:
+      zero:
 
   api:
     image: zero-api
@@ -50,10 +62,14 @@ services:
     environment:
       LOG_LEVELS: "log,error,warn,debug,verbose"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
+      SMTP_URL: "smtp://mailserver:1025"
+      UI_BASE_URL: "http://localhost:8080"
       JWT_SECRET: "secret"
       JWT_TTL: "24h"
       CORS_ORIGIN: "http://localhost:8080"
       CORS_MAX_AGE: 60
+    networks:
+      zero:
 
   db-migrate-deploy:
     image: zero-api
@@ -65,6 +81,8 @@ services:
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
     command: /bin/sh -c "prisma migrate deploy"
+    networks:
+      zero:
 
   db-migrate-reset:
     image: zero-api
@@ -76,8 +94,13 @@ services:
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
     command: /bin/sh -c "prisma migrate reset --skip-seed --force"
+    networks:
+      zero:
 
 volumes:
   qa-db-data:
   qa-backend-temp:
   qa-backend-uploaded_files:
+
+networks:
+  zero:

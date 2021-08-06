@@ -157,7 +157,7 @@ export class UsersController {
 
     if (!(await this.usersService.checkPassword(user.id, createEmailConfirmation.password))) throw new ForbiddenException();
 
-    await this.usersService.createEmailConfirmation(user.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL) || 86400);
+    await this.usersService.createEmailConfirmation(user.id, parseInt(process.env.EMAIL_CONFIRMATION_TTL));
 
     return { status: 'OK' };
   }

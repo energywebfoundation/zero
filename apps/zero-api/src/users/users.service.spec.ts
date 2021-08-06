@@ -4,15 +4,17 @@ import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole, User, EmailConfirmation } from '@prisma/client';
-import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
+import * as mailhog from 'mailhog';
+import { AppModule } from '../app/app.module';
 
 describe('UsersService', () => {
   let module: TestingModule;
   let service: UsersService;
   let prisma: PrismaService;
+  let mailhogClient;
 
   const testData1: CreateUserDto = {
     firstName: 'test first name 1',
@@ -31,18 +33,26 @@ describe('UsersService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [PrismaModule],
-      providers: [UsersService]
+      imports: [AppModule],
+      providers: []
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
+
+    mailhogClient = mailhog({
+      port: 8025,
+      host: 'localhost',
+      protocol: 'http:',
+      basePath: '/api'
+    });
 
     await prisma.clearDatabase();
   });
 
   afterAll(async () => {
     await module.close();
+    await mailhogClient.deleteAll();
   });
 
   beforeEach(async () => {
@@ -71,6 +81,29 @@ describe('UsersService', () => {
       const newUser = await service.create(testData1);
       expect(newUser.password).not.toEqual(testData1.password);
       expect(bcrypt.compare(testData1.password, newUser.password)).toBeTruthy();
+    });
+
+    it('should send email confirmation email', async function() {
+      await mailhogClient.deleteAll();
+      const newUser = await service.create(testData1);
+
+      const messages = await mailhogClient.messages();
+      expect(messages.items.length).toEqual(1);
+
+      const message = messages.items[0];
+
+      expect(message.to).toEqual(`${newUser.firstName} ${newUser.lastName} <${newUser.email}>`);
+      expect(message.subject).toEqual('EW Zero - confirm email address');
+
+      const token = (await prisma.emailConfirmation.findFirst({
+        where: { userId: newUser.id },
+        orderBy: { createdAt: 'desc' }
+      })).id;
+
+      const confirmationUrl = `${process.env.UI_BASE_URL}/auth/confirm-email#token=${token}`;
+
+      expect(message.text.search(confirmationUrl)).toBeGreaterThanOrEqual(0);
+      expect(message.html.search(confirmationUrl)).toBeGreaterThanOrEqual(0);
     });
 
     it('should create a user with multiple roles', async function() {
@@ -203,6 +236,25 @@ describe('UsersService', () => {
       expect(dbRecord.length).toEqual(1);
       expect(dbRecord[0].id).toEqual(token);
       expect(dbRecord[0].userId).toEqual(user.id);
+    });
+
+    it('should send password reset email message', async function() {
+      await mailhogClient.deleteAll();
+      const token = await service.passwordResetInitialize(user.id, 3600);
+      expect(token).toBeDefined();
+
+      const messages = await mailhogClient.messages();
+      expect(messages.items.length).toEqual(1);
+
+      const message = messages.items[0];
+
+      const passwordResetUrl = `${process.env.UI_BASE_URL}/auth/reset-password#token=${encodeURIComponent(token)}`;
+
+      expect(message.to).toEqual(`${user.firstName} ${user.lastName} <${user.email}>`);
+      expect(message.subject).toEqual('EW Zero - password reset');
+
+      expect(message.text.search(passwordResetUrl)).toBeGreaterThanOrEqual(0);
+      expect(message.html.search(passwordResetUrl)).toBeGreaterThanOrEqual(0);
     });
 
     it('should forbid to create a new token for non-existing user', async function() {

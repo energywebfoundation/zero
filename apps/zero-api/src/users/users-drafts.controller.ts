@@ -53,7 +53,7 @@ export class UsersDraftsController {
   ) {
     if (user.id !== userId) throw new ForbiddenException();
 
-    return this.draftsService.create(user.id, createDraftDto);
+    return this.draftsService.create(userId, createDraftDto);
   }
 
   @Get(':id')

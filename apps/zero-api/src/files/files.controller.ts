@@ -36,8 +36,8 @@ const filesInterceptor = FileInterceptor('file', {
   //  This is a temporary storage for files to be processed
   storage: multer.diskStorage({}),
   limits: {
-    files: parseInt(process.env.UPLOADED_FILES_COUNT_LIMIT) || 5,
-    fileSize: parseInt(process.env.UPLOADED_FILE_SIZE_LIMIT) || 1000000
+    files: parseInt(process.env.UPLOADED_FILES_COUNT_LIMIT),
+    fileSize: parseInt(process.env.UPLOADED_FILE_SIZE_LIMIT)
   } // see https://github.com/expressjs/multer#multeropts for options
 });
 

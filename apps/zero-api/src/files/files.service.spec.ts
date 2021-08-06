@@ -8,6 +8,7 @@ import { createAndActivateUser, createUploadedFile, fileExists, removeFolderCont
 import { UsersService } from '../users/users.service';
 import { User, UserRole, FileType } from '@prisma/client';
 import { ReadStream } from 'fs';
+import { AppModule } from '../app/app.module';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -22,7 +23,8 @@ describe('FilesService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      providers: [FilesService, PrismaService, UsersService]
+      imports: [AppModule],
+      providers: []
     }).compile();
 
     service = module.get<FilesService>(FilesService);
