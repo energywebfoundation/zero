@@ -12,6 +12,7 @@ import { getSwaggerDocumentationConfig } from './swagger/SwaggerDocumentConfig';
 import {intersection} from 'lodash';
 
 const logger = new Logger('bootstrap', { timestamp: true });
+const webserverLogger = new Logger('webserver', { timestamp: true });
 
 logger.log('starting');
 
@@ -42,6 +43,10 @@ async function bootstrap() {
   await app.listen(port, () => {
     logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
+
+  const server = app.getHttpServer();
+
+  server.on('connection', connectionHandler);
 }
 
 bootstrap()
@@ -57,4 +62,15 @@ function getLogLevelsFromEnv(): LogLevel[] {
   const envLogLevels = (process.env.LOG_LEVELS).split(',') as LogLevel[];
 
   return intersection(allowedLogLevels, envLogLevels) as LogLevel[]
+}
+
+function connectionHandler(socket) {
+  webserverLogger.debug(`connection from ${socket.remoteAddress}:${socket.remotePort}`);
+
+  const start = Date.now();
+
+  socket.on('close', (error) => {
+    webserverLogger.debug(`connection from ${socket.remoteAddress}:${socket.remotePort} closed${error ? ' with error' : ''}, ` +
+      `${socket.bytesRead} bytes read, ${socket.bytesWritten} bytes written, ${Date.now() - start}ms elapsed`);
+  })
 }
