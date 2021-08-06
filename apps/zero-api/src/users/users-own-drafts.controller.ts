@@ -1,8 +1,14 @@
 import {
   Body,
   ClassSerializerInterceptor,
-  Controller, Delete, ForbiddenException,
-  Get, NotFoundException, Param, ParseIntPipe, Post, Put,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
   UseFilters,
   UseInterceptors,
   UsePipes,
@@ -18,13 +24,12 @@ import { User } from './decorators/user.decorator';
 import { UserDto } from './dto/user.dto';
 import { CreateDraftDto } from '../drafts/dto/create-draft.dto';
 import { UpdateDraftDto } from '../drafts/dto/update-draft.dto';
-import { UserRole } from '@prisma/client';
 
-@Controller('users/:userId/drafts')
+@Controller('users/me/drafts')
 @UsePipes(ValidationPipe)
 @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
 @UseFilters(PrismaClientExceptionFilter)
-export class UsersDraftsController {
+export class UsersOwnDraftsController {
   constructor(
     private readonly usersService: UsersService,
     private readonly draftsService: DraftsService
@@ -36,11 +41,8 @@ export class UsersDraftsController {
   @ApiOkResponse({ type: DraftDto, isArray: true })
   findAll(
     @User() user: UserDto,
-    @Param('userId', new ParseIntPipe()) userId: number
   ) {
-    if (user.id !== userId && !user.roles.includes(UserRole.admin)) throw new ForbiddenException();
-
-    return this.draftsService.findAllForUser(userId);
+    return this.draftsService.findAllForUser(user.id);
   }
 
 
@@ -50,11 +52,8 @@ export class UsersDraftsController {
   @ApiCreatedResponse({ type: DraftDto })
   create(
     @User() user: UserDto, @Body() createDraftDto: CreateDraftDto,
-    @Param('userId', new ParseIntPipe()) userId: number
   ) {
-    if (user.id !== userId && !user.roles.includes(UserRole.admin)) throw new ForbiddenException();
-
-    return this.draftsService.create(userId, createDraftDto);
+    return this.draftsService.create(user.id, createDraftDto);
   }
 
   @Get(':id')
@@ -63,14 +62,11 @@ export class UsersDraftsController {
   @ApiOkResponse({ type: DraftDto })
   async findOne(
     @User() user: UserDto,
-    @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number
   ) {
-    if (user.id !== userId && !user.roles.includes(UserRole.admin)) throw new ForbiddenException();
-
     const draft = await this.draftsService.findOne(id);
 
-    if (draft?.userId !== user.id && !user.roles.includes(UserRole.admin)) throw new NotFoundException();
+    if (draft?.userId !== user.id) throw new NotFoundException();
 
     return draft;
   }
@@ -81,15 +77,12 @@ export class UsersDraftsController {
   @ApiOkResponse({ type: DraftDto })
   async update(
     @User() user: UserDto,
-    @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updateDraftDto: UpdateDraftDto
   ) {
-    if (user.id !== userId && !user.roles.includes(UserRole.admin)) throw new ForbiddenException();
-
     const draft = await this.draftsService.findOne(id);
 
-    if (draft?.userId !== user.id && !user.roles.includes(UserRole.admin)) throw new NotFoundException();
+    if (draft?.userId !== user.id) throw new NotFoundException();
 
     return this.draftsService.update(id, updateDraftDto);
   }
@@ -100,14 +93,11 @@ export class UsersDraftsController {
   @ApiOkResponse()
   async remove(
     @User() user: UserDto,
-    @Param('userId', new ParseIntPipe()) userId: number,
     @Param('id', new ParseIntPipe()) id: number
   ) {
-    if (user.id !== userId && !user.roles.includes(UserRole.admin)) throw new ForbiddenException();
-
     const draft = await this.draftsService.findOne(id);
 
-    if (draft?.userId !== user.id && !user.roles.includes(UserRole.admin)) throw new NotFoundException();
+    if (draft?.userId !== user.id) throw new NotFoundException();
 
     return this.draftsService.remove(id);
   }
