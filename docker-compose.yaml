@@ -71,32 +71,6 @@ services:
     networks:
       zero:
 
-  db-migrate-deploy:
-    image: zero-api
-    restart: on-failure
-    profiles:
-      - migrate-deploy
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
-    command: /bin/sh -c "prisma migrate deploy"
-    networks:
-      zero:
-
-  db-migrate-reset:
-    image: zero-api
-    restart: on-failure
-    profiles:
-      - migrate-reset
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
-    command: /bin/sh -c "prisma migrate reset --skip-seed --force"
-    networks:
-      zero:
-
 volumes:
   qa-db-data:
   qa-backend-temp:
