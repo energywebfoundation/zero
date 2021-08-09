@@ -80,6 +80,10 @@ export class FilesService {
   }
 
   async getUserFilesMetadata(userId: number): Promise<FileMetadataDto[]> {
+    if (!(await this.prisma.user.findUnique({ where: { id: userId } }))) {
+      return null;
+    }
+
     return (await this.prisma.file.findMany({ where: { ownerId: userId } })).map(r => new FileMetadataDto(r));
   }
 
