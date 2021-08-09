@@ -26,6 +26,12 @@
   * [Test](#test)
   * [Run demo](#run-demo)
   * [Build](#build)
+- [Docker](#docker)
+  * [Images building](#images-building)
+  * [Running containers](#running-containers)
+  * [Database schema setup](#database-schema-setup)
+    + [Deploying schema migrations](#deploying-schema-migrations)
+    + [Resetting the database schema](#resetting-the-database-schema)
 - [Contribution guidelines](#contribution-guidelines)
 
 # Versions
@@ -95,7 +101,100 @@ yarn build
 Visit the UI at: http://localhost:3000 to access user interface or http://localhost:3333/swagger to access Swagger
 rendered document.
 
-## Contribution guidelines
+
+# Docker
+## Images building
+
+Two docker images are created after executing the command below: `zero-api`, `zero-ui`
+
+```shell
+yarn build:docker
+```
+
+Both frontend and backend applications will be built int /dest folder and then docker images created.
+
+## Running containers
+
+The following services needs to be created to run EW Zero stack:
+
+```
+version: '3'
+
+services:
+  ui:
+    image: zero-ui
+    ports:
+      - 8080:80
+    environment:
+      API_BASE_URL: http://localhost:3333
+
+  api:
+    image: zero-api
+    ports:
+      - '3333:3333'
+    volumes:
+      - qa-backend-temp:/tmp # this is a temporary folder content does not need to be saved when container restarted
+      - qa-backend-uploaded_files:/uploaded-files #this folder needs to be shared between instances if multiple
+    environment:
+      # LOG_LEVELS: "log,error,warn,debug,verbose" # useful for debugging/QA environment
+      LOG_LEVELS: "log,error,warn" # recommended for production
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero" # user and password need to be in sync to the db service settings below
+      SMTP_URL: "smtp://mailserver:1025"
+      UI_BASE_URL: "http://localhost:8080"
+      JWT_SECRET: "secret"
+      JWT_TTL: "24h"
+      CORS_ORIGIN: "http://localhost:8080"
+      CORS_MAX_AGE: 60
+    networks:
+      zero:
+
+  db:
+    image: postgres:13.3-alpine
+    volumes:
+      - qa-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zero
+    networks:
+      zero:
+
+  # this is a fake mailserver useful for testing/debugging/learing/making demos
+  mailserver:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - 8025:8025
+    networks:
+      zero:
+
+volumes:
+  qa-db-data:
+  qa-backend-temp:
+  qa-backend-uploaded_files:
+
+networks:
+  zero:
+```
+## Database schema setup
+
+After having all stack running, a database schema needs to be set. According to your needs, there are two options here:
+
+### Deploying schema migrations
+Execute the following when your api service is running. You need to check name of the container. In this case it is `zero_api_1`.
+```shell
+# zero_api_1 is a name of your running instance of "api" service defined above. it may depend on folder name your docker-compose file is executed in
+docker exec -it zero_api_1 prisma migrate deploy
+```
+
+### Resetting the database schema
+Execute the following when your api service is running. You need to check name of the container. In this case it is `zero_api_1`.
+```shell
+# zero_api_1 is a name of your running instance of "api" service defined above. it may depend on folder name your docker-compose file is executed in
+docker exec -it zero_api_1 prisma migrate reset --force --skip-seed --skip-generate
+```
+
+# Contribution guidelines
 
 If you want to contribute to Zero, be sure to follow classic open source contribution guidelines (described below).
 
