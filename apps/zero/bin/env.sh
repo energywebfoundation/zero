@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REQUIRED_VARIABLES=(
-  API_URL
+  API_BASE_URL
 )
 
 # Recreate config file
