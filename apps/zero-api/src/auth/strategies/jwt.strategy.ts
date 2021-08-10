@@ -33,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   authenticate(req: Request, options?: unknown) {
     super.authenticate(req, options);
     if (req.authInfo) {
-      this.logger.warn(`authInfo=${JSON.stringify(req.authInfo)}`);
+      this.logger.warn(req.authInfo);
     }
   }
 }
