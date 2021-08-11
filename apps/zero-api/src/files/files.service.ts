@@ -5,7 +5,6 @@ import { Express } from 'express';
 // This is a hack to make Multer available in the Express namespace
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
-import { tmpdir } from 'os';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
 import { copyFile, rename, stat, unlink } from 'fs/promises';

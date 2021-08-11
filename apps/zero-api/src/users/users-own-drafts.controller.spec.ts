@@ -21,8 +21,8 @@ describe('UsersOwnDraftsController', function() {
   let usersService: UsersService;
   let draftsService: DraftsService;
 
-  let user1: UserDto, user2: UserDto, adminUser: UserDto;
-  let accessToken1: string, adminAccessToken: string;
+  let user1: UserDto, user2: UserDto;
+  let accessToken1: string;
 
   const password1 = 'pass1', password2 = 'pass2';
 
@@ -63,16 +63,6 @@ describe('UsersOwnDraftsController', function() {
       roles: [UserRole.seller],
       password: password2
     } as User);
-
-    adminUser = await createAndActivateUser(usersService, prisma, {
-      firstName: 'test first name admin',
-      lastName: 'test last name admin',
-      email: 'test-email-admin@foo.bar',
-      roles: [UserRole.admin],
-      password: 'admin password'
-    } as User);
-
-    adminAccessToken = await logInUser(app, adminUser.email, 'admin password');
   });
 
   afterAll(async () => {
