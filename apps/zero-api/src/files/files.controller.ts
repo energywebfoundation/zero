@@ -30,6 +30,7 @@ import { User } from '../users/decorators/user.decorator';
 import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 import { Public } from '../auth/decorators/public.decorator';
+import * as mimeTypes from 'mime-types';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -50,18 +51,9 @@ const filesInterceptor = FileInterceptor('file', {
 export class FilesController {
   private readonly logger = new Logger(FilesController.name, { timestamp: true });
 
-  private readonly supportedMimeTypes = [
-    'image/jpeg',
-    'image/png',
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  ];
+  private readonly supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
 
-  private readonly imagesMimeTypes = [
-    'image/jpeg',
-    'image/png'
-  ];
+  private readonly supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
 
   constructor(private readonly filesService: FilesService) {}
 
@@ -90,7 +82,10 @@ export class FilesController {
       }
     }
 
-    const newFileRecord = await this.filesService.addFile(file, user.id, body.fileType, meta);
+    const fileExtensionDetected = mimeTypes.extension(file.mimetype);
+    this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
+
+    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id, body.fileType, meta);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;
@@ -160,7 +155,7 @@ export class FilesController {
   ) {
     const fileMetadata = await this.filesService.getFileMetadata(id);
 
-    if (isNil(fileMetadata) || this.imagesMimeTypes.indexOf(fileMetadata.mimetype) < 0) {
+    if (isNil(fileMetadata) || this.supportedImagesFormats.indexOf(fileMetadata.fileExtension) < 0) {
       throw new NotFoundException();
     }
 
