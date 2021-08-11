@@ -13,6 +13,7 @@ import { FilesModule } from '../files/files.module';
 import { HttpLoggerMiddleware } from '../middlewares/http-logger.middleware';
 import { EmailModule } from '../email/email.module';
 import * as Joi from 'joi';
+import { ConnectionCloseMiddleware } from '../middlewares/connection-close.middleware';
 
 @Module({
   imports: [
@@ -72,6 +73,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(HttpLoggerMiddleware)
+      .forRoutes('*');
+
+    consumer
+      .apply(ConnectionCloseMiddleware)
       .forRoutes('*');
   }
 }
