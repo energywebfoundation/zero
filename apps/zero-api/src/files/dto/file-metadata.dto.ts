@@ -9,6 +9,9 @@ export class FileMetadataDto implements File {
   @ApiProperty({ example: 'agreement.pdf' })
   filename: string;
 
+  @ApiProperty({ example: 'pdf' })
+  fileExtension: string;
+
   @ApiProperty({ example: 'application/pdf' })
   mimetype: string;
 
