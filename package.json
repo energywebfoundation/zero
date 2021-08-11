@@ -37,7 +37,8 @@
     "db:migrate:reset": "prisma migrate reset",
     "db:migrate:ci": "prisma migrate reset --skip-generate --skip-seed --force",
     "db:migrate:deploy": "prisma migrate deploy",
-    "swagger:schema:generate": "cd apps/zero-api && TS_NODE_PROJECT=tsconfig.app.json ts-node src/generateSchema.ts"
+    "swagger:schema:generate": "cd apps/zero-api && TS_NODE_PROJECT=tsconfig.app.json ts-node src/generateSchema.ts",
+    "cucumber-test-api": "cd apps/zero-api && cucumber-js -f @cucumber/pretty-formatter -p default"
   },
   "dependencies": {
     "@emotion/react": "11.4.0",
@@ -115,6 +116,8 @@
     "@babel/preset-typescript": "7.12.13",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@cucumber/cucumber": "^7.3.1",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@emotion/babel-plugin": "11.2.0",
     "@nestjs/schematics": "8.0.2",
     "@nestjs/testing": "8.0.4",
@@ -151,7 +154,10 @@
     "@typescript-eslint/parser": "^4.27.0",
     "babel-jest": "26.2.2",
     "babel-loader": "8.1.0",
+    "chai": "^4.3.4",
     "concurrently": "^6.2.0",
+    "cucumber-pretty": "^6.0.0",
+    "cucumber-tsflow": "^4.0.0-rc.1",
     "cypress": "^7.3.0",
     "cypress-cucumber-preprocessor": "^4.1.2",
     "dotenv": "8.2.0",
