@@ -83,6 +83,17 @@ export class FilesController {
     }
 
     const fileExtensionDetected = mimeTypes.extension(file.mimetype);
+
+    if (!fileExtensionDetected) {
+      this.logger.warn(`unrecognized mimetype: ${file.mimetype}`);
+      throw new BadRequestException(`unrecognized mimetype: ${file.mimetype}`);
+    }
+
+    if ([...this.supportedDocumentsFormats, ...this.supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
+      this.logger.warn(`unsupported file extension detected (${fileExtensionDetected}) for ${file.mimetype} mimetype`);
+      throw new BadRequestException(`unsupported mimetype (${file.mimetype})`);
+    }
+
     this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
 
     const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id, body.fileType, meta);
