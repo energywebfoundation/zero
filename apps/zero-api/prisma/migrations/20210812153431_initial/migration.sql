@@ -29,7 +29,7 @@ CREATE TABLE "File" (
     "fileExtension" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
     "ownerId" INTEGER NOT NULL,
-    "fileType" "FileType" NOT NULL,
+    "fileType" "FileType",
     "meta" JSONB,
     "uploadedAt" TIMESTAMP(3) NOT NULL,
     "processingCompletedAt" TIMESTAMP(3),
