@@ -1214,6 +1214,10 @@
             "type": "string",
             "example": "agreement.pdf"
           },
+          "fileExtension": {
+            "type": "string",
+            "example": "pdf"
+          },
           "mimetype": {
             "type": "string",
             "example": "application/pdf"
@@ -1241,6 +1245,7 @@
         "required": [
           "id",
           "filename",
+          "fileExtension",
           "mimetype",
           "ownerId",
           "fileType",

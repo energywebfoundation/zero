@@ -24,13 +24,14 @@ export class FilesService {
     mkdirp.sync(this.filesStorage);
   }
 
-  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
+  async addFile(file: Express.Multer.File, fileExtension: string, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
       let fileRecord: File = await this.prisma.file.create({
         data: {
           filename: file.originalname,
+          fileExtension,
           ownerId: owner,
           fileType,
           meta,

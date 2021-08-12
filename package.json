@@ -78,6 +78,7 @@
     "joi": "^17.4.2",
     "localforage": "^1.9.0",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.32",
     "mkdirp": "^1.0.4",
     "nodemailer": "^6.6.3",
     "notistack": "^2.0.1-alpha.4",
