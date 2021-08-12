@@ -31,6 +31,8 @@ import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 import { Public } from '../auth/decorators/public.decorator';
 import * as mimeTypes from 'mime-types';
+import {FileType} from '@prisma/client';
+import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -62,25 +64,15 @@ export class FilesController {
   @ApiTags('files')
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UploadFileDto })
-  @ApiCreatedResponse({ type: FileMetadataDto })
+  @ApiCreatedResponse({ type: UploadFileResponseDto })
   @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor, filesInterceptor)
   async uploadFiles(
     @User() user: UserDto,
     @Body() body: UploadFileDto,
     @UploadedFile() file: Express.Multer.File
-  ): Promise<FileMetadataDto> {
+  ): Promise<UploadFileResponseDto> {
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
     this.logger.debug(`form fields: ${JSON.stringify(body)}`);
-
-    let meta;
-
-    if (!isNil(body.meta)) {
-      try {
-        meta = JSON.parse(body.meta);
-      } catch (err) {
-        throw new BadRequestException(`invalid "meta" field value: ${err}`);
-      }
-    }
 
     const fileExtensionDetected = mimeTypes.extension(file.mimetype);
 
@@ -96,7 +88,7 @@ export class FilesController {
 
     this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
 
-    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id, body.fileType, meta);
+    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;

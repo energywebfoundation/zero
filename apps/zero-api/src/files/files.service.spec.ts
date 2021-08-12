@@ -66,18 +66,16 @@ describe('FilesService', () => {
     });
 
     it('should create database record', async function() {
-      const res = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      const res = await service.addFile(uploadedFile, 'pdf', user.id);
 
       const databaseRecord = await prismaService.file.findUnique({ where: { id: res.id } });
       expect(databaseRecord).toBeDefined();
       expect(databaseRecord.filename).toEqual(uploadedFile.originalname);
-      expect(databaseRecord.fileType).toEqual(FileType.facility);
-      expect(databaseRecord.meta).toEqual({meta: "data"});
       expect(databaseRecord.ownerId).toEqual(user.id);
     });
 
     it('should store a file in the destination folder', async function() {
-      const res = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      const res = await service.addFile(uploadedFile, 'pdf', user.id);
 
       expect(await fileExists(resolve(destinationFolder, res.id))).toEqual(true);
     });
@@ -88,7 +86,7 @@ describe('FilesService', () => {
 
     beforeEach(async function() {
       const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      file = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      file = await service.addFile(uploadedFile, 'pdf', user.id);
     });
 
     it('should return existing file metadata record', async function() {
@@ -107,7 +105,7 @@ describe('FilesService', () => {
 
     beforeEach(async function() {
       const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      file = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      file = await service.addFile(uploadedFile, 'pdf', user.id);
     });
 
     it('should return a file stream', async function() {
@@ -133,11 +131,11 @@ describe('FilesService', () => {
 
     beforeEach(async function() {
 
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', anotherUser.id, FileType.facility,  {meta: "data"})
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', anotherUser.id)
 
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id)
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id)
+      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id)
     });
 
     afterEach(async function() {

@@ -1259,18 +1259,10 @@
           "file": {
             "type": "string",
             "format": "binary"
-          },
-          "fileType": {
-            "$ref": "#/components/schemas/FileType"
-          },
-          "meta": {
-            "type": "string",
-            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
           }
         },
         "required": [
-          "file",
-          "fileType"
+          "file"
         ]
       }
     }
