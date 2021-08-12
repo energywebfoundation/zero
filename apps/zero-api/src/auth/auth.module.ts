@@ -1,10 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategies';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './strategies';
+import { JwtStrategy, LocalStrategy } from './strategies';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -25,4 +24,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService, JwtModule]
 })
-export class AuthModule {}
+export class AuthModule {
+  private readonly logger = new Logger(AuthModule.name, { timestamp: true });
+
+  constructor(jwtService: JwtService, config: ConfigService) {
+    this.logger.debug(`JWT_TTL=${config.get<string | number>('JWT_TTL')}`);
+  }
+}

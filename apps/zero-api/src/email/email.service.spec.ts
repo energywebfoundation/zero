@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailService } from './email.service';
 import { AppModule } from '../app/app.module';
-import { EmailModule } from './email.module';
 import * as mailhog from 'mailhog';
 
 describe('EmailService', () => {

@@ -5,7 +5,6 @@ import { Express } from 'express';
 // This is a hack to make Multer available in the Express namespace
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
-import { tmpdir } from 'os';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
 import { copyFile, rename, stat, unlink } from 'fs/promises';
@@ -25,13 +24,14 @@ export class FilesService {
     mkdirp.sync(this.filesStorage);
   }
 
-  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
+  async addFile(file: Express.Multer.File, fileExtension: string, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
       let fileRecord: File = await this.prisma.file.create({
         data: {
           filename: file.originalname,
+          fileExtension,
           ownerId: owner,
           fileType,
           meta,
@@ -80,6 +80,10 @@ export class FilesService {
   }
 
   async getUserFilesMetadata(userId: number): Promise<FileMetadataDto[]> {
+    if (!(await this.prisma.user.findUnique({ where: { id: userId } }))) {
+      return null;
+    }
+
     return (await this.prisma.file.findMany({ where: { ownerId: userId } })).map(r => new FileMetadataDto(r));
   }
 

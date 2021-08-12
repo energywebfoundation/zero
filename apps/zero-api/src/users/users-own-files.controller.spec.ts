@@ -2,7 +2,6 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app/app.module';
-import { UsersDraftsController } from './users-drafts.controller';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { FileType, User, UserRole } from '@prisma/client';
@@ -14,16 +13,16 @@ import {
   logInUser,
   removeFolderContent
 } from '../../test/helpers';
-import { UsersFilesController } from './users-files.controller';
 import { FilesService } from '../files/files.service';
 import { resolve } from 'path';
 import { tmpdir } from 'os';
 import { FileMetadataDto } from '../files/dto/file-metadata.dto';
+import { UsersOwnFilesController } from './users-own-files.controller';
 
-describe('UsersFilesController', function() {
+describe('UsersOwnFilesController', function() {
   let app: INestApplication;
   let httpServer;
-  let controller: UsersDraftsController;
+  let controller: UsersOwnFilesController;
   let prisma: PrismaService;
   let usersService: UsersService;
   let filesService: FilesService;
@@ -36,8 +35,6 @@ describe('UsersFilesController', function() {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersFilesController],
-      providers: [UsersService, FilesService, PrismaService],
       imports: [AppModule]
     }).compile();
 
@@ -46,7 +43,7 @@ describe('UsersFilesController', function() {
 
     httpServer = app.getHttpServer();
 
-    controller = module.get<UsersDraftsController>(UsersDraftsController);
+    controller = module.get<UsersOwnFilesController>(UsersOwnFilesController);
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
     filesService = module.get<FilesService>(FilesService);
@@ -94,7 +91,7 @@ describe('UsersFilesController', function() {
 
     it('should deny access when not authenticated', async function() {
       const { body } = (await request(httpServer)
-        .get(`/users/${user1.id}/files`)
+        .get(`/users/me/files`)
         .expect(HttpStatus.UNAUTHORIZED));
 
       expect(body.length).not.toBeDefined();
@@ -102,7 +99,7 @@ describe('UsersFilesController', function() {
 
     it('should respond with list of files metadata', async function() {
       const entities: FileMetadataDto[] = (await request(httpServer)
-        .get(`/users/${user1.id}/files`)
+        .get(`/users/me/files`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
 
@@ -116,40 +113,11 @@ describe('UsersFilesController', function() {
 
     it('should respond with only metadata files owned by the user', async function() {
       const entities: FileMetadataDto[] = (await request(httpServer)
-        .get(`/users/${user1.id}/files`)
+        .get(`/users/me/files`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
 
       expect(entities.filter(e => e.ownerId !== user1.id).length).toEqual(0);
-    });
-
-    it('should deny access to drafts of another user if not admin', async function() {
-      const body = (await request(httpServer)
-        .get(`/users/${user2.id}/files`)
-        .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.FORBIDDEN)).body;
-
-      expect(body.drafts).not.toBeDefined();
-    });
-
-    it('should allow access to drafts of another user when admin', async function() {
-      const adminUser = await createAndActivateUser(usersService, prisma, {
-        firstName: 'test first name 3',
-        lastName: 'test last name 3',
-        email: 'test-email3@foo.bar',
-        roles: [UserRole.admin],
-        password: 'admin password'
-      } as User);
-
-      const adminAccessToken = await logInUser(app, adminUser.email, 'admin password');
-
-      const body = (await request(httpServer)
-        .get(`/users/${user1.id}/files`)
-        .set(getAuthBearerHeader(adminAccessToken))
-        .expect(HttpStatus.OK)).body;
-
-      expect(body.length).toEqual(3);
-      expect(body.filter(f => f.ownerId !== user1.id).length).toEqual(0);
     });
   });
 });

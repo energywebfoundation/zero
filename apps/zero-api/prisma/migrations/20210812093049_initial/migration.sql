@@ -26,6 +26,7 @@ CREATE TABLE "User" (
 CREATE TABLE "File" (
     "id" TEXT NOT NULL,
     "filename" TEXT NOT NULL,
+    "fileExtension" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
     "ownerId" INTEGER NOT NULL,
     "fileType" "FileType" NOT NULL,
