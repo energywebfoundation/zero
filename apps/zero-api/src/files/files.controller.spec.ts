@@ -26,6 +26,7 @@ describe('FilesController', () => {
   let httpServer;
   let controller: FilesController;
   let usersService: UsersService;
+  let filesService: FilesService;
   let prisma: PrismaService;
   const password = 'my password';
   let user, accessToken;
@@ -44,6 +45,7 @@ describe('FilesController', () => {
 
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
+    filesService = module.get<FilesService>(FilesService);
     controller = module.get<FilesController>(FilesController);
 
     await prisma.clearDatabase();
@@ -135,6 +137,49 @@ describe('FilesController', () => {
     it('should require logged in user', async function() {
       await request(httpServer)
         .get(`/files/${fileId}/metadata`)
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('PUT /files/:id/metadata', function() {
+    const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
+    let fileId: string;
+
+    beforeAll(async function() {
+      expect(await fileExists(testFilePath)).toEqual(true);
+      fileId = (await request(httpServer)
+        .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
+        .attach('file', testFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+    });
+
+    it('should update database record', async function() {
+      await request(httpServer)
+        .put(`/files/${fileId}/metadata`)
+        .send({ fileType: FileType.sustainability, meta: { foo: 'bar' } })
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK);
+
+      const dbRecord = await filesService.getFileMetadata(fileId);
+      expect(dbRecord.fileType).toEqual(FileType.sustainability);
+      expect(dbRecord.meta).toEqual({ foo: 'bar' });
+    });
+
+    it('should respond with 404 Not Found for non-existing fileId', async function() {
+      await request(httpServer)
+        .put(`/files/00000000-0000-0000-0000-000000000000/metadata`)
+        .send({ fileType: FileType.sustainability, meta: {} })
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should require logged in user', async function() {
+      await request(httpServer)
+        .put(`/files/${fileId}/metadata`)
+        .send({ fileType: FileType.sustainability, meta: {} })
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });
