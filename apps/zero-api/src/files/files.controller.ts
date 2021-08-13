@@ -10,6 +10,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Res,
   UploadedFile,
   UseFilters,
@@ -31,6 +32,7 @@ import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 import { Public } from '../auth/decorators/public.decorator';
 import * as mimeTypes from 'mime-types';
+import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 const filesInterceptor = FileInterceptor('file', {
@@ -102,6 +104,18 @@ export class FilesController {
     @Param('id', new ParseUUIDPipe()) id: string
   ): Promise<FileMetadataDto> {
     return await this.filesService.getFileMetadata(id);
+  }
+
+  @Put(':id/metadata')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ type: FileMetadataDto })
+  @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
+  async updateFileMetadata(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateFileMetadataDto: UpdateFileMetadataDto
+  ): Promise<FileMetadataDto> {
+    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto);
   }
 
   @Get(':id')

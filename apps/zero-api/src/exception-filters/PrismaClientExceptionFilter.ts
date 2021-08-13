@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ConflictException } from '@nestjs/common';
+import { ArgumentsHost, Catch, ConflictException, NotFoundException } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
 
@@ -9,6 +9,9 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
       // see error codes: https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
       case 'P2002':
         super.catch(new ConflictException(), host);
+        break
+      case 'P2025':
+        super.catch(new NotFoundException(), host);
         break
       default:
         // default 500 error code

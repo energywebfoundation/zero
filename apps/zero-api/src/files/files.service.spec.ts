@@ -100,6 +100,25 @@ describe('FilesService', () => {
     });
   });
 
+  describe('updateFileMetadata()', function() {
+    let file;
+
+    beforeEach(async function() {
+      const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      file = await service.addFile(uploadedFile, 'pdf', user.id);
+    });
+
+    it('should update file metadata record', async function() {
+      const entity = await service.updateFileMetadata(file.id, {
+        fileType: FileType.sustainability,
+        meta: { someKey: 'some value' }
+      });
+
+      expect(entity.fileType).toEqual(FileType.sustainability);
+      expect(entity.meta).toEqual({ someKey: 'some value' });
+    });
+  });
+
   describe('getFileContentStream()', function() {
     let file;
 

@@ -11,6 +11,7 @@ import { copyFile, rename, stat, unlink } from 'fs/promises';
 import { File } from '@prisma/client';
 import { createReadStream, ReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
+import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 @Injectable()
@@ -76,6 +77,10 @@ export class FilesService {
 
   async getFileMetadata(fileId: string): Promise<File> {
     return this.prisma.file.findUnique({ where: { id: fileId } });
+  }
+
+  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
+    return new FileMetadataDto(await this.prisma.file.update({ where: { id: fileId }, data }));
   }
 
   async getUserFilesMetadata(userId: number): Promise<FileMetadataDto[]> {
