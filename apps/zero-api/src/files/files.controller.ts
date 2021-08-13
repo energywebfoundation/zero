@@ -31,7 +31,6 @@ import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 import { Public } from '../auth/decorators/public.decorator';
 import * as mimeTypes from 'mime-types';
-import {FileType} from '@prisma/client';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 const filesInterceptor = FileInterceptor('file', {
