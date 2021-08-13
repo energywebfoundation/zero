@@ -15,6 +15,7 @@ import { EmailModule } from '../email/email.module';
 import * as Joi from 'joi';
 import { ConnectionCloseMiddleware } from '../middlewares/connection-close.middleware';
 import { FacilitiesModule } from '../facilities/facilities.module';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
   imports: [
@@ -63,7 +64,8 @@ import { FacilitiesModule } from '../facilities/facilities.module';
     DraftsModule,
     FilesModule,
     EmailModule,
-    FacilitiesModule
+    FacilitiesModule,
+    ProductsModule
   ],
   controllers: [AppController],
   providers: [
