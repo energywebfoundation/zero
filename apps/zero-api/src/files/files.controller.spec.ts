@@ -80,7 +80,6 @@ describe('FilesController', () => {
     it('should require logged in user', async function() {
       await request(httpServer)
         .post('/files')
-        .field('fileType', FileType.facility)
         .attach('file', testFilePath)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -88,7 +87,6 @@ describe('FilesController', () => {
     it('should create a file', async function() {
       const newFileId: string = (await request(httpServer)
         .post('/files')
-        .field('fileType', FileType.facility)
         .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testFilePath)
         .set(getAuthBearerHeader(accessToken))
