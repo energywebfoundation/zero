@@ -808,7 +808,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileMetadataDto"
+                  "$ref": "#/components/schemas/UploadFileResponseDto"
                 }
               }
             }
@@ -837,6 +837,49 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      },
+      "put": {
+        "operationId": "FilesController_updateFileMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFileMetadataDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
@@ -1263,6 +1306,37 @@
         },
         "required": [
           "file"
+        ]
+      },
+      "UploadFileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60"
+          }
+        }
+      },
+      "UpdateFileMetadataDto": {
+        "type": "object",
+        "properties": {
+          "fileType": {
+            "$ref": "#/components/schemas/FileType"
+          },
+          "meta": {
+            "type": "object",
+            "example": {
+              "field1": "value",
+              "field2": [
+                1,
+                2,
+                3
+              ]
+            }
+          }
+        },
+        "required": [
+          "fileType"
         ]
       }
     }
