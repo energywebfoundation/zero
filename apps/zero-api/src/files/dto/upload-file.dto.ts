@@ -1,6 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { FileType } from '@prisma/client';
-import { IsEnum, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadFileDto {
   @ApiProperty({ type: 'string', format: 'binary' })

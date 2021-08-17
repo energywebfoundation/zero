@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app/app.module';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
-import { FileType, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import * as request from 'supertest';
 import {
   createAndActivateUser,

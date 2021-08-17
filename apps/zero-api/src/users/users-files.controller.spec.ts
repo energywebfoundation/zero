@@ -5,7 +5,7 @@ import { AppModule } from '../app/app.module';
 import { UsersDraftsController } from './users-drafts.controller';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
-import { FileType, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import * as request from 'supertest';
 import {
   createAndActivateUser,
