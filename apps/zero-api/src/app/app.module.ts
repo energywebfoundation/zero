@@ -14,6 +14,7 @@ import { HttpLoggerMiddleware } from '../middlewares/http-logger.middleware';
 import { EmailModule } from '../email/email.module';
 import * as Joi from 'joi';
 import { ConnectionCloseMiddleware } from '../middlewares/connection-close.middleware';
+import { FacilitiesModule } from '../facilities/facilities.module';
 
 @Module({
   imports: [
@@ -61,7 +62,8 @@ import { ConnectionCloseMiddleware } from '../middlewares/connection-close.middl
     AuthModule,
     DraftsModule,
     FilesModule,
-    EmailModule
+    EmailModule,
+    FacilitiesModule
   ],
   controllers: [AppController],
   providers: [
