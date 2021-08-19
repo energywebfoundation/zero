@@ -20,7 +20,7 @@ export class FacilitiesService {
     const dbRecord = await this.prisma.facility.findUnique({ where: { id } });
 
     if (!dbRecord) {
-      throw new NotFoundException();
+      return null;
     }
 
     return new FacilityDto(dbRecord);
