@@ -808,7 +808,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileMetadataDto"
+                  "$ref": "#/components/schemas/UploadFileResponseDto"
                 }
               }
             }
@@ -837,6 +837,49 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "files"
+        ]
+      },
+      "put": {
+        "operationId": "FilesController_updateFileMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFileMetadataDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
@@ -907,6 +950,180 @@
         },
         "tags": [
           "files"
+        ]
+      }
+    },
+    "/api/facilities": {
+      "post": {
+        "operationId": "FacilitiesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFacilityDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "facilities"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "FacilitiesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "facilities"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/facilities/{id}": {
+      "get": {
+        "operationId": "FacilitiesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "facilities"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "FacilitiesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFacilityDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "facilities"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "FacilitiesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "facilities"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
         ]
       }
     }
@@ -1214,6 +1431,10 @@
             "type": "string",
             "example": "agreement.pdf"
           },
+          "fileExtension": {
+            "type": "string",
+            "example": "pdf"
+          },
           "mimetype": {
             "type": "string",
             "example": "application/pdf"
@@ -1241,6 +1462,7 @@
         "required": [
           "id",
           "filename",
+          "fileExtension",
           "mimetype",
           "ownerId",
           "fileType",
@@ -1254,19 +1476,85 @@
           "file": {
             "type": "string",
             "format": "binary"
-          },
+          }
+        },
+        "required": [
+          "file"
+        ]
+      },
+      "UploadFileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5ff1cb39-da8b-4f0a-a17d-a5d00ea85a60"
+          }
+        }
+      },
+      "UpdateFileMetadataDto": {
+        "type": "object",
+        "properties": {
           "fileType": {
             "$ref": "#/components/schemas/FileType"
           },
           "meta": {
-            "type": "string",
-            "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
+            "type": "object",
+            "example": {
+              "field1": "value",
+              "field2": [
+                1,
+                2,
+                3
+              ]
+            }
           }
         },
         "required": [
-          "file",
           "fileType"
         ]
+      },
+      "CreateFacilityDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My facility"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "FacilityDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "ownerId": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "My facility"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "name"
+        ]
+      },
+      "UpdateFacilityDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My facility"
+          }
+        }
       }
     }
   }

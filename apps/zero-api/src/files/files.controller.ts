@@ -10,6 +10,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Res,
   UploadedFile,
   UseFilters,
@@ -30,6 +31,9 @@ import { User } from '../users/decorators/user.decorator';
 import { UserDto } from '../users/dto/user.dto';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 import { Public } from '../auth/decorators/public.decorator';
+import * as mimeTypes from 'mime-types';
+import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
+import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -50,18 +54,9 @@ const filesInterceptor = FileInterceptor('file', {
 export class FilesController {
   private readonly logger = new Logger(FilesController.name, { timestamp: true });
 
-  private readonly supportedMimeTypes = [
-    'image/jpeg',
-    'image/png',
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  ];
+  private readonly supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
 
-  private readonly imagesMimeTypes = [
-    'image/jpeg',
-    'image/png'
-  ];
+  private readonly supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
 
   constructor(private readonly filesService: FilesService) {}
 
@@ -70,27 +65,31 @@ export class FilesController {
   @ApiTags('files')
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UploadFileDto })
-  @ApiCreatedResponse({ type: FileMetadataDto })
+  @ApiCreatedResponse({ type: UploadFileResponseDto })
   @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor, filesInterceptor)
   async uploadFiles(
     @User() user: UserDto,
     @Body() body: UploadFileDto,
     @UploadedFile() file: Express.Multer.File
-  ): Promise<FileMetadataDto> {
+  ): Promise<UploadFileResponseDto> {
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
     this.logger.debug(`form fields: ${JSON.stringify(body)}`);
 
-    let meta;
+    const fileExtensionDetected = mimeTypes.extension(file.mimetype);
 
-    if (!isNil(body.meta)) {
-      try {
-        meta = JSON.parse(body.meta);
-      } catch (err) {
-        throw new BadRequestException(`invalid "meta" field value: ${err}`);
-      }
+    if (!fileExtensionDetected) {
+      this.logger.warn(`unrecognized mimetype: ${file.mimetype}`);
+      throw new BadRequestException(`unrecognized mimetype: ${file.mimetype}`);
     }
 
-    const newFileRecord = await this.filesService.addFile(file, user.id, body.fileType, meta);
+    if ([...this.supportedDocumentsFormats, ...this.supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
+      this.logger.warn(`unsupported file extension detected (${fileExtensionDetected}) for ${file.mimetype} mimetype`);
+      throw new BadRequestException(`unsupported mimetype (${file.mimetype})`);
+    }
+
+    this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
+
+    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;
@@ -105,6 +104,18 @@ export class FilesController {
     @Param('id', new ParseUUIDPipe()) id: string
   ): Promise<FileMetadataDto> {
     return await this.filesService.getFileMetadata(id);
+  }
+
+  @Put(':id/metadata')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ type: FileMetadataDto })
+  @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
+  async updateFileMetadata(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateFileMetadataDto: UpdateFileMetadataDto
+  ): Promise<FileMetadataDto> {
+    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto);
   }
 
   @Get(':id')
@@ -160,7 +171,7 @@ export class FilesController {
   ) {
     const fileMetadata = await this.filesService.getFileMetadata(id);
 
-    if (isNil(fileMetadata) || this.imagesMimeTypes.indexOf(fileMetadata.mimetype) < 0) {
+    if (isNil(fileMetadata) || this.supportedImagesFormats.indexOf(fileMetadata.fileExtension) < 0) {
       throw new NotFoundException();
     }
 

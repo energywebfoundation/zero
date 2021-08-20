@@ -590,7 +590,7 @@
             "parallel" : false,
             "commands" : [
               "nx build zero-api --prod",
-              "cp -R ./prisma ./dist/apps/zero-api/prisma",
+              "cp -R ./apps/zero-api/prisma ./dist/apps/zero-api/prisma",
               "cp ./apps/zero-api/Dockerfile ./dist/apps/zero-api/",
               "docker tag zero-api:latest zero-api:previous || exit 0",
               "docker build ./dist/apps/zero-api/ -t zero-api",

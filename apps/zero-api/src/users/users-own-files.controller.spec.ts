@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app/app.module';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
-import { FileType, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import * as request from 'supertest';
 import {
   createAndActivateUser,
@@ -82,13 +82,12 @@ describe('UsersOwnFilesController', function() {
 
   describe('GET users/:userId/files', function() {
     beforeAll(async function() {
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user2.id, FileType.facility, null);
+      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user2.id);
 
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user1.id, FileType.facility, null);
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user1.id, FileType.facility, null);
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), user1.id, FileType.facility, null);
+      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
+      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
+      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
     });
-
 
     it('should deny access when not authenticated', async function() {
       const { body } = (await request(httpServer)

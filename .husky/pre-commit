@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
-yarn affected:lint
-yarn affected:test
+yarn nx affected --target=lint --base=origin/develop --head=HEAD
+yarn nx affected --target=test --base=origin/develop --head=HEAD

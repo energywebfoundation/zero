@@ -26,9 +26,10 @@ CREATE TABLE "User" (
 CREATE TABLE "File" (
     "id" TEXT NOT NULL,
     "filename" TEXT NOT NULL,
+    "fileExtension" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
     "ownerId" INTEGER NOT NULL,
-    "fileType" "FileType" NOT NULL,
+    "fileType" "FileType",
     "meta" JSONB,
     "uploadedAt" TIMESTAMP(3) NOT NULL,
     "processingCompletedAt" TIMESTAMP(3),
@@ -75,6 +76,17 @@ CREATE TABLE "EmailConfirmation" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Facility" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "ownerId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
@@ -89,3 +101,6 @@ ALTER TABLE "PasswordReset" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") O
 
 -- AddForeignKey
 ALTER TABLE "EmailConfirmation" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Facility" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

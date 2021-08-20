@@ -8,9 +8,11 @@ import { Multer } from 'multer';
 import { dirname, resolve } from 'path';
 import * as mkdirp from 'mkdirp';
 import { copyFile, rename, stat, unlink } from 'fs/promises';
-import { File, FileType, Prisma } from '@prisma/client';
+import { File } from '@prisma/client';
 import { createReadStream, ReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
+import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
+import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 
 @Injectable()
 export class FilesService {
@@ -24,16 +26,15 @@ export class FilesService {
     mkdirp.sync(this.filesStorage);
   }
 
-  async addFile(file: Express.Multer.File, owner: number, fileType: FileType, meta: Prisma.JsonValue): Promise<FileMetadataDto> {
+  async addFile(file: Express.Multer.File, fileExtension: string, owner: number): Promise<UploadFileResponseDto> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
       let fileRecord: File = await this.prisma.file.create({
         data: {
           filename: file.originalname,
+          fileExtension,
           ownerId: owner,
-          fileType,
-          meta,
           mimetype: file.mimetype,
           uploadedAt: new Date()
         }
@@ -67,7 +68,7 @@ export class FilesService {
         data: { processingCompletedAt: new Date() }
       });
 
-      return new FileMetadataDto(fileRecord);
+      return new UploadFileResponseDto(fileRecord);
     } catch (err) {
       this.logger.error(err);
       throw err;
@@ -76,6 +77,10 @@ export class FilesService {
 
   async getFileMetadata(fileId: string): Promise<File> {
     return this.prisma.file.findUnique({ where: { id: fileId } });
+  }
+
+  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
+    return new FileMetadataDto(await this.prisma.file.update({ where: { id: fileId }, data }));
   }
 
   async getUserFilesMetadata(userId: number): Promise<FileMetadataDto[]> {
