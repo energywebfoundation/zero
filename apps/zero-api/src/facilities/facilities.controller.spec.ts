@@ -14,7 +14,8 @@ describe('FacilitiesController', () => {
   let httpServer;
   let prisma: PrismaService;
   let usersService: UsersService;
-  let user: User, adminUser: User, accessToken: string, adminAccessToken: string;
+  let user1: User, user2: User, adminUser: User;
+  let accessToken1: string, accessToken2: string, adminAccessToken: string;
 
   beforeAll(async function() {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,7 +34,7 @@ describe('FacilitiesController', () => {
 
     await prisma.clearDatabase();
 
-    user = await createAndActivateUser(usersService, prisma, {
+    user1 = await createAndActivateUser(usersService, prisma, {
       firstName: 'test first name 1',
       lastName: 'test last name 1',
       email: 'test-email1@foo.bar',
@@ -41,7 +42,16 @@ describe('FacilitiesController', () => {
       password: 'password'
     } as User);
 
-    accessToken = await logInUser(app, user.email, 'password');
+    user2 = await createAndActivateUser(usersService, prisma, {
+      firstName: 'test first name 2',
+      lastName: 'test last name 2',
+      email: 'test-email2@foo.bar',
+      roles: [UserRole.seller],
+      password: 'password'
+    } as User);
+
+    accessToken1 = await logInUser(app, user1.email, 'password');
+    accessToken2 = await logInUser(app, user2.email, 'password');
 
     adminUser = await createAndActivateUser(usersService, prisma, {
       firstName: 'admin first name',
@@ -76,7 +86,7 @@ describe('FacilitiesController', () => {
       await request(httpServer)
         .post('/facilities')
         .send({ name: 'My first awesome facility' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
       const dbRows = await prisma.facility.findMany();
@@ -95,7 +105,7 @@ describe('FacilitiesController', () => {
     it('should require a user to have admin role', async function() {
       await request(httpServer)
         .get('/facilities')
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.FORBIDDEN);
 
       await request(httpServer)
@@ -110,13 +120,13 @@ describe('FacilitiesController', () => {
       await request(httpServer)
         .post('/facilities')
         .send({ name: 'My awesome facility 1' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
       await request(httpServer)
         .post('/facilities')
         .send({ name: 'My awesome facility 2' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
       const facilities = (await request(httpServer)
@@ -143,12 +153,12 @@ describe('FacilitiesController', () => {
       const facility = (await request(httpServer)
         .post('/facilities')
         .send({ name: 'My second awesome facility' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
       const responseBody = (await request(httpServer)
         .get(`/facilities/${facility.id}`)
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
 
       expect(responseBody).toEqual(facility);
@@ -160,12 +170,12 @@ describe('FacilitiesController', () => {
       const facility = (await request(httpServer)
         .post('/facilities')
         .send({ name: 'My second awesome facility' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
       const responseBody = (await request(httpServer)
         .get(`/facilities/${facility.id + 1}`)
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND)).body;
 
       expect(responseBody).toEqual({ 'statusCode': 404, 'message': 'Not Found' });
@@ -185,18 +195,34 @@ describe('FacilitiesController', () => {
       const facility = (await request(httpServer)
         .post('/facilities')
         .send({ name: 'My facility to be updated' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
       (await request(httpServer)
         .put(`/facilities/${facility.id}`)
         .send({ name: 'My facility name updated' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
 
       const facilityUpdated = await prisma.facility.findUnique({ where: { id: facility.id } });
 
       expect(facilityUpdated.name).toEqual('My facility name updated');
+    });
+
+    it('should deny updating not-owned facility', async function() {
+      await prisma.facility.deleteMany();
+
+      const notOwnedFacility = (await request(httpServer)
+        .post('/facilities')
+        .send({ name: 'My facility to be updated' })
+        .set(getAuthBearerHeader(accessToken2))
+        .expect(HttpStatus.CREATED)).body;
+
+      await request(httpServer)
+        .put(`/facilities/${notOwnedFacility.id}`)
+        .send({ name: 'My facility name updated' })
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -213,15 +239,30 @@ describe('FacilitiesController', () => {
       const facility = (await request(httpServer)
         .post('/facilities')
         .send({ name: 'My facility to be updated' })
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
       await request(httpServer)
         .delete(`/facilities/${facility.id}`)
-        .set(getAuthBearerHeader(accessToken))
+        .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK);
 
       expect((await prisma.facility.findMany()).length).toEqual(0);
+    });
+
+    it('should deny deleting not-owned facility', async function() {
+      await prisma.facility.deleteMany();
+
+      const notOwnedFacility = (await request(httpServer)
+        .post('/facilities')
+        .send({ name: 'My facility to be updated' })
+        .set(getAuthBearerHeader(accessToken2))
+        .expect(HttpStatus.CREATED)).body;
+
+      await request(httpServer)
+        .delete(`/facilities/${notOwnedFacility.id}`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN);
     });
   });
 });

@@ -3,7 +3,10 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
+  Logger,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -32,6 +35,8 @@ import { FacilityDto } from './dto/facility.dto';
 @ApiBearerAuth('access-token')
 @ApiTags('facilities')
 export class FacilitiesController {
+  private readonly logger = new Logger(FacilitiesController.name, { timestamp: true });
+
   constructor(private readonly facilitiesService: FacilitiesService) {}
 
   @Post()
@@ -58,16 +63,44 @@ export class FacilitiesController {
 
   @Put(':id')
   @ApiOkResponse({ type: FacilityDto })
-  update(
+  async update(
+    @User() user: UserDto,
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updateFacilityDto: UpdateFacilityDto
   ) {
+    const facility = await this.facilitiesService.findOne(id);
+
+    if (!facility) {
+      this.logger.warn(`userId=${user.id} tried to update non-existing facilityId=${id}`);
+      throw new NotFoundException();
+    }
+
+    if (facility && facility.ownerId !== user.id) {
+      this.logger.warn(`userId=${user.id} tried to update productId=${id} of not-owned facilityId=${facility.id}`);
+      throw new ForbiddenException(`userId=${user.id} is not an owner of facilityId=${facility.id}`);
+    }
+
     return this.facilitiesService.update(id, updateFacilityDto);
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: FacilityDto })
-  remove(@Param('id', new ParseIntPipe()) id: number) {
+  async remove(
+    @User() user: UserDto,
+    @Param('id', new ParseIntPipe()) id: number
+  ) {
+    const facility = await this.facilitiesService.findOne(id);
+
+    if (!facility) {
+      this.logger.warn(`userId=${user.id} tried to delete non-existing facilityId=${id}`);
+      throw new NotFoundException();
+    }
+
+    if (facility && facility.ownerId !== user.id) {
+      this.logger.warn(`userId=${user.id} tried to update productId=${id} of not-owned facilityId=${facility.id}`);
+      throw new ForbiddenException(`userId=${user.id} is not an owner of facilityId=${facility.id}`);
+    }
+
     return this.facilitiesService.remove(id);
   }
 }
