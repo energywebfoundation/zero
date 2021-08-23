@@ -87,6 +87,17 @@ CREATE TABLE "Facility" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "facilityId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
@@ -104,3 +115,6 @@ ALTER TABLE "EmailConfirmation" ADD FOREIGN KEY ("userId") REFERENCES "User"("id
 
 -- AddForeignKey
 ALTER TABLE "Facility" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Product" ADD FOREIGN KEY ("facilityId") REFERENCES "Facility"("id") ON DELETE CASCADE ON UPDATE CASCADE;

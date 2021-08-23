@@ -76,13 +76,24 @@ model EmailConfirmation {
 }
 
 model Facility {
-  id      Int  @id @default(autoincrement())
+  id      Int       @id @default(autoincrement())
   name    String
-  User    User @relation(fields: [ownerId], references: [id])
+  User    User      @relation(fields: [ownerId], references: [id])
   ownerId Int
+  Product Product[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id         Int      @id @default(autoincrement())
+  name       String
+  Facility   Facility @relation(fields: [facilityId], references: [id])
+  facilityId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole {
