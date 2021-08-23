@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 import {
-  FormFieldRadioGroup,
+  FormFieldRadioGroupConfig,
   FormRadioGroupProps,
 } from './form-field-radio-group';
 
@@ -16,7 +16,7 @@ export const Regular = (args: Omit<FormRadioGroupProps<string>, 'control'>) => {
     defaultValues: { test: 1 },
   });
 
-  return <FormFieldRadioGroup control={control} {...args} />;
+  return <FormFieldRadioGroupConfig control={control} {...args} />;
 };
 Regular.args = {
   disable: false,

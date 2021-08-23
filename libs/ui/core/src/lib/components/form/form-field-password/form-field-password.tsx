@@ -7,10 +7,13 @@ import {
   TextField,
 } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
-import { GenericFormField } from '../../../containers';
+import { GenericFormFieldConfig } from '../../../containers';
 
 export interface FormFieldPasswordProps extends BaseTextFieldProps {
-  field: Omit<GenericFormField, 'autocomplete' | 'multiple' | 'maxValues'> &
+  field: Omit<
+    GenericFormFieldConfig,
+    'autocomplete' | 'multiple' | 'maxValues'
+  > &
     BaseTextFieldProps;
   register: UseFormRegister<FieldValues>;
   errorExists: boolean;

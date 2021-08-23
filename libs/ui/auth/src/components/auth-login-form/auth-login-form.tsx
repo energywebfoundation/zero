@@ -11,6 +11,7 @@ import { Box, Button, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { authLoginFormFields } from './auth-login-form-fields';
 import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 
 export interface AuthLoginFormProps {
   sumbitHandler: TGenericFormSubmitHandlerFn<AuthLoginFormFields>;
@@ -23,12 +24,14 @@ export interface AuthLoginFormFields {
   password: string;
 }
 
-export const AuthLoginForm = ({ sumbitHandler }: AuthLoginFormProps) => {
+export const AuthLoginForm: FC<AuthLoginFormProps> = ({
+  sumbitHandler,
+}: AuthLoginFormProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <StyledAuthLoginForm>
-      <GenericFormContainer
+      <GenericFormContainer<AuthLoginFormFields>
         inputsVariant={'filled'}
         submitHandler={sumbitHandler}
         validationSchema={authLoginFormSchema}

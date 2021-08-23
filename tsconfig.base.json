@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "pretty": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": ".",
     "sourceMap": true,

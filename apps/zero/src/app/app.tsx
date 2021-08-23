@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { Container } from '@material-ui/core';
 import { Route, Routes } from 'react-router-dom';
 import { SellerLandingPage } from '@energy-web-zero/seller';
@@ -11,12 +11,12 @@ import { AccountPage } from '@energy-web-zero/ui/account';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AppProps {}
 
-const App: FC<AppProps> = () => {
+const App: FC<AppProps> = memo(() => {
   useAppEffects();
   return (
     <>
       <TopNavBarContainer />
-      <Container fixed>
+      <Container fixed sx={{ pt: '98px' }}>
         <Routes>
           <Route path={'auth/*'} element={<AuthPage />} />
           <Route path={'sellers'} element={<SellerLandingPage />} />
@@ -27,6 +27,8 @@ const App: FC<AppProps> = () => {
       </Container>
     </>
   );
-};
+});
+
+App.displayName = 'App';
 
 export default App;

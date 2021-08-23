@@ -7,18 +7,17 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import Menu from '@material-ui/icons/Menu';
-import { FC, memo, ReactElement } from 'react';
+import { FC, memo, ReactElement, useCallback } from 'react';
 import IconLink from '../icon-link/icon-link';
 import LanguageSelect, {
   AppLanguageEnum,
 } from '../language-select/language-select';
 import { useTopNavBarStyles } from './top-nav-bar.styles';
 
-import PersonAddAlt1Outlined from '@material-ui/icons/PersonAddAlt1Outlined';
 import NavLinkItem, { IconTypeEnum } from '../nav-link-item/nav-link-item';
 import { PersonOutline } from '@material-ui/icons';
-import NotificationAreaContainer from '../../../containers/notification-area-container/notification-area-container';
-import TopBarUserProfileContainer from '../../../containers/top-bar-user-profile-container/top-bar-user-profile-container';
+import NotificationAreaContainer from '../../containers/notification-area-container/notification-area-container';
+import TopBarUserProfileContainer from '../../containers/top-bar-user-profile-container/top-bar-user-profile-container';
 
 export interface PrimaryNavigationItem {
   isEnabled: boolean;
@@ -59,10 +58,13 @@ export const TopNavBar = memo(
     isAuthenticated,
   }: TopNavBarProps) => {
     const styles = useTopNavBarStyles();
+
     return (
       <AppBar
         style={{
-          display: hidden ? 'none' : 'unset',
+          display: hidden ? 'none' : 'inherit',
+          position: 'fixed',
+          zIndex: 1000,
         }}
         hidden={hidden}
         className={styles.root}
@@ -76,7 +78,20 @@ export const TopNavBar = memo(
                   <Menu />
                 </IconButton>
               )}
-              {logo ?? <Box>{logo}</Box>}
+              {logo ?? (
+                <Box
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    handleNavigate(
+                      isAuthenticated
+                        ? '/account/dashboard/empty'
+                        : '/auth/sign-up'
+                    )
+                  }
+                >
+                  {logo}
+                </Box>
+              )}
             </Box>
             <Box
               flexGrow={1}

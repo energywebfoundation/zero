@@ -3,20 +3,21 @@ import AdapterDayJs from '@material-ui/lab/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@material-ui/lab';
 import { Control, Controller } from 'react-hook-form';
 import { TextField } from '@material-ui/core';
-import { GenericFormField } from '../../../containers/generic-form-container';
+import { GenericFormFieldConfig } from '../../../containers/generic-form-container';
 
 export enum DateFormatEnum {
   DATE_FORMAT_MDY = 'MMM D, YYYY',
   DATE_FORMAT_DMY = 'DD/MM/YYYY',
+  DATE_FORMAT_ISO = 'YYYY/MM/DD',
   DATE_FORMAT_MONTH_AND_YEAR = 'MMM, YYYY',
   DATE_FORMAT_FULL_YEAR = 'YYYY',
   DATE_FORMAT_INCLUDING_TIME = `MMM D, YYYY hh:mm a`,
 }
 
-export type FormFieldDatePicker = Omit<GenericFormField, 'type'>;
+export type FormFieldDatePickerConfig = Omit<GenericFormFieldConfig, 'type'>;
 
 export interface FormFieldDatePickerProps<FormValuesType> {
-  field: FormFieldDatePicker;
+  field: FormFieldDatePickerConfig;
   datePickerProps?: Omit<
     FormFieldDatePickerProps<string>,
     'value' | 'onChange' | 'renderInput'
@@ -47,10 +48,11 @@ export const FormFieldDatePicker: TFormFieldDatePicker = ({
       render={({ field: { value, onChange } }) => (
         <LocalizationProvider dateAdapter={AdapterDayJs}>
           <DatePicker
+            mask={'____/__/__'}
             disabled={disabled}
             onChange={onChange}
             value={value}
-            inputFormat={DateFormatEnum.DATE_FORMAT_DMY}
+            inputFormat={DateFormatEnum.DATE_FORMAT_ISO}
             renderInput={(props) => (
               <TextField
                 {...props}

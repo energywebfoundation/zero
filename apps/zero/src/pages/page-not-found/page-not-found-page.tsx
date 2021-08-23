@@ -9,7 +9,6 @@ const StyledPageNotFoundPage = styled.div``;
 export const PageNotFoundPage = (props: PageNotFoundPageProps) => (
   <StyledPageNotFoundPage>
     <h1>Welcome to PageNotFoundPage!</h1>
-    <Link to={'/'}>Take me home!</Link>
   </StyledPageNotFoundPage>
 );
 

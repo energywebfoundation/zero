@@ -5,11 +5,11 @@ const $purpleLight = '#CDABFF';
 const $purpleExtraLight = '#F6EFFF';
 
 const $green = '#00D08A';
+const $greenLight = '#b1ebcd';
 
 const $textColorDefault = '#a8a8a8';
 const $inputBackgroundColor = '#F6F3F9';
 const $inputTextColor = '#2D1155';
-const $simpleTextColor = '#fff';
 
 const $bodyBackgroundColor = '#ffffff';
 const $mainBackgroundColor = '#ffffff';
@@ -25,6 +25,7 @@ export type UiThemeVariables = {
   primaryColorDark: string;
   primaryColorDim: string;
   secondaryColor: string;
+  secondaryColorLight: string;
   textColorDefault: string;
   simpleTextColor: string;
   bodyBackgroundColor: string;
@@ -42,8 +43,9 @@ export const variables: UiThemeVariables = {
   primaryColorDark: $purpleDark,
   primaryColorDim: $purple,
   secondaryColor: $green,
+  secondaryColorLight: $greenLight,
   textColorDefault: $textColorDefault,
-  simpleTextColor: $simpleTextColor,
+  simpleTextColor: $textColorDefault,
   bodyBackgroundColor: $bodyBackgroundColor,
   mainBackgroundColor: $mainBackgroundColor,
   fieldIconColor: $fieldIconColor,
