@@ -7,6 +7,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { authStateSlice, rootEpic } from '../features';
 import { navigationStateSlice, appStateSlice } from '../features';
+import { userFileListStateSlice } from '../features/userFileListState';
 
 export const history = createBrowserHistory();
 
@@ -17,6 +18,7 @@ export const store = configureStore({
     navigationState: navigationStateSlice.reducer,
     router: connectRouter(history),
     authState: authStateSlice.reducer,
+    userFileListState: userFileListStateSlice.reducer,
   },
   devTools: true,
   middleware: [epicMiddleware, logger, routerMiddleware(history)],

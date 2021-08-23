@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
 import { useForm } from 'react-hook-form';
-import { FormFieldSelect, FormSelectProps } from './form-field-select';
+import { FormFieldSelectConfig, FormSelectProps } from './form-field-select';
 
 export default {
   title: 'Form / FormSelect',
@@ -13,7 +13,7 @@ export const Regular = (args: Omit<FormSelectProps<string>, 'control'>) => {
     defaultValues: { test: 1 },
   });
 
-  return <FormFieldSelect control={control} {...args} />;
+  return <FormFieldSelectConfig control={control} {...args} />;
 };
 Regular.args = {
   disable: false,
@@ -37,7 +37,7 @@ export const Autocomplete = (
     defaultValues: { test: 1 },
   });
 
-  return <FormFieldSelect control={control} {...args} />;
+  return <FormFieldSelectConfig control={control} {...args} />;
 };
 Autocomplete.args = {
   field: {
@@ -62,7 +62,7 @@ export const AutocompleteMultipleValues = (
     defaultValues: { test: 1 },
   });
 
-  return <FormFieldSelect control={control} {...args} />;
+  return <FormFieldSelectConfig control={control} {...args} />;
 };
 AutocompleteMultipleValues.args = {
   field: {

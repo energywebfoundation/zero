@@ -1,10 +1,15 @@
-import { BaseTextFieldProps, MenuItem, TextField } from '@material-ui/core';
+import {
+  BaseTextFieldProps,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import map from 'lodash/fp/map';
 import React, { FC } from 'react';
 import { FormSelectOption } from '../form-field-select';
-import { GenericFormField } from '../../../containers/generic-form-container';
+import { GenericFormFieldConfig } from '../../../containers/generic-form-container';
 
-interface FormFieldSelectRegular extends GenericFormField {
+interface FormFieldSelectRegular extends GenericFormFieldConfig {
   options: FormSelectOption[];
 }
 
@@ -46,9 +51,22 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
       {...textFieldProps}
     >
       {map(
-        (option: { label: string; value: string }) => (
-          <MenuItem key={option.label} value={option.value}>
-            {option.label}
+        ({ label, value, subText }: FormSelectOption) => (
+          <MenuItem key={label} value={value}>
+            <div>
+              <Typography fontSize={'16px'} color={'primary'} fontWeight={600}>
+                {label}
+              </Typography>
+              {subText && (
+                <Typography
+                  fontWeight={'500'}
+                  fontSize={'14px'}
+                  color={'primary'}
+                >
+                  {subText}
+                </Typography>
+              )}
+            </div>
           </MenuItem>
         ),
         options

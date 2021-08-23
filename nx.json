@@ -78,5 +78,13 @@
     "zero-ui-assets": {
       "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }

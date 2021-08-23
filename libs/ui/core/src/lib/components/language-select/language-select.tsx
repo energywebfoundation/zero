@@ -32,7 +32,7 @@ export const LanguageSelect: FC<LanguageSelectProps> = () => {
       <Select
         disableUnderline={true}
         value={language}
-        onChange={(e) => setLanguage(e.target.value)}
+        onChange={(e) => setLanguage(e.target.value as AppLanguageEnum)}
         className={styles.root}
       >
         {map(

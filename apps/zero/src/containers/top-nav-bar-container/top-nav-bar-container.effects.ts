@@ -28,14 +28,14 @@ export const useTopNavContainerEffects = () => {
           align: 'right',
         },
         {
-          isEnabled: isUserBuyer && isBuyerPath,
+          isEnabled: isUserBuyer,
           url: 'buyers/searches',
           translateKey: 'navigation.searches',
           iconType: IconTypeEnum.SearchOutlined,
           align: 'left',
         },
         {
-          isEnabled: isUserBuyer && isBuyerPath,
+          isEnabled: isUserBuyer,
           url: 'buyers/product-list',
           translateKey: 'navigation.productList',
           iconType: IconTypeEnum.ListOutlined,
@@ -51,21 +51,21 @@ export const useTopNavContainerEffects = () => {
           align: 'right',
         },
         {
-          isEnabled: isUserSeller && isSellerPath,
+          isEnabled: isUserSeller,
           url: 'sellers/facilities',
           translateKey: 'navigation.facilities',
           iconType: IconTypeEnum.FlashOn,
           align: 'left',
         },
         {
-          isEnabled: isUserSeller && isSellerPath,
+          isEnabled: isUserSeller,
           url: 'sellers/products',
           translateKey: 'navigation.products',
           iconType: IconTypeEnum.VerifiedUserOutlined,
           align: 'left',
         },
         {
-          isEnabled: isUserSeller && isSellerPath,
+          isEnabled: isUserSeller,
           url: 'sellers/client-requests',
           translateKey: 'navigation.clientRequests',
           iconType: IconTypeEnum.PeopleOutlineOutlined,
@@ -77,8 +77,8 @@ export const useTopNavContainerEffects = () => {
 
   return {
     selectors: {
-      prmiaryNavigation: useSelector(
-        navigationStateSelectors.prmiaryNavigation
+      primiaryNavigation: useSelector(
+        navigationStateSelectors.primiaryNavigation
       ),
       secondaryNavigation: useSelector(
         navigationStateSelectors.secondaryNavigation

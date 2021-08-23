@@ -2,23 +2,24 @@ import React, { PropsWithChildren, ReactElement } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { FormFieldSelectAutocomplete } from '../form-field-select-autocomplete';
 import { FormFieldSelectRegular } from '../form-field-select-regular';
-import { GenericFormField } from '../../../containers';
+import { GenericFormFieldConfig } from '../../../containers';
 
 export type FormSelectOption = {
   value: string | number;
   label: string;
+  subText?: string;
 };
 
-export interface FormFieldSelect extends GenericFormField {
+export interface FormFieldSelectConfig extends GenericFormFieldConfig {
   options: FormSelectOption[];
 }
 export interface FormSelectProps<FormValuesType> {
-  field: FormFieldSelect;
+  field: FormFieldSelectConfig;
   control: Control<FormValuesType>;
   errorExists: boolean;
   errorText: string;
   variant?: 'standard' | 'outlined' | 'filled';
-  disable: boolean;
+  disabled?: boolean;
 }
 
 export type TFormFieldSelect = <FormValuesType>(
@@ -31,6 +32,7 @@ export const FormFieldSelect: TFormFieldSelect = ({
   errorExists,
   errorText,
   variant,
+  disabled,
 }) => {
   return (
     <Controller
@@ -39,6 +41,8 @@ export const FormFieldSelect: TFormFieldSelect = ({
       render={({ field: { value, onChange } }) =>
         field.autocomplete ? (
           <FormFieldSelectAutocomplete
+            control={control}
+            disabled={Boolean(disabled)}
             label={field.label}
             options={field.options}
             onChange={onChange}

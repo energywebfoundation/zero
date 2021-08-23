@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, ReactElement } from 'react';
 import { Control, Controller } from 'react-hook-form';
-import { GenericFormField } from '../../../containers';
+import { GenericFormFieldConfig } from '../../../containers';
 import {
   FormControl,
   FormControlLabel,
@@ -15,11 +15,11 @@ export type FormRadioGroupOption = {
   label: string;
 };
 
-export interface FormFieldRadioGroup extends GenericFormField {
+export interface FormFieldRadioGroupConfig extends GenericFormFieldConfig {
   options: FormRadioGroupOption[];
 }
 export interface FormRadioGroupProps<FormValuesType> {
-  field: FormFieldRadioGroup;
+  field: FormFieldRadioGroupConfig;
   control: Control<FormValuesType>;
   errorExists: boolean;
   errorText: string;

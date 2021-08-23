@@ -14,7 +14,7 @@ export const AccountPage = (props: AccountPageProps) => {
       <Global
         styles={css`
           body {
-            background-color: #e5e5e5;
+            background-color: #f6f3f9;
           }
         `}
       />
@@ -22,7 +22,7 @@ export const AccountPage = (props: AccountPageProps) => {
         <title>Account / Dashboard</title>
       </Helmet>
       <Routes>
-        <Route path={'dashboard'} element={<AccountDashboardPage />} />
+        <Route path={'dashboard/*'} element={<AccountDashboardPage />} />
       </Routes>
     </StyledAccountPage>
   );

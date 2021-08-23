@@ -7,7 +7,7 @@ export interface TopNavBarContainerProps {}
 
 export const TopNavBarContainer = () => {
   const {
-    selectors: { isAuthenticated, prmiaryNavigation, secondaryNavigation },
+    selectors: { isAuthenticated, primiaryNavigation, secondaryNavigation },
     actions: { changeLanguage },
   } = useTopNavContainerEffects();
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export const TopNavBarContainer = () => {
       handleNavigate={(url) => navigate(url)}
       handleLanguageChange={(language) => changeLanguage(language)}
       logo={<Logo />}
-      primaryNavigationItemList={prmiaryNavigation}
+      primaryNavigationItemList={primiaryNavigation}
     />
   );
 };
