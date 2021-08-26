@@ -53,6 +53,6 @@ For example: `http://ui.mydomain.com`, `*`. If correctly set to only frontend ba
 of [CSRF](https://owasp.org/www-community/attacks/csrf) type attacks. If not set correctly, web browser can refuse to make
 connections to the backend REST API. Use browser developer tools to diagnose it.
 
-### CORS_MAX_AGE: 60
+### CORS_MAX_AGE:
 
 Determines time in seconds for how long CORS headers will be cached in web browser.
