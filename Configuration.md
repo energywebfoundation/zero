@@ -13,6 +13,10 @@ example: `https://api.mydomain.com/api`.
 
 ## Backend
 
+### NODE_ENV:
+
+default: `development`. Should be set to `production` on production
+
 ### LOG_LEVELS:
 
 default: `log,error,warn,debug,verbose`
@@ -56,3 +60,21 @@ connections to the backend REST API. Use browser developer tools to diagnose it.
 ### CORS_MAX_AGE:
 
 Determines time in seconds for how long CORS headers will be cached in web browser.
+
+### EMAIL_CONFIRMATION_TTL:
+
+Expiration time in seconds of email confirmation links.
+
+default: `86400`
+
+### FILES_STORAGE:
+
+Location of the uploaded files storage in the filesystem.
+
+default: `./uploaded-files`
+
+### UPLOADED_FILE_SIZE_LIMIT:
+
+Uploaded file size limit in bytes.
+
+default: `200000`
