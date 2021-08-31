@@ -87,6 +87,12 @@ jobs:
           docker push $ECR_REGISTRY/ew-zero-api:latest
           docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER 
           docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
+
+      - name: Push git tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ steps.sem_ver.outputs.version_tag }}
       
       - name: Logout of Amazon ECR
         if: always()
