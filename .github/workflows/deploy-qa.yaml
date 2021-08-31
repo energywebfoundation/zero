@@ -93,6 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.sem_ver.outputs.version_tag }}
+          RELEASE_BRANCHES: chore/github-actions-qa-deployment
       
       - name: Logout of Amazon ECR
         if: always()
