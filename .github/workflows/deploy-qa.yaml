@@ -15,12 +15,34 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-  build-images:
+  build-and-push-images:
     runs-on: ubuntu-latest
     needs: [ cancel-previous ]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Calculate semantic version
+        id: sem_ver
+        uses: paulhatch/semantic-version@v4.0.2
+        with:
+          # The prefix to use to identify tags
+          tag_prefix: "v"
+          # A string which, if present in a git commit, indicates that a change represents a
+          # major (breaking) change, supports regular expressions wrapped with '/'
+          major_pattern: "(MAJOR)"
+          # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+          minor_pattern: "(MINOR)"
+          # A string to determine the format of the version output
+          format: "${major}.${minor}.${patch}-prerelease${increment}"
+          # Indicate whether short tags like 'v1' should be supported. If false only full
+          # tags like 'v1.0.0' will be recognized.
+          short_tags: false
+          # If this is set to true, *every* commit will be treated as a new version.
+          bump_each_commit: false
 
       - name: Setup app dependencies
         uses: actions/setup-node@v2
@@ -40,3 +62,28 @@ jobs:
 
       - name: Build Docker images
         run: yarn build:docker
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Push docker images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SEM_VER: ${{ steps.sem_ver.outputs.version_tag }}
+        run: |
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest 
+          docker push $ECR_REGISTRY/ew-zero-ui:latest
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER 
+          docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+      
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
