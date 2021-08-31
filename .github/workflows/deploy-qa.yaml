@@ -83,6 +83,10 @@ jobs:
           docker push $ECR_REGISTRY/ew-zero-ui:latest
           docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER 
           docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest 
+          docker push $ECR_REGISTRY/ew-zero-api:latest
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER 
+          docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
       
       - name: Logout of Amazon ECR
         if: always()
