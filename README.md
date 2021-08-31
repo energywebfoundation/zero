@@ -189,6 +189,9 @@ volumes:
 networks:
   zero:
 ```
+
+Detailed description of env variables is available [here](Configuration.md).
+
 ## Database schema setup
 
 After having all stack running, a database schema needs to be set. According to your needs, there are two options here:
