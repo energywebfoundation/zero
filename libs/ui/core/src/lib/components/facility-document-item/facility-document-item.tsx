@@ -13,7 +13,6 @@ export interface FacilityDocumentDto {
 /* eslint-disable-next-line */
 export interface FacilityDocumentItemProps {
   id: string;
-  name: string;
   description?: string;
   handleDescriptionChange: (fileId: string, descrition: string) => void;
   handleRemoveDocumentItem: (fileId: string) => void;

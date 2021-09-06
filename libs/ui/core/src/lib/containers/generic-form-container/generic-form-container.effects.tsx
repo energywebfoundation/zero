@@ -5,6 +5,8 @@ import {
   UseFormRegister,
   Control,
   UseFormSetValue,
+  FieldErrors,
+  DeepPartial,
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { BaseSyntheticEvent, useEffect, useRef } from 'react';
@@ -28,8 +30,8 @@ export type TGenericFormEffectsReturnType<FormValuesType> = {
   register: UseFormRegister<FormValuesType>;
   // eslint-disable-next-line @typescript-eslint/ban-types
   onSubmit: (e?: BaseSyntheticEvent<object>) => Promise<void>;
-  errors: DeepMap<FormValuesType, FieldError>;
-  dirtyFields: DeepMap<FormValuesType, true>;
+  errors: FieldErrors;
+  dirtyFields: DeepMap<DeepPartial<FormValuesType>, true>;
   control: Control<FormValuesType>;
   isValid: boolean;
   isDirty: boolean;
