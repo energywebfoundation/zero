@@ -14,7 +14,10 @@ export interface GreenLabelListProps {
   greenLabelList: ReadonlyArray<GreenLabelDto>;
   handleAddNewGreenLabel: (newGreenLabel: GreenLabelDto) => void;
   handleDeleteGreenLabel: (greenLabelType: GreenLabelTypeEnum) => void;
-  handleUpdateGreenLabel: (greenLabelType: GreenLabelTypeEnum) => void;
+  handleUpdateGreenLabel: (
+    greenLabelType: GreenLabelTypeEnum,
+    greenLabel: GreenLabelDto
+  ) => void;
 }
 
 const StyledGreenLabelList = styled.div``;
