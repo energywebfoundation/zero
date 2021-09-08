@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import UiAccount from './ui-account';
+import LayoutNoTopbar from './layout-no-topbar';
 
-describe('UiAccount', () => {
+describe('LayoutNoTopbar', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<UiAccount />);
+    const { baseElement } = render(<LayoutNoTopbar />);
     expect(baseElement).toBeTruthy();
   });
 });
