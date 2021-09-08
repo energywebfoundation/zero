@@ -58,8 +58,6 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           color: styleConfig.PRIMARY_COLOR,
           fontWeight: 600
         },
-        root: {
-        }
       },
     },
     MuiInputBase: {
@@ -73,7 +71,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           color: styleConfig.INPUT_TEXT_COLOR,
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           borderRadius: '5px 5px',
-          height: '48px',
+          maxHeight: '48px',
           '&.Mui-disabled': {
             backgroundColor: darken(styleConfig.INPUT_BACKGROUND_COLOR, 0.2),
           },
