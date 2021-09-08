@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import {
+  appStateActions,
+  appStateSelectors,
   authStateActions,
   authStateSelectors,
 } from '@energy-web-zero/store-configure';
@@ -15,27 +17,42 @@ export const useAppEffects = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const authToken = useSelector(authStateSelectors.token);
-  const { isFetched, data, error } = useUsersControllerMe({
+
+  const { isFetched, isFetching, data, error } = useUsersControllerMe({
     query: {
       retry: 1,
       enabled: Boolean(authToken),
     },
   });
+
+  useEffect(() => {
+    if (authToken) {
+      dispatch(appStateActions.setLoading(isFetching));
+    }
+  }, [isFetching, authToken]);
+
   useEffect(() => {
     if (isFetched && data) {
       dispatch(authStateActions.setUserProfileData(data as UserDto));
       dispatch(authStateActions.setIsAuthenticated(true));
       navigate('/account/dashboard/empty');
-      // enqueueSnackbar(`Welcome back ${data.firstName}!`);
+      enqueueSnackbar(`Welcome back ${data.firstName}!`);
     } else if (error && authToken) {
       localforage.removeItem('token').then((value) => {
         dispatch(authStateActions.setToken(null));
         dispatch(authStateActions.setIsAuthenticated(false));
-        console.log(authToken, 'You are logged out');
-        navigate('/auth/sign-out');
+        enqueueSnackbar('You were logged out');
+        navigate('/auth/sign-in');
       });
     }
   }, [isFetched, data]);
 
-  return bindActionCreators({}, dispatch);
+  return {
+    actions: bindActionCreators({}, dispatch),
+    selectors: {
+      isAuthenticated: useSelector(authStateSelectors.isAuthenticated),
+      authenticatedHomeRoute: '/account/dashboard',
+      isLoading: useSelector(appStateSelectors.isLoading),
+    },
+  };
 };

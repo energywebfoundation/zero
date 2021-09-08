@@ -19,7 +19,7 @@ export const TopNavBarContainer = () => {
       secondaryNavigationItemList={secondaryNavigation}
       handleNavigate={(url) => navigate(url)}
       handleLanguageChange={(language) => changeLanguage(language)}
-      logo={<Logo />}
+      logo={<Logo width="102" height="47" />}
       primaryNavigationItemList={primiaryNavigation}
     />
   );

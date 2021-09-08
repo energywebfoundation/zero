@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../Providers/StoreProvider';
 import { UserDto, UserRole } from '@energyweb/zero-ui-api';
 
-interface IAppState {
+interface IAuthState {
   isAuthenticated: boolean;
   token: string | null;
   userProfileData: UserDto | null;
 }
 
-const initialState: IAppState = {
+const initialState: IAuthState = {
   isAuthenticated: false,
   token: null,
   userProfileData: null,
@@ -30,15 +30,24 @@ export const authStateSlice = createSlice({
   },
 });
 
+const authState = (state: RootState) => state.authState;
+
 export const authStateSelectors = {
-  isAuthenticated: (state: RootState): boolean =>
-    state.authState.isAuthenticated,
-  token: (state: RootState) => state.authState.token,
-  userProfileData: (state: RootState) => state.authState.userProfileData,
-  isUserSeller: (state: RootState) =>
-    Boolean(state.authState.userProfileData?.roles.includes(UserRole.seller)),
-  isUserBuyer: (state: RootState) =>
-    Boolean(state.authState.userProfileData?.roles.includes(UserRole.buyer)),
+  isAuthenticated: createSelector(
+    authState,
+    (state: IAuthState): boolean => state.isAuthenticated
+  ),
+  token: createSelector(authState, (state: IAuthState) => state.token),
+  userProfileData: createSelector(
+    authState,
+    (state: IAuthState) => state.userProfileData
+  ),
+  isUserSeller: createSelector(authState, (state: IAuthState) =>
+    Boolean(state.userProfileData?.roles.includes(UserRole.seller))
+  ),
+  isUserBuyer: createSelector(authState, (state: IAuthState) =>
+    Boolean(state.userProfileData?.roles.includes(UserRole.buyer))
+  ),
 };
 export const authStateActions = {
   ...authStateSlice.actions,

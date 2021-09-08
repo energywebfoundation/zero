@@ -1,10 +1,11 @@
 import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
 import { RootState } from '../../Providers/StoreProvider';
-import { EMPTY, Observable } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { mapTo, tap } from 'rxjs/operators';
 import { authStateActions } from './authState.slice';
 import * as localforage from 'localforage';
 import { AnyAction } from '@reduxjs/toolkit';
+import { appStateActions } from '../appState';
 
 export const afterUserTokenIsSet$: Epic = (
   action$,
@@ -18,7 +19,7 @@ export const afterUserTokenIsSet$: Epic = (
         console.log('token is persisted');
       }
     }),
-    mergeMap(() => EMPTY)
+    mapTo(appStateActions.setIsInitialized(true))
   );
 
 const authStateEpics = combineEpics(afterUserTokenIsSet$);

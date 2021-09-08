@@ -128,6 +128,15 @@
         "facilityStory": "Facility story",
         "impactStory": "Impact story",
         "impactStoryPlaceholderText": "Briefly describe facility and its story"
+      },
+      "LoadingPage": {
+        "title": "Loading - Please Wait",
+        "pleaseWait": "Please wait!"
+      },
+      "NotFoundPage": {
+        "title": "404 - Page Not found",
+        "back": "Back to Home page",
+        "whoops": "Whoops! Something went wrong!"
       }
     }
   }
