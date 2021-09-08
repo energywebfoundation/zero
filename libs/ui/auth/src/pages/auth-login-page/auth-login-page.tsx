@@ -30,6 +30,8 @@ export const AuthLoginPage = () => {
               fontWeight={700}
               textAlign={'center'}
               color={'secondary'}
+              fontSize={'24px'}
+              mb={'9px'}
             >
               {t('authLoginPage.headText')}
             </Typography>
@@ -38,6 +40,7 @@ export const AuthLoginPage = () => {
               color={'primary'}
               variant={'body1'}
               fontWeight={500}
+              fontSize={'20px'}
             >
               {t('authLoginPage.subHeadText')}
             </Typography>

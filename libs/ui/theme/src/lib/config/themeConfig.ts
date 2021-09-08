@@ -56,7 +56,10 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       styleOverrides: {
         label: {
           color: styleConfig.PRIMARY_COLOR,
+          fontWeight: 600
         },
+        root: {
+        }
       },
     },
     MuiInputBase: {
@@ -70,6 +73,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           color: styleConfig.INPUT_TEXT_COLOR,
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           borderRadius: '5px 5px',
+          height: '48px',
           '&.Mui-disabled': {
             backgroundColor: darken(styleConfig.INPUT_BACKGROUND_COLOR, 0.2),
           },
@@ -82,6 +86,13 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           },
         },
       },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          padding: "6px 8px"
+        }
+      }
     },
     MuiFormLabel: {
       styleOverrides: {
