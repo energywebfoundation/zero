@@ -4,7 +4,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
@@ -22,7 +21,15 @@ import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
 import * as multer from 'multer';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UploadFileDto } from './dto/upload-file.dto';
@@ -121,65 +128,34 @@ export class FilesController {
   @Get(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
-  @ApiOkResponse({ description: 'binary file content' })
+  @ApiResponse({status: 308, description: 'http redirect' })
   async getFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
   ) {
-    const fileMetadata = await this.filesService.getFileMetadata(id);
+    const url = await this.filesService.getFileUrl(id);
 
-    if (isNil(fileMetadata)) {
+    if (isNil(url)) {
       throw new NotFoundException();
     }
 
-    res.setHeader('Content-Type', fileMetadata.mimetype);
-    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
-
-    let responseFinished = false;
-
-    try {
-      const stream = await this.filesService.getFileContentStream(id);
-
-      res
-        .on('finish', () => {
-          this.logger.debug(`response writeable stream for file ${id} [FINISH]`);
-          responseFinished = true;
-        })
-        .on('close', () => {
-          this.logger.debug(`response writeable stream for file ${id} [CLOSE]`);
-          if (!responseFinished) {
-            this.logger.warn(`incomplete response for  file ${id}`);
-            this.logger.warn(`closing file content read stream explicitly`);
-            stream.close();
-          }
-        });
-
-      stream.pipe(res);
-    } catch (err) {
-      this.logger.error(err);
-      throw new InternalServerErrorException();
-    }
+    res.redirect(308, url);
   }
 
-  @Get('/images/:id')
+  @Get('images/:id')
   @Public()
   @ApiTags('files')
-  @ApiOkResponse()
-  async getImage(
+  @ApiResponse({status: 308, description: 'http redirect' })
+  async getImageFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
   ) {
-    const fileMetadata = await this.filesService.getFileMetadata(id);
+    const url = await this.filesService.getFileUrl(id);
 
-    if (isNil(fileMetadata) || this.supportedImagesFormats.indexOf(fileMetadata.fileExtension) < 0) {
+    if (isNil(url)) {
       throw new NotFoundException();
     }
 
-    res.setHeader('Content-Type', fileMetadata.mimetype);
-    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
-
-    const stream = await this.filesService.getFileContentStream(id);
-
-    stream.pipe(res);
+    res.redirect(308, url);
   }
 }

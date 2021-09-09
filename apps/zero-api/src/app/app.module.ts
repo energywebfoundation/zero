@@ -52,7 +52,10 @@ import { ProductsModule } from '../products/products.module';
         JWT_SECRET: Joi.string().required(),
         JWT_TTL: Joi.string().default('24h'),
         EMAIL_CONFIRMATION_TTL: Joi.number().min(0).default(86400),
-        FILES_STORAGE: Joi.string().default('./uploaded-files'),
+        AWS_BUCKET: Joi.string().required(),
+        AWS_REGION: Joi.string().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
         UPLOADED_FILE_SIZE_LIMIT: Joi.number().min(10000),
         CORS_ORIGIN: Joi.string().default('*'),
         CORS_MAX_AGE: Joi.number().default(60)

@@ -930,29 +930,6 @@
         ]
       }
     },
-    "/api/files/images/{id}": {
-      "get": {
-        "operationId": "FilesController_getImage",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "files"
-        ]
-      }
-    },
     "/api/facilities": {
       "post": {
         "operationId": "FacilitiesController_create",
