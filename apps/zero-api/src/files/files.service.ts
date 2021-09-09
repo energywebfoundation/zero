@@ -21,8 +21,8 @@ export class FilesService {
   async addFile(filePath: string, originalFileName: string, mimetype: string, ownerId: number): Promise<UploadFileResponseDto> {
     this.logger.debug(`processing file: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
 
-    try {
-      let fileRecord: File = await this.prisma.file.create({
+    return this.prisma.$transaction(async (prisma) => {
+      let fileRecord: File = await prisma.file.create({
         data: {
           filename: originalFileName,
           ownerId,
@@ -47,16 +47,16 @@ export class FilesService {
       this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
 
       this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
-      fileRecord = await this.prisma.file.update({
+      fileRecord = await prisma.file.update({
         where: { id: fileRecord.id },
         data: { processingCompletedAt: new Date() }
       });
 
       return new UploadFileResponseDto(fileRecord);
-    } catch (err) {
+    }).catch((err) => {
       this.logger.error(err);
       throw err;
-    }
+    });
   }
 
   async getFileMetadata(fileId: string): Promise<File> {
