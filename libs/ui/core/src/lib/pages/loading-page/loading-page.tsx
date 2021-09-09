@@ -29,7 +29,7 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
       <>
         <div
           style={{
-            display: !isLoading ? 'block' : 'none',
+            display: isLoading ? 'block' : 'none',
             zIndex: 2000,
             position: 'absolute',
             top: 0,

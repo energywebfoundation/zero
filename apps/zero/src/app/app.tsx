@@ -5,13 +5,13 @@ import { BuyerLandingPage } from '@energy-web-zero/buyer';
 import { AuthPage } from '@energy-web-zero/ui-auth';
 import { useAppEffects } from './app.effects';
 import { AccountPage } from '@energy-web-zero/ui/account';
-import { NotFoundPage } from '@energyweb/zero-ui';
-import LoadingPage from '../../../../libs/ui/core/src/lib/pages/loading-page/loading-page';
+import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AppProps {}
 
 const App: FC<AppProps> = memo(() => {
   const { selectors } = useAppEffects();
+
   return (
     <LoadingPage isLoading={selectors.isLoading}>
       <Routes>
