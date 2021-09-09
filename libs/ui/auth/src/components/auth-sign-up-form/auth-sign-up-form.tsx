@@ -71,7 +71,7 @@ export const AuthSignUpForm: FC<AuthSignupFormProps> = ({ submitHandler }) => {
                 navigate('/auth/sign-in');
               }, [navigate])}
             />
-            <GenericFormSubmitButton />
+            <GenericFormSubmitButton name={'sign-up'} />
           </Box>
         </Grid>
       </GenericFormContainer>

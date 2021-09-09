@@ -1,9 +1,20 @@
 import { makeStyles } from '@material-ui/styles';
+import { variables } from '@energyweb/zero-theme';
+
 
 export const useStyles = makeStyles((theme) => {
   return {
     icon: {
-      color: '#fff',
+      color: variables.secondaryColor,
+      '&:hover': {
+      color: variables.primaryColor,
+      }
     },
+    btn: {
+      '&:hover': {
+        backgroundColor: variables.secondaryColor,
+        color: variables.hoverTextColor
+      }
+    }
   };
 });

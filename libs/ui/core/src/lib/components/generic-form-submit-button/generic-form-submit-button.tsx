@@ -7,17 +7,20 @@ import { GenericFormContext } from '../../providers';
 import { useContext } from 'react';
 
 /* eslint-disable-next-line */
-export interface GenericFormSubmitButtonProps {}
+export interface GenericFormSubmitButtonProps {
+  name: string;
+}
 
 const StyledGenericFormSubmitButton = styled.div``;
 
-export const GenericFormSubmitButton = () => {
+export const GenericFormSubmitButton = (prop: GenericFormSubmitButtonProps) => {
   const { t } = useTranslation();
   const styles = useStyles();
   const context = useContext(GenericFormContext);
   return (
     <StyledGenericFormSubmitButton>
       <Button
+        className={styles.btn}
         disabled={
           !context?.isDirty || context?.isSubmitting || !context?.isValid
         }
@@ -26,7 +29,9 @@ export const GenericFormSubmitButton = () => {
         color={'primary'}
         endIcon={<ChevronRight className={styles.icon} />}
       >
-        {t('forms.submitBtnText')}
+        {prop.name === 'sign-in'
+          ? t('forms.signInBtnText')
+          : t('forms.signUpBtnText')}
       </Button>
     </StyledGenericFormSubmitButton>
   );

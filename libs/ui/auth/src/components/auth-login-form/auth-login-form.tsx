@@ -49,7 +49,7 @@ export const AuthLoginForm: FC<AuthLoginFormProps> = ({
             <Button sx={{ fontSize: '14px', fontWeight: 600 }}>
               {t('forms.AuthLoginForm.resetPasswordBtnText')}
             </Button>
-            <GenericFormSubmitButton />
+            <GenericFormSubmitButton name={'sign-in'} />
           </Box>
         </Grid>
         <Grid item xs={12}>

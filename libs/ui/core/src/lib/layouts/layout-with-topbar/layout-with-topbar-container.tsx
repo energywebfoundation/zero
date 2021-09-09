@@ -18,9 +18,7 @@ export const LayoutWithTopbarContainer = ({
     <>
       <GlobalStyles styles={{ body: { backgroundColor: bgColor } }} />
       {!disableTopbar && <TopNavBarContainer />}
-      <Container fixed sx={{ pt: '98px' }}>
-        {children}
-      </Container>
+      <Container fixed>{children}</Container>
     </>
   );
 };
