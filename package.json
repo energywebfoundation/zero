@@ -41,6 +41,8 @@
     "orval:generate": "cd libs/ui/zero-api && orval"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.30.0",
+    "@aws-sdk/s3-request-presigner": "^3.30.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@hookform/error-message": "^2.0.0",
@@ -73,6 +75,7 @@
     "dayjs-recur": "^1.0.0",
     "document-register-element": "1.13.1",
     "eventemitter2": "^6.4.4",
+    "file-type": "^16.5.3",
     "handlebars": "^4.7.7",
     "history": "5.0.0",
     "i18next": "^20.3.1",
@@ -148,6 +151,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/file-type": "^10.9.1",
     "@types/jest": "26.0.8",
     "@types/leaflet": "^1.7.4",
     "@types/mkdirp": "^1.0.2",
