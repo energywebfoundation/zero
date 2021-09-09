@@ -35,12 +35,13 @@ ReactDOM.render(
                 `}
               />
               <SnackbarProvider
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                autoHideDuration={20}
-                maxSnack={10}
+                domRoot={
+                  document
+                    .getElementsByClassName('notificationAreaBox')
+                    .item(0) as HTMLElement
+                }
+                autoHideDuration={4000}
+                maxSnack={4}
               >
                 <App />
               </SnackbarProvider>
