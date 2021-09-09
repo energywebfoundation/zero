@@ -20,15 +20,14 @@ export class FilesService {
 
   constructor(private prisma: PrismaService) {}
 
-  async addFile(file: Express.Multer.File, fileExtension: string, owner: number): Promise<UploadFileResponseDto> {
+  async addFile(file: Express.Multer.File, ownerId: number): Promise<UploadFileResponseDto> {
     this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
 
     try {
       let fileRecord: File = await this.prisma.file.create({
         data: {
           filename: file.originalname,
-          fileExtension,
-          ownerId: owner,
+          ownerId,
           mimetype: file.mimetype,
           uploadedAt: new Date()
         }

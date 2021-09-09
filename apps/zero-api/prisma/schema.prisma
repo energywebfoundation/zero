@@ -30,7 +30,6 @@ model User {
 model File {
   id                    String    @id @default(uuid())
   filename              String
-  fileExtension         String
   mimetype              String
   owner                 User      @relation(fields: [ownerId], references: [id])
   ownerId               Int

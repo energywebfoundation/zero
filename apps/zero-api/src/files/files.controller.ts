@@ -96,7 +96,7 @@ export class FilesController {
 
     this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
 
-    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id);
+    const newFileRecord = await this.filesService.addFile(file, user.id);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;
