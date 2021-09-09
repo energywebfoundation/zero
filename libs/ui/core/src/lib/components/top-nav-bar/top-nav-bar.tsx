@@ -154,8 +154,8 @@ export const TopNavBar = memo(
               </Box>
             </Box>
           </Toolbar>
-          <NotificationAreaContainer />
         </Container>
+        <NotificationAreaContainer />
       </AppBar>
     );
   }

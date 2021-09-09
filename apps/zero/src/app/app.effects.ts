@@ -5,6 +5,7 @@ import {
   appStateSelectors,
   authStateActions,
   authStateSelectors,
+  notificationStateActions,
 } from '@energy-web-zero/store-configure';
 import { useEffect } from 'react';
 import { UserDto, useUsersControllerMe } from '@energyweb/zero-ui-api';
@@ -48,7 +49,12 @@ export const useAppEffects = () => {
   }, [isFetched, data]);
 
   return {
-    actions: bindActionCreators({}, dispatch),
+    actions: bindActionCreators(
+      {
+        addNotification: notificationStateActions.addNotification,
+      },
+      dispatch
+    ),
     selectors: {
       isAuthenticated: useSelector(authStateSelectors.isAuthenticated),
       authenticatedHomeRoute: '/account/dashboard',

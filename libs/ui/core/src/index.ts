@@ -1,3 +1,4 @@
+export * from './lib/components/notification-item/notification-item';
 export * from './lib/layouts/layout-no-topbar/layout-no-topbar';
 export * from './lib/layouts/layout-with-topbar/layout-with-topbar-container';
 export * from './lib/containers/generic-form-submit-button-container/generic-form-submit-button-container';

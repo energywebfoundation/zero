@@ -35,6 +35,15 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       secondary: styleConfig.TEXT_COLOR_DEFAULT,
       disabled: styleConfig.TEXT_COLOR_DEFAULT,
     },
+    success: {
+      main: '#ABDE19',
+    },
+    warning: {
+      main: '#FFB800',
+    },
+    error: {
+      main: '#DA2042',
+    },
   },
   typography: {
     fontFamily: styleConfig.FONT_FAMILY_PRIMARY,
