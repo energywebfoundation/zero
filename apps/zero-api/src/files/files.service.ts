@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { pick } from 'lodash';
-import { Express } from 'express';
 // This is a hack to make Multer available in the Express namespace
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
@@ -20,15 +18,15 @@ export class FilesService {
 
   constructor(private prisma: PrismaService) {}
 
-  async addFile(file: Express.Multer.File, ownerId: number): Promise<UploadFileResponseDto> {
-    this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
+  async addFile(filePath: string, originalFileName: string, mimetype: string, ownerId: number): Promise<UploadFileResponseDto> {
+    this.logger.debug(`processing file: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
 
     try {
       let fileRecord: File = await this.prisma.file.create({
         data: {
-          filename: file.originalname,
+          filename: originalFileName,
           ownerId,
-          mimetype: file.mimetype,
+          mimetype: mimetype,
           uploadedAt: new Date()
         }
       });
@@ -40,15 +38,15 @@ export class FilesService {
         Bucket: process.env.AWS_BUCKET,
         Key: fileRecord.id,
         CacheControl: 'max-age=0',
-        ContentDisposition: `attachment; filename=${file.originalname}`,
+        ContentDisposition: `attachment; filename=${originalFileName}`,
         ACL: 'public-read',
-        Body: createReadStream(file.path)
+        Body: createReadStream(filePath)
       }));
 
-      this.logger.debug(`moved ${file.path} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
+      this.logger.debug(`moved ${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
       this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
 
-      this.logger.debug(`finished file processing: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
+      this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
       fileRecord = await this.prisma.file.update({
         where: { id: fileRecord.id },
         data: { processingCompletedAt: new Date() }

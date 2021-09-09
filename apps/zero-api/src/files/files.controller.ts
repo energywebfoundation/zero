@@ -41,6 +41,8 @@ import { Public } from '../auth/decorators/public.decorator';
 import * as mimeTypes from 'mime-types';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
+import { fromFile } from 'file-type';
+import { extname } from 'path';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -82,7 +84,11 @@ export class FilesController {
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
     this.logger.debug(`form fields: ${JSON.stringify(body)}`);
 
-    const fileExtensionDetected = mimeTypes.extension(file.mimetype);
+    const mimetypeDetected = (await fromFile(file.path))?.mime;
+
+    this.logger.debug(`content type detected: ${mimetypeDetected}`);
+
+    const fileExtensionDetected = mimetypeDetected ? mimeTypes.extension(mimetypeDetected) : extname(file.originalname).split('.')[1];
 
     if (!fileExtensionDetected) {
       this.logger.warn(`unrecognized mimetype: ${file.mimetype}`);
@@ -96,7 +102,7 @@ export class FilesController {
 
     this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
 
-    const newFileRecord = await this.filesService.addFile(file, user.id);
+    const newFileRecord = await this.filesService.addFile(file.path, file.originalname, mimetypeDetected || file.mimetype, user.id);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;
