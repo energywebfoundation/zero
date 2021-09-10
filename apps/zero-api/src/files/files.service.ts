@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 // This is a hack to make Multer available in the Express namespace
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
+import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
 import { createReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
@@ -43,7 +44,7 @@ export class FilesService {
         Body: createReadStream(filePath)
       }));
 
-      this.logger.debug(`moved ${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
+      this.logger.debug(`${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
       this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
 
       this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
@@ -52,9 +53,14 @@ export class FilesService {
         data: { processingCompletedAt: new Date() }
       });
 
+      this.logger.debug(`removing temporary file: ${filePath}`);
+      unlink(filePath);
+
       return new UploadFileResponseDto(fileRecord);
     }).catch((err) => {
       this.logger.error(err);
+      this.logger.debug(`removing temporary file: ${filePath}`);
+      unlink(filePath);
       throw err;
     });
   }
