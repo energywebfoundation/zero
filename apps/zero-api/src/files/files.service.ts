@@ -8,7 +8,7 @@ import { createReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class FilesService {
@@ -55,6 +55,26 @@ export class FilesService {
       return new UploadFileResponseDto(fileRecord);
     }).catch((err) => {
       this.logger.error(err);
+      throw err;
+    });
+  }
+
+  async deleteFile(fileId: string) {
+    this.logger.debug(`removing file id=${fileId}`);
+    return this.prisma.$transaction(async () => {
+      this.logger.debug(`removing file database record id=${fileId}`);
+      const recordDeleted = await this.prisma.file.delete({ where: { id: fileId } });
+
+      this.logger.debug(`removing file from the S3 storage bucket=${process.env.AWS_BUCKET} key=${fileId}`)
+      await this.s3client.send(new DeleteObjectCommand({
+        Bucket: process.env.AWS_BUCKET,
+        Key: fileId
+      }));
+
+      return new FileMetadataDto(recordDeleted);
+    }).catch((err) => {
+      this.logger.error(err);
+      this.logger.warn(`rolling back changes`);
       throw err;
     });
   }

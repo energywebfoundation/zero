@@ -3,6 +3,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Logger,
   NotFoundException,
@@ -163,5 +164,13 @@ export class FilesController {
     }
 
     res.redirect(308, url);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ type: FileMetadataDto })
+  async deleteFile(@Param('id', new ParseUUIDPipe()) id: string): Promise<FileMetadataDto> {
+    return this.filesService.deleteFile(id);
   }
 }
