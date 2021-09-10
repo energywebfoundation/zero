@@ -74,6 +74,10 @@ jobs:
           EMAIL_CONFIRMATION_TTL: 3600
           DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/zero"
           SMTP_URL: "smtp://localhost:1025"
+          AWS_BUCKET: "ew-zero-uploaded-files-dev"
+          AWS_REGION: "us-west-2"
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
 # Disabled until UI tests are fixed
 #      - name: Run UI tests
