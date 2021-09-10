@@ -27,7 +27,6 @@ describe('UsersOwnFilesController', function() {
   let usersService: UsersService;
   let filesService: FilesService;
   const temporaryFolder = tmpdir();
-  const destinationFolder = resolve(process.env.FILES_STORAGE || tmpdir());
   let user1: UserDto, user2: UserDto;
   let accessToken1: string;
 
@@ -72,7 +71,6 @@ describe('UsersOwnFilesController', function() {
 
   afterAll(async () => {
     await prisma.file.deleteMany();
-    await removeFolderContent(destinationFolder);
     await app?.close();
   });
 
@@ -82,12 +80,18 @@ describe('UsersOwnFilesController', function() {
 
   describe('GET users/:userId/files', function() {
     beforeAll(async function() {
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user2.id);
+      const uploadedFile1 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await filesService.addFile(uploadedFile1.path, uploadedFile1.originalname, uploadedFile1.mimetype, user2.id);
 
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
-      await filesService.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user1.id);
-    });
+      const uploadedFile2 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await filesService.addFile(uploadedFile2.path, uploadedFile2.originalname, uploadedFile2.mimetype, user1.id);
+
+      const uploadedFile3 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await filesService.addFile(uploadedFile3.path, uploadedFile3.originalname, uploadedFile3.mimetype, user1.id);
+
+      const uploadedFile4 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await filesService.addFile(uploadedFile4.path, uploadedFile4.originalname, uploadedFile4.mimetype, user1.id);
+    }, 20000);
 
     it('should deny access when not authenticated', async function() {
       const { body } = (await request(httpServer)

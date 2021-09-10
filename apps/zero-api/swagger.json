@@ -858,7 +858,7 @@
           "files"
         ]
       },
-      "put": {
+      "patch": {
         "operationId": "FilesController_updateFileMetadata",
         "parameters": [
           {
@@ -928,11 +928,9 @@
         "tags": [
           "files"
         ]
-      }
-    },
-    "/api/files/images/{id}": {
-      "get": {
-        "operationId": "FilesController_getImage",
+      },
+      "delete": {
+        "operationId": "FilesController_deleteFile",
         "parameters": [
           {
             "name": "id",
@@ -945,9 +943,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
         "tags": [
           "files"
         ]
@@ -1598,10 +1608,6 @@
             "type": "string",
             "example": "agreement.pdf"
           },
-          "fileExtension": {
-            "type": "string",
-            "example": "pdf"
-          },
           "mimetype": {
             "type": "string",
             "example": "application/pdf"
@@ -1612,6 +1618,10 @@
           },
           "fileType": {
             "$ref": "#/components/schemas/FileType"
+          },
+          "url": {
+            "type": "string",
+            "example": "http://localhost:3333/925884cd-c577-4ae4-af44-c7086ba609a5"
           },
           "meta": {
             "type": "object",
@@ -1629,10 +1639,10 @@
         "required": [
           "id",
           "filename",
-          "fileExtension",
           "mimetype",
           "ownerId",
           "fileType",
+          "url",
           "uploadedAt",
           "processingCompletedAt"
         ]
