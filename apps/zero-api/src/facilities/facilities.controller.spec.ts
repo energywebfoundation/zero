@@ -7,6 +7,19 @@ import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
 import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
 import * as request from 'supertest';
+import { CreateFacilityDto } from './dto/create-facility.dto';
+
+const newFacilityData: CreateFacilityDto = {
+  companyName: 'Company Name',
+  name: 'Facility name',
+  facilityId: 'a unique id',
+  registry: ['REC', 'I_REC'],
+  registryId: 'registry id',
+  energySource: 'BIOMASS',
+  installedCapacity: 1000,
+  country: 'PL',
+  ownershipType: 'OWNER'
+};
 
 describe('FacilitiesController', () => {
   let controller: FacilitiesController;
@@ -85,13 +98,13 @@ describe('FacilitiesController', () => {
 
       await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My first awesome facility' })
+        .send(newFacilityData)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
       const dbRows = await prisma.facility.findMany();
       expect(dbRows.length).toEqual(1);
-      expect(dbRows[0].name).toEqual('My first awesome facility');
+      expect(dbRows[0].name).toEqual(newFacilityData.name);
     });
   });
 
@@ -119,13 +132,13 @@ describe('FacilitiesController', () => {
 
       await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My awesome facility 1' })
+        .send({ ...newFacilityData, name: 'My awesome facility 1', facilityId: '1' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
       await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My awesome facility 2' })
+        .send({ ...newFacilityData, name: 'My awesome facility 2', facilityId: '2' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED);
 
@@ -152,7 +165,7 @@ describe('FacilitiesController', () => {
 
       const facility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My second awesome facility' })
+        .send({ ...newFacilityData, name: 'My second awesome facility' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
@@ -161,7 +174,7 @@ describe('FacilitiesController', () => {
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
 
-      expect(responseBody).toEqual(facility);
+      expect(responseBody).toEqual({ ...facility });
     });
 
     it('should respond with 404 not found when non-existing id requested', async function() {
@@ -169,7 +182,7 @@ describe('FacilitiesController', () => {
 
       const facility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My second awesome facility' })
+        .send({ ...newFacilityData, name: 'My second awesome facility' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
@@ -194,7 +207,7 @@ describe('FacilitiesController', () => {
 
       const facility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My facility to be updated' })
+        .send({ ...newFacilityData, name: 'My facility to be updated' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
@@ -214,7 +227,7 @@ describe('FacilitiesController', () => {
 
       const notOwnedFacility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My facility to be updated' })
+        .send({ ...newFacilityData, name: 'My facility to be updated' })
         .set(getAuthBearerHeader(accessToken2))
         .expect(HttpStatus.CREATED)).body;
 
@@ -238,7 +251,7 @@ describe('FacilitiesController', () => {
 
       const facility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My facility to be updated' })
+        .send({ ...newFacilityData, name: 'My facility to be updated' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body;
 
@@ -255,7 +268,7 @@ describe('FacilitiesController', () => {
 
       const notOwnedFacility = (await request(httpServer)
         .post('/facilities')
-        .send({ name: 'My facility to be updated' })
+        .send({ ...newFacilityData, name: 'My facility to be updated' })
         .set(getAuthBearerHeader(accessToken2))
         .expect(HttpStatus.CREATED)).body;
 

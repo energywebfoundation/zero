@@ -30,6 +30,12 @@ export class FileMetadataDto implements File {
   @ApiProperty({ example: new Date(Date.now() + 983) })
   processingCompletedAt;
 
+  @ApiPropertyOptional({ example: '9b191175-66eb-4778-985b-c54146713f74', nullable: true })
+  imageOfFacilityId: string;
+
+  @ApiPropertyOptional({ example: '6661045a-db9e-43a6-9801-5955dffc0f92', nullable: true })
+  documentOfFacilityId: string;
+
   @Exclude()
   createdAt: Date;
 

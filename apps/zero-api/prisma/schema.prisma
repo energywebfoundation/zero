@@ -18,7 +18,7 @@ model User {
   lastName          String
   roles             UserRole[]
   drafts            Draft[]
-  Facility          Facility[]
+  facilities        Facility[]
   password          String
   emailConfirmed    Boolean             @default(false)
   emailConfirmation EmailConfirmation[]
@@ -38,6 +38,10 @@ model File {
   meta                  Json?
   uploadedAt            DateTime
   processingCompletedAt DateTime?
+  imageOfFacility       Facility? @relation("imageOfFacility", fields: [imageOfFacilityId], references: [id])
+  imageOfFacilityId     String?
+  documentOfFacility    Facility? @relation("documentOfFacility", fields: [documentOfFacilityId], references: [id])
+  documentOfFacilityId  String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 }
@@ -76,14 +80,37 @@ model EmailConfirmation {
 }
 
 model Facility {
-  id      String    @id @default(uuid())
-  name    String
-  User    User      @relation(fields: [ownerId], references: [id])
-  ownerId Int
-  Product Product[]
+  id                      String                            @id @default(uuid())
+  companyName             String
+  name                    String
+  facilityId              String
+  registry                DeviceRegistryEnum[]
+  registryId              String
+  energySource            RenevableEnergySourceEnum
+  installedCapacity       Int
+  certifiedEnergy         Int?
+  energyToBeCertified     Int?
+  commercialOperationDate DateTime?
+  financialSupport        FacilityFinancialSupportTypeEnum?
+  country                 String
+  region                  String?
+  latitude                Float?
+  longitude               Float?
+  gridOperator            String?
+  story                   String?
+  impactStory             String?
+  owner                   User?                             @relation(fields: [ownerId], references: [id])
+  ownerId                 Int
+  ownershipType           DeviceOwnershipEnum
+
+  products  Product[]
+  images    File[]    @relation("imageOfFacility")
+  documents File[]    @relation("documentOfFacility")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique(facilityId)
 }
 
 model Product {
@@ -94,6 +121,33 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum DeviceRegistryEnum {
+  REC
+  I_REC
+  TIGR
+  ALL
+}
+
+enum RenevableEnergySourceEnum {
+  SOLAR
+  WIND
+  HYDRO
+  BIOMASS
+  GEOTHERMAL
+}
+
+enum FacilityFinancialSupportTypeEnum {
+  GOVERNMENT_SUBSIDIES
+  TAX_REBATES
+  OTHER
+}
+
+enum DeviceOwnershipEnum {
+  OWNER
+  I_REC_MANAGER
+  BROKER
 }
 
 enum UserRole {

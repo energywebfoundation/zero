@@ -1663,6 +1663,16 @@
           "processingCompletedAt": {
             "type": "object",
             "example": "2021-09-23T12:05:04.192Z"
+          },
+          "imageOfFacilityId": {
+            "type": "string",
+            "example": "9b191175-66eb-4778-985b-c54146713f74",
+            "nullable": true
+          },
+          "documentOfFacilityId": {
+            "type": "string",
+            "example": "6661045a-db9e-43a6-9801-5955dffc0f92",
+            "nullable": true
           }
         },
         "required": [
@@ -1713,22 +1723,149 @@
                 3
               ]
             }
+          },
+          "imageOfFacilityId": {
+            "type": "string",
+            "example": "9b191175-66eb-4778-985b-c54146713f74"
+          },
+          "documentOfFacilityId": {
+            "type": "string",
+            "example": "6661045a-db9e-43a6-9801-5955dffc0f92"
           }
         },
         "required": [
           "fileType"
         ]
       },
+      "EacRegistry": {
+        "type": "string",
+        "enum": [
+          "REC",
+          "I_REC",
+          "TIGR",
+          "ALL"
+        ]
+      },
+      "EnergySource": {
+        "type": "string",
+        "enum": [
+          "SOLAR",
+          "WIND",
+          "HYDRO",
+          "BIOMASS",
+          "GEOTHERMAL"
+        ]
+      },
+      "FinancialSupport": {
+        "type": "string",
+        "enum": [
+          "GOVERNMENT_SUBSIDIES",
+          "TAX_REBATES",
+          "OTHER"
+        ]
+      },
+      "DeviceOwnershipEnum": {
+        "type": "string",
+        "enum": [
+          "OWNER",
+          "I_REC_MANAGER",
+          "BROKER"
+        ]
+      },
       "CreateFacilityDto": {
         "type": "object",
         "properties": {
+          "companyName": {
+            "type": "string",
+            "example": "A company name"
+          },
           "name": {
             "type": "string",
-            "example": "My facility"
+            "example": "Facility name"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "registry": {
+            "type": "array",
+            "example": [
+              "REC",
+              "I_REC"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/EacRegistry"
+            }
+          },
+          "registryId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "energySource": {
+            "$ref": "#/components/schemas/EnergySource"
+          },
+          "installedCapacity": {
+            "type": "number",
+            "example": 1000
+          },
+          "certifiedEnergy": {
+            "type": "number",
+            "example": 400
+          },
+          "energyToBeCertified": {
+            "type": "number",
+            "example": 500
+          },
+          "commercialOperationDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-13T10:05:25.618Z"
+          },
+          "financialSupport": {
+            "$ref": "#/components/schemas/FinancialSupport"
+          },
+          "country": {
+            "type": "string",
+            "example": "PL"
+          },
+          "region": {
+            "type": "string",
+            "example": "a region"
+          },
+          "latitude": {
+            "type": "number",
+            "example": 50.0677
+          },
+          "longitude": {
+            "type": "number",
+            "example": 19.924224
+          },
+          "gridOperator": {
+            "type": "string",
+            "example": "A grid operator"
+          },
+          "story": {
+            "type": "string",
+            "example": "A story text."
+          },
+          "impactStory": {
+            "type": "string",
+            "example": "An impact story text."
+          },
+          "ownershipType": {
+            "$ref": "#/components/schemas/DeviceOwnershipEnum"
           }
         },
         "required": [
-          "name"
+          "companyName",
+          "name",
+          "facilityId",
+          "registry",
+          "registryId",
+          "energySource",
+          "installedCapacity",
+          "country",
+          "ownershipType"
         ]
       },
       "FacilityDto": {
@@ -1738,27 +1875,187 @@
             "type": "string",
             "example": "29974dc9-3582-4a09-8216-24c54b5419b1"
           },
+          "companyName": {
+            "type": "string",
+            "example": "A company name"
+          },
+          "name": {
+            "type": "string",
+            "example": "Facility name"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "registry": {
+            "type": "array",
+            "example": [
+              "REC",
+              "I_REC"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/EacRegistry"
+            }
+          },
+          "registryId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "energySource": {
+            "$ref": "#/components/schemas/EnergySource"
+          },
+          "installedCapacity": {
+            "type": "number",
+            "example": 1000
+          },
+          "certifiedEnergy": {
+            "type": "number",
+            "example": 400
+          },
+          "energyToBeCertified": {
+            "type": "number",
+            "example": 500
+          },
+          "commercialOperationDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-13T10:05:25.618Z"
+          },
+          "financialSupport": {
+            "$ref": "#/components/schemas/FinancialSupport"
+          },
+          "country": {
+            "type": "string",
+            "example": "PL"
+          },
+          "region": {
+            "type": "string",
+            "example": "a region"
+          },
+          "latitude": {
+            "type": "number",
+            "example": 50.0677
+          },
+          "longitude": {
+            "type": "number",
+            "example": 19.924224
+          },
+          "gridOperator": {
+            "type": "string",
+            "example": "A grid operator"
+          },
+          "story": {
+            "type": "string",
+            "example": "A story text."
+          },
+          "impactStory": {
+            "type": "string",
+            "example": "An impact story text."
+          },
           "ownerId": {
             "type": "number",
             "example": 1
           },
-          "name": {
-            "type": "string",
-            "example": "My facility"
+          "ownershipType": {
+            "$ref": "#/components/schemas/DeviceOwnershipEnum"
           }
         },
         "required": [
           "id",
+          "companyName",
+          "name",
+          "facilityId",
+          "registry",
+          "registryId",
+          "energySource",
+          "installedCapacity",
+          "country",
           "ownerId",
-          "name"
+          "ownershipType"
         ]
       },
       "UpdateFacilityDto": {
         "type": "object",
         "properties": {
+          "companyName": {
+            "type": "string",
+            "example": "A company name"
+          },
           "name": {
             "type": "string",
-            "example": "My facility"
+            "example": "Facility name"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "registry": {
+            "type": "array",
+            "example": [
+              "REC",
+              "I_REC"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/EacRegistry"
+            }
+          },
+          "registryId": {
+            "type": "string",
+            "example": "123abc"
+          },
+          "energySource": {
+            "$ref": "#/components/schemas/EnergySource"
+          },
+          "installedCapacity": {
+            "type": "number",
+            "example": 1000
+          },
+          "certifiedEnergy": {
+            "type": "number",
+            "example": 400
+          },
+          "energyToBeCertified": {
+            "type": "number",
+            "example": 500
+          },
+          "commercialOperationDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-13T10:05:25.618Z"
+          },
+          "financialSupport": {
+            "$ref": "#/components/schemas/FinancialSupport"
+          },
+          "country": {
+            "type": "string",
+            "example": "PL"
+          },
+          "region": {
+            "type": "string",
+            "example": "a region"
+          },
+          "latitude": {
+            "type": "number",
+            "example": 50.0677
+          },
+          "longitude": {
+            "type": "number",
+            "example": 19.924224
+          },
+          "gridOperator": {
+            "type": "string",
+            "example": "A grid operator"
+          },
+          "story": {
+            "type": "string",
+            "example": "A story text."
+          },
+          "impactStory": {
+            "type": "string",
+            "example": "An impact story text."
+          },
+          "ownershipType": {
+            "$ref": "#/components/schemas/DeviceOwnershipEnum"
           }
         }
       },

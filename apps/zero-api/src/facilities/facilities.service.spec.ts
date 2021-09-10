@@ -6,6 +6,20 @@ import { UserDto } from '../users/dto/user.dto';
 import { UsersService } from '../users/users.service';
 import { createAndActivateUser } from '../../test/helpers';
 import { User, UserRole } from '@prisma/client';
+import { CreateFacilityDto } from './dto/create-facility.dto';
+
+
+const newFacilityData: CreateFacilityDto = {
+  companyName: 'Company Name',
+  name: 'Facility name',
+  facilityId: 'a unique id',
+  registry: ['REC', 'I_REC'],
+  registryId: 'registry id',
+  energySource: 'BIOMASS',
+  installedCapacity: 1000,
+  country: 'PL',
+  ownershipType: 'OWNER'
+};
 
 describe('FacilitiesService', () => {
   let module: TestingModule;
@@ -58,7 +72,7 @@ describe('FacilitiesService', () => {
   describe('create()', function() {
     it('should create a new db record', async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      const result = await service.create({ name: 'New facility name' }, user1.id);
+      const result = await service.create(newFacilityData, user1.id);
 
       expect(result).toBeDefined();
       expect(result.id).toBeDefined();
@@ -67,9 +81,9 @@ describe('FacilitiesService', () => {
       const dbRecords = await prisma.facility.findMany();
 
       expect(dbRecords.length).toEqual(1);
-      expect(dbRecords[0].name).toEqual('New facility name');
+      expect(dbRecords[0].name).toEqual(newFacilityData.name);
 
-      expect(result).toEqual(dbRecords[0]);
+      expect(result).toEqual({ ...dbRecords[0], documents: [], images: [] });
     });
   });
 
@@ -78,9 +92,21 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should return all db records', async function() {
@@ -91,18 +117,30 @@ describe('FacilitiesService', () => {
       expect(result[1].name).toEqual('New facility name 2');
       expect(result[2].name).toEqual('New facility name 3');
 
-      expect(r1).toEqual(result[0]);
-      expect(r2).toEqual(result[1]);
-      expect(r3).toEqual(result[2]);
+      expect(r1).toEqual({ ...result[0], documents: [], images: [] });
+      expect(r2).toEqual({ ...result[1], documents: [], images: [] });
+      expect(r3).toEqual({ ...result[2], documents: [], images: [] });
     });
   });
 
   describe('findOne()', function() {
     it('should return a record', async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      const r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      await service.create({ name: 'New facility name 2' }, user1.id);
-      await service.create({ name: 'New facility name 3' }, user2.id);
+      const r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
 
       const result = await service.findOne(r1.id);
 
@@ -115,17 +153,38 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should update a given record', async function() {
       await service.update(r1.id, { name: 'Updated facility name 1' });
 
       expect((await prisma.facility.findUnique({ where: { id: r1.id } })).name).toEqual('Updated facility name 1');
-      expect((await prisma.facility.findUnique({ where: { id: r2.id } }))).toEqual(r2);
-      expect((await prisma.facility.findUnique({ where: { id: r3.id } }))).toEqual(r3);
+
+      expect({
+        ...(await prisma.facility.findUnique({ where: { id: r2.id } })),
+        documents: [],
+        images: []
+      }).toEqual(r2);
+      expect({
+        ...(await prisma.facility.findUnique({ where: { id: r3.id } })),
+        documents: [],
+        images: []
+      }).toEqual(r3);
     });
   });
 
@@ -134,9 +193,21 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should remove a given record', async function() {

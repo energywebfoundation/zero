@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,7 +9,9 @@ export class FacilitiesService {
   constructor(private prisma: PrismaService) {}
 
   async create(createFacilityDto: CreateFacilityDto, ownerId: number): Promise<FacilityDto> {
-    return new FacilityDto(await this.prisma.facility.create({ data: { ...createFacilityDto, ownerId } }));
+    return new FacilityDto(await this.prisma.facility.create({
+      data: { ...createFacilityDto, ownerId }
+    }));
   }
 
   async findAll(): Promise<FacilityDto[]> {
