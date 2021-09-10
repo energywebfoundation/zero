@@ -1,82 +1,108 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { pick } from 'lodash';
-import { Express } from 'express';
 // This is a hack to make Multer available in the Express namespace
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
-import { dirname, resolve } from 'path';
-import * as mkdirp from 'mkdirp';
-import { copyFile, rename, stat, unlink } from 'fs/promises';
+import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
-import { createReadStream, ReadStream } from 'fs';
+import { createReadStream } from 'fs';
 import { FileMetadataDto } from './dto/file-metadata.dto';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class FilesService {
   private readonly logger = new Logger(FilesService.name, { timestamp: true });
 
-  private readonly filesStorage = resolve(process.env.FILES_STORAGE);
+  private readonly s3client = new S3Client({ region: process.env.AWS_REGION });
 
-  constructor(private prisma: PrismaService) {
-    this.logger.debug('instantiating');
-    this.logger.debug(`files storage set to ${this.filesStorage}`);
-    mkdirp.sync(this.filesStorage);
-  }
+  constructor(private prisma: PrismaService) {}
 
-  async addFile(file: Express.Multer.File, fileExtension: string, owner: number): Promise<UploadFileResponseDto> {
-    this.logger.debug(`processing file: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
+  async addFile(filePath: string, originalFileName: string, mimetype: string, ownerId: number): Promise<UploadFileResponseDto> {
+    this.logger.debug(`processing file: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
 
-    try {
-      let fileRecord: File = await this.prisma.file.create({
+    return this.prisma.$transaction(async (prisma) => {
+      let fileRecord: File = await prisma.file.create({
         data: {
-          filename: file.originalname,
-          fileExtension,
-          ownerId: owner,
-          mimetype: file.mimetype,
+          filename: originalFileName,
+          ownerId,
+          mimetype: mimetype,
           uploadedAt: new Date()
         }
       });
       this.logger.debug(`new record created: ${JSON.stringify(fileRecord)}`);
 
-      const source = file.path;
-      const destination = resolve(this.filesStorage, fileRecord.id);
+      const start = Date.now();
 
-      this.logger.debug(`moving ${source} -> ${destination}`);
+      await this.s3client.send(new PutObjectCommand({
+        Bucket: process.env.AWS_BUCKET,
+        Key: fileRecord.id,
+        CacheControl: 'max-age=0',
+        ContentDisposition: `attachment; filename=${originalFileName}`,
+        ACL: 'public-read',
+        Body: createReadStream(filePath)
+      }));
 
-      await mkdirp(dirname(destination));
-      await rename(source, destination).catch(async (err) => {
-        if (err.code === 'EXDEV') {
-          this.logger.warn(`files are on separate partitions`);
-          this.logger.debug(`copying ${file.path} -> ${destination}`);
-          await copyFile(file.path, destination);
-          this.logger.debug(`removing ${file.path}`);
-          await unlink(file.path);
-        } else {
-          this.logger.error(err);
-          return Promise.reject(err);
-        }
-      });
+      this.logger.debug(`${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
+      this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
 
-      this.logger.debug(`moved ${file.path} -> ${destination}`);
-
-      this.logger.debug(`finished file processing: ${JSON.stringify(pick(file, ['originalname', 'path', 'size']))}`);
-      fileRecord = await this.prisma.file.update({
+      this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
+      fileRecord = await prisma.file.update({
         where: { id: fileRecord.id },
         data: { processingCompletedAt: new Date() }
       });
 
+      this.logger.debug(`removing temporary file: ${filePath}`);
+      unlink(filePath);
+
       return new UploadFileResponseDto(fileRecord);
-    } catch (err) {
+    }).catch((err) => {
       this.logger.error(err);
+      this.logger.debug(`removing temporary file: ${filePath}`);
+      unlink(filePath);
       throw err;
-    }
+    });
   }
 
-  async getFileMetadata(fileId: string): Promise<File> {
-    return this.prisma.file.findUnique({ where: { id: fileId } });
+  async deleteFile(fileId: string) {
+    this.logger.debug(`removing file id=${fileId}`);
+    return this.prisma.$transaction(async () => {
+      this.logger.debug(`removing file database record id=${fileId}`);
+      const recordDeleted = await this.prisma.file.delete({ where: { id: fileId } });
+
+      this.logger.debug(`removing file from the S3 storage bucket=${process.env.AWS_BUCKET} key=${fileId}`)
+      await this.s3client.send(new DeleteObjectCommand({
+        Bucket: process.env.AWS_BUCKET,
+        Key: fileId
+      }));
+
+      return new FileMetadataDto(recordDeleted);
+    }).catch((err) => {
+      this.logger.error(err);
+      this.logger.warn(`rolling back changes`);
+      throw err;
+    });
+  }
+
+  async getFileMetadata(fileId: string): Promise<FileMetadataDto> {
+    const dbRecord = await this.prisma.file.findUnique({ where: { id: fileId } });
+
+    if (!dbRecord) {
+      return null;
+    }
+
+    return new FileMetadataDto(await this.prisma.file.findUnique({ where: { id: fileId } }));
+  }
+
+  async getFileUrl(fileId: string): Promise<string> {
+    const metadata = await this.getFileMetadata(fileId);
+
+    if (!metadata) {
+      return null;
+    }
+
+    return `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${metadata.id}`;
   }
 
   async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
@@ -89,35 +115,5 @@ export class FilesService {
     }
 
     return (await this.prisma.file.findMany({ where: { ownerId: userId } })).map(r => new FileMetadataDto(r));
-  }
-
-  async getFileContentStream(id): Promise<ReadStream> {
-    const filePath = resolve(this.filesStorage, id);
-
-    await stat(filePath).catch((err) => {
-      this.logger.error(err);
-      return Promise.reject(err);
-    });
-
-    return new Promise((resolve, reject) => {
-      this.logger.debug(`creating read stream for ${id} located at ${filePath}`);
-      const stream = createReadStream(filePath)
-        .on('open', () => {
-          this.logger.debug(`read stream for ${id} [OPEN]`);
-          resolve(stream);
-        })
-        .on('error', (err) => {
-          this.logger.error(`read stream error for ${id}`);
-          this.logger.error(err);
-          stream.close();
-          reject(err);
-        })
-        .on('ready', () => this.logger.debug(`read stream for ${id} [READY]`))
-        .on('pause', () => this.logger.debug(`read stream for ${id} [PAUSE]`))
-        .on('resume', () => this.logger.debug(`read stream for ${id} [RESUME]`))
-        .on('data', (data) => this.logger.debug(`read stream for ${id} [DATA] (${data.length} bytes)`))
-        .on('end', () => this.logger.debug(`read stream for ${id} [END]`))
-        .on('close', () => this.logger.debug(`read stream for ${id} [CLOSE]`));
-    });
   }
 }

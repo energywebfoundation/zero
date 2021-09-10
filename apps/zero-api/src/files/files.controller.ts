@@ -3,14 +3,14 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
   Res,
   UploadedFile,
   UseFilters,
@@ -22,7 +22,15 @@ import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
 import * as multer from 'multer';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { NoDataInterceptor } from '../interceptors/NoDataInterceptor';
 import { PrismaClientExceptionFilter } from '../exception-filters/PrismaClientExceptionFilter';
 import { UploadFileDto } from './dto/upload-file.dto';
@@ -34,6 +42,8 @@ import { Public } from '../auth/decorators/public.decorator';
 import * as mimeTypes from 'mime-types';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
+import { fromFile } from 'file-type';
+import { extname } from 'path';
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -75,7 +85,11 @@ export class FilesController {
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
     this.logger.debug(`form fields: ${JSON.stringify(body)}`);
 
-    const fileExtensionDetected = mimeTypes.extension(file.mimetype);
+    const mimetypeDetected = (await fromFile(file.path))?.mime;
+
+    this.logger.debug(`content type detected: ${mimetypeDetected}`);
+
+    const fileExtensionDetected = mimetypeDetected ? mimeTypes.extension(mimetypeDetected) : extname(file.originalname).split('.')[1];
 
     if (!fileExtensionDetected) {
       this.logger.warn(`unrecognized mimetype: ${file.mimetype}`);
@@ -89,7 +103,7 @@ export class FilesController {
 
     this.logger.debug((`detected ${fileExtensionDetected} file extension for ${file.mimetype} mimetype`));
 
-    const newFileRecord = await this.filesService.addFile(file, fileExtensionDetected, user.id);
+    const newFileRecord = await this.filesService.addFile(file.path, file.originalname, mimetypeDetected || file.mimetype, user.id);
 
     this.logger.debug(`${user.email} successfully uploaded the file: ${file.originalname}`);
     return newFileRecord;
@@ -106,7 +120,7 @@ export class FilesController {
     return await this.filesService.getFileMetadata(id);
   }
 
-  @Put(':id/metadata')
+  @Patch(':id/metadata')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
   @ApiOkResponse({ type: FileMetadataDto })
@@ -121,65 +135,42 @@ export class FilesController {
   @Get(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
-  @ApiOkResponse({ description: 'binary file content' })
+  @ApiResponse({status: 308, description: 'http redirect' })
   async getFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
   ) {
-    const fileMetadata = await this.filesService.getFileMetadata(id);
+    const url = await this.filesService.getFileUrl(id);
 
-    if (isNil(fileMetadata)) {
+    if (isNil(url)) {
       throw new NotFoundException();
     }
 
-    res.setHeader('Content-Type', fileMetadata.mimetype);
-    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
-
-    let responseFinished = false;
-
-    try {
-      const stream = await this.filesService.getFileContentStream(id);
-
-      res
-        .on('finish', () => {
-          this.logger.debug(`response writeable stream for file ${id} [FINISH]`);
-          responseFinished = true;
-        })
-        .on('close', () => {
-          this.logger.debug(`response writeable stream for file ${id} [CLOSE]`);
-          if (!responseFinished) {
-            this.logger.warn(`incomplete response for  file ${id}`);
-            this.logger.warn(`closing file content read stream explicitly`);
-            stream.close();
-          }
-        });
-
-      stream.pipe(res);
-    } catch (err) {
-      this.logger.error(err);
-      throw new InternalServerErrorException();
-    }
+    res.redirect(308, url);
   }
 
-  @Get('/images/:id')
+  @Get('images/:id')
   @Public()
   @ApiTags('files')
-  @ApiOkResponse()
-  async getImage(
+  @ApiResponse({status: 308, description: 'http redirect' })
+  async getImageFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
   ) {
-    const fileMetadata = await this.filesService.getFileMetadata(id);
+    const url = await this.filesService.getFileUrl(id);
 
-    if (isNil(fileMetadata) || this.supportedImagesFormats.indexOf(fileMetadata.fileExtension) < 0) {
+    if (isNil(url)) {
       throw new NotFoundException();
     }
 
-    res.setHeader('Content-Type', fileMetadata.mimetype);
-    res.setHeader('Cache-Control', 'private, max-age=31536000, immutable');
+    res.redirect(308, url);
+  }
 
-    const stream = await this.filesService.getFileContentStream(id);
-
-    stream.pipe(res);
+  @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @ApiTags('files')
+  @ApiOkResponse({ type: FileMetadataDto })
+  async deleteFile(@Param('id', new ParseUUIDPipe()) id: string): Promise<FileMetadataDto> {
+    return this.filesService.deleteFile(id);
   }
 }
