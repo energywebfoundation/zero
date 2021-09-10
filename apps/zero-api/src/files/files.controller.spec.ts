@@ -139,7 +139,7 @@ describe('FilesController', () => {
     });
   });
 
-  describe('PUT /files/:id/metadata', function() {
+  describe('PATCH /files/:id/metadata', function() {
     const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
     let fileId: string;
 
@@ -156,7 +156,7 @@ describe('FilesController', () => {
 
     it('should update database record', async function() {
       await request(httpServer)
-        .put(`/files/${fileId}/metadata`)
+        .patch(`/files/${fileId}/metadata`)
         .send({ fileType: FileType.sustainability, meta: { foo: 'bar' } })
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.OK);
@@ -168,7 +168,7 @@ describe('FilesController', () => {
 
     it('should respond with 404 Not Found for non-existing fileId', async function() {
       await request(httpServer)
-        .put(`/files/00000000-0000-0000-0000-000000000000/metadata`)
+        .patch(`/files/00000000-0000-0000-0000-000000000000/metadata`)
         .send({ fileType: FileType.sustainability, meta: {} })
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.NOT_FOUND);
@@ -176,7 +176,7 @@ describe('FilesController', () => {
 
     it('should require logged in user', async function() {
       await request(httpServer)
-        .put(`/files/${fileId}/metadata`)
+        .patch(`/files/${fileId}/metadata`)
         .send({ fileType: FileType.sustainability, meta: {} })
         .expect(HttpStatus.UNAUTHORIZED);
     });

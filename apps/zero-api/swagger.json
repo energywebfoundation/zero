@@ -858,7 +858,7 @@
           "files"
         ]
       },
-      "put": {
+      "patch": {
         "operationId": "FilesController_updateFileMetadata",
         "parameters": [
           {

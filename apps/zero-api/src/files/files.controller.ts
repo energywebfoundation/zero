@@ -8,8 +8,8 @@ import {
   NotFoundException,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
   Res,
   UploadedFile,
   UseFilters,
@@ -119,7 +119,7 @@ export class FilesController {
     return await this.filesService.getFileMetadata(id);
   }
 
-  @Put(':id/metadata')
+  @Patch(':id/metadata')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
   @ApiOkResponse({ type: FileMetadataDto })
