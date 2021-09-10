@@ -18,6 +18,9 @@ export class FileMetadataDto implements File {
   @ApiProperty({ enum: FileType, enumName: 'FileType' })
   fileType: FileType;
 
+  @ApiProperty({ example: 'http://localhost:3333/925884cd-c577-4ae4-af44-c7086ba609a5' })
+  url: string;
+
   @ApiPropertyOptional({ example: '{ "field1": "value", "field2" : [1, 2, 3] }' })
   meta: Prisma.JsonValue;
 
@@ -35,5 +38,7 @@ export class FileMetadataDto implements File {
 
   constructor(partial: Partial<FileMetadataDto>) {
     Object.assign(this, partial);
+
+    this.url = `${process.env.FILES_BASE_URL}/${this.id}`;
   }
 }

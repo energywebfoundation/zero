@@ -56,6 +56,12 @@ import { ProductsModule } from '../products/products.module';
         AWS_REGION: Joi.string().required(),
         AWS_ACCESS_KEY_ID: Joi.string().required(),
         AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+
+        FILES_BASE_URL: Joi.string().uri({
+          allowRelative: false,
+          scheme: ['http', 'https']
+        }).default('http://localhost:3333/api/files'),
+
         UPLOADED_FILE_SIZE_LIMIT: Joi.number().min(10000),
         CORS_ORIGIN: Joi.string().default('*'),
         CORS_MAX_AGE: Joi.number().default(60)

@@ -79,8 +79,14 @@ export class FilesService {
     });
   }
 
-  async getFileMetadata(fileId: string): Promise<File> {
-    return this.prisma.file.findUnique({ where: { id: fileId } });
+  async getFileMetadata(fileId: string): Promise<FileMetadataDto> {
+    const dbRecord = await this.prisma.file.findUnique({ where: { id: fileId } });
+
+    if (!dbRecord) {
+      return null;
+    }
+
+    return new FileMetadataDto(await this.prisma.file.findUnique({ where: { id: fileId } }));
   }
 
   async getFileUrl(fileId: string): Promise<string> {

@@ -1619,6 +1619,10 @@
           "fileType": {
             "$ref": "#/components/schemas/FileType"
           },
+          "url": {
+            "type": "string",
+            "example": "http://localhost:3333/925884cd-c577-4ae4-af44-c7086ba609a5"
+          },
           "meta": {
             "type": "object",
             "example": "{ \"field1\": \"value\", \"field2\" : [1, 2, 3] }"
@@ -1638,6 +1642,7 @@
           "mimetype",
           "ownerId",
           "fileType",
+          "url",
           "uploadedAt",
           "processingCompletedAt"
         ]
