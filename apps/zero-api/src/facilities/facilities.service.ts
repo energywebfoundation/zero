@@ -16,7 +16,7 @@ export class FacilitiesService {
     return (await this.prisma.facility.findMany()).map(f => new FacilityDto(f));
   }
 
-  async findOne(id: number): Promise<FacilityDto> {
+  async findOne(id: string): Promise<FacilityDto> {
     const dbRecord = await this.prisma.facility.findUnique({ where: { id } });
 
     if (!dbRecord) {
@@ -26,11 +26,11 @@ export class FacilitiesService {
     return new FacilityDto(dbRecord);
   }
 
-  async update(id: number, updateFacilityDto: UpdateFacilityDto): Promise<FacilityDto> {
+  async update(id: string, updateFacilityDto: UpdateFacilityDto): Promise<FacilityDto> {
     return new FacilityDto(await this.prisma.facility.update({ where: { id }, data: updateFacilityDto }));
   }
 
-  async remove(id: number): Promise<FacilityDto> {
+  async remove(id: string): Promise<FacilityDto> {
     return new FacilityDto(await this.prisma.facility.delete({ where: { id } }));
   }
 }

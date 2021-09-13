@@ -76,7 +76,7 @@ model EmailConfirmation {
 }
 
 model Facility {
-  id      Int       @id @default(autoincrement())
+  id      String    @id @default(uuid())
   name    String
   User    User      @relation(fields: [ownerId], references: [id])
   ownerId Int
@@ -90,7 +90,7 @@ model Product {
   id         Int      @id @default(autoincrement())
   name       String
   Facility   Facility @relation(fields: [facilityId], references: [id])
-  facilityId Int
+  facilityId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -124,13 +124,13 @@ describe('ProductsController', () => {
 
       const resBody = (await request(httpServer)
         .post('/products')
-        .send({ name: 'My first awesome product', facilityId: 9999 })
+        .send({ name: 'My first awesome product', facilityId: '91fa679d-9bfe-456f-b564-d57107182068' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.BAD_REQUEST)).body;
 
       expect(resBody).toEqual({
         'error': 'Bad Request',
-        'message': 'non-existing facilityId=9999',
+        'message': 'non-existing facilityId=91fa679d-9bfe-456f-b564-d57107182068',
         'statusCode': 400
       });
     });
@@ -288,13 +288,13 @@ describe('ProductsController', () => {
 
       const resBody = (await request(httpServer)
         .put(`/products/${product.id}`)
-        .send({ name: 'My product name updated', facilityId: 9999 })
+        .send({ name: 'My product name updated', facilityId: '14b4a132-69d3-4512-86ea-784522196f6f' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.BAD_REQUEST)).body;
 
       expect(resBody).toEqual({
         'error': 'Bad Request',
-        'message': 'non-existing facilityId=9999',
+        'message': 'non-existing facilityId=14b4a132-69d3-4512-86ea-784522196f6f',
         'statusCode': 400
       });
     });

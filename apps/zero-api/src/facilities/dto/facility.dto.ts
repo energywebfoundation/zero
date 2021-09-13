@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 
 export class FacilityDto {
-  @ApiProperty({ example: 1 })
-  id: number;
+  @ApiProperty({ example: '29974dc9-3582-4a09-8216-24c54b5419b1' })
+  id: string;
 
   @ApiProperty({ example: 1 })
   ownerId: number;

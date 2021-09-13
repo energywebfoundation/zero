@@ -8,7 +8,6 @@ import {
   Logger,
   NotFoundException,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   UseFilters,
@@ -57,7 +56,7 @@ export class FacilitiesController {
 
   @Get(':id')
   @ApiOkResponse({ type: FacilityDto })
-  findOne(@Param('id', new ParseIntPipe()) id: number) {
+  findOne(@Param('id') id: string) {
     return this.facilitiesService.findOne(id);
   }
 
@@ -65,7 +64,7 @@ export class FacilitiesController {
   @ApiOkResponse({ type: FacilityDto })
   async update(
     @User() user: UserDto,
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param('id') id: string,
     @Body() updateFacilityDto: UpdateFacilityDto
   ) {
     const facility = await this.facilitiesService.findOne(id);
@@ -87,7 +86,7 @@ export class FacilitiesController {
   @ApiOkResponse({ type: FacilityDto })
   async remove(
     @User() user: UserDto,
-    @Param('id', new ParseIntPipe()) id: number
+    @Param('id') id: string
   ) {
     const facility = await this.facilitiesService.findOne(id);
 

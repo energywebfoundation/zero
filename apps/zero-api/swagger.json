@@ -1058,7 +1058,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
@@ -1091,7 +1091,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
@@ -1134,7 +1134,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
@@ -1735,8 +1735,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
-            "example": 1
+            "type": "string",
+            "example": "29974dc9-3582-4a09-8216-24c54b5419b1"
           },
           "ownerId": {
             "type": "number",
@@ -1770,8 +1770,8 @@
             "example": "My product"
           },
           "facilityId": {
-            "type": "number",
-            "example": 1
+            "type": "string",
+            "example": "29974dc9-3582-4a09-8216-24c54b5419b1"
           }
         },
         "required": [
@@ -1787,8 +1787,8 @@
             "example": 1
           },
           "facilityId": {
-            "type": "number",
-            "example": 1
+            "type": "string",
+            "example": "29974dc9-3582-4a09-8216-24c54b5419b1"
           },
           "name": {
             "type": "string",
@@ -1809,8 +1809,8 @@
             "example": "My product"
           },
           "facilityId": {
-            "type": "number",
-            "example": 1
+            "type": "string",
+            "example": "29974dc9-3582-4a09-8216-24c54b5419b1"
           }
         }
       }

@@ -6,8 +6,8 @@ export class ProductDto implements Product {
   @ApiProperty({ example: 1 })
   id: number;
 
-  @ApiProperty({ example: 1 })
-  facilityId: number;
+  @ApiProperty({ example: '29974dc9-3582-4a09-8216-24c54b5419b1' })
+  facilityId: string;
 
   @ApiProperty({ example: 'My product' })
   name: string;
