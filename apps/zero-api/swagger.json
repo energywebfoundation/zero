@@ -916,8 +916,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "binary file content"
+          "308": {
+            "description": "http redirect"
           }
         },
         "security": [
@@ -958,6 +958,29 @@
             "access-token": []
           }
         ],
+        "tags": [
+          "files"
+        ]
+      }
+    },
+    "/api/files/images/{id}": {
+      "get": {
+        "operationId": "FilesController_getImageFileContent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "308": {
+            "description": "http redirect"
+          }
+        },
         "tags": [
           "files"
         ]
