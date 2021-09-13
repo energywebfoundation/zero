@@ -40,6 +40,7 @@ export class FilesService {
         Key: fileRecord.id,
         CacheControl: 'max-age=0',
         ContentDisposition: `attachment; filename=${originalFileName}`,
+        ContentType: mimetype,
         ACL: 'public-read',
         Body: createReadStream(filePath)
       }));
