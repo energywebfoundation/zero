@@ -1,7 +1,9 @@
 import { render } from '@testing-library/react';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import '@energy-web-zero/localization';
 
 import TopNavBarContainer from './top-nav-bar-container';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { StoreProvider } from '@energy-web-zero/store/configure';
 import { MemoryRouter } from 'react-router-dom';
 
