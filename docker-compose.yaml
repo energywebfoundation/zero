@@ -68,6 +68,12 @@ services:
       JWT_TTL: "24h"
       CORS_ORIGIN: "http://localhost:8080"
       CORS_MAX_AGE: 60
+      AWS_BUCKET:
+      AWS_REGION:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      FILES_BASE_URL: "http://localhost:3333/api/files"
+
     networks:
       zero:
 
