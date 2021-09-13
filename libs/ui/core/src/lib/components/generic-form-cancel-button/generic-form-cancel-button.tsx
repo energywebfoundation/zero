@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Add } from '@material-ui/icons';
 import { useStyles } from './generic-form-cancel-button.styles';
 import { variables } from '@energyweb/zero-theme';
-/* eslint-disable-next-line */
 export interface GenericFormCancelButtonProps {
   handleCancel: () => void;
 }
@@ -19,7 +18,7 @@ export const GenericFormCancelButton = ({
     <StyledGenericFormCancelButton>
       <Button
         sx={{
-          background: '#ffffff',
+          background: variables.bodyBackgroundColor,
           '&:hover': {
             backgroundColor: variables.secondaryColor,
           },

@@ -6,7 +6,6 @@ import { useStyles } from './generic-form-submit-button.styles';
 import { GenericFormContext } from '../../providers';
 import { useContext } from 'react';
 
-/* eslint-disable-next-line */
 export interface GenericFormSubmitButtonProps {
   name: string;
 }
