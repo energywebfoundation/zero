@@ -7,12 +7,12 @@ import { RootState } from '../../Providers/StoreProvider';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface INavgationState {
-  prmiaryNavigation: PrimaryNavigationItem[];
+  primiaryNavigation: PrimaryNavigationItem[];
   secondaryNavigation: SecondaryNavigationItem[];
 }
 
 export const initialState: INavgationState = {
-  prmiaryNavigation: [],
+  primiaryNavigation: [],
   secondaryNavigation: [],
 };
 
@@ -24,7 +24,7 @@ export const navigationStateSlice = createSlice({
       state,
       action: PayloadAction<PrimaryNavigationItem[]>
     ) => {
-      state.prmiaryNavigation = action.payload;
+      state.primiaryNavigation = action.payload;
     },
     setSecondaryNavigation: (
       state,
@@ -40,8 +40,8 @@ export const navigationStateActions = {
 };
 
 export const navigationStateSelectors = {
-  prmiaryNavigation: (state: RootState) =>
-    state.navigationState.prmiaryNavigation.filter((el) => el.isEnabled),
+  primiaryNavigation: (state: RootState) =>
+    state.navigationState.primiaryNavigation.filter((el) => el.isEnabled),
   secondaryNavigation: (state: RootState) =>
     state.navigationState.secondaryNavigation,
 };

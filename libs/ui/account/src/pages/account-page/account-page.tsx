@@ -1,30 +1,20 @@
-import styled from '@emotion/styled';
 import { Route, Routes } from 'react-router-dom';
 import AccountDashboardPage from '../account-dashboard-page/account-dashboard-page';
-import { Helmet } from 'react-helmet';
-import { css, Global } from '@emotion/react';
+import { Helmet } from 'react-helmet-async';
+import { LayoutWithTopbarContainer } from '@energyweb/zero-ui';
 /* eslint-disable-next-line */
 export interface AccountPageProps {}
 
-const StyledAccountPage = styled.div``;
-
 export const AccountPage = (props: AccountPageProps) => {
   return (
-    <StyledAccountPage>
-      <Global
-        styles={css`
-          body {
-            background-color: #e5e5e5;
-          }
-        `}
-      />
+    <LayoutWithTopbarContainer bgColor={'#f6f3f9'}>
       <Helmet>
         <title>Account / Dashboard</title>
       </Helmet>
       <Routes>
-        <Route path={'dashboard'} element={<AccountDashboardPage />} />
+        <Route path={'dashboard/*'} element={<AccountDashboardPage />} />
       </Routes>
-    </StyledAccountPage>
+    </LayoutWithTopbarContainer>
   );
 };
 

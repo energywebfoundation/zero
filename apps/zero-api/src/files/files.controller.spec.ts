@@ -10,13 +10,12 @@ import {
   createAndActivateUser,
   fileExists,
   getAuthBearerHeader,
-  logInUser,
-  removeFolderContent
+  logInUser
 } from '../../test/helpers';
 import { FileType, User, UserRole } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { FileMetadataDto } from './dto/file-metadata.dto';
-import { stat } from 'fs/promises';
+import axios from 'axios';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -26,6 +25,7 @@ describe('FilesController', () => {
   let httpServer;
   let controller: FilesController;
   let usersService: UsersService;
+  let filesService: FilesService;
   let prisma: PrismaService;
   const password = 'my password';
   let user, accessToken;
@@ -44,6 +44,7 @@ describe('FilesController', () => {
 
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
+    filesService = module.get<FilesService>(FilesService);
     controller = module.get<FilesController>(FilesController);
 
     await prisma.clearDatabase();
@@ -61,7 +62,6 @@ describe('FilesController', () => {
 
   afterAll(async () => {
     await module.close();
-    await removeFolderContent(process.env.FILES_STORAGE);
   });
 
   it('should be defined', () => {
@@ -78,7 +78,6 @@ describe('FilesController', () => {
     it('should require logged in user', async function() {
       await request(httpServer)
         .post('/files')
-        .field('fileType', FileType.facility)
         .attach('file', testFilePath)
         .expect(HttpStatus.UNAUTHORIZED);
     });
@@ -86,7 +85,6 @@ describe('FilesController', () => {
     it('should create a file', async function() {
       const newFileId: string = (await request(httpServer)
         .post('/files')
-        .field('fileType', FileType.facility)
         .field('meta', JSON.stringify({ meta: 'data' }))
         .attach('file', testFilePath)
         .set(getAuthBearerHeader(accessToken))
@@ -95,8 +93,13 @@ describe('FilesController', () => {
       expect(newFileId).toBeDefined();
 
       expect((await prisma.file.findUnique({ where: { id: newFileId } }))).not.toBeNull();
-      expect(await fileExists(resolve(process.env.FILES_STORAGE, newFileId))).toEqual(true);
-    });
+
+      const url = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${newFileId}`;
+
+      const res = await axios.head(url);
+
+      expect(res.status).toEqual(200);
+    }, 10000);
   });
 
   describe('GET /files/:id/metadata', function() {
@@ -139,6 +142,49 @@ describe('FilesController', () => {
     });
   });
 
+  describe('PATCH /files/:id/metadata', function() {
+    const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
+    let fileId: string;
+
+    beforeAll(async function() {
+      expect(await fileExists(testFilePath)).toEqual(true);
+      fileId = (await request(httpServer)
+        .post('/files')
+        .field('fileType', FileType.facility)
+        .field('meta', JSON.stringify({ meta: 'data' }))
+        .attach('file', testFilePath)
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.CREATED)).body.id;
+    });
+
+    it('should update database record', async function() {
+      await request(httpServer)
+        .patch(`/files/${fileId}/metadata`)
+        .send({ fileType: FileType.sustainability, meta: { foo: 'bar' } })
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.OK);
+
+      const dbRecord = await filesService.getFileMetadata(fileId);
+      expect(dbRecord.fileType).toEqual(FileType.sustainability);
+      expect(dbRecord.meta).toEqual({ foo: 'bar' });
+    });
+
+    it('should respond with 404 Not Found for non-existing fileId', async function() {
+      await request(httpServer)
+        .patch(`/files/00000000-0000-0000-0000-000000000000/metadata`)
+        .send({ fileType: FileType.sustainability, meta: {} })
+        .set(getAuthBearerHeader(accessToken))
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should require logged in user', async function() {
+      await request(httpServer)
+        .patch(`/files/${fileId}/metadata`)
+        .send({ fileType: FileType.sustainability, meta: {} })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
   describe('GET /files/:id', function() {
     const testFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
     let fileId: string;
@@ -160,16 +206,14 @@ describe('FilesController', () => {
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
-    it('should respond with a file content of an existing file', async function() {
-      const { body } = await request(httpServer)
+    it('should respond with a redirect to S3 bucket url', async function() {
+      const res = await request(httpServer)
         .get(`/files/${fileId}`)
         .set(getAuthBearerHeader(accessToken))
-        .expect(HttpStatus.OK);
+        .expect(HttpStatus.PERMANENT_REDIRECT);
 
-      expect(body).toBeDefined();
-      expect(body).not.toBeNull();
-      expect(Buffer.isBuffer(body)).toEqual(true);
-      expect(body.length).toEqual((await stat(testFilePath)).size);
+      expect(res.headers['location']).toBeDefined();
+      expect(res.headers['location']).toEqual(`https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileId}`);
     });
 
     it('should respond with 404 Not Found for non-existing fileId', async function() {
@@ -182,9 +226,8 @@ describe('FilesController', () => {
 
   describe('GET /files/images/:id', function() {
     const testImageFilePath = resolve(__dirname, '../../test/test-files/jash.jpeg');
-    const testPdfFilePath = resolve(__dirname, '../../test/test-files/test-file.pdf');
 
-    let imageFileId: string, pdfFileId: string;
+    let imageFileId: string;
 
     beforeAll(async function() {
       expect(await fileExists(testImageFilePath)).toEqual(true);
@@ -195,59 +238,18 @@ describe('FilesController', () => {
         .attach('file', testImageFilePath)
         .set(getAuthBearerHeader(accessToken))
         .expect(HttpStatus.CREATED)).body.id;
-
-      pdfFileId = (await request(httpServer)
-        .post('/files')
-        .field('fileType', FileType.facility)
-        .field('meta', JSON.stringify({ meta: 'data' }))
-        .attach('file', testPdfFilePath)
-        .set(getAuthBearerHeader(accessToken))
-        .expect(HttpStatus.CREATED)).body.id;
-    });
-
+    }, 20000);
 
     describe('when no access token provided', function() {
-      it('should respond with an image file content', async function() {
-        const { body } = await request(httpServer)
+      it('should respond with a redirect to S3 bucket url', async function() {
+        const res = await request(httpServer)
           .get(`/files/images/${imageFileId}`)
-          .expect(HttpStatus.OK);
+          .expect(HttpStatus.PERMANENT_REDIRECT);
 
-        expect(body).toBeDefined();
-        expect(body).not.toBeNull();
-        expect(Buffer.isBuffer(body)).toEqual(true);
-        expect(body.length).toEqual((await stat(testImageFilePath)).size);
-      });
-
-      it('should respond with 404 Not Found when non-image file requested', async function() {
-        const { body } = await request(httpServer)
-          .get(`/files/images/${pdfFileId}`)
-          .expect(HttpStatus.NOT_FOUND);
-
-        expect(body);
-      });
-    });
-
-    describe('whan valid access token provided', function() {
-      it('should respond with an image file content', async function() {
-        const { body } = await request(httpServer)
-          .get(`/files/images/${imageFileId}`)
-          .set(getAuthBearerHeader(accessToken))
-          .expect(HttpStatus.OK);
-
-        expect(body).toBeDefined();
-        expect(body).not.toBeNull();
-        expect(Buffer.isBuffer(body)).toEqual(true);
-        expect(body.length).toEqual((await stat(testImageFilePath)).size);
-      });
-
-      it('should respond with 404 Not Found when non-image file requested', async function() {
-        const { body } = await request(httpServer)
-          .get(`/files/images/${pdfFileId}`)
-          .set(getAuthBearerHeader(accessToken))
-          .expect(HttpStatus.NOT_FOUND);
-
-        expect(body);
+        expect(res.headers['location']).toBeDefined();
+        expect(res.headers['location']).toEqual(`https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${imageFileId}`);
       });
     });
   });
+
 });

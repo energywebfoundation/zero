@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FilesService } from './files.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { tmpdir } from 'os';
-import { basename, resolve } from 'path';
+import { resolve } from 'path';
 import { Express } from 'express';
 import { createAndActivateUser, createUploadedFile, fileExists, removeFolderContent } from '../../test/helpers';
 import { UsersService } from '../users/users.service';
-import { User, UserRole, FileType } from '@prisma/client';
-import { ReadStream } from 'fs';
+import { FileType, User, UserRole } from '@prisma/client';
 import { AppModule } from '../app/app.module';
+import axios from 'axios';
 
 process.env.FILES_STORAGE = resolve(__dirname, '../../../../uploaded-files-tests');
 
@@ -18,7 +18,6 @@ describe('FilesService', () => {
   let usersService: UsersService;
   let prismaService: PrismaService;
   const temporaryFolder = tmpdir();
-  const destinationFolder = resolve(process.env.FILES_STORAGE || tmpdir());
   let user: User;
 
   beforeAll(async () => {
@@ -44,12 +43,10 @@ describe('FilesService', () => {
 
   afterAll(async () => {
     await module.close();
-    await removeFolderContent(destinationFolder);
   });
 
   beforeEach(async function() {
     await prismaService.file.deleteMany();
-    await removeFolderContent(destinationFolder);
   });
 
   it('should be defined', () => {
@@ -66,20 +63,24 @@ describe('FilesService', () => {
     });
 
     it('should create database record', async function() {
-      const res = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      const res = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
 
       const databaseRecord = await prismaService.file.findUnique({ where: { id: res.id } });
       expect(databaseRecord).toBeDefined();
       expect(databaseRecord.filename).toEqual(uploadedFile.originalname);
-      expect(databaseRecord.fileType).toEqual(FileType.facility);
-      expect(databaseRecord.meta).toEqual({meta: "data"});
       expect(databaseRecord.ownerId).toEqual(user.id);
     });
 
-    it('should store a file in the destination folder', async function() {
-      const res = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+    it('should store a file in the S3 bucket', async function() {
+      const fileMetadata = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
 
-      expect(await fileExists(resolve(destinationFolder, res.id))).toEqual(true);
+      const url = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileMetadata.id}`;
+
+      const res = await axios.head(url);
+
+      expect(res.status).toEqual(200);
+      expect(res.headers['content-disposition']).toBeDefined();
+      expect(res.headers['content-disposition']).toContain(`filename=${fileMetadata.filename}`);
     });
   });
 
@@ -88,7 +89,7 @@ describe('FilesService', () => {
 
     beforeEach(async function() {
       const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      file = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      file = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
     });
 
     it('should return existing file metadata record', async function() {
@@ -102,19 +103,39 @@ describe('FilesService', () => {
     });
   });
 
-  describe('getFileContentStream()', function() {
+  describe('updateFileMetadata()', function() {
     let file;
 
     beforeEach(async function() {
       const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      file = await service.addFile(uploadedFile, 'pdf', user.id, FileType.facility,  {meta: "data"});
+      file = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
     });
 
-    it('should return a file stream', async function() {
-      const stream = await service.getFileContentStream(file.id);
-      expect(stream).not.toBeNull();
-      expect(stream).toBeInstanceOf(ReadStream);
-      expect(basename(stream.path as string)).toEqual(file.id);
+    it('should update file metadata record', async function() {
+      const entity = await service.updateFileMetadata(file.id, {
+        fileType: FileType.sustainability,
+        meta: { someKey: 'some value' }
+      });
+
+      expect(entity.fileType).toEqual(FileType.sustainability);
+      expect(entity.meta).toEqual({ someKey: 'some value' });
+    });
+  });
+
+  describe('getFileUrl()', function() {
+    let file;
+
+    beforeEach(async function() {
+      const uploadedFile = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      file = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
+    });
+
+    it('should return a correct file S3 bucket url', async function() {
+      const url = await service.getFileUrl(file.id);
+
+      const expectedUrl = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.id}`;
+
+      expect(url).toEqual(expectedUrl);
     });
   });
 
@@ -132,17 +153,21 @@ describe('FilesService', () => {
     });
 
     beforeEach(async function() {
+      const uploadedFile1 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await service.addFile(uploadedFile1.path, uploadedFile1.originalname, uploadedFile1.mimetype, anotherUser.id);
 
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', anotherUser.id, FileType.facility,  {meta: "data"})
+      const uploadedFile2 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await service.addFile(uploadedFile2.path, uploadedFile2.originalname, uploadedFile2.mimetype, user.id);
 
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
-      await service.addFile(await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder), 'pdf', user.id, FileType.facility,  {meta: "data"})
+      const uploadedFile3 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await service.addFile(uploadedFile3.path, uploadedFile3.originalname, uploadedFile3.mimetype, user.id);
+
+      const uploadedFile4 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
+      await service.addFile(uploadedFile4.path, uploadedFile4.originalname, uploadedFile4.mimetype, user.id);
     });
 
     afterEach(async function() {
       await prismaService.file.deleteMany();
-      await removeFolderContent(destinationFolder);
     });
 
     it('should return existing files metadata records of a user', async function() {

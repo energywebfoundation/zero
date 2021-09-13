@@ -1,21 +1,6 @@
+const { getJestProjects } = require('@nrwl/jest');
+
 module.exports = {
   setupFilesAfterEnv: ['jest-extended'],
-  projects: [
-    '<rootDir>/apps/zero',
-    '<rootDir>/apps/zero-api',
-    '<rootDir>/libs/ui/forms',
-    '<rootDir>/libs/ui/core',
-    '<rootDir>/libs/ui/theme',
-    '<rootDir>/libs/store',
-    '<rootDir>/libs/store/configure',
-    '<rootDir>/libs/store/app-shared-state',
-    '<rootDir>/libs/localization',
-    '<rootDir>/libs/buyer',
-    '<rootDir>/libs/seller',
-    '<rootDir>/libs/zero-ui-assets',
-    '<rootDir>/libs/ui/utils',
-    '<rootDir>/libs/ui/auth',
-    '<rootDir>/libs/ui/zero-api',
-    '<rootDir>/libs/ui/account',
-  ],
+  projects: [...getJestProjects(), '<rootDir>/libs/store'],
 };

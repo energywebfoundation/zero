@@ -8,6 +8,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 model User {
@@ -17,6 +18,7 @@ model User {
   lastName          String
   roles             UserRole[]
   drafts            Draft[]
+  Facility          Facility[]
   password          String
   emailConfirmed    Boolean             @default(false)
   emailConfirmation EmailConfirmation[]
@@ -29,11 +31,10 @@ model User {
 model File {
   id                    String    @id @default(uuid())
   filename              String
-  fileExtension         String
   mimetype              String
   owner                 User      @relation(fields: [ownerId], references: [id])
   ownerId               Int
-  fileType              FileType
+  fileType              FileType?
   meta                  Json?
   uploadedAt            DateTime
   processingCompletedAt DateTime?
@@ -72,6 +73,27 @@ model EmailConfirmation {
   updatedAt   DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model Facility {
+  id      Int       @id @default(autoincrement())
+  name    String
+  User    User      @relation(fields: [ownerId], references: [id])
+  ownerId Int
+  Product Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id         Int      @id @default(autoincrement())
+  name       String
+  Facility   Facility @relation(fields: [facilityId], references: [id])
+  facilityId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole {

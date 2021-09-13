@@ -5,14 +5,20 @@ import {
   useGenericFormEffects,
 } from './generic-form-container.effects';
 import GenericFormContextProvider from '../../providers/generic-form-context-provider/generic-form-context-provider';
-import { DeepPartial, UnpackNestedValue, UseFormReset } from 'react-hook-form';
+import {
+  DeepPartial,
+  FormProvider,
+  UnpackNestedValue,
+  UseFormReset,
+} from 'react-hook-form';
 import * as yup from 'yup';
 import {
-  FormFieldRadioGroup,
-  FormFieldSelect,
+  FormFieldRadioGroupConfig,
+  FormFieldSelectConfig,
   FormFieldTextInputProps,
 } from '../../components';
 import { useTranslation } from 'react-i18next';
+import { Observable } from 'rxjs';
 
 export enum GenericFormFieldType {
   TextInput = 'TextInput',
@@ -22,12 +28,21 @@ export enum GenericFormFieldType {
   Password = 'Password',
   RadioGroup = 'RadioGroup',
   Select = 'Select',
+  Switch = 'Switch',
+  ImageUpload = 'ImageUpload',
+  FileList = 'FileList',
+  GreenLabelList = 'GreenLabelList',
+  FacilityDocumentList = 'FacilityDocumentList',
+  Autocomplete = 'Autocomplete',
 }
 
-export interface GenericFormField {
+export interface GenericFormFieldConfig {
   name: string;
   label: string | null;
+  required?: boolean;
   frozen?: boolean;
+  placeholderText?: string;
+  helperText?: string;
   autocomplete?: boolean;
   multiple?: boolean;
   maxValues?: number;
@@ -38,18 +53,25 @@ export interface GenericFormField {
     isValidCheck?: boolean;
   };
   textFieldProps?: BaseTextFieldProps;
+  infoTooltip?: string;
+  characterCountLimit?: number;
 }
 
 export type TGenericFormFieldList = Array<
-  GenericFormField | FormFieldRadioGroup | FormFieldSelect
+  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig
 >;
 
-export type TGenericFormSubmitHandlerFn<FormValuesType, ResponseType = any> = (
+export type TGenericFormSubmitHandlerFn<
+  FormValuesType,
+  ResponseType = unknown
+> = (
   values: UnpackNestedValue<FormValuesType>,
   resetForm: UseFormReset<FormValuesType>
 ) => Promise<ResponseType>;
 
 export interface GenericFormContainerProps<FormValuesType> {
+  readonly?: boolean;
+  nested?: boolean;
   submitHandler: TGenericFormSubmitHandlerFn<FormValuesType>;
   validationSchema: yup.AnyObjectSchema;
   initialValues: UnpackNestedValue<DeepPartial<FormValuesType>>;
@@ -58,6 +80,8 @@ export interface GenericFormContainerProps<FormValuesType> {
   inputsVariant?: FormFieldTextInputProps['variant'];
   formInputsProps?: BaseTextFieldProps;
   processing?: boolean;
+  handleValuesChanged$?: (values$: Observable<FormValuesType>) => void;
+  handleValidityChange?: (isFormValid: boolean) => void;
 }
 
 export type TGenericForm = <FormValuesType>(
@@ -67,11 +91,15 @@ export type TGenericForm = <FormValuesType>(
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type GenericFormContextData = Omit<
   TGenericFormEffectsReturnType<any>,
-  'onSubmit'
+  'handleValuesChanged$'
 > &
   Omit<
-    GenericFormContainerProps<any>,
-    'submitHandler' | 'validationSchema' | 'formClass' | 'initialValues'
+    GenericFormContainerProps<unknown>,
+    | 'submitHandler'
+    | 'validationSchema'
+    | 'formClass'
+    | 'initialValues'
+    | 'handleValuesChanged$'
   >;
 
 export const GenericFormContainer: TGenericForm = ({
@@ -84,6 +112,8 @@ export const GenericFormContainer: TGenericForm = ({
   inputsVariant,
   formInputsProps,
   processing,
+  handleValuesChanged$,
+  nested,
 }) => {
   const {
     control,
@@ -96,10 +126,12 @@ export const GenericFormContainer: TGenericForm = ({
     touchedFields,
     isSubmitting,
     getValues,
+    setValue,
   } = useGenericFormEffects({
     validationSchema,
     submitHandler,
     initialValues,
+    handleValuesChanged$,
   });
 
   const { t } = useTranslation();
@@ -117,17 +149,26 @@ export const GenericFormContainer: TGenericForm = ({
     isSubmitting,
     touchedFields,
     getValues,
+    nested,
+    onSubmit,
+    setValue,
     fields: fields.map((field) => ({
       ...field,
       label: field.label ? t(field.label) : null,
     })),
   };
 
-  return (
+  return !nested ? (
     <form onSubmit={onSubmit} className={formClass}>
       <GenericFormContextProvider formConfig={context}>
         {children}
       </GenericFormContextProvider>
     </form>
+  ) : (
+    <div>
+      <GenericFormContextProvider formConfig={context}>
+        {children}
+      </GenericFormContextProvider>
+    </div>
   );
 };

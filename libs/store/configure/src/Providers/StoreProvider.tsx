@@ -5,8 +5,14 @@ import { createEpicMiddleware } from 'redux-observable';
 import logger from 'redux-logger';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
-import { authStateSlice, rootEpic } from '../features';
-import { navigationStateSlice, appStateSlice } from '../features';
+import {
+  appStateSlice,
+  notificationStateSlice,
+  authStateSlice,
+  userFileListStateSlice,
+  navigationStateSlice,
+  rootEpic,
+} from '../features';
 
 export const history = createBrowserHistory();
 
@@ -14,9 +20,11 @@ const epicMiddleware = createEpicMiddleware();
 export const store = configureStore({
   reducer: {
     appState: appStateSlice.reducer,
+    notificationState: notificationStateSlice.reducer,
     navigationState: navigationStateSlice.reducer,
     router: connectRouter(history),
     authState: authStateSlice.reducer,
+    userFileListState: userFileListStateSlice.reducer,
   },
   devTools: true,
   middleware: [epicMiddleware, logger, routerMiddleware(history)],

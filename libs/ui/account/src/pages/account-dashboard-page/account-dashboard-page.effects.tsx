@@ -1,3 +1,4 @@
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { authStateSelectors } from '@energy-web-zero/store-configure';
 import { useSelector } from 'react-redux';
 

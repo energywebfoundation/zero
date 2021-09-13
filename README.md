@@ -81,6 +81,19 @@ docker run --name zero-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zer
 yarn
 ```
 
+## Deploy database schema
+Until first release of EW Zero, only one initial migration is maintained, so after schema changes, the only option is to reset it:
+
+```shell
+yarn db:migrate:reset
+```
+
+or if you have Prisma cli installed as a global package:
+
+```shell
+prisma migrate reset
+```
+
 ## Test
 
 ```shell

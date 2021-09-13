@@ -18,7 +18,7 @@
       "whatIsZero": "What is Zero?",
       "zeroIsGlobalSearchEngineForRenewableEnergy": "Zero is global search engine for Renevable Energy"
     },
-    "accountSellerDashboardPage": {
+    "accountSellerDashboardEmptyPage": {
       "GuideCard-1": {
         "headText": "1. Setup your public page",
         "subHeadText": "Upload your inventory through manual or automatic means",
@@ -63,7 +63,6 @@
         "almostOk": "Almost ok",
         "goodPassword": "Good password!",
         "strongPassword": "Strong password"
-
       },
       "TopBarUserProfile": {
         "welcome": "Welcome",
@@ -94,6 +93,50 @@
             "seller": "I want to SELL RE Products"
           }
         }
+      },
+      "SellerAddFacilitiesBasicInformationForm": {
+        "deviceOwnerCompanyName": "Device owner / Company name",
+        "facilityName": "Facility name",
+        "registryId": "Registry ID",
+        "eacRegistries": "EAC registries",
+        "source": "Source",
+        "deviceOwnership": "Device ownership",
+        "installedCapacity": "Installed capacity",
+        "projectSupportedFinancially": "This project is supported financially",
+        "typeOfFinancialSupport": "Type of support",
+        "commercialOperationDate": "Commercial operation date"
+      },
+      "SellerAddFacilitiesLocationForm": {
+        "location": "Location",
+        "country": "Country",
+        "region": "Region / Province",
+        "address": "Address",
+        "gridOperator": "Grid operator",
+        "latitude": "Latitude",
+        "longitude": "Longitude"
+      }
+    },
+    "pages": {
+      "SellerAddFacilitiesImagesPage": {
+        "basicInformation": "Basic Information",
+        "location": "Location",
+        "sustainability": "Sustainability",
+        "images": "Images",
+        "products": "Products"
+      },
+      "SellerAddFacilitiesSustainabilityPage": {
+        "facilityStory": "Facility story",
+        "impactStory": "Impact story",
+        "impactStoryPlaceholderText": "Briefly describe facility and its story"
+      },
+      "LoadingPage": {
+        "title": "Loading - Please Wait",
+        "pleaseWait": "Please wait!"
+      },
+      "NotFoundPage": {
+        "title": "404 - Page Not found",
+        "back": "Back to Home page",
+        "whoops": "Whoops! Something went wrong!"
       }
     }
   }

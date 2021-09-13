@@ -1,4 +1,9 @@
-import { createTheme, Theme, ThemeOptions } from '@material-ui/core/styles';
+import {
+  createTheme,
+  darken,
+  Theme,
+  ThemeOptions,
+} from '@material-ui/core/styles';
 import { variables } from './variables';
 import { enUS, plPL } from '@material-ui/core/locale';
 import { IStyleConfig } from '../utils/makeThemeConfig';
@@ -9,7 +14,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       xs: 0,
       sm: 600,
       md: 960,
-      lg: 1340,
+      lg: 1392,
       xl: 1920,
     },
   },
@@ -20,6 +25,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     secondary: {
       main: styleConfig.SECONDARY_COLOR,
+      light: styleConfig.SECONDARY_COLOR_LIGHT,
     },
     background: {
       paper: styleConfig.MAIN_BACKGROUND_COLOR,
@@ -28,6 +34,15 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       primary: styleConfig.SIMPLE_TEXT_COLOR,
       secondary: styleConfig.TEXT_COLOR_DEFAULT,
       disabled: styleConfig.TEXT_COLOR_DEFAULT,
+    },
+    success: {
+      main: '#ABDE19',
+    },
+    warning: {
+      main: '#FFB800',
+    },
+    error: {
+      main: '#DA2042',
     },
   },
   typography: {
@@ -43,7 +58,6 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiButtonBase: {
       defaultProps: {
-        // The props to apply
         disableRipple: true, // No more ripple, on the whole application 💣!
       },
     },
@@ -56,7 +70,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiInputBase: {
       styleOverrides: {
-        root: { height: '50px' },
+        // root: { height: '50px' },
       },
     },
     MuiFilledInput: {
@@ -66,7 +80,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           borderRadius: '5px 5px',
           '&.Mui-disabled': {
-            backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
+            backgroundColor: darken(styleConfig.INPUT_BACKGROUND_COLOR, 0.2),
           },
           '&.Mui-error': {
             border: '1px solid',
@@ -176,6 +190,22 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
         tooltip: {
           backgroundColor: styleConfig.PRIMARY_COLOR,
         },
+      },
+    },
+    MuiCard: {
+      styleOverrides: { root: { padding: '40px' } },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          paddingBottom: '20px',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: { padding: 0 },
       },
     },
   },

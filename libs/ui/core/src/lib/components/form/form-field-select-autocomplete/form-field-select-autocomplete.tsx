@@ -8,8 +8,10 @@ import {
 import { FormSelectOption } from '../form-field-select';
 import { useSelectAutocompleteEffects } from './form-field-select-autocomplete.effects';
 import { useStyles } from './SelectAutocomplete.styles';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import { Control } from 'react-hook-form';
 
-export interface FormFieldSelectAutocompleteProps<ValueType> {
+export interface FormFieldSelectAutocompleteProps<FormValuesType> {
   label: string | null;
   options: FormSelectOption[];
   onChange: (...event: any[]) => void;
@@ -21,6 +23,7 @@ export interface FormFieldSelectAutocompleteProps<ValueType> {
   disabled?: boolean;
   required?: boolean;
   textFieldProps?: BaseTextFieldProps;
+  control: Control<FormValuesType>;
 }
 
 // const getOptionSelected = (option: { value: any }, value: { value: any }) =>
@@ -52,9 +55,11 @@ export const FormFieldSelectAutocomplete: FC<
 
   return (
     <Autocomplete
+      fullWidth
       multiple={multiple}
       filterSelectedOptions
       options={options}
+      popupIcon={<ChevronRight />}
       className={classes.autocomplete}
       inputValue={textValue}
       getOptionLabel={(option) => option.label}
