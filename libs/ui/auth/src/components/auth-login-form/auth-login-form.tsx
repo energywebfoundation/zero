@@ -46,8 +46,10 @@ export const AuthLoginForm: FC<AuthLoginFormProps> = ({
         </Grid>
         <Grid item xs={12}>
           <Box justifyContent={'space-between'} display={'flex'} my={'20px'}>
-            <Button>{t('forms.AuthLoginForm.resetPasswordBtnText')}</Button>
-            <GenericFormSubmitButton />
+            <Button sx={{ fontSize: '14px', fontWeight: 600 }}>
+              {t('forms.AuthLoginForm.resetPasswordBtnText')}
+            </Button>
+            <GenericFormSubmitButton name={'sign-in'} />
           </Box>
         </Grid>
         <Grid item xs={12}>

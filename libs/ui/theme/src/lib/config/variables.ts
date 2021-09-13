@@ -14,6 +14,7 @@ const $inputTextColor = '#2D1155';
 const $bodyBackgroundColor = '#ffffff';
 const $mainBackgroundColor = '#ffffff';
 const $fieldIconColor = '#ffffff';
+const $white = '#ffffff';
 
 const $fontFamilyPrimary = 'Rajdhani';
 const $fontFamilySecondary = 'Rajdhani';
@@ -35,6 +36,7 @@ export type UiThemeVariables = {
   fieldIconColor: string;
   fontFamilyPrimary: string;
   fontFamilySecondary: string;
+  hoverTextColor: string;
   fontSize: number;
 };
 
@@ -54,4 +56,5 @@ export const variables: UiThemeVariables = {
   fontSize: $fontSize,
   inputBackgroundColor: $inputBackgroundColor,
   inputTextColor: $inputTextColor,
+  hoverTextColor: $white
 };
