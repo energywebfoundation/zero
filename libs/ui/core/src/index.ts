@@ -11,3 +11,5 @@ export * from './lib/components';
 export * from './lib/containers';
 export * from './lib/providers';
 export * from './lib/pages';
+export * from './containers/top-nav-bar-container/top-nav-bar-container';
+
