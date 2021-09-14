@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
@@ -7,6 +7,7 @@ import { FileMetadataDto } from './dto/file-metadata.dto';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { isNil } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class FilesService {
@@ -106,6 +107,39 @@ export class FilesService {
   }
 
   async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
+    if (!isNil(data.documentOfFacilityId) && !isNil(data.imageOfFacilityId)) {
+      this.logger.warn('file cannot be both document and image of a facility');
+      throw new BadRequestException('file cannot be both document and image of a facility');
+    }
+
+    const facilityId = data.documentOfFacilityId || data.imageOfFacilityId;
+
+    if (facilityId && !(await this.prisma.facility.findUnique({ where: { id: facilityId } }))) {
+      this.logger.warn(`no facility found with id=${facilityId}`);
+      throw new BadRequestException(`unknown facilityId: ${facilityId}`);
+    }
+
+    const existingFileRecord = await this.prisma.file.findUnique({ where: { id: fileId } });
+
+    if (!existingFileRecord) {
+      throw new NotFoundException();
+    }
+
+    if (
+      (existingFileRecord.documentOfFacilityId !== null
+        && data.documentOfFacilityId !== null
+        && data.imageOfFacilityId !== null
+      )
+      ||
+      (existingFileRecord.imageOfFacilityId !== null
+        && data.imageOfFacilityId !== null
+        && data.documentOfFacilityId !== null
+      )
+    ) {
+      this.logger.warn('file cannot be both document and image of a facility');
+      throw new BadRequestException('file cannot be both document and image of a facility');
+    }
+
     return new FileMetadataDto(await this.prisma.file.update({ where: { id: fileId }, data }));
   }
 
