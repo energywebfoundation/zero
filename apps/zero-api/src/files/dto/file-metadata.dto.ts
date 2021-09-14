@@ -45,6 +45,10 @@ export class FileMetadataDto implements File {
   constructor(partial: Partial<FileMetadataDto>) {
     Object.assign(this, partial);
 
-    this.url = `${process.env.FILES_BASE_URL}/${this.id}`;
+    if (this.imageOfFacilityId) {
+      this.url = `${process.env.FILES_BASE_URL}/images/${this.id}`;
+    } else {
+      this.url = `${process.env.FILES_BASE_URL}/${this.id}`;
+    }
   }
 }
