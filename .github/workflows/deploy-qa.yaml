@@ -15,18 +15,18 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-  build-and-push-images:
+  semantic-version:
+    name: Semantic versioning
     runs-on: ubuntu-latest
-    needs: [ cancel-previous ]
-
+    needs: [cancel-previous]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Calculate semantic version
-        id: sem_ver
+      - name: Create semantic versioning
+        id: semantic-version
         uses: paulhatch/semantic-version@v4.0.2
         with:
           # The prefix to use to identify tags
@@ -43,6 +43,18 @@ jobs:
           short_tags: false
           # If this is set to true, *every* commit will be treated as a new version.
           bump_each_commit: false
+    outputs:
+      version_tag: ${{ steps.semantic-version.outputs.version_tag }}
+
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    needs: [ cancel-previous, semantic-version]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Setup app dependencies
         uses: actions/setup-node@v2
@@ -77,7 +89,7 @@ jobs:
       - name: Push docker images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          SEM_VER: ${{ steps.sem_ver.outputs.version_tag }}
+          SEM_VER: ${{ needs.semantic-version.outputs.version_tag }}
         run: |
           docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest 
           docker push $ECR_REGISTRY/ew-zero-ui:latest
@@ -92,7 +104,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.26.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.sem_ver.outputs.version_tag }}
+          CUSTOM_TAG: ${{ needs.semantic-version.outputs.version_tag }}
           RELEASE_BRANCHES: chore/github-actions-qa-deployment
       
       - name: Logout of Amazon ECR
@@ -101,7 +113,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [cancel-previous, build-and-push-images]
+    needs: [cancel-previous, semantic-version, build-and-push-images]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
