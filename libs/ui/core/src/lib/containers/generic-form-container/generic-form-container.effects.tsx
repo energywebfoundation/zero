@@ -1,6 +1,5 @@
 import {
   DeepMap,
-  FieldError,
   useForm,
   UseFormRegister,
   Control,
@@ -20,7 +19,7 @@ import { Observable, Subject } from 'rxjs';
 
 type GenericFormEffectsProps<FormValuesType> = {
   mode?: Mode;
-  handleValuesChanged$?: (values$: Observable<FormValuesType>) => void;
+  subscribeValuesChanged$?: (values$: Observable<FormValuesType>) => void;
 } & Pick<
   GenericFormContainerProps<FormValuesType>,
   'validationSchema' | 'initialValues' | 'submitHandler'
@@ -50,7 +49,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   initialValues,
   submitHandler,
   mode = 'onBlur',
-  handleValuesChanged$,
+  subscribeValuesChanged$,
 }) => {
   const {
     watch,
@@ -69,17 +68,18 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   const { errors, dirtyFields, isValid, isDirty, touchedFields, isSubmitting } =
     formState;
 
+  const values = watch();
   const formValuesSubjectRef$ = useRef(new Subject());
   const formValuesRef$ = useRef(formValuesSubjectRef$.current.asObservable());
 
-  const values = watch();
+  useEffect(() => {
+    if (subscribeValuesChanged$) {
+      subscribeValuesChanged$(formValuesRef$.current as any);
+    }
+  }, [subscribeValuesChanged$]);
+
   useEffect(() => {
     formValuesSubjectRef$.current.next(values);
-    if (handleValuesChanged$) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      handleValuesChanged$(formValuesRef$);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => formValuesSubjectRef$.current.complete();
   }, [values]);
@@ -87,7 +87,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   const onSubmit = handleSubmit(async (values) => {
     submitHandler(values, reset)
       .then((res) => {
-        console.log(res);
+        console.log('submitHandler response', res);
         reset();
       })
       .catch((reason) => {

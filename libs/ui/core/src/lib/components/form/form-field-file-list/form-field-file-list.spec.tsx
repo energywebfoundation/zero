@@ -2,12 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import {
-  Standard,
-  Filled,
-  Outlined,
-  Error,
-} from './form-field-file-list.stories';
+import { Standard } from './form-field-file-list.stories';
 
 describe('FormFieldFileList', () => {
   it('should render ', () => {
