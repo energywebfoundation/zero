@@ -9,6 +9,9 @@ import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { isNil } from '@nestjs/common/utils/shared.utils';
 
+export const supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
+export const supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
+
 @Injectable()
 export class FilesService {
   private readonly logger = new Logger(FilesService.name, { timestamp: true });

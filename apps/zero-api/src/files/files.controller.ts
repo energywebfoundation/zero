@@ -44,6 +44,8 @@ import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { fromFile } from 'file-type';
 import { extname } from 'path';
+import { supportedDocumentsFormats, supportedImagesFormats } from './files.service'
+
 
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
@@ -63,10 +65,6 @@ const filesInterceptor = FileInterceptor('file', {
 @UseFilters(PrismaClientExceptionFilter)
 export class FilesController {
   private readonly logger = new Logger(FilesController.name, { timestamp: true });
-
-  private readonly supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
-
-  private readonly supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
 
   constructor(private readonly filesService: FilesService) {}
 
@@ -101,7 +99,7 @@ export class FilesController {
       throw new BadRequestException(`unrecognized mimetype: ${file.mimetype}`);
     }
 
-    if ([...this.supportedDocumentsFormats, ...this.supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
+    if ([...supportedDocumentsFormats, ...supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
       this.logger.warn(`unsupported file extension detected (${fileExtensionDetected}) for ${file.mimetype} mimetype`);
       throw new BadRequestException(`unsupported mimetype (${file.mimetype})`);
     }
