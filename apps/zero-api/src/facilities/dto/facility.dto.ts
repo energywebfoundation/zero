@@ -6,6 +6,7 @@ import {
   FacilityFinancialSupportTypeEnum,
   RenevableEnergySourceEnum
 } from '@prisma/client';
+import { FileMetadataDto } from '../../files/dto/file-metadata.dto';
 
 export class FacilityDto {
   @ApiProperty({ example: '29974dc9-3582-4a09-8216-24c54b5419b1' })
@@ -70,6 +71,12 @@ export class FacilityDto {
 
   @ApiProperty({ enum: DeviceOwnershipEnum, enumName: 'DeviceOwnershipEnum' })
   ownershipType: DeviceOwnershipEnum;
+
+  @ApiProperty({ type: [FileMetadataDto] })
+  images: FileMetadataDto[];
+
+  @ApiProperty({ type: [FileMetadataDto] })
+  documents: FileMetadataDto[];
 
   @Exclude()
   createdAt: Date;

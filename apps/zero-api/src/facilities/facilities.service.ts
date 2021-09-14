@@ -3,6 +3,7 @@ import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FacilityDto } from './dto/facility.dto';
+import { FileMetadataDto } from '../files/dto/file-metadata.dto';
 
 @Injectable()
 export class FacilitiesService {
@@ -19,13 +20,25 @@ export class FacilitiesService {
   }
 
   async findOne(id: string): Promise<FacilityDto> {
-    const dbRecord = await this.prisma.facility.findUnique({ where: { id } });
+    const dbRecord = await this.prisma.facility.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        documents: true
+      }
+    });
 
     if (!dbRecord) {
       return null;
     }
 
-    return new FacilityDto(dbRecord);
+    const { images, documents, ...facility } = dbRecord;
+
+    return new FacilityDto({
+      ...facility,
+      images: images.map(i => new FileMetadataDto(i)),
+      documents: documents.map(i => new FileMetadataDto(i))
+    });
   }
 
   async update(id: string, updateFacilityDto: UpdateFacilityDto): Promise<FacilityDto> {

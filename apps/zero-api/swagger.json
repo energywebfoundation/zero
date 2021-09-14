@@ -1958,6 +1958,18 @@
           },
           "ownershipType": {
             "$ref": "#/components/schemas/DeviceOwnershipEnum"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileMetadataDto"
+            }
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileMetadataDto"
+            }
           }
         },
         "required": [
@@ -1971,7 +1983,9 @@
           "installedCapacity",
           "country",
           "ownerId",
-          "ownershipType"
+          "ownershipType",
+          "images",
+          "documents"
         ]
       },
       "UpdateFacilityDto": {
