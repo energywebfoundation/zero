@@ -101,7 +101,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [cancel-previous, semantic-version, build-and-push]
+    needs: [cancel-previous, build-and-push-images]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
