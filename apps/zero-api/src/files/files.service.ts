@@ -8,9 +8,15 @@ import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { isNil } from '@nestjs/common/utils/shared.utils';
+import * as mimeTypes from 'mime-types';
 
 export const supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
 export const supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
+
+export function mimetypeIsAnImage(mimetype) {
+  const extension = mimeTypes.extension(mimetype);
+  return supportedImagesFormats.indexOf(extension) > -1;
+}
 
 @Injectable()
 export class FilesService {
@@ -141,6 +147,10 @@ export class FilesService {
     ) {
       this.logger.warn('file cannot be both document and image of a facility');
       throw new BadRequestException('file cannot be both document and image of a facility');
+    }
+
+    if (data.imageOfFacilityId && !mimetypeIsAnImage(existingFileRecord.mimetype)) {
+      throw new BadRequestException(`cannot set non-image format file as a facility image`);
     }
 
     return new FileMetadataDto(await this.prisma.file.update({ where: { id: fileId }, data }));
