@@ -1,4 +1,4 @@
-import { IsEnum, IsISO8601, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsISO8601, IsNotEmpty, IsNumber, IsOptional, IsString, IsArray} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   DeviceOwnershipEnum,
@@ -100,4 +100,14 @@ export class CreateFacilityDto {
   @ApiProperty({ enum: DeviceOwnershipEnum, enumName: 'DeviceOwnershipEnum' })
   @IsEnum(DeviceOwnershipEnum)
   ownershipType: DeviceOwnershipEnum;
+
+  @ApiPropertyOptional({ example: ['05ef9336-64e8-4de8-8586-de54b5b41a48'] })
+  @IsOptional()
+  @IsArray()
+  images?: string[];
+
+  @ApiPropertyOptional({ example: ['85fe477f-6648-4cbb-b6a4-5bb9637500ec'] })
+  @IsOptional()
+  @IsArray()
+  documents?: string[];
 }

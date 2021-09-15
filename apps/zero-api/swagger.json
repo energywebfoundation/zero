@@ -1854,6 +1854,24 @@
           },
           "ownershipType": {
             "$ref": "#/components/schemas/DeviceOwnershipEnum"
+          },
+          "images": {
+            "example": [
+              "05ef9336-64e8-4de8-8586-de54b5b41a48"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "documents": {
+            "example": [
+              "85fe477f-6648-4cbb-b6a4-5bb9637500ec"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
@@ -2070,6 +2088,24 @@
           },
           "ownershipType": {
             "$ref": "#/components/schemas/DeviceOwnershipEnum"
+          },
+          "images": {
+            "example": [
+              "05ef9336-64e8-4de8-8586-de54b5b41a48"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "documents": {
+            "example": [
+              "85fe477f-6648-4cbb-b6a4-5bb9637500ec"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
