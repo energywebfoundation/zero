@@ -206,7 +206,8 @@
     "url-loader": "^3.0.0"
   },
   "prisma": {
-    "schema": "apps/zero-api/prisma/schema.prisma"
+    "schema": "apps/zero-api/prisma/schema.prisma",
+    "seed": "ts-node apps/zero-api/prisma/seed.ts"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,
