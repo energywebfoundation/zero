@@ -5,8 +5,9 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient
   implements OnModuleInit, OnModuleDestroy {
   constructor() {
-    super({log: ['warn', 'error']});
+    super({ log: ['warn', 'error'] });
   }
+
   async onModuleInit() {
     await this.$connect();
   }
@@ -25,7 +26,9 @@ export class PrismaService extends PrismaClient
       .map(row => row.tablename)
       .filter(tableName => tableName !== '_prisma_migrations');
 
-    await Promise.all(tables.map(tableName => this.$queryRaw(`TRUNCATE TABLE "public"."${tableName}" CASCADE;`)));
+    for (const tableName of tables) {
+      await this.$queryRaw(`TRUNCATE TABLE "public"."${tableName}" CASCADE;`);
+    }
   }
 
   async resetSequences() {
@@ -33,6 +36,8 @@ export class PrismaService extends PrismaClient
       `SELECT c.relname FROM pg_class AS c JOIN pg_namespace AS n ON c.relnamespace = n.oid WHERE c.relkind='S' AND n.nspname='public';`
     )).map(r => r.relname);
 
-    await Promise.all(sequences.map(sequenceName => this.$queryRaw(`ALTER SEQUENCE "public"."${sequenceName}" RESTART WITH 1;`)));
+    for (const sequenceName of sequences) {
+      await this.$queryRaw(`ALTER SEQUENCE "public"."${sequenceName}" RESTART WITH 1;`);
+    }
   }
 }
