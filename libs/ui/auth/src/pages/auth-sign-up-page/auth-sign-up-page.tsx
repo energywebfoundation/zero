@@ -22,15 +22,17 @@ export const AuthSignUpPage = () => {
     <StyledAuthSIgnUpPage>
       <Grid container justifyContent={'center'}>
         <Grid item sm={8}>
-          <Box mb={'40px'} textAlign={'center'}>
+          <Box mb={'32px'} textAlign={'center'}>
             <Logo transform={'scale(1.2)'} />
           </Box>
           <GenericFormCard>
             <Typography
               variant={'h6'}
+              fontSize={'24px'}
               fontWeight={700}
               textAlign={'center'}
               color={'secondary'}
+              mb={'9px'}
             >
               {t('authSignUpPage.headText')}
             </Typography>
@@ -39,6 +41,7 @@ export const AuthSignUpPage = () => {
               textAlign={'center'}
               variant={'body1'}
               fontWeight={500}
+              fontSize={'20px'}
             >
               {t('authSignUpPage.subHeadText')}
             </Typography>

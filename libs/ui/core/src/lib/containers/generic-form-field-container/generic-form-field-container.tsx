@@ -13,7 +13,6 @@ import {
   FormFieldDatePickerConfig,
   FormFieldRadioGroupConfig,
   FormFieldSelectConfig,
-  FormFieldSelectAutocomplete,
 } from '../../components';
 import { useContext } from 'react';
 import { GenericFormContext } from '../../providers';
@@ -24,6 +23,11 @@ import { FormFieldImageUpload } from '../../components/form/form-field-image-upl
 import { FormFieldFileList } from '../../components/form/form-field-file-list';
 import { FormFieldGreenLabelList } from '../../components/form/form-field-green-label-list';
 import { FormFieldFacilityDocumentList } from '../../components/form/form-field-facility-documents';
+import {
+  FormFieldMap,
+  FormFieldMapConfig,
+  FormFieldMapProps,
+} from '../../components/form/form-field-map';
 
 /* eslint-disable-next-line */
 export interface GenericFormFieldContainerProps {
@@ -246,6 +250,19 @@ const renderField = (
           variant={formConfigContextData.inputsVariant}
           errorExists={isFieldInvalid}
           errorText={''}
+        />
+      );
+
+    case GenericFormFieldType.Map:
+      // eslint-disable-next-line no-case-declarations
+      const mapFieldConfig = genericFormFieldConfig as FormFieldMapConfig;
+      return (
+        <FormFieldMap
+          register={formConfigContextData.register}
+          disabled={mapFieldConfig.disabled ?? false}
+          errorExists={isFieldInvalid}
+          errorText={''}
+          field={mapFieldConfig}
         />
       );
 

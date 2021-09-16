@@ -8,7 +8,7 @@ import {
 import { SellerAddFacilitiesLocationFormFields } from '../../pages/seller-add-facilities-location-page/seller-add-facilities-location-page';
 import { sellerAddFacilitiesLocationFormFields } from './seller-add-facilities-location-form-fields';
 import { sellerAddFacilitiesLocationFormSchema } from './seller-add-facilities-location-form.schema';
-import { Box, Divider, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 /* eslint-disable-next-line */
 export interface SellerAddFacilitiesLocationFormProps {
@@ -24,15 +24,17 @@ export function SellerAddFacilitiesLocationForm({
     <StyledSellerAddFacilitiesLocationForm>
       <GenericFormContainer<SellerAddFacilitiesLocationFormFields>
         submitHandler={submitHandler}
-        handleValuesChanged$={(values$) => {}}
+        subscribeValuesChanged$={(values$) => {
+          values$.subscribe(console.log);
+        }}
         validationSchema={sellerAddFacilitiesLocationFormSchema}
         initialValues={{
           country: '',
           region: '',
           address: '',
           gridOperator: '',
-          latitude: '',
-          longitude: '',
+          latitude: '47.166168',
+          longitude: '8.515495',
         }}
         fields={sellerAddFacilitiesLocationFormFields}
       >
@@ -58,12 +60,7 @@ export function SellerAddFacilitiesLocationForm({
         </Grid>
         <Grid container mt={'20px'}>
           <Grid item xs={12}>
-            <GenericMap
-              handleLocationChange={(coordinates) => {
-                console.log(coordinates);
-              }}
-              coordinates={[47.166168, 8.515495]}
-            />
+            <GenericFormFieldContainer fieldName={'map'} />
           </Grid>
         </Grid>
       </GenericFormContainer>

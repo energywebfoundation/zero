@@ -47,7 +47,7 @@ export const AuthSignUpForm: FC<AuthSignupFormProps> = ({ submitHandler }) => {
         initialValues={initialValues}
         fields={authSignupFormFields}
       >
-        <Grid container spacing={'40px'}>
+        <Grid container spacing={'32px'}>
           <Grid item sm={6}>
             <GenericFormFieldContainer fieldName={'firstName'} />
             <GenericFormFieldContainer fieldName={'email'} />
@@ -71,7 +71,7 @@ export const AuthSignUpForm: FC<AuthSignupFormProps> = ({ submitHandler }) => {
                 navigate('/auth/sign-in');
               }, [navigate])}
             />
-            <GenericFormSubmitButton />
+            <GenericFormSubmitButton name={'sign-up'} />
           </Box>
         </Grid>
       </GenericFormContainer>

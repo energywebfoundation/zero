@@ -74,10 +74,12 @@
     "forms": {
       "cancelBtnText": "Cancel",
       "submitBtnText": "Submit",
+      "signInBtnText": "Log in",
+      "signUpBtnText": "Register",
       "AuthLoginForm": {
         "email": "Email",
         "password": "Password",
-        "createAccountBtnText": "Create account",
+        "createAccountBtnText": "Create an account",
         "resetPasswordBtnText": "Forget the password?",
         "submitBtnText": "Login"
       },

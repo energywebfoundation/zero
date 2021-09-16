@@ -1,8 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-// This is a hack to make Multer available in the Express namespace
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
 import { createReadStream } from 'fs';
@@ -22,19 +19,19 @@ export class FilesService {
   async addFile(filePath: string, originalFileName: string, mimetype: string, ownerId: number): Promise<UploadFileResponseDto> {
     this.logger.debug(`processing file: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
 
-    return this.prisma.$transaction(async (prisma) => {
-      let fileRecord: File = await prisma.file.create({
-        data: {
-          filename: originalFileName,
-          ownerId,
-          mimetype: mimetype,
-          uploadedAt: new Date()
-        }
-      });
-      this.logger.debug(`new record created: ${JSON.stringify(fileRecord)}`);
+    let fileRecord: File = await this.prisma.file.create({
+      data: {
+        filename: originalFileName,
+        ownerId,
+        mimetype: mimetype,
+        uploadedAt: new Date()
+      }
+    });
+    this.logger.debug(`new record created: ${JSON.stringify(fileRecord)}`);
 
-      const start = Date.now();
+    const start = Date.now();
 
+    try {
       await this.s3client.send(new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET,
         Key: fileRecord.id,
@@ -44,26 +41,28 @@ export class FilesService {
         ACL: 'public-read',
         Body: createReadStream(filePath)
       }));
-
-      this.logger.debug(`${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
-      this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
-
-      this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
-      fileRecord = await prisma.file.update({
-        where: { id: fileRecord.id },
-        data: { processingCompletedAt: new Date() }
-      });
-
+    } catch (err) {
+      this.logger.error(`S3 file upload error: ${err}`);
       this.logger.debug(`removing temporary file: ${filePath}`);
-      unlink(filePath);
-
-      return new UploadFileResponseDto(fileRecord);
-    }).catch((err) => {
-      this.logger.error(err);
-      this.logger.debug(`removing temporary file: ${filePath}`);
-      unlink(filePath);
+      await unlink(filePath).catch((err) => this.logger.error(err.message));
+      await this.prisma.file.delete({ where: { id: fileRecord.id } }).catch((err) => this.logger.error(err.message));
       throw err;
+    }
+
+
+    this.logger.debug(`${filePath} uploaded to S3 on key ${fileRecord.id} in ${(Date.now() - start) / 1000}s`);
+    this.logger.debug(`file url: https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${fileRecord.id}`);
+
+    this.logger.debug(`finished file processing: ${JSON.stringify({ originalFileName, mimetype, filePath })}`);
+    fileRecord = await this.prisma.file.update({
+      where: { id: fileRecord.id },
+      data: { processingCompletedAt: new Date() }
     });
+
+    this.logger.debug(`removing temporary file: ${filePath}`);
+    await unlink(filePath).catch((err) => this.logger.error(err.message));
+
+    return new UploadFileResponseDto(fileRecord);
   }
 
   async deleteFile(fileId: string) {
@@ -72,7 +71,7 @@ export class FilesService {
       this.logger.debug(`removing file database record id=${fileId}`);
       const recordDeleted = await this.prisma.file.delete({ where: { id: fileId } });
 
-      this.logger.debug(`removing file from the S3 storage bucket=${process.env.AWS_BUCKET} key=${fileId}`)
+      this.logger.debug(`removing file from the S3 storage bucket=${process.env.AWS_BUCKET} key=${fileId}`);
       await this.s3client.send(new DeleteObjectCommand({
         Bucket: process.env.AWS_BUCKET,
         Key: fileId

@@ -35,4 +35,9 @@ export const sellerAddFacilitiesLocationFormFields: TGenericFormFieldList = [
     type: GenericFormFieldType.TextInput,
     name: 'longitude',
   },
+  {
+    label: 'forms.SellerAddFacilitiesLocationForm.longitude',
+    type: GenericFormFieldType.Map,
+    name: 'map',
+  },
 ];

@@ -34,6 +34,7 @@ export enum GenericFormFieldType {
   GreenLabelList = 'GreenLabelList',
   FacilityDocumentList = 'FacilityDocumentList',
   Autocomplete = 'Autocomplete',
+  Map = 'Map',
 }
 
 export interface GenericFormFieldConfig {
@@ -80,7 +81,7 @@ export interface GenericFormContainerProps<FormValuesType> {
   inputsVariant?: FormFieldTextInputProps['variant'];
   formInputsProps?: BaseTextFieldProps;
   processing?: boolean;
-  handleValuesChanged$?: (values$: Observable<FormValuesType>) => void;
+  subscribeValuesChanged$?: (values$: Observable<FormValuesType>) => void;
   handleValidityChange?: (isFormValid: boolean) => void;
 }
 
@@ -99,7 +100,7 @@ export type GenericFormContextData = Omit<
     | 'validationSchema'
     | 'formClass'
     | 'initialValues'
-    | 'handleValuesChanged$'
+    | 'subscribeValuesChanged$'
   >;
 
 export const GenericFormContainer: TGenericForm = ({
@@ -112,7 +113,7 @@ export const GenericFormContainer: TGenericForm = ({
   inputsVariant,
   formInputsProps,
   processing,
-  handleValuesChanged$,
+  subscribeValuesChanged$,
   nested,
 }) => {
   const {
@@ -131,7 +132,7 @@ export const GenericFormContainer: TGenericForm = ({
     validationSchema,
     submitHandler,
     initialValues,
-    handleValuesChanged$,
+    subscribeValuesChanged$,
   });
 
   const { t } = useTranslation();

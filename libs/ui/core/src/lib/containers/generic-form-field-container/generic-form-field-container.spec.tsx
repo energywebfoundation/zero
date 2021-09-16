@@ -4,7 +4,9 @@ import GenericFormFieldContainer from './generic-form-field-container';
 
 describe('GenericFormFieldContainer', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<GenericFormFieldContainer />);
+    const { baseElement } = render(
+      <GenericFormFieldContainer fieldName={'testName'} />
+    );
     expect(baseElement).toBeTruthy();
   });
 });
