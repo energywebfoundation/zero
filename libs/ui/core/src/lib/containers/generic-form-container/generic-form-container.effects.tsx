@@ -48,7 +48,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   validationSchema,
   initialValues,
   submitHandler,
-  mode = 'onBlur',
+  mode = 'onChange',
   subscribeValuesChanged$,
 }) => {
   const {
