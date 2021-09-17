@@ -75,7 +75,7 @@ export class FacilitiesController {
     }
 
     if (facility && facility.ownerId !== user.id) {
-      this.logger.warn(`userId=${user.id} tried to update productId=${id} of not-owned facilityId=${facility.id}`);
+      this.logger.warn(`userId=${user.id} attempts to update not-owned facilityId=${facility.id}`);
       throw new ForbiddenException(`userId=${user.id} is not an owner of facilityId=${facility.id}`);
     }
 
