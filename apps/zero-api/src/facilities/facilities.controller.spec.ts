@@ -195,10 +195,10 @@ describe('FacilitiesController', () => {
     });
   });
 
-  describe('PUT /facilities/:id', function() {
+  describe('PATCH /facilities/:id', function() {
     it('should require a logged in user', async function() {
       await request(httpServer)
-        .put('/facilities/1')
+        .patch('/facilities/1')
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
@@ -212,7 +212,7 @@ describe('FacilitiesController', () => {
         .expect(HttpStatus.CREATED)).body;
 
       (await request(httpServer)
-        .put(`/facilities/${facility.id}`)
+        .patch(`/facilities/${facility.id}`)
         .send({ name: 'My facility name updated' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body;
@@ -232,7 +232,7 @@ describe('FacilitiesController', () => {
         .expect(HttpStatus.CREATED)).body;
 
       await request(httpServer)
-        .put(`/facilities/${notOwnedFacility.id}`)
+        .patch(`/facilities/${notOwnedFacility.id}`)
         .send({ name: 'My facility name updated' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.FORBIDDEN);

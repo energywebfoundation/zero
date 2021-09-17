@@ -8,8 +8,8 @@ import {
   Logger,
   NotFoundException,
   Param,
+  Patch,
   Post,
-  Put,
   UseFilters,
   UseInterceptors,
   UsePipes,
@@ -60,7 +60,7 @@ export class FacilitiesController {
     return this.facilitiesService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOkResponse({ type: FacilityDto })
   async update(
     @User() user: UserDto,
