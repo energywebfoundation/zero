@@ -82,6 +82,11 @@ export class FilesController {
     @Body() body: UploadFileDto,
     @UploadedFile() file: Express.Multer.File
   ): Promise<UploadFileResponseDto> {
+    if (!file) {
+      this.logger.warn(`${user.email} made a request with no file`);
+      throw new BadRequestException('request with no file');
+    }
+
     this.logger.debug(`${user.email} is uploading a file: ${file.originalname}`);
     this.logger.debug(`form fields: ${JSON.stringify(body)}`);
 
