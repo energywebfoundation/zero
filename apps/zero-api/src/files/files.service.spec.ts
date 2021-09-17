@@ -112,10 +112,14 @@ describe('FilesService', () => {
     });
 
     it('should update file metadata record', async function() {
-      const entity = await service.updateFileMetadata(file.id, {
-        fileType: FileType.sustainability,
-        meta: { someKey: 'some value' }
-      });
+      const entity = await service.updateFileMetadata(
+        file.id,
+        {
+          fileType: FileType.sustainability,
+          meta: { someKey: 'some value' }
+        },
+        file.ownerId
+      );
 
       expect(entity.fileType).toEqual(FileType.sustainability);
       expect(entity.meta).toEqual({ someKey: 'some value' });

@@ -18,7 +18,7 @@ import {
   UsePipes,
   ValidationPipe
 } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { FilesService, supportedDocumentsFormats, supportedImagesFormats } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
 import * as multer from 'multer';
@@ -44,7 +44,6 @@ import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { fromFile } from 'file-type';
 import { extname } from 'path';
-import { supportedDocumentsFormats, supportedImagesFormats } from './files.service'
 
 
 const filesInterceptor = FileInterceptor('file', {
@@ -129,16 +128,17 @@ export class FilesController {
   @ApiOkResponse({ type: FileMetadataDto })
   @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
   async updateFileMetadata(
+    @User() user: UserDto,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateFileMetadataDto: UpdateFileMetadataDto
   ): Promise<FileMetadataDto> {
-    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto);
+    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto, user.id);
   }
 
   @Get(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
-  @ApiResponse({status: 308, description: 'http redirect' })
+  @ApiResponse({ status: 308, description: 'http redirect' })
   async getFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
@@ -155,7 +155,7 @@ export class FilesController {
   @Get('images/:id')
   @Public()
   @ApiTags('files')
-  @ApiResponse({status: 308, description: 'http redirect' })
+  @ApiResponse({ status: 308, description: 'http redirect' })
   async getImageFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response

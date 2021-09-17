@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
@@ -115,7 +115,7 @@ export class FilesService {
     return `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${metadata.id}`;
   }
 
-  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
+  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto, requestingUserId: number): Promise<FileMetadataDto> {
     if (!isNil(data.documentOfFacilityId) && !isNil(data.imageOfFacilityId)) {
       this.logger.warn('file cannot be both document and image of a facility');
       throw new BadRequestException('file cannot be both document and image of a facility');
@@ -123,7 +123,9 @@ export class FilesService {
 
     const facilityId = data.documentOfFacilityId || data.imageOfFacilityId;
 
-    if (facilityId && !(await this.prisma.facility.findUnique({ where: { id: facilityId } }))) {
+    const facility = facilityId ? (await this.prisma.facility.findUnique({ where: { id: facilityId } })) : null;
+
+    if (facilityId && !facility) {
       this.logger.warn(`no facility found with id=${facilityId}`);
       throw new BadRequestException(`unknown facilityId: ${facilityId}`);
     }
@@ -132,6 +134,16 @@ export class FilesService {
 
     if (!existingFileRecord) {
       throw new NotFoundException();
+    }
+
+    if (existingFileRecord.ownerId != requestingUserId) {
+      this.logger.warn(`userId=${requestingUserId} attempts to update fileId=${fileId} owned by ${existingFileRecord.ownerId}`);
+      throw new ForbiddenException(`file not owned by userId=${requestingUserId}`);
+    }
+
+    if (facility && existingFileRecord.ownerId !== facility.ownerId) {
+      this.logger.warn(`file owner (${existingFileRecord.ownerId}) and facility owner (${facility.ownerId}) do not match`);
+      throw new BadRequestException('file owner and facility owner do not match');
     }
 
     if (
