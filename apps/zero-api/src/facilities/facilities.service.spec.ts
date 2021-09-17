@@ -171,7 +171,7 @@ describe('FacilitiesService', () => {
     });
 
     it('should update a given record', async function() {
-      await service.update(r1.id, { name: 'Updated facility name 1' });
+      await service.update(r1.id, { name: 'Updated facility name 1' }, user1.id);
 
       expect((await prisma.facility.findUnique({ where: { id: r1.id } })).name).toEqual('Updated facility name 1');
 

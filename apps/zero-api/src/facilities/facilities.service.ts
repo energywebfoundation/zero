@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -10,15 +10,15 @@ import { mimetypeIsAnImage } from '../files/files.service';
 export class FacilitiesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createFacilityDto: CreateFacilityDto, ownerId: number): Promise<FacilityDto> {
+  async create(createFacilityDto: CreateFacilityDto, requestingUserId: number): Promise<FacilityDto> {
     const { images, documents, ...newFacilityData } = createFacilityDto;
 
-    await this.validateFilesToBeLinked(images, documents);
+    await this.validateFilesToBeLinked(requestingUserId, images, documents);
 
     const { images: imagesLinked, documents: documentsLinked, ...newRecord } = await this.prisma.facility.create({
       data: {
         ...newFacilityData,
-        ownerId,
+        ownerId: requestingUserId,
         images: { connect: (images || []).map(i => ({ id: i })) },
         documents: { connect: (documents || []).map(i => ({ id: i })) }
       },
@@ -61,10 +61,10 @@ export class FacilitiesService {
     });
   }
 
-  async update(id: string, updateFacilityDto: UpdateFacilityDto): Promise<FacilityDto> {
+  async update(id: string, updateFacilityDto: UpdateFacilityDto, requestingUserId: number): Promise<FacilityDto> {
     const { images, documents, ...updateData } = updateFacilityDto;
 
-    await this.validateFilesToBeLinked(images || [], documents || [], id);
+    await this.validateFilesToBeLinked(requestingUserId, images || [], documents || [], id);
 
     const { images: imagesLinked, documents: documentsLinked, ...updatedRecord } = await this.prisma.facility.update({
       where: { id },
@@ -96,7 +96,7 @@ export class FacilitiesService {
     return new FacilityDto(await this.prisma.facility.delete({ where: { id } }));
   }
 
-  async validateFilesToBeLinked(imagesIds: string[], documentsIds: string[], facilityId?: string) {
+  async validateFilesToBeLinked(requestingUserId: number, imagesIds: string[], documentsIds: string[], facilityId?: string) {
     const imagesRecords = await Promise.all((imagesIds || []).map(async (id) => {
       return {
         id,
@@ -115,6 +115,13 @@ export class FacilitiesService {
     for (const file of [...imagesRecords, ...documentsRecords]) {
       if (!file.record) {
         throw new BadRequestException(`${file.id} file does not exist`);
+      }
+    }
+
+    // checking ownership of files
+    for (const file of [...imagesRecords, ...documentsRecords]) {
+      if (file.record.ownerId !== requestingUserId) {
+        throw new ForbiddenException(`userId=${requestingUserId} is not an owner of the ${file.id} file`);
       }
     }
 

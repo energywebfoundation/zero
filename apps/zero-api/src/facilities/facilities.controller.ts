@@ -79,7 +79,7 @@ export class FacilitiesController {
       throw new ForbiddenException(`userId=${user.id} is not an owner of facilityId=${facility.id}`);
     }
 
-    return this.facilitiesService.update(id, updateFacilityDto);
+    return this.facilitiesService.update(id, updateFacilityDto, user.id);
   }
 
   @Delete(':id')
