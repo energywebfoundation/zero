@@ -1,34 +1,40 @@
 import styled from '@emotion/styled';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
+import {
+  FacilityDocumentDto,
+  GreenLabelDto,
+  TGenericFormSubmitHandlerFn,
+} from '@energyweb/zero-ui';
 import SellerAddFacilitiesSustainabilityForm from '../../components/seller-add-facilities-sustainability-form/seller-add-facilities-sustainability-form';
+import { ReactElement } from 'react';
 
 /* eslint-disable-next-line */
 export interface SellerAddFacilitiesSustainabilityPageProps {
+  initialValues: SellerAddFacilitiesSustainabilityFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesSustainabilityFormFields>;
+  children: ReactElement;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SellerAddFacilitiesSustainabilityFormFields {
   facilityStory: string;
   impactStory: string;
-  facilityDocumentList: Array<{ documentId: string; description: string }>;
-  greenLabelList: Array<any>;
+  facilityDocumentList: Array<FacilityDocumentDto>;
+  greenLabelList: Array<GreenLabelDto>;
+  sustainabilityDocumentList: Array<FacilityDocumentDto>;
 }
 
 const StyledSellerAddFacilitiesSustainabilityPage = styled.div``;
 
 export const SellerAddFacilitiesSustainabilityPage = ({
   submitHandler,
+  initialValues,
+  children,
 }: SellerAddFacilitiesSustainabilityPageProps) => (
   <StyledSellerAddFacilitiesSustainabilityPage>
     <SellerAddFacilitiesSustainabilityForm
-      initialValues={{
-        facilityStory: 'This is very long story',
-        impactStory: 'This is the impact',
-        facilityDocumentList: [],
-        greenLabelList: [],
-      }}
+      initialValues={initialValues}
       submitHandler={submitHandler}
+      children={children}
     />
   </StyledSellerAddFacilitiesSustainabilityPage>
 );

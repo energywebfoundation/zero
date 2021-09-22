@@ -45,7 +45,7 @@ export const filesControllerUploadFiles = <TData = UploadFileResponseDto>(
     {
       url: `/api/files`,
       method: 'post',
-      responseType: 'blob',
+      responseType: 'json',
       data,
     },
     // eslint-disable-next-line

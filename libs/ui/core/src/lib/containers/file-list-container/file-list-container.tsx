@@ -25,16 +25,20 @@ export const FileListContainer = ({
 }: FileListContainerProps) => {
   const {
     userFileList: { isFetched, data = [] },
+    handleDeleteRequest,
+    isProcessing,
   } = useFileListContainerEffects();
   const [selectedFileIdList, setSelectedFileIdList] = useState<string[]>([]);
   return (
     <GenericModal
       title={'Files uploaded by you'}
       open={open}
-      handleClose={handleCancel}
+      handleOnClose={handleCancel}
     >
       <StyledFileListContainer>
         <FileList
+          selectable
+          fileTypeDisplayList={[]}
           handleSubmit={(fileIdList) => {
             handleSubmitSelection(fileIdList);
             if (resetAfterSubmit) {
@@ -42,7 +46,7 @@ export const FileListContainer = ({
             }
           }}
           handleCancel={handleCancel}
-          loading={!isFetched}
+          loading={!isFetched || isProcessing}
           handleSelectionChange={useCallback(
             (id) => {
               setSelectedFileIdList(

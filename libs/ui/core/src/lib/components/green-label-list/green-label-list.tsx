@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { Box, Grid, IconButton } from '@material-ui/core';
-import React, { FC } from 'react';
+import { Box, Grid } from '@material-ui/core';
+import React from 'react';
 import GreenLabelForm, {
   GreenLabelDto,
   GreenLabelTypeEnum,
 } from '../green-label-form/green-label-form';
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
-import FileUploadContainer from '../../containers/file-upload-container/file-upload-container';
-import FileInfo, { FileTypeEnum } from '../file-info/file-info';
+import GreenLabelListItem from '../green-label-list-item/green-label-list-item';
 
 /* eslint-disable-next-line */
 export interface GreenLabelListProps {
@@ -22,68 +20,6 @@ export interface GreenLabelListProps {
 
 const StyledGreenLabelList = styled.div``;
 
-const RowTemplate: FC<{
-  data: GreenLabelDto;
-  handleUpdateGreenLabel: (
-    greenLabelType: GreenLabelTypeEnum,
-    greenLabel: GreenLabelDto
-  ) => void;
-  handleDeleteGreenLabel: (greenLabelType: GreenLabelTypeEnum) => void;
-}> = ({ data, handleUpdateGreenLabel, handleDeleteGreenLabel }) => (
-  <Grid container flexWrap={'nowrap'} columnGap={2}>
-    <Grid item sm={4}>
-      <GreenLabelForm
-        data={data.type}
-        readOnly
-        submitHandler={async (values, resetForm) => {}}
-      />
-    </Grid>
-    <Grid
-      display={'flex'}
-      item
-      sm={8}
-      justifyContent={'space-between'}
-      alignItems={'center'}
-    >
-      <Box width={'90%'}>
-        {!data.proofDocumentId ? (
-          <FileUploadContainer
-            handleSubmitSelection={(fileIdList) => {
-              handleUpdateGreenLabel(data.type, {
-                ...data,
-                proofDocumentId: fileIdList?.[0],
-              });
-            }}
-            handleFileListChanged={() => {}}
-            selectOnUploaded
-            withFileList
-            fullWidth
-          />
-        ) : (
-          <FileInfo
-            fileType={FileTypeEnum.PDF}
-            filename={data.proofDocumentId}
-          />
-        )}
-      </Box>
-      <IconButton
-        onClick={() => handleDeleteGreenLabel(data.type)}
-        sx={{
-          mx: 3,
-          backgroundColor: '#fff',
-          color: 'primary.main',
-          fontWeight: 700,
-          '&:hover': {
-            color: '#fff',
-          },
-        }}
-      >
-        <HighlightOffOutlinedIcon color={'error'} />
-      </IconButton>
-    </Grid>
-  </Grid>
-);
-
 export const GreenLabelList = ({
   greenLabelList = [],
   handleAddNewGreenLabel,
@@ -97,7 +33,7 @@ export const GreenLabelList = ({
           <Box>
             {greenLabelList.map((data, index) => (
               <Box key={index}>
-                <RowTemplate
+                <GreenLabelListItem
                   handleDeleteGreenLabel={handleDeleteGreenLabel}
                   handleUpdateGreenLabel={handleUpdateGreenLabel}
                   data={data}

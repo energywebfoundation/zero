@@ -3,17 +3,20 @@ import {
   FormSectionCard,
   GenericFormContainer,
   GenericFormFieldContainer,
+  GenericFormSubmitButtonContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui';
 import { SellerAddFacilitiesSustainabilityFormFields } from '../../pages/seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';
 import { sellerAddFacilitiesSustainAbilityFormSchema } from './seller-add-facilities-sustainability-form.schema';
 import { sellerAddFacilitiesSustainabilityFormFields } from './seller-add-facilities-sustainability-form-fields';
 import Grid from '@material-ui/core/Grid';
+import { ReactElement } from 'react';
 
 /* eslint-disable-next-line */
 export interface SellerAddFacilitiesSustainabilityFormProps {
   initialValues: SellerAddFacilitiesSustainabilityFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesSustainabilityFormFields>;
+  children: ReactElement;
 }
 
 const StyledSellerAddFacilitiesSustainabilityForm = styled.div``;
@@ -21,6 +24,7 @@ const StyledSellerAddFacilitiesSustainabilityForm = styled.div``;
 export function SellerAddFacilitiesSustainabilityForm({
   submitHandler,
   initialValues,
+  children,
 }: SellerAddFacilitiesSustainabilityFormProps) {
   return (
     <StyledSellerAddFacilitiesSustainabilityForm>
@@ -65,7 +69,7 @@ export function SellerAddFacilitiesSustainabilityForm({
             >
               <GenericFormFieldContainer
                 contentHeight
-                fieldName={'facilityDocuments'}
+                fieldName={'facilityDocumentList'}
               />
             </FormSectionCard>
           </Grid>
@@ -88,11 +92,12 @@ export function SellerAddFacilitiesSustainabilityForm({
             <FormSectionCard sectionHeader={'Sustainability documents'}>
               <GenericFormFieldContainer
                 contentHeight
-                fieldName={'sustainabilityDocuments'}
+                fieldName={'sustainabilityDocumentList'}
               />
             </FormSectionCard>
           </Grid>
         </Grid>
+        {children}
       </GenericFormContainer>
     </StyledSellerAddFacilitiesSustainabilityForm>
   );

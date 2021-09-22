@@ -61,7 +61,6 @@ export const GreenLabelForm = ({
     <StyledGreenLabelForm>
       <GenericFormContainer<GreenLabelFormFields>
         nested
-        readonly
         submitHandler={submitHandler}
         validationSchema={greenLabelFormSchema}
         initialValues={{ greenLabel: data }}
@@ -74,7 +73,10 @@ export const GreenLabelForm = ({
           alignItems={'flex-end'}
         >
           <Grid item sm={12}>
-            <GenericFormFieldContainer disabled fieldName={'greenLabel'} />
+            <GenericFormFieldContainer
+              disabled={true}
+              fieldName={'greenLabel'}
+            />
           </Grid>
           {!readOnly && (
             <Grid item sm={2} justifyItems={'flex-end'}>

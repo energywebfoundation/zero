@@ -3,19 +3,25 @@ import {
   GenericFormCard,
   GenericFormContainer,
   GenericFormFieldContainer,
-  Info,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui';
 import { sellerAddFacilitiesBasicInformationFormSchema } from './seller-add-facilities-basic-information-form.schema';
 import {
+  DeviceOwnershipEnum,
+  DeviceRegistryEnum,
   EnergyUnitCapacityEmum,
+  FacilityFinancialSupportTypeEnum,
+  RenevableEnergySourceEnum,
   sellerAddFacilitiesBasicInformationFormFields,
 } from './seller-add-facilities-basic-information-form-fields';
 import { Box, Grid } from '@material-ui/core';
+import { ReactElement } from 'react';
 
 /* eslint-disable-next-line */
 export interface SellerAddFacilitiesBasicInformationFormProps {
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesBasicInformationFormFields>;
+  initialFormValues: SellerAddFacilitiesBasicInformationFormFields;
+  children: ReactElement;
 }
 
 const StyledSellerAddFacilitiesBasicInformationForm = styled.div``;
@@ -23,38 +29,28 @@ const StyledSellerAddFacilitiesBasicInformationForm = styled.div``;
 export interface SellerAddFacilitiesBasicInformationFormFields {
   deviceOwner: string;
   facilityName: string;
-  eacRegistries: string;
+  eacRegistries: DeviceRegistryEnum;
   registryId: string;
-  source: string;
-  deviceOwnership: string;
+  source: RenevableEnergySourceEnum;
+  deviceOwnership: DeviceOwnershipEnum;
   projectSupportedFinancially: boolean;
   installedCapacity: string;
-  capacityUnit: string;
+  capacityUnit: EnergyUnitCapacityEmum;
   commercialOperationDate: string;
-  typeOfFinancialSupport: string;
+  typeOfFinancialSupport: FacilityFinancialSupportTypeEnum;
 }
 
 export const SellerAddFacilitiesBasicInformationForm = ({
   submitHandler,
+  initialFormValues,
+  children,
 }: SellerAddFacilitiesBasicInformationFormProps) => (
   <StyledSellerAddFacilitiesBasicInformationForm>
     <GenericFormCard>
       <GenericFormContainer<SellerAddFacilitiesBasicInformationFormFields>
         submitHandler={submitHandler}
         validationSchema={sellerAddFacilitiesBasicInformationFormSchema}
-        initialValues={{
-          deviceOwner: '',
-          facilityName: '',
-          registryId: '',
-          eacRegistries: '',
-          source: '',
-          deviceOwnership: '',
-          installedCapacity: '',
-          capacityUnit: EnergyUnitCapacityEmum.MWh,
-          commercialOperationDate: '',
-          projectSupportedFinancially: false,
-          typeOfFinancialSupport: '',
-        }}
+        initialValues={initialFormValues}
         fields={sellerAddFacilitiesBasicInformationFormFields}
       >
         <Grid container spacing={'20px'}>
@@ -92,6 +88,7 @@ export const SellerAddFacilitiesBasicInformationForm = ({
             <GenericFormFieldContainer fieldName={'typeOfFinancialSupport'} />
           </Grid>
         </Grid>
+        {children}
       </GenericFormContainer>
     </GenericFormCard>
   </StyledSellerAddFacilitiesBasicInformationForm>

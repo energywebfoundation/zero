@@ -7,7 +7,7 @@ import {
 import map from 'lodash/fp/map';
 import React, { FC } from 'react';
 import { FormSelectOption } from '../form-field-select';
-import { GenericFormFieldConfig } from '../../../containers/generic-form-container';
+import { GenericFormFieldConfig } from '../../../containers';
 
 interface FormFieldSelectRegular extends GenericFormFieldConfig {
   options: FormSelectOption[];
@@ -21,6 +21,8 @@ export interface SelectRegularProps {
   onChange: (...event: any[]) => void;
   variant?: 'standard' | 'outlined' | 'filled';
   textFieldProps?: BaseTextFieldProps;
+  alreadySelectedValues?: Array<FormSelectOption['value']>;
+  disabled?: boolean;
 }
 
 export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
@@ -31,11 +33,14 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
   value,
   onChange,
   textFieldProps,
+  alreadySelectedValues = [],
+  disabled,
 }) => {
   const { options } = field;
   return (
     <TextField
-      disabled={field.frozen}
+      placeholder={field.placeholderText}
+      disabled={disabled || field.frozen}
       select
       name={field.name}
       label={field.label}
@@ -52,7 +57,11 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
     >
       {map(
         ({ label, value, subText }: FormSelectOption) => (
-          <MenuItem key={label} value={value}>
+          <MenuItem
+            disabled={alreadySelectedValues?.includes(value)}
+            key={label}
+            value={value}
+          >
             <div>
               <Typography fontSize={'16px'} color={'primary'} fontWeight={600}>
                 {label}

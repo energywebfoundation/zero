@@ -1,6 +1,6 @@
-import React, { FC, memo, useContext } from 'react';
+import React, { FC, memo, useContext, useEffect } from 'react';
 import { BaseTextFieldProps } from '@material-ui/core';
-import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { GreenLabelListContainer } from '../../../containers/green-label-list-container/green-label-list-container';
 import { GenericFormFieldConfig } from '../../../containers/generic-form-container/generic-form-container';
 import { GenericFormContext } from '@energyweb/zero-ui';
@@ -31,10 +31,10 @@ export const FormFieldGreenLabelList: FC<FormFieldGreenLabelListProps> = memo(
     ...rest
   }) => {
     register(field.name);
-    const { setValue } = useContext(GenericFormContext)!;
+    const { getValues, setValue } = useContext(GenericFormContext)!;
     return (
       <GreenLabelListContainer
-        data={[]}
+        data={getValues(field.name)}
         handleValueChanged={(data) => {
           console.log('GreenLabelListContainer', data);
           setValue(field.name, data);

@@ -1,16 +1,16 @@
 import { BaseTextFieldProps } from '@material-ui/core';
-import React, { PropsWithChildren, ReactElement, ReactNode } from 'react';
+import React, {
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  useContext,
+} from 'react';
 import {
   TGenericFormEffectsReturnType,
   useGenericFormEffects,
 } from './generic-form-container.effects';
 import GenericFormContextProvider from '../../providers/generic-form-context-provider/generic-form-context-provider';
-import {
-  DeepPartial,
-  FormProvider,
-  UnpackNestedValue,
-  UseFormReset,
-} from 'react-hook-form';
+import { DeepPartial, UnpackNestedValue, UseFormReset } from 'react-hook-form';
 import * as yup from 'yup';
 import {
   FormFieldRadioGroupConfig,
@@ -19,6 +19,7 @@ import {
 } from '../../components';
 import { useTranslation } from 'react-i18next';
 import { Observable } from 'rxjs';
+import { ValidationError } from 'yup';
 
 export enum GenericFormFieldType {
   TextInput = 'TextInput',
@@ -56,6 +57,7 @@ export interface GenericFormFieldConfig {
   textFieldProps?: BaseTextFieldProps;
   infoTooltip?: string;
   characterCountLimit?: number;
+  helpBoxText?: string;
 }
 
 export type TGenericFormFieldList = Array<
@@ -71,7 +73,8 @@ export type TGenericFormSubmitHandlerFn<
 ) => Promise<ResponseType>;
 
 export interface GenericFormContainerProps<FormValuesType> {
-  readonly?: boolean;
+  formName?: string;
+  readOnlyForm?: boolean;
   nested?: boolean;
   submitHandler: TGenericFormSubmitHandlerFn<FormValuesType>;
   validationSchema: yup.AnyObjectSchema;
@@ -82,7 +85,11 @@ export interface GenericFormContainerProps<FormValuesType> {
   formInputsProps?: BaseTextFieldProps;
   processing?: boolean;
   subscribeValuesChanged$?: (values$: Observable<FormValuesType>) => void;
-  handleValidityChange?: (isFormValid: boolean) => void;
+  handleValidityChange?: (
+    isFormValid: boolean,
+    errors: ValidationError[]
+  ) => void;
+  handleDirtyChange?: (isFormDirty: boolean) => void;
 }
 
 export type TGenericForm = <FormValuesType>(
@@ -90,7 +97,7 @@ export type TGenericForm = <FormValuesType>(
 ) => ReactElement;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export type GenericFormContextData = Omit<
+export type GenericFormContextData = { readOnlyForm?: boolean } & Omit<
   TGenericFormEffectsReturnType<any>,
   'handleValuesChanged$'
 > &
@@ -115,6 +122,7 @@ export const GenericFormContainer: TGenericForm = ({
   processing,
   subscribeValuesChanged$,
   nested,
+  readOnlyForm,
 }) => {
   const {
     control,
@@ -153,6 +161,7 @@ export const GenericFormContainer: TGenericForm = ({
     nested,
     onSubmit,
     setValue,
+    readOnlyForm,
     fields: fields.map((field) => ({
       ...field,
       label: field.label ? t(field.label) : null,

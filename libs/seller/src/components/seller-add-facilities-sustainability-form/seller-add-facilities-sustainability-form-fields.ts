@@ -6,34 +6,32 @@ import {
 export const sellerAddFacilitiesSustainabilityFormFields: TGenericFormFieldList =
   [
     {
-      label: 'forms.SellerAddFacilitiesSustainabilityPage.facilityStory',
+      label: 'forms.SellerAddFacilitiesSustainabilityForm.facilityStory',
       type: GenericFormFieldType.Textarea,
       name: 'facilityStory',
       characterCountLimit: 3000,
     },
     {
-      label: 'forms.SellerAddFacilitiesSustainabilityPage.facilityStory',
+      label: null,
       type: GenericFormFieldType.GreenLabelList,
       name: 'greenLabelList',
     },
     {
-      label: 'forms.SellerAddFacilitiesSustainabilityPage.facilityDocuments',
+      label: 'forms.SellerAddFacilitiesSustainabilityForm.facilityDocuments',
       type: GenericFormFieldType.FacilityDocumentList,
-      name: 'facilityDocuments',
+      name: 'facilityDocumentList',
     },
     {
-      label: 'forms.SellerAddFacilitiesSustainabilityPage.impactStory',
+      label: 'forms.SellerAddFacilitiesSustainabilityForm.impactStory',
       type: GenericFormFieldType.Textarea,
       name: 'impactStory',
       characterCountLimit: 2000,
       placeholderText:
-        'forms.SellerAddFacilitiesSustainabilityPage.impactStoryPlaceholderText',
+        'forms.SellerAddFacilitiesSustainabilityForm.impactStoryPlaceholderText',
     },
     {
-      label: 'forms.SellerAddFacilitiesSustainabilityPage.impactStory',
+      label: null,
       type: GenericFormFieldType.FacilityDocumentList,
-      name: 'sustainabilityDocuments',
-      placeholderText:
-        'forms.SellerAddFacilitiesSustainabilityPage.impactStoryPlaceholderText',
+      name: 'sustainabilityDocumentList',
     },
   ];

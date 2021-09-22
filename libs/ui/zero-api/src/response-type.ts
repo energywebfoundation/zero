@@ -5,7 +5,10 @@ export const getWithResponseType = <T>(
 ): Promise<T> => {
   const source = axios.CancelToken.source();
   const promise = axios({ ...config, cancelToken: source.token }).then(
-    ({ data }) => data
+    (res) => {
+      console.log(res);
+      return res.data;
+    }
   );
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

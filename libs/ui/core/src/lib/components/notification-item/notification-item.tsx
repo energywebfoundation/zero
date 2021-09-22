@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Box, Container, IconButton, Typography } from '@material-ui/core';
 import {
   NotificationConfig,
@@ -29,16 +28,19 @@ export const NotificationItem = ({
         alignItems={'center'}
         justifyContent={'space-between'}
       >
-        <Typography
-          component={'div'}
-          color={'#fff'}
-          fontSize={'20px'}
-          fontWeight={700}
-          lineHeight={'24px'}
-        >
-          <div>{text.firstLine}</div>
-          {text.firstLine && <div>{text.secondLine}</div>}
-        </Typography>
+        <Box flexGrow={1}>
+          <Typography
+            textAlign={'center'}
+            component={'div'}
+            color={'#fff'}
+            fontSize={'20px'}
+            fontWeight={700}
+            lineHeight={'24px'}
+          >
+            <div>{text.firstLine}</div>
+            {text.firstLine && <div>{text.secondLine}</div>}
+          </Typography>
+        </Box>
         <IconButton>
           <Close
             sx={{ fontSize: '16px', cursor: 'pointer', color: '#fff' }}

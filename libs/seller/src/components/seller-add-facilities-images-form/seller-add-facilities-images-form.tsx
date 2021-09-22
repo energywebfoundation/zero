@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import {
   GenericFormContainer,
   TGenericFormSubmitHandlerFn,
@@ -8,10 +9,13 @@ import {
 import { sellerAddFacilitiesImagesFormSchema } from './seller-add-facilities-images-form.schema';
 import { sellerAddFacilitiesImagesFormFields } from './seller-add-facilities-images-form-fields';
 import { Grid } from '@material-ui/core';
+import { ReactElement } from 'react';
 
 /* eslint-disable-next-line */
 export interface SellerAddFacilitiesImagesFormProps {
+  initialValues: SellerAddFacilitiesImagesFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesImagesFormFields>;
+  children: ReactElement;
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SellerAddFacilitiesImagesFormFields {
@@ -20,30 +24,31 @@ export interface SellerAddFacilitiesImagesFormFields {
 
 const StyledSellerAddFacilitiesImagesForm = styled.div``;
 
-export function SellerAddFacilitiesImagesForm({
+export const SellerAddFacilitiesImagesForm = ({
   submitHandler,
-}: SellerAddFacilitiesImagesFormProps) {
-  return (
-    <StyledSellerAddFacilitiesImagesForm>
-      <GenericFormCard>
-        <GenericFormContainer<SellerAddFacilitiesImagesFormFields>
-          submitHandler={submitHandler}
-          validationSchema={sellerAddFacilitiesImagesFormSchema}
-          initialValues={{ facilityImageList: [] }}
-          fields={sellerAddFacilitiesImagesFormFields}
-        >
-          <Grid container>
-            <Grid item xs={12}>
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'facilityImageList'}
-              />
-            </Grid>
+  initialValues,
+  children,
+}: SellerAddFacilitiesImagesFormProps) => (
+  <StyledSellerAddFacilitiesImagesForm>
+    <GenericFormCard>
+      <GenericFormContainer<SellerAddFacilitiesImagesFormFields>
+        submitHandler={submitHandler}
+        validationSchema={sellerAddFacilitiesImagesFormSchema}
+        initialValues={initialValues}
+        fields={sellerAddFacilitiesImagesFormFields}
+      >
+        <Grid container>
+          <Grid item xs={12}>
+            <GenericFormFieldContainer
+              contentHeight
+              fieldName={'facilityImageList'}
+            />
           </Grid>
-        </GenericFormContainer>
-      </GenericFormCard>
-    </StyledSellerAddFacilitiesImagesForm>
-  );
-}
+        </Grid>
+      </GenericFormContainer>
+    </GenericFormCard>
+    {children}
+  </StyledSellerAddFacilitiesImagesForm>
+);
 
 export default SellerAddFacilitiesImagesForm;

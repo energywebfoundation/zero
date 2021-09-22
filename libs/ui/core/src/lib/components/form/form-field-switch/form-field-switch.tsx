@@ -25,7 +25,6 @@ export const FormFieldSwitch: TFormFieldSwitch = ({
   errorExists,
 }) => {
   const { t } = useTranslation();
-  console.log(field.infoTooltip);
   return (
     <Controller
       name={field.name as any}
@@ -38,10 +37,10 @@ export const FormFieldSwitch: TFormFieldSwitch = ({
               label={field.label}
               control={
                 <Switch
+                  checked={Boolean(value)}
                   disabled={field.frozen}
                   aria-label={t(field.label ?? '')}
                   name="controlled-switch"
-                  value={Boolean(value)}
                   onChange={onChange}
                 />
               }

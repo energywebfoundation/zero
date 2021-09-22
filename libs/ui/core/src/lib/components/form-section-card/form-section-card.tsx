@@ -45,7 +45,7 @@ export const FormSectionCard = ({
       />
       <CardContent>
         {helpText && (
-          <Box mt={'-20px'}>
+          <Box mt={'-20px'} mb={1}>
             <Typography color={'primary'} fontWeight={500}>
               {helpText}
             </Typography>

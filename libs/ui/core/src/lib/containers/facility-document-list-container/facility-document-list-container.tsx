@@ -1,9 +1,11 @@
 import FacilityDocumentList from '../../components/facility-document-list/facility-document-list';
 import React, { useEffect, useState } from 'react';
-import { FacilityDocumentDto } from '../../components/facility-document-item/facility-document-item';
+import { FacilityDocumentDto } from '../../components';
+import { noop } from 'lodash';
 
 /* eslint-disable-next-line */
 export interface FacilityDocumentListContainerProps {
+  data: FacilityDocumentDto[];
   handleFacilityDocumentListChanged: (
     facilityDocumentList: FacilityDocumentDto[]
   ) => void;
@@ -11,8 +13,9 @@ export interface FacilityDocumentListContainerProps {
 
 export const FacilityDocumentListContainer = ({
   handleFacilityDocumentListChanged,
+  data,
 }: FacilityDocumentListContainerProps) => {
-  const [list, setList] = useState<FacilityDocumentDto[]>([]);
+  const [list, setList] = useState<FacilityDocumentDto[]>(data);
   useEffect(() => {
     handleFacilityDocumentListChanged(list);
   }, [list]);
@@ -29,7 +32,7 @@ export const FacilityDocumentListContainer = ({
       handleFileSelectionSubmit={(fileIdList) => {
         setList([...list, { id: fileIdList[0], description: '' }]);
       }}
-      handleFileListChanged={(fileIdList) => {}}
+      handleFileListChanged={noop}
       documentList={list}
     />
   );
