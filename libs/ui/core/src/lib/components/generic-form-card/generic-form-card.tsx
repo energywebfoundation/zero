@@ -11,7 +11,7 @@ const StyledGenericFormCard = styled.div``;
 
 export const GenericFormCard = ({ children }: GenericFormCardProps) => (
   <StyledGenericFormCard>
-    <Paper sx={{ p: '32px 50px' }}>{children}</Paper>
+    <Paper sx={{ p: '32px' }}>{children}</Paper>
   </StyledGenericFormCard>
 );
 

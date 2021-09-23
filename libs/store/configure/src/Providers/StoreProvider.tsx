@@ -13,6 +13,7 @@ import {
   navigationStateSlice,
   rootEpic,
 } from '../features';
+import { userdraftListStateSlice } from '../features/userDraftListState';
 
 export const history = createBrowserHistory();
 
@@ -25,6 +26,7 @@ export const store = configureStore({
     router: connectRouter(history),
     authState: authStateSlice.reducer,
     userFileListState: userFileListStateSlice.reducer,
+    userDraftListState: userdraftListStateSlice.reducer,
   },
   devTools: true,
   middleware: [epicMiddleware, logger, routerMiddleware(history)],

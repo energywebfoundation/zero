@@ -1,8 +1,9 @@
-import React, { FC, forwardRef, memo } from 'react';
-import { BaseTextFieldProps, useFormControl } from '@material-ui/core';
+import React, { FC, memo } from 'react';
+import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues, useFormContext } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers/generic-form-container/generic-form-container';
 import FileListContainer from '../../../containers/file-list-container/file-list-container';
+import { noop } from 'lodash';
 
 export interface FormFieldFileListProps extends BaseTextFieldProps {
   field: Omit<
@@ -19,22 +20,13 @@ export interface FormFieldFileListProps extends BaseTextFieldProps {
 }
 
 export const FormFieldFileList: FC<FormFieldFileListProps> = memo(
-  ({
-    field,
-    register,
-    errorExists,
-    errorText,
-    isDirty,
-    variant,
-    disabled,
-    ...rest
-  }) => {
+  ({ field, register, errorExists, errorText, isDirty, variant, disabled }) => {
     register(field.name);
     const { setValue } = useFormContext();
     return (
       <FileListContainer
         open={false}
-        handleCancel={() => {}}
+        handleCancel={noop}
         handleSubmitSelection={(fileIdList) => {
           setValue(field.name, fileIdList);
           console.log(field.name, fileIdList);

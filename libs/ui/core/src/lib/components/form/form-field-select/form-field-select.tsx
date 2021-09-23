@@ -12,6 +12,8 @@ export type FormSelectOption = {
 
 export interface FormFieldSelectConfig extends GenericFormFieldConfig {
   options: FormSelectOption[];
+  preSelectedOptions?: Array<FormSelectOption['value']>;
+  disabledOptions?: Array<FormSelectOption['value']>;
 }
 export interface FormSelectProps<FormValuesType> {
   field: FormFieldSelectConfig;
@@ -56,6 +58,7 @@ export const FormFieldSelect: TFormFieldSelect = ({
         ) : (
           <FormFieldSelectRegular
             field={field}
+            disabled={Boolean(disabled)}
             errorExists={errorExists}
             errorText={errorText}
             value={value as any}

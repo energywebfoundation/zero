@@ -9,37 +9,35 @@ export interface FileUploadContainerProps {
   selectOnUploaded?: boolean;
   handleSubmitSelection: (fileIdList: string[]) => void;
   handleFileListChanged: (fileIdList: string[]) => void;
+  uploadCompletedSuccessfullyMessage?: string;
+  uploadErrorMessage?: string;
 }
 
 export const FileUploadContainer = ({
   title,
   withFileList,
-  fullWidth,
   selectOnUploaded,
   handleFileListChanged,
   handleSubmitSelection,
+  uploadCompletedSuccessfullyMessage,
+  uploadErrorMessage,
 }: FileUploadContainerProps) => {
-  const { submitHandler } = useFileUploadContainerEffects();
+  const { acceptedListChangedHandler, isProcessing } =
+    useFileUploadContainerEffects(
+      uploadCompletedSuccessfullyMessage,
+      uploadErrorMessage,
+      handleSubmitSelection,
+      handleFileListChanged,
+      selectOnUploaded
+    );
 
   return (
     <FileUpload
+      isProcessing={isProcessing}
       handleSubmitSelection={handleSubmitSelection}
       withFileList={withFileList}
       title={title}
-      handleAcceptedFilesChange={(files) => {
-        Promise.all(
-          files.map((file) =>
-            submitHandler({ file }).then((value) => {
-              return value;
-            })
-          )
-        ).then((value) => {
-          handleFileListChanged(value as string[]);
-          if (selectOnUploaded) {
-            handleSubmitSelection(value as string[]);
-          }
-        });
-      }}
+      handleAcceptedFilesChange={acceptedListChangedHandler}
     />
   );
 };

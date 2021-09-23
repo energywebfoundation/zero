@@ -1,4 +1,4 @@
-import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
+import { combineEpics, Epic, StateObservable } from 'redux-observable';
 import { RootState } from '../../Providers/StoreProvider';
 import { Action } from '@reduxjs/toolkit';
 import { EMPTY, Observable } from 'rxjs';

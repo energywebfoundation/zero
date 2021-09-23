@@ -10,7 +10,6 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
     },
     circle: {
-      cursor: 'pointer',
       height: '40px',
       width: '40px',
       fontSize: '20px',

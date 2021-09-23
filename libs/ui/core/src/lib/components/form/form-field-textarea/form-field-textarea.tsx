@@ -33,7 +33,7 @@ export const FormFieldTextarea: FC<FormFieldTextareaProps> = memo(
   }) => {
     const { label, helperText, placeholderText, characterCountLimit } = field;
     const { t } = useTranslation();
-    const { name, onBlur, onChange } = register(field.name);
+    const { name, onBlur, onChange, ref } = register(field.name);
     const styles = useStyles();
     const [fieldValue, setFieldValue] = useState<string | null>(null);
     return (
@@ -41,7 +41,10 @@ export const FormFieldTextarea: FC<FormFieldTextareaProps> = memo(
         <Box width={'100%'}>
           {helperText && <div>{t(helperText)}</div>}
           <TextField
-            inputRef={(instance) => setFieldValue(instance?.value)}
+            inputRef={(instance) => {
+              ref(instance);
+              setFieldValue(instance?.value);
+            }}
             className={styles.root}
             placeholder={t(placeholderText || '')}
             variant={variant || 'outlined'}

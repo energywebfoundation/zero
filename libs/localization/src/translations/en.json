@@ -69,6 +69,19 @@
         "logout": "Logout",
         "profile": "Profile",
         "myAccount": "My account"
+      },
+      "ImageUpload": {
+        "addImage":"Add image",
+        "dragDropImage": "Drag and drop image anywhere"
+      },
+      "ImageUploadContainer": {
+        "uploadSuccessfullMsg": "Image uploaded successfully",
+        "uploadErrorMsg":  "There has been error uploading image",
+        "fileDoesntPassTheValidation": "does not pass validation and has been removed from upload list",
+        "helpText": "A JPG or PNG image must not be more than 4,000 pixels wide high, and its file size must be less than 5MB."
+      },
+      "FileInfo": {
+        "loading": "Loading..."
       }
     },
     "forms": {
@@ -116,6 +129,19 @@
         "gridOperator": "Grid operator",
         "latitude": "Latitude",
         "longitude": "Longitude"
+      },
+      "SellerAddFacilitiesSustainabilityForm": {
+        "facilityStory": "Facility story",
+        "impactStory": "Impact story",
+        "impactStoryPlaceholderText": "Briefly describe facility and its story"
+      },
+      "FileList": {
+        "submitSelection": "Submit selection",
+        "cancel": "Cancel"
+      },
+      "ImageUploadContainer": {
+        "uploadErrorMsg": "Error uploading image",
+        "uploadSuccessfullMsg": "Image uploaded successfully"
       }
     },
     "pages": {
@@ -125,11 +151,6 @@
         "sustainability": "Sustainability",
         "images": "Images",
         "products": "Products"
-      },
-      "SellerAddFacilitiesSustainabilityPage": {
-        "facilityStory": "Facility story",
-        "impactStory": "Impact story",
-        "impactStoryPlaceholderText": "Briefly describe facility and its story"
       },
       "LoadingPage": {
         "title": "Loading - Please Wait",

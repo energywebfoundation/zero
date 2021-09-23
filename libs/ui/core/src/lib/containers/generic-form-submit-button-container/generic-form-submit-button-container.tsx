@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { BaseSyntheticEvent, ReactElement, useContext } from 'react';
 import { GenericFormContextData } from '../generic-form-container';
 import { GenericFormContext } from '../../providers';
+import { Typography } from '@material-ui/core';
 
 interface GenericFormSubmitButtonContainerRenderProps {
   isValid: boolean;
@@ -36,7 +37,6 @@ export const GenericFormSubmitButtonContainer = (
     return null;
   } else {
     const { isValid, isDirty, isSubmitting, onSubmit } = genericFormContext;
-    console.log(genericFormContext);
     return (
       <StyledGenericFormSubmitButtonContainer>
         {props.render({ isValid, isDirty, isSubmitting, onSubmit })}

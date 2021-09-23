@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { push } from 'connected-react-router';
 import { RootState } from '../../Providers/StoreProvider';
 import { FileMetadataDto } from '@energyweb/zero-ui-api';
@@ -21,9 +21,15 @@ export const userFileListStateSlice = createSlice({
   },
 });
 
+const state = (s: RootState) => s.userFileListState;
+
 export const userFileListStateSelectors = {
-  getFileMetadataById: (state: RootState, id: string) =>
-    state.userFileListState.fileList.find((el) => el.id === id),
+  getFileMetadataById: createSelector(
+    [state, (s: RootState, id: string) => id],
+    (state: IUserFileListState, id: string) =>
+      state.fileList.find((el) => el.id === id)
+  ),
+  list: createSelector([state], (s) => s.fileList),
 };
 
 export const userFileListStateActions = {
