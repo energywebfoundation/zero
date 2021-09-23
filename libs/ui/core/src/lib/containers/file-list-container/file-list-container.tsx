@@ -38,7 +38,6 @@ export const FileListContainer = ({
       <StyledFileListContainer>
         <FileList
           selectable
-          fileTypeDisplayList={[]}
           handleSubmit={(fileIdList) => {
             handleSubmitSelection(fileIdList);
             if (resetAfterSubmit) {
@@ -56,6 +55,7 @@ export const FileListContainer = ({
             [selectedFileIdList]
           )}
           selectedFileIdList={selectedFileIdList}
+          handleDeleteRequest={handleDeleteRequest}
           fileList={data}
         />
       </StyledFileListContainer>

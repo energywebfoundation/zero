@@ -90,9 +90,6 @@ export const AccountSellerDashboardEmptyPage = ({
         </Grid>
       </Grid>
     </Box>
-    <Grid>
-      <Button>See Facility drafts</Button>
-    </Grid>
   </StyledAccountSellerDashboardEmptyPage>
 );
 

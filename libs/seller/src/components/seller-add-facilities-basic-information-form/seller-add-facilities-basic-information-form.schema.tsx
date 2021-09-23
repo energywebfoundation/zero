@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import {
+  DeviceOwnershipEnum,
   EnergyUnitCapacityEmum,
   FacilityFinancialSupportTypeEnum,
   RenevableEnergySourceEnum,
@@ -9,7 +10,7 @@ export const sellerAddFacilitiesBasicInformationFormSchema = yup
   .object()
   .shape({
     deviceOwner: yup.string().required('Company name is required'),
-    facilityName: yup.string().required('Company name is required'),
+    facilityName: yup.string().required('Facility name is required'),
     registryId: yup.string().required('Registry ID is required'),
     eacRegistries: yup.string(),
     source: yup
@@ -22,7 +23,13 @@ export const sellerAddFacilitiesBasicInformationFormSchema = yup
         RenevableEnergySourceEnum.WIND,
         RenevableEnergySourceEnum.GEOTHERMAL,
       ]),
-    deviceOwnership: yup.string(),
+    deviceOwnership: yup
+      .string()
+      .oneOf([
+        DeviceOwnershipEnum.OWNER,
+        DeviceOwnershipEnum.BROKER,
+        DeviceOwnershipEnum.I_REC_MANAGER,
+      ]),
     projectSupportedFinancially: yup.boolean(),
     installedCapacity: yup.number(),
     capacityUnit: yup

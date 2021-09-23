@@ -1,3 +1,5 @@
+export * from './lib/containers/facility-draft-list-container/facility-draft-list-container';
+export * from './lib/components/facility-draft-list/facility-draft-list';
 export * from './lib/pages/facility-draft-list-page/facility-draft-list-page';
 export * from './lib/components/disabled-overlay/disabled-overlay';
 export * from './lib/containers/image-list-container/image-list-container';

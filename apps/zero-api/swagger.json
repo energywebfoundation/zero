@@ -1652,11 +1652,11 @@
           },
           "uploadedAt": {
             "type": "object",
-            "example": "2021-07-26T10:30:22.588Z"
+            "example": "2021-09-23T12:05:03.209Z"
           },
           "processingCompletedAt": {
             "type": "object",
-            "example": "2021-07-26T10:30:23.571Z"
+            "example": "2021-09-23T12:05:04.192Z"
           }
         },
         "required": [

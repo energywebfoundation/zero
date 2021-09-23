@@ -35,7 +35,7 @@ export const ProcessingContainer = ({
           zIndex: 2,
         }}
       >
-        <CircularProgress sx={{ opacity: 1 }} color={'primary'} />
+        <CircularProgress color={'primary'} />
       </Box>
     )}
     {children}

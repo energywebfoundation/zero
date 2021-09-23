@@ -3,6 +3,7 @@ import FileListItem from '../file-list-item/file-list-item';
 import { FileMetadataDto } from '@energyweb/zero-ui-api';
 import { Box, Button, Grid } from '@material-ui/core';
 import { FileTypeEnum } from '../file-info/file-info';
+import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface FileListItemConfig extends FileMetadataDto {}
@@ -10,7 +11,7 @@ interface FileListItemConfig extends FileMetadataDto {}
 /* eslint-disable-next-line */
 export interface FileListProps {
   selectable?: boolean;
-  fileTypeDisplayList: Array<FileTypeEnum>;
+  fileTypeDisplayList?: Array<FileTypeEnum>;
   loading: boolean;
   fileList: Array<FileListItemConfig>;
   selectedFileIdList: string[];
@@ -35,6 +36,7 @@ export const FileList = ({
   handleDeleteRequest,
   selectable,
 }: FileListProps) => {
+  const { t } = useTranslation();
   return (
     <StyledFileList>
       <Grid container>
@@ -64,14 +66,14 @@ export const FileList = ({
               handleSubmit(selectedFileIdList);
             }}
           >
-            Submit selection
+            {t('components.FileList.submitSelection')}
           </Button>
           <Button
             color={'warning'}
             variant={'contained'}
             onClick={handleCancel}
           >
-            Cancel
+            {t('components.FileList.cancel')}
           </Button>
         </Box>
       )}

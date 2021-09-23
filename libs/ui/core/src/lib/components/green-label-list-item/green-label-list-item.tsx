@@ -10,16 +10,20 @@ import FileInfo from '../file-info/file-info';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 /* eslint-disable-next-line */
-export interface GreenLabelListItemProps {}
-
-const GreenLabelListItem: FC<{
+export interface GreenLabelListItemProps {
   data: GreenLabelDto;
   handleUpdateGreenLabel: (
     greenLabelType: GreenLabelTypeEnum,
     greenLabel: GreenLabelDto
   ) => void;
   handleDeleteGreenLabel: (greenLabelType: GreenLabelTypeEnum) => void;
-}> = ({ data, handleUpdateGreenLabel, handleDeleteGreenLabel }) => (
+}
+
+const GreenLabelListItem = ({
+  data,
+  handleUpdateGreenLabel,
+  handleDeleteGreenLabel,
+}: GreenLabelListItemProps) => (
   <Grid
     container
     flexWrap={'nowrap'}

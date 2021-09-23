@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import {
   DeleteForeverOutlined,
   DocumentScannerOutlined,
@@ -17,13 +16,20 @@ import {
   userFileListStateSelectors,
 } from '@energy-web-zero/store-configure';
 import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { useTranslation } from 'react-i18next';
 
 export enum FileTypeEnum {
-  PDF = 'PDF',
-  JPG = 'JPG',
-  DOC = 'DOC',
-  PNG = 'PNG',
-  XML = 'XML',
+  PDF = 'application/pdf',
+  JPEG = 'image/jpeg',
+  DOC = 'application/msword',
+  DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  XLS = 'application/vnd.ms-excel',
+  XLT = 'application/vnd.ms-excel',
+  XLA = 'application/vnd.ms-excel',
+  XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  PNG = 'image/png',
+  XML = 'text/xml',
+  PPT = 'application/vnd.ms-powerpoint',
 }
 /* eslint-disable-next-line */
 export interface FileInfoProps {
@@ -32,19 +38,17 @@ export interface FileInfoProps {
   selected?: boolean;
 }
 
-const StyledFileInfo = styled(Box)``;
-
 export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
-  console.log(id);
   const fileMetadata: FileMetadataDto | undefined = useSelector((state) =>
     userFileListStateSelectors.getFileMetadataById(state as RootState, id)
   );
+  const { t } = useTranslation();
   return (
-    <StyledFileInfo display={'flex'} alignItems={'center'}>
+    <Box display={'flex'} alignItems={'center'}>
       {fileMetadata ? (
         <Box display={'flex'}>
           <Box mr={2}>
-            {renderFileTypeIcon(getFileTypeFromMime(fileMetadata.mimetype))}
+            {renderFileTypeIcon(fileMetadata.mimetype as FileTypeEnum)}
           </Box>
           <Typography
             sx={{ textDecoration: 'underline' }}
@@ -69,7 +73,7 @@ export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
             fontSize={'16px'}
             color={'primary'}
           >
-            Loading...
+            {t('components.FileInfo.loading')}
           </Typography>
         </Box>
       )}
@@ -78,25 +82,29 @@ export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
           <DeleteForeverOutlined />
         </IconButton>
       )}
-    </StyledFileInfo>
+    </Box>
   );
 };
 
-const renderFileTypeIcon = (fileType: FileTypeEnum) => {
-  switch (fileType) {
-    case FileTypeEnum.PDF:
-      return <PictureAsPdfOutlined color={'secondary'} />;
-    case FileTypeEnum.DOC:
-    case FileTypeEnum.XML:
-      return <DocumentScannerOutlined color={'secondary'} />;
-    case FileTypeEnum.JPG:
-    case FileTypeEnum.PNG:
-      return <Image color={'secondary'} />;
-  }
-};
-
-const getFileTypeFromMime = (mimeType: string): FileTypeEnum => {
-  return FileTypeEnum.JPG;
+const renderFileTypeIcon = (mime: FileTypeEnum) => {
+  if (mime === FileTypeEnum.PDF)
+    return <PictureAsPdfOutlined color={'secondary'} />;
+  if (
+    [
+      FileTypeEnum.DOC,
+      FileTypeEnum.XML,
+      FileTypeEnum.DOCX,
+      FileTypeEnum.XLA,
+      FileTypeEnum.XLT,
+      FileTypeEnum.XLS,
+      FileTypeEnum.PPT,
+      FileTypeEnum.XLSX,
+    ].includes(mime)
+  )
+    return <DocumentScannerOutlined color={'secondary'} />;
+  if ([FileTypeEnum.JPEG, FileTypeEnum.PNG].includes(mime))
+    return <Image color={'secondary'} />;
+  else return null;
 };
 
 export default FileInfo;

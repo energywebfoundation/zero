@@ -13,9 +13,10 @@ const MB = 1024 * 1024;
 const UPLOAD_SIZE_LIMIT_PDF = 128 * MB;
 
 export enum AcceptedFileTypeEnum {
-  DOCUMENT_PDF = '',
-  DOCUMENT_XSL = '',
-  DOCUMENT_WORD = '',
+  DOCUMENT_PDF = 'application/pdf',
+  DOCUMENT_XLS = 'application/vnd.ms-excel',
+  DOCUMENT_WORD = 'application/msword',
+  DOCUMENT_XML = 'text/xml',
   IMAGE_JPEG = 'image/jpeg',
   IMAGE_PNG = 'image/png',
 }

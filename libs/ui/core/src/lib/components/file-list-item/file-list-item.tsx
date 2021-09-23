@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { FileMetadataDto } from '@energyweb/zero-ui-api';
 import Grid from '@material-ui/core/Grid';
-import FileInfo, { FileTypeEnum } from '../file-info/file-info';
+import FileInfo from '../file-info/file-info';
 import { Box } from '@material-ui/core';
 
 /* eslint-disable-next-line */

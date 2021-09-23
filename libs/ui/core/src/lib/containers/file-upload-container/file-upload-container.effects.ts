@@ -27,7 +27,6 @@ export const useFileUploadContainerEffects = (
       ).then((value) => {
         handleFileListChanged(value as string[]);
         if (selectOnUploaded) {
-          console.log(value, '!!!');
           handleSubmitSelection(value as string[]);
         }
       });

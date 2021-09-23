@@ -12,10 +12,10 @@ export const ImageList = ({
   withPlaceholdersCount = 16,
 }: ImageListProps) => (
   <Grid container mx={0} bgcolor={'white'}>
-    {Array.from({ length: withPlaceholdersCount }).map((value) => (
-      <Grid item xs={12} sm={3}>
+    {Array.from({ length: withPlaceholdersCount }).map((value, index) => (
+      <Grid item xs={12} sm={3} key={index}>
         <Box p={1}>
-          <ImageItem src={'xx'} showLightPlaceholder />
+          <ImageItem src={imageList[index]} showLightPlaceholder />
         </Box>
       </Grid>
     ))}

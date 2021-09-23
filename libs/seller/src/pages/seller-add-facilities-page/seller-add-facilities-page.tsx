@@ -18,9 +18,6 @@ import { SellerAddFacilitiesImagesFormFields } from '../../components/seller-add
 import { SellerAddFacilitiesBasicInformationFormFields } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 
-/* eslint-disable-next-line */
-export interface SellerAddFacilitiesPagePropsEnum {}
-
 const StyledSellerAddFacilitiesPage = styled.div``;
 export enum SellerAddFacilitiesSteps {
   BasicInformation = 0,
@@ -106,7 +103,6 @@ export const SellerAddFacilitiesPage = () => {
                     ] as SellerAddFacilitiesBasicInformationFormFields
                   }
                   submitHandler={async (values, resetForm) => {
-                    console.log(values);
                     updateFacilityDraft(
                       SellerAddFacilitiesSteps.BasicInformation,
                       values
@@ -132,7 +128,6 @@ export const SellerAddFacilitiesPage = () => {
                     ] as SellerAddFacilitiesLocationFormFields
                   }
                   submitHandler={async (values, resetForm) => {
-                    console.log(values);
                     updateFacilityDraft(
                       SellerAddFacilitiesSteps.Location,
                       values
@@ -159,7 +154,6 @@ export const SellerAddFacilitiesPage = () => {
                     ] as SellerAddFacilitiesSustainabilityFormFields
                   }
                   submitHandler={async (values, resetForm) => {
-                    console.log(values);
                     updateFacilityDraft(
                       SellerAddFacilitiesSteps.Sustainability,
                       values
@@ -184,7 +178,6 @@ export const SellerAddFacilitiesPage = () => {
                     ] as SellerAddFacilitiesImagesFormFields
                   }
                   submitHandler={async (values, resetForm) => {
-                    console.log(values);
                     updateFacilityDraft(
                       SellerAddFacilitiesSteps.Images,
                       values

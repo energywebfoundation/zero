@@ -51,7 +51,6 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
   );
   const [facilityDraftId, setFacilityDraftId] = useState(draftId);
   const [showDraftSavedMsg, setShowDraftSavedMsg] = useState(false);
-  console.log(showDraftSavedMsg);
   const [isDraftDirty, setIsDraftDirty] = useState(false);
   const [facilityDraft, setFacilityDraft] =
     useImmer<FacilityDraft>(initialDraftState);

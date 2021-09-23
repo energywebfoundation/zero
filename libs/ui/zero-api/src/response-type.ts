@@ -6,7 +6,6 @@ export const getWithResponseType = <T>(
   const source = axios.CancelToken.source();
   const promise = axios({ ...config, cancelToken: source.token }).then(
     (res) => {
-      console.log(res);
       return res.data;
     }
   );

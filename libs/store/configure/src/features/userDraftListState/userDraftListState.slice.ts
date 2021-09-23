@@ -1,9 +1,10 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../Providers/StoreProvider';
-import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { DraftDto } from '@energyweb/zero-ui-api';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IUserdraftListState {
-  draftList: FileMetadataDto[];
+  draftList: DraftDto[];
 }
 
 const initialState: IUserdraftListState = {
@@ -14,7 +15,7 @@ export const userdraftListStateSlice = createSlice({
   name: 'userdraftListState',
   initialState,
   reducers: {
-    userDraftListFetched: (state, action: PayloadAction<any>) => {
+    userDraftListFetched: (state, action: PayloadAction<DraftDto[]>) => {
       state.draftList = action.payload;
     },
   },
@@ -22,13 +23,16 @@ export const userdraftListStateSlice = createSlice({
 
 const state = (s: RootState) => s.userDraftListState;
 
-export const userdraftListStateSelectors = {
-  getFileMetadataById: createSelector(
-    [state, (s: RootState, id: string) => id],
-    (state: IUserdraftListState, id: string) =>
+export const userDraftListStateSelectors = {
+  getUserDraftById: createSelector(
+    [state, (s: RootState, id: number) => id],
+    (state: IUserdraftListState, id: number) =>
       state.draftList.find((el) => el.id === id)
   ),
   list: createSelector([state], (s) => s.draftList),
+  faciliTyDraftList: createSelector([state], (s) =>
+    s.draftList.filter((el) => (el.draftType = 'facility'))
+  ),
 };
 
 export const userdraftListStateActions = {

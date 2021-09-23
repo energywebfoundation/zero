@@ -89,8 +89,7 @@ export const ImageUploadContainer = ({
               fontSize={'16px'}
               lineHeight={'20px'}
             >
-              A JPG or PNG image must not be more than 4,000 pixels wide high,
-              and its file size must be less than 5MB.
+              {t('components.ImageUploadContainer.helpText')}
             </Typography>
           </Grid>
           <Grid item sm={3}>

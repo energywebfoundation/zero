@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import SellerAddFacilitiesBasicInformationForm, {
   SellerAddFacilitiesBasicInformationFormFields,
 } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
@@ -12,20 +11,16 @@ export interface SellerAddFacilitiesBasicInformationPageProps {
   children: ReactElement;
 }
 
-const StyledSellerAddFacilitiesBasicInformationPage = styled.div``;
-
 export const SellerAddFacilitiesBasicInformationPage = ({
   submitHandler,
   initialValues,
   children,
 }: SellerAddFacilitiesBasicInformationPageProps) => (
-  <StyledSellerAddFacilitiesBasicInformationPage>
-    <SellerAddFacilitiesBasicInformationForm
-      children={children}
-      initialFormValues={initialValues}
-      submitHandler={submitHandler}
-    />
-  </StyledSellerAddFacilitiesBasicInformationPage>
+  <SellerAddFacilitiesBasicInformationForm
+    children={children}
+    initialFormValues={initialValues}
+    submitHandler={submitHandler}
+  />
 );
 
 export default SellerAddFacilitiesBasicInformationPage;

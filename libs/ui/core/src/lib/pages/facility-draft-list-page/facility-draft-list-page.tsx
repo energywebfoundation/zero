@@ -1,12 +1,12 @@
-import styled from '@emotion/styled';
+import { useFacilityDraftListPageEffects } from './facility-draft-list-page.effects';
+import FacilityDraftListContainer from '../../containers/facility-draft-list-container/facility-draft-list-container';
 
 /* eslint-disable-next-line */
 export interface FacilityDraftListPageProps {}
 
-const StyledFacilityDraftListPage = styled.div``;
-
-export function FacilityDraftListPage(props: FacilityDraftListPageProps) {
-  return <StyledFacilityDraftListPage></StyledFacilityDraftListPage>;
-}
+export const FacilityDraftListPage = (props: FacilityDraftListPageProps) => {
+  useFacilityDraftListPageEffects();
+  return <FacilityDraftListContainer />;
+};
 
 export default FacilityDraftListPage;

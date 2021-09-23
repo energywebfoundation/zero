@@ -73,10 +73,7 @@ export const GreenLabelForm = ({
           alignItems={'flex-end'}
         >
           <Grid item sm={12}>
-            <GenericFormFieldContainer
-              disabled={true}
-              fieldName={'greenLabel'}
-            />
+            <GenericFormFieldContainer fieldName={'greenLabel'} />
           </Grid>
           {!readOnly && (
             <Grid item sm={2} justifyItems={'flex-end'}>

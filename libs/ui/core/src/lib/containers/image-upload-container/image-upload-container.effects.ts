@@ -53,7 +53,7 @@ export const useImageUploadContainerEffects = (
                 text: {
                   firstLine:
                     uploadSuccessMsg ??
-                    t('components.FileUploadContainer.uploadSuccessfullMsg'),
+                    t('components.ImageUploadContainer.uploadSuccessfullMsg'),
                 },
               })
             );
@@ -65,14 +65,12 @@ export const useImageUploadContainerEffects = (
                 text: {
                   firstLine:
                     uploadErrorMsg ??
-                    t('components.FileUploadContainer.uploadErrorMsg'),
+                    t('components.ImageUploadContainer.uploadErrorMsg'),
                 },
               })
             );
           });
       });
-
-      console.log(acceptedFiles, fileRejections, event);
     },
     []
   );
