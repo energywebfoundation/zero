@@ -61,17 +61,19 @@
     "ui-zero-api": {
       "tags": []
     },
-    "zero": {
-      "tags": []
-    },
     "zero-api": {
       "tags": []
     },
     "zero-e2e": {
       "tags": [],
-      "implicitDependencies": ["zero"]
+      "implicitDependencies": [
+        "zero-ui"
+      ]
     },
     "zero-ui-assets": {
+      "tags": []
+    },
+    "zero-ui": {
       "tags": []
     }
   },
