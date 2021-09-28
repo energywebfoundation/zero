@@ -44,27 +44,6 @@
         }
       }
     },
-    "localization": {
-      "root": "libs/localization",
-      "sourceRoot": "libs/localization/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/localization/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/localization"],
-          "options": {
-            "jestConfig": "libs/localization/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "seller": {
       "root": "libs/seller",
       "sourceRoot": "libs/seller/src",
@@ -277,6 +256,27 @@
             "ci": {
               "quiet": true
             }
+          }
+        }
+      }
+    },
+    "ui-localization": {
+      "root": "libs/ui/localization",
+      "sourceRoot": "libs/ui/localization/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/localization/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/localization"],
+          "options": {
+            "jestConfig": "libs/ui/localization/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

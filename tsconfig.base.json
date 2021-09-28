@@ -18,13 +18,13 @@
     "baseUrl": ".",
     "paths": {
       "@energy-web-zero/buyer": ["libs/buyer/src/index.ts"],
-      "@energy-web-zero/localization": ["libs/localization/src/index.ts"],
       "@energy-web-zero/seller": ["libs/seller/src/index.ts"],
       "@energy-web-zero/store-configure": ["libs/store/configure/src/index.ts"],
       "@energy-web-zero/store/app-shared-state": [
         "libs/store/app-shared-state/src/index.ts"
       ],
       "@energy-web-zero/ui-auth": ["libs/ui/auth/src/index.ts"],
+      "@energy-web-zero/ui-localization": ["libs/ui/localization/src/index.ts"],
       "@energy-web-zero/ui/account": ["libs/ui/account/src/index.ts"],
       "@energy-web-zero/zero-ui-assets": ["libs/zero-ui-assets/src/index.ts"],
       "@energyweb/zero-forms": ["libs/ui/forms/src/index.ts"],

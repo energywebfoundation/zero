@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import localforage from 'localforage';
-import '@energy-web-zero/localization';
+import '@energy-web-zero/ui-localization';
 import './styles.scss';
 
 import App from './app/app';

@@ -71,12 +71,12 @@
         "myAccount": "My account"
       },
       "ImageUpload": {
-        "addImage":"Add image",
+        "addImage": "Add image",
         "dragDropImage": "Drag and drop image anywhere"
       },
       "ImageUploadContainer": {
         "uploadSuccessfullMsg": "Image uploaded successfully",
-        "uploadErrorMsg":  "There has been error uploading image",
+        "uploadErrorMsg": "There has been error uploading image",
         "fileDoesntPassTheValidation": "does not pass validation and has been removed from upload list",
         "helpText": "A JPG or PNG image must not be more than 4,000 pixels wide high, and its file size must be less than 5MB."
       },

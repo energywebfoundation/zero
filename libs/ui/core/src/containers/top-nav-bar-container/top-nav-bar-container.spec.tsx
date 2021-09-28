@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import '@energy-web-zero/localization';
+import '@energy-web-zero/ui-localization';
 
 import TopNavBarContainer from './top-nav-bar-container';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
