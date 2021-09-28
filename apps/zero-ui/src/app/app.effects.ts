@@ -6,9 +6,9 @@ import {
   authStateActions,
   authStateSelectors,
   notificationStateActions,
-} from '@energy-web-zero/store';
+} from '@energyweb/zero-ui-store';
 import { useEffect } from 'react';
-import { UserDto, useUsersControllerMe } from '@energy-web-zero/api-client';
+import { UserDto, useUsersControllerMe } from '@energyweb/zero-api-client';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import localforage from 'localforage';

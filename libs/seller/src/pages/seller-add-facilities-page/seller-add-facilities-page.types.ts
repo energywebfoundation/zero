@@ -3,7 +3,7 @@ import {
   SellerAddFacilitiesImagesFormFields,
   SellerAddFacilitiesLocationFormFields,
   SellerAddFacilitiesSustainabilityFormFields,
-} from '@energy-web-zero/seller';
+} from '@energyweb/zero-ui-seller';
 
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 

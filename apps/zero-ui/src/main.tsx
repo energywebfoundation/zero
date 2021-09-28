@@ -1,13 +1,13 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import localforage from 'localforage';
-import '@energy-web-zero/ui-localization';
+import '@@energyweb/zero-ui-localization';
 import './styles.scss';
 
 import App from './app/app';
 import { UiTheme } from '@energyweb/zero-theme';
-import { StoreProvider } from '@energy-web-zero/store';
-import { ApiProvider } from '@energy-web-zero/api-client';
+import { StoreProvider } from '@energyweb/zero-ui-store';
+import { ApiProvider } from '@energyweb/zero-api-client';
 import { SnackbarProvider } from 'notistack';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { css, Global } from '@emotion/react';

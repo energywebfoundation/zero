@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { ReactComponent as WindMillSvg } from './windmill.svg';
 import { FC, memo, ReactNode } from 'react';
-import { Logo } from '@energy-web-zero/ui-assets';
+import { Logo } from '@energyweb/zero-ui-assets';
 import { useTranslation } from 'react-i18next';
 
 /* eslint-disable-next-line */

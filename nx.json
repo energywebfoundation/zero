@@ -9,7 +9,7 @@
   "affected": {
     "defaultBase": "develop"
   },
-  "npmScope": "energy-web-zero",
+  "npmScope": "@energyweb/zero",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",

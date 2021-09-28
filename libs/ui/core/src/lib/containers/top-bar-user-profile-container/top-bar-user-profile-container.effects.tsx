@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { authStateSelectors, authStateActions } from '@energy-web-zero/store';
+import { authStateSelectors, authStateActions } from '@energyweb/zero-ui-store';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import localforage from 'localforage';

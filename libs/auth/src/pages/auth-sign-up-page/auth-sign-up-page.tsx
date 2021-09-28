@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { GenericFormCard } from '@energyweb/zero-ui';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { Logo } from '@energy-web-zero/ui-assets';
+import { Logo } from '@energyweb/zero-ui-assets';
 import Box from '@material-ui/system/Box/Box';
 import { Grid, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';

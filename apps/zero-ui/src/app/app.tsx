@@ -1,11 +1,11 @@
 import { FC, memo } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { SellerLandingPage } from '@energy-web-zero/seller';
-import { BuyerLandingPage } from '@energy-web-zero/buyer';
-import { AuthPage } from '@energy-web-zero/auth';
+import { SellerLandingPage } from '@energyweb/zero-ui-seller';
+import { BuyerLandingPage } from '@energyweb/zero-ui-buyer';
+import { AuthPage } from '@energyweb/zero-ui-auth';
+import { AccountPage } from '@energyweb/zero-ui-account';
+import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui-core';
 import { useAppEffects } from './app.effects';
-import { AccountPage } from '@energy-web-zero/account';
-import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AppProps {}
 

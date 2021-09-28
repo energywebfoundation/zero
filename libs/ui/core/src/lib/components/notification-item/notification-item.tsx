@@ -1,5 +1,5 @@
 import { Box, Container, IconButton, Typography } from '@material-ui/core';
-import { NotificationConfig, NotificationType } from '@energy-web-zero/store';
+import { NotificationConfig, NotificationType } from '@energyweb/zero-ui-store';
 import { Close } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { GuideCard } from '@energyweb/zero-ui';
 import Edit from '@material-ui/icons/EditOutlined';
 import FlashOn from '@material-ui/icons/FlashOn';
@@ -7,7 +7,7 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined';
 import ChevronRightOutlined from '@material-ui/icons/ChevronRightOutlined';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
-import { UserDto } from '@energy-web-zero/api-client';
+import { UserDto } from '@energyweb/zero-api-client';
 
 /* eslint-disable-next-line */
 export interface AccountSellerDashboardEmptyPageProps {

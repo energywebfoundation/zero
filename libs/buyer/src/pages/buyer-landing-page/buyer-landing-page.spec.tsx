@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 
 import BuyerLandingPage from './buyer-landing-page';
-import { StoreProvider } from '@energy-web-zero/store/configure';
-import { UiTheme } from '@energyweb/zero-theme';
+import { StoreProvider } from '@energyweb/zero-ui-store';
+import { UiTheme } from '@energyweb/zero-ui-theme';
 
 describe('BuyerLandingPage', () => {
   it('should render successfully', () => {

@@ -3,12 +3,12 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   notificationStateActions,
   NotificationType,
-} from '@energy-web-zero/store';
+} from '@energyweb/zero-ui-store';
 import { DropEvent, FileRejection } from 'react-dropzone';
 import {
   UploadFileDto,
   useFilesControllerUploadFiles,
-} from '@energy-web-zero/api-client';
+} from '@energyweb/zero-api-client';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'react-i18next';
 

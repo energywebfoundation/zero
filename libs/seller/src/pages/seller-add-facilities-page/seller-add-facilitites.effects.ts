@@ -1,13 +1,13 @@
 import {
   useUsersOwnDraftsControllerCreate,
   useUsersOwnDraftsControllerUpdate,
-} from '@energy-web-zero/api-client';
+} from '@energyweb/zero-api-client';
 import { useSelector } from 'react-redux';
 import {
   authStateSelectors,
   notificationStateActions,
   NotificationType,
-} from '@energy-web-zero/store';
+} from '@energyweb/zero-ui-store';
 import { useCallback, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { FacilityDraft } from './seller-add-facilities-page.types';

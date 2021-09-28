@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { FC, memo } from 'react';
 import { ReactComponent as NotFoundSvg } from './not_found.svg';
 import { Helmet } from 'react-helmet-async';
-import { Logo } from '@energy-web-zero/ui-assets';
+import { Logo } from '@energyweb/zero-ui-assets';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from '@material-ui/icons';

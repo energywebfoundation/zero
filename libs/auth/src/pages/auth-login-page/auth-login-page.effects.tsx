@@ -1,10 +1,10 @@
-import { useAppControllerLogin } from '@energy-web-zero/api-client';
+import { useAppControllerLogin } from '@energyweb/zero-api-client';
 import { useCallback } from 'react';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
+import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
 import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { authStateActions } from '@energy-web-zero/store';
+import { authStateActions } from '@energyweb/zero-ui-store';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 

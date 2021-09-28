@@ -1,7 +1,7 @@
 module.exports = {
   apiClient: {
     input: {
-      target: './src/swagger.json',
+      target: '../../apps/zero-api/swagger.json',
     },
     output: {
       client: 'react-query',

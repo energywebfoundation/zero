@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import '@energy-web-zero/ui-localization';
+import '@energyweb/zero-ui-localization';
 
 import TopNavBarContainer from './top-nav-bar-container';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { StoreProvider } from '@energy-web-zero/store/configure';
+import { StoreProvider } from '@energyweb/zero-ui-store';
 import { MemoryRouter } from 'react-router-dom';
 
 describe('TopNavBarContainer', () => {

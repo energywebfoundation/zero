@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { appStateSelectors } from '@energy-web-zero/store';
+import { appStateSelectors } from '@energyweb/zero-ui-store';
 
 export const useLayoutWithTopbarEffects = () => {
   return {

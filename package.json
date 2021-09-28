@@ -1,5 +1,5 @@
 {
-  "name": "energy-web-zero",
+  "name": "@energyweb/zero",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "start": "concurrently --names 'FRONT,API' -c 'yellow,cyan'  'nx serve zero-ui --port=3000' 'nx serve zero-api'",
     "start:api": "nx serve zero-api",
     "clean": "rm -rf node_modules && rm -rf dist",
-    "build": "nx run-many --target=build --projects=zero-ui,zero-api --parallel",
+    "build": "yarn swagger:schema:generate && yarn orval:generate && nx run-many --target=build --projects=zero-ui,zero-api --parallel",
     "build:docker": "nx run-many --target=docker-image-build --projects=zero-ui,zero-api && yarn docker:tag:canary",
     "docker:tag:canary": "docker tag zero-ui:latest zero-ui:canary && docker tag zero-ui:latest zero-ui:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0 && docker tag zero-api:latest zero-api:canary && docker tag zero-api:latest zero-api:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0",
     "test": "nx test",
@@ -31,15 +31,12 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "prepare": "husky install",
-    "publish:canary": "",
-    "publish:preview": "",
-    "publish:release": "",
     "db:migrate:recreate-initial": "rm -rf apps/zero-api/prisma/migrations/* && prisma migrate dev --create-only --skip-seed -n initial && git add apps/zero-api/prisma/migrations/* && prisma generate",
     "db:migrate:reset": "prisma migrate reset",
     "db:migrate:ci": "prisma migrate reset --skip-generate --skip-seed --force",
     "db:migrate:deploy": "prisma migrate deploy",
     "swagger:schema:generate": "cd apps/zero-api && TS_NODE_PROJECT=tsconfig.app.json ts-node src/generateSchema.ts",
-    "orval:generate": "cd libs/ui/zero-api && orval"
+    "orval:generate": "cd libs/api-client && orval"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.30.0",

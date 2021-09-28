@@ -1,7 +1,7 @@
 import {
   UploadFileDto,
   useFilesControllerUploadFiles,
-} from '@energy-web-zero/api-client';
+} from '@energyweb/zero-api-client';
 
 export const useFileUploadContainerEffects = (
   uploadCompletedSuccessfullyMessage1: string | undefined,

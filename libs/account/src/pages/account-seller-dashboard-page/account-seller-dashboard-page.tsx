@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import {
   AccountSellerDashboardEmptyPage,
   SellerAddFacilitiesPage,
-} from '@energy-web-zero/seller';
+} from '@energyweb/zero-ui-seller';
 
 /* eslint-disable-next-line */
 export interface AccountSellerDashboardPageProps {}

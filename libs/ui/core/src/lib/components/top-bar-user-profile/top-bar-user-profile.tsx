@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Avatar, Box, Menu, MenuItem, Typography } from '@material-ui/core';
-import { UserDto } from '@energy-web-zero/api-client';
+import { UserDto } from '@energyweb/zero-api-client';
 import { useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { Grid, Typography } from '@material-ui/core';
 import AuthLoginForm from '../../components/auth-login-form/auth-login-form';
-import { Logo } from '@energy-web-zero/ui-assets';
+import { Logo } from '@energyweb/zero-ui-assets';
 import Box from '@material-ui/system/Box/Box';
-import { GenericFormCard } from '@energyweb/zero-ui';
+import { GenericFormCard } from '@energyweb/zero-ui-core';
 import { useTranslation } from 'react-i18next';
 import { useAuthLoginPageEffects } from './auth-login-page.effects';
 

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FileMetadataDto } from '@energy-web-zero/api-client';
+import { FileMetadataDto } from '@energyweb/zero-api-client';
 import Grid from '@material-ui/core/Grid';
 import FileInfo from '../file-info/file-info';
 import { Box } from '@material-ui/core';

@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   authStateSelectors,
   userFileListStateActions,
-} from '@energy-web-zero/store';
-import { useUsersFilesControllerGetUserFilesMetadata } from '@energy-web-zero/api-client';
+} from '@energyweb/zero-ui-store';
+import { useUsersFilesControllerGetUserFilesMetadata } from '@energyweb/zero-api-client';
 import { useEffect } from 'react';
 
 export const useFetchUserFileListEffect = () => {

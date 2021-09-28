@@ -1,6 +1,5 @@
 import { List, ListItem } from '@material-ui/core';
-import { DraftDto } from '@energy-web-zero/api-client';
-import { FacilityDraft } from '@energy-web-zero/seller';
+import { DraftDto } from '@energyweb/zero-api-client';
 
 /* eslint-disable-next-line */
 export interface FacilityDraftListProps {

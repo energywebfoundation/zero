@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { authStateSelectors } from '@energy-web-zero/store';
+import { authStateSelectors } from '@energyweb/zero-ui-store';
 
 export const useAccountSellerDashboardPageEffects = () => {
   const navigate = useNavigate();

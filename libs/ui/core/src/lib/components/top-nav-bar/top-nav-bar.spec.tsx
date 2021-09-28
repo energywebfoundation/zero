@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import TopNavBar from './top-nav-bar';
 
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import '@energy-web-zero/ui-localization';
+import '@energyweb/zero-ui-localization';
 
 describe('TopNavBar', () => {
   it('should render successfully', () => {

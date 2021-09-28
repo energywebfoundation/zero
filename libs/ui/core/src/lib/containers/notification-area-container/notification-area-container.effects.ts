@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   notificationStateActions,
   notificationStateSelectors,
-} from '@energy-web-zero/store';
+} from '@energyweb/zero-ui-store';
 
 export const useNotificationAreaContainerEffects = () => {
   const dispatch = useDispatch();
