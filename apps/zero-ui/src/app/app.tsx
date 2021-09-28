@@ -2,9 +2,9 @@ import { FC, memo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { SellerLandingPage } from '@energy-web-zero/seller';
 import { BuyerLandingPage } from '@energy-web-zero/buyer';
-import { AuthPage } from '@energy-web-zero/ui-auth';
+import { AuthPage } from '@energy-web-zero/auth';
 import { useAppEffects } from './app.effects';
-import { AccountPage } from '@energy-web-zero/ui/account';
+import { AccountPage } from '@energy-web-zero/account';
 import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AppProps {}

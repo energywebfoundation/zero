@@ -25,7 +25,13 @@
     }
   },
   "projects": {
+    "account": {
+      "tags": []
+    },
     "api-client": {
+      "tags": []
+    },
+    "auth": {
       "tags": []
     },
     "buyer": {
@@ -37,13 +43,7 @@
     "store": {
       "tags": []
     },
-    "ui-account": {
-      "tags": []
-    },
     "ui-assets": {
-      "tags": []
-    },
-    "ui-auth": {
       "tags": []
     },
     "ui-core": {

@@ -23,6 +23,46 @@
     }
   },
   "projects": {
+    "account": {
+      "root": "libs/account",
+      "sourceRoot": "libs/account/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/account",
+            "tsConfig": "libs/account/tsconfig.lib.json",
+            "project": "libs/account/package.json",
+            "entryFile": "libs/account/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/account/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/account/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/account"],
+          "options": {
+            "jestConfig": "libs/account/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "api-client": {
       "root": "libs/api-client",
       "sourceRoot": "libs/api-client/src",
@@ -58,6 +98,46 @@
           "outputs": ["coverage/libs/api-client"],
           "options": {
             "jestConfig": "libs/api-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/auth",
+            "tsConfig": "libs/auth/tsconfig.lib.json",
+            "project": "libs/auth/package.json",
+            "entryFile": "libs/auth/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/auth/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/auth/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth"],
+          "options": {
+            "jestConfig": "libs/auth/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -126,46 +206,6 @@
         }
       }
     },
-    "ui-account": {
-      "root": "libs/ui/account",
-      "sourceRoot": "libs/ui/account/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/account",
-            "tsConfig": "libs/ui/account/tsconfig.lib.json",
-            "project": "libs/ui/account/package.json",
-            "entryFile": "libs/ui/account/src/index.ts",
-            "external": ["react/jsx-runtime", "@emotion/styled/base"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/account/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/account/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/account"],
-          "options": {
-            "jestConfig": "libs/ui/account/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "ui-assets": {
       "root": "libs/ui/assets",
       "sourceRoot": "libs/ui/assets/src",
@@ -182,46 +222,6 @@
           "outputs": ["coverage/libs/ui/assets"],
           "options": {
             "jestConfig": "libs/ui/assets/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "ui-auth": {
-      "root": "libs/ui/auth",
-      "sourceRoot": "libs/ui/auth/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/auth",
-            "tsConfig": "libs/ui/auth/tsconfig.lib.json",
-            "project": "libs/ui/auth/package.json",
-            "entryFile": "libs/ui/auth/src/index.ts",
-            "external": ["react/jsx-runtime", "@emotion/styled/base"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/auth/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/auth/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/auth"],
-          "options": {
-            "jestConfig": "libs/ui/auth/jest.config.js",
             "passWithNoTests": true
           }
         }
