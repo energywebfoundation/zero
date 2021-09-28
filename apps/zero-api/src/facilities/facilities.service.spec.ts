@@ -4,9 +4,10 @@ import { AppModule } from '../app/app.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from '../users/dto/user.dto';
 import { UsersService } from '../users/users.service';
-import { createAndActivateUser } from '../../test/helpers';
-import { User, UserRole } from '@prisma/client';
+import { createAndActivateUser, createDocumentDbRecord, createImageDbRecord } from '../../test/helpers';
+import { File, User, UserRole } from '@prisma/client';
 import { CreateFacilityDto } from './dto/create-facility.dto';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 
 
 const newFacilityData: CreateFacilityDto = {
@@ -27,7 +28,11 @@ describe('FacilitiesService', () => {
   let service: FacilitiesService;
   let usersService: UsersService;
   let user1: UserDto;
+  let user1Doc: File;
+  let user1Img: File;
   let user2: UserDto;
+  let user2Doc: File;
+  let user2Img: File;
 
   beforeAll(async function() {
     module = await Test.createTestingModule({
@@ -48,6 +53,9 @@ describe('FacilitiesService', () => {
       password: 'test password 1'
     } as User);
 
+    user1Doc = await createDocumentDbRecord(prisma, user1.id);
+    user1Img = await createImageDbRecord(prisma, user1.id);
+
     user2 = await createAndActivateUser(usersService, prisma, {
       firstName: 'test first name 2',
       lastName: 'test last name 2',
@@ -55,7 +63,12 @@ describe('FacilitiesService', () => {
       roles: [UserRole.seller],
       password: 'test password 2'
     } as User);
+
+    user2Doc = await createDocumentDbRecord(prisma, user2.id);
+    user2Img = await createImageDbRecord(prisma, user2.id);
+
   });
+
 
   afterAll(async function() {
     await module.close();
@@ -84,6 +97,93 @@ describe('FacilitiesService', () => {
       expect(dbRecords[0].name).toEqual(newFacilityData.name);
 
       expect(result).toEqual({ ...dbRecords[0], documents: [], images: [] });
+    });
+
+    it('should accept owned document', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+    });
+
+    it('should accept owned image', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+    });
+
+    it('should refuse to link not-image mimetype file as an image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user1Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing document', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: ['00000000-0000-0000-0000-000000000000']
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: ['00000000-0000-0000-0000-000000000000']
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link not-owned document', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: [user2Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link not-owned image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user2Img.id]
+        }, user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link a document already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: [user1Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link an image already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user1Img.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -186,6 +286,121 @@ describe('FacilitiesService', () => {
         images: []
       }).toEqual(r3);
     });
+
+    it('should accept owned document', async function() {
+      await service.update(
+        r1.id,
+        {
+          ...newFacilityData,
+          documents: [user1Doc.id]
+        },
+        user1.id);
+    });
+
+    it('should accept owned image', async function() {
+      await service.update(
+        r1.id,
+        {
+          ...newFacilityData,
+          images: [user1Img.id]
+        },
+        user1.id);
+    });
+
+    it('should refuse to link not-image mimetype file as an image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user1Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing document', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: ['00000000-0000-0000-0000-000000000000']
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: ['00000000-0000-0000-0000-000000000000']
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link not-owned document', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: [user2Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link not-owned image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user2Img.id]
+          },
+          user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link a document already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: [user1Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link an image already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user1Img.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
   });
 
   describe('remove()', function() {

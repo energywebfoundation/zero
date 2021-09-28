@@ -6,6 +6,10 @@ import * as request from 'supertest';
 import { copyFile, readdir, stat, unlink } from 'fs/promises';
 import { basename, resolve } from 'path';
 import { Express } from 'express';
+import { tmpdir } from 'os';
+import { FilesService } from '../src/files/files.service';
+
+const temporaryFolder = tmpdir();
 
 export async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
   return (await request(app.getHttpServer())
@@ -52,4 +56,28 @@ export async function createUploadedFile(testFile: string, temporaryFolder: stri
     buffer: null,
     stream: null
   };
+}
+
+export async function createDocumentDbRecord(prismaService: PrismaService, ownerId: number) {
+  return prismaService.file.create({
+    data: {
+      filename: 'foo-bar.pdf',
+      ownerId,
+      mimetype: 'application/pdf',
+      uploadedAt: new Date(),
+      processingCompletedAt: new Date(Date.now() + 300)
+    }
+  });
+}
+
+export async function createImageDbRecord(prismaService: PrismaService, ownerId: number) {
+  return prismaService.file.create({
+    data: {
+      filename: 'foo-bar.jpg',
+      ownerId,
+      mimetype: 'image/jpeg',
+      uploadedAt: new Date(),
+      processingCompletedAt: new Date(Date.now() + 300)
+    }
+  });
 }
