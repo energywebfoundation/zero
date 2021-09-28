@@ -64,17 +64,15 @@
     "zero-api": {
       "tags": []
     },
-    "zero-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "zero-ui"
-      ]
+    "zero-ui": {
+      "tags": []
     },
     "zero-ui-assets": {
       "tags": []
     },
-    "zero-ui": {
-      "tags": []
+    "zero-ui-e2e": {
+      "tags": [],
+      "implicitDependencies": ["zero-ui"]
     }
   },
   "targetDependencies": {

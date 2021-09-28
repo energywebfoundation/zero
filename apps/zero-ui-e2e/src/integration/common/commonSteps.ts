@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Given } from "cypress-cucumber-preprocessor/steps";
-
+import { Given } from 'cypress-cucumber-preprocessor/steps';
 
 //This means that user has no account created into the system
 Given('the user is unregistered', () => {});
