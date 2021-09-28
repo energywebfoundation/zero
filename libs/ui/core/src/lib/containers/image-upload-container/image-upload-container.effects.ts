@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   notificationStateActions,
   NotificationType,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { DropEvent, FileRejection } from 'react-dropzone';
 import {
   UploadFileDto,

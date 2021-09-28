@@ -20,7 +20,7 @@
       "@energy-web-zero/api-client": ["libs/api-client/src/index.ts"],
       "@energy-web-zero/buyer": ["libs/buyer/src/index.ts"],
       "@energy-web-zero/seller": ["libs/seller/src/index.ts"],
-      "@energy-web-zero/store-configure": ["libs/store/configure/src/index.ts"],
+      "@energy-web-zero/store": ["libs/store/src/index.ts"],
       "@energy-web-zero/ui-assets": ["libs/ui/assets/src/index.ts"],
       "@energy-web-zero/ui-auth": ["libs/ui/auth/src/index.ts"],
       "@energy-web-zero/ui-localization": ["libs/ui/localization/src/index.ts"],

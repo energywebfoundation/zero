@@ -6,7 +6,7 @@ import {
   authStateActions,
   authStateSelectors,
   notificationStateActions,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { useEffect } from 'react';
 import { UserDto, useUsersControllerMe } from '@energy-web-zero/api-client';
 import { useNavigate } from 'react-router-dom';

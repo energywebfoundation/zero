@@ -4,7 +4,7 @@ import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
 import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { authStateActions } from '@energy-web-zero/store-configure';
+import { authStateActions } from '@energy-web-zero/store';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 

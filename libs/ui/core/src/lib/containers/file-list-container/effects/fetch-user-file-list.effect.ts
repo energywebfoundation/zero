@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   authStateSelectors,
   userFileListStateActions,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { useUsersFilesControllerGetUserFilesMetadata } from '@energy-web-zero/api-client';
 import { useEffect } from 'react';
 

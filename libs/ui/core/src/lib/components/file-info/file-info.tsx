@@ -11,10 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import {
-  RootState,
-  userFileListStateSelectors,
-} from '@energy-web-zero/store-configure';
+import { RootState, userFileListStateSelectors } from '@energy-web-zero/store';
 import { FileMetadataDto } from '@energy-web-zero/api-client';
 import { useTranslation } from 'react-i18next';
 

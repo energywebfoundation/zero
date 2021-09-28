@@ -3,7 +3,7 @@ import {
   authStateSelectors,
   userDraftListStateSelectors,
   userdraftListStateSlice,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { useUsersDraftsControllerFindAll } from '@energy-web-zero/api-client';
 import { useEffect } from 'react';
 

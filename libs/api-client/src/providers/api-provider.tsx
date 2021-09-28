@@ -2,10 +2,7 @@ import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useAxiosInterceptors } from '../hooks/axios-interceptors';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  authStateActions,
-  authStateSelectors,
-} from '@energy-web-zero/store-configure';
+import { authStateActions, authStateSelectors } from '@energy-web-zero/store';
 import localforage from 'localforage';
 
 export interface ApiProviderProps {

@@ -7,7 +7,7 @@ import {
   authStateSelectors,
   notificationStateActions,
   NotificationType,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { useCallback, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { FacilityDraft } from './seller-add-facilities-page.types';

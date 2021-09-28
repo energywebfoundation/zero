@@ -5,7 +5,7 @@ import {
   authStateSelectors,
   navigationStateActions,
   navigationStateSelectors,
-} from '@energy-web-zero/store-configure';
+} from '@energy-web-zero/store';
 import { useEffect } from 'react';
 import { IconTypeEnum } from '@energyweb/zero-ui';
 import { useLocation } from 'react-router-dom';
