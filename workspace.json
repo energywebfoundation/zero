@@ -281,46 +281,6 @@
         }
       }
     },
-    "ui-forms": {
-      "root": "libs/ui/forms",
-      "sourceRoot": "libs/ui/forms/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/forms",
-            "tsConfig": "libs/ui/forms/tsconfig.lib.json",
-            "project": "libs/ui/forms/package.json",
-            "entryFile": "libs/ui/forms/src/index.ts",
-            "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/forms/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/forms/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/forms"],
-          "options": {
-            "jestConfig": "libs/ui/forms/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "ui-theme": {
       "root": "libs/ui/theme",
       "sourceRoot": "libs/ui/theme/src",
@@ -356,46 +316,6 @@
           "outputs": ["coverage/libs/ui/theme"],
           "options": {
             "jestConfig": "libs/ui/theme/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "ui-utils": {
-      "root": "libs/ui/utils",
-      "sourceRoot": "libs/ui/utils/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/utils",
-            "tsConfig": "libs/ui/utils/tsconfig.lib.json",
-            "project": "libs/ui/utils/package.json",
-            "entryFile": "libs/ui/utils/src/index.ts",
-            "external": ["react/jsx-runtime", "@emotion/styled/base"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/utils/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/utils/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/utils"],
-          "options": {
-            "jestConfig": "libs/ui/utils/jest.config.js",
             "passWithNoTests": true
           }
         }

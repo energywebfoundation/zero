@@ -49,13 +49,7 @@
     "ui-core": {
       "tags": []
     },
-    "ui-forms": {
-      "tags": []
-    },
     "ui-theme": {
-      "tags": []
-    },
-    "ui-utils": {
       "tags": []
     },
     "ui-zero-api": {
