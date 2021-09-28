@@ -49,10 +49,6 @@
     "ui-core": {
       "tags": []
     },
-    "ui-core-e2e": {
-      "tags": [],
-      "implicitDependencies": ["ui-core"]
-    },
     "ui-forms": {
       "tags": []
     },

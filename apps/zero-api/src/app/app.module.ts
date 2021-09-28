@@ -35,7 +35,7 @@ import { ProductsModule } from '../products/products.module';
 
         DATABASE_URL: Joi.string()
           .uri({ allowRelative: false, scheme: 'postgresql' })
-          .default('postgresql://postgres:postgres@localhost:5432/zero'),
+          .default('postgresql://postgres:postgres@localhost:5433/zero'),
 
         SMTP_URL: Joi.string()
           .uri({ allowRelative: false, scheme: 'smtp' })
