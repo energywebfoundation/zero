@@ -3,7 +3,7 @@ import {
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { sellerAddFacilitiesBasicInformationFormSchema } from './seller-add-facilities-basic-information-form.schema';
 import {
   DeviceOwnershipEnum,

@@ -1,7 +1,7 @@
 import SellerAddFacilitiesBasicInformationForm, {
   SellerAddFacilitiesBasicInformationFormFields,
 } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
+import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
 import { ReactElement } from 'react';
 
 /* eslint-disable-next-line */

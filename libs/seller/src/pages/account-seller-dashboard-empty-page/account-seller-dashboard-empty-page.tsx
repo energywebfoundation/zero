@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Grid, Typography } from '@material-ui/core';
-import { GuideCard } from '@energyweb/zero-ui';
+import { GuideCard } from '@energyweb/zero-ui-core';
 import Edit from '@material-ui/icons/EditOutlined';
 import FlashOn from '@material-ui/icons/FlashOn';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';

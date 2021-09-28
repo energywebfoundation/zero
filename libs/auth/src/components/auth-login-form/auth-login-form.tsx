@@ -5,7 +5,7 @@ import {
   GenericFormFieldContainer,
   GenericFormSubmitButton,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { authLoginFormSchema } from './auth-login-form.schema';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';

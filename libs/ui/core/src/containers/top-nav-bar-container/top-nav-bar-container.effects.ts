@@ -7,7 +7,7 @@ import {
   navigationStateSelectors,
 } from '@energyweb/zero-ui-store';
 import { useEffect } from 'react';
-import { IconTypeEnum } from '@energyweb/zero-ui';
+import { IconTypeEnum } from '@energyweb/zero-ui-core';
 import { useLocation } from 'react-router-dom';
 
 export const useTopNavContainerEffects = () => {

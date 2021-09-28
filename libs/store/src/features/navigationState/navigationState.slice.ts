@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   PrimaryNavigationItem,
   SecondaryNavigationItem,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { RootState } from '../../Providers/StoreProvider';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

@@ -7,7 +7,7 @@ import { useSellerAddFacilititesEffects } from './seller-add-facilitites.effects
 import {
   GenericFormMultiStep,
   GenericFormSubmitButtonContainer,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import SellerAddFacilitiesSustainabilityPage, {
   SellerAddFacilitiesSustainabilityFormFields,
 } from '../seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';

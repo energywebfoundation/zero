@@ -3,7 +3,7 @@ import {
   FacilityDocumentDto,
   GreenLabelDto,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import SellerAddFacilitiesSustainabilityForm from '../../components/seller-add-facilities-sustainability-form/seller-add-facilities-sustainability-form';
 import { ReactElement } from 'react';
 

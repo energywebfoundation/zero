@@ -3,7 +3,7 @@ import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
 import ImageUploadContainer from '../../../containers/image-upload-container/image-upload-container';
-import { GenericFormContext } from '@energyweb/zero-ui';
+import { GenericFormContext } from '@energyweb/zero-ui-core';
 
 export interface FormFieldImageUploadProps extends BaseTextFieldProps {
   field: Omit<

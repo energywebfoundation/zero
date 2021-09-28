@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/swagger.json
+
 
 # dependencies
 /node_modules
@@ -42,5 +44,3 @@ Thumbs.db
 
 /uploaded-files
 /uploaded-files-tests
-
-swagger.json

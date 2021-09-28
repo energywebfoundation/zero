@@ -1,12 +1,9 @@
-import {
-  UserDto,
-  UserRole,
-  useUsersControllerCreate,
-} from '@energyweb/zero-ui-client';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
+import { useUsersControllerCreate } from '@energyweb/zero-api-client';
+import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
 import { useCallback } from 'react';
 import { AuthSignUpFormFields } from '../../components/auth-sign-up-form/auth-sign-up-form';
 import { useNavigate } from 'react-router-dom';
+
 export const useAuthSignUpPageEffects = () => {
   const { mutateAsync } = useUsersControllerCreate();
   const navigate = useNavigate();

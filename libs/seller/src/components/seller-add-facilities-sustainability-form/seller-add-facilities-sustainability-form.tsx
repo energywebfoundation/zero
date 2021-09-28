@@ -3,9 +3,8 @@ import {
   FormSectionCard,
   GenericFormContainer,
   GenericFormFieldContainer,
-  GenericFormSubmitButtonContainer,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { SellerAddFacilitiesSustainabilityFormFields } from '../../pages/seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';
 import { sellerAddFacilitiesSustainAbilityFormSchema } from './seller-add-facilities-sustainability-form.schema';
 import { sellerAddFacilitiesSustainabilityFormFields } from './seller-add-facilities-sustainability-form-fields';

@@ -6,7 +6,7 @@ import {
   GenericFormContextData,
   GenericFormFieldConfig,
   GenericMap,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 
 type T = Omit<
   GenericFormFieldConfig,

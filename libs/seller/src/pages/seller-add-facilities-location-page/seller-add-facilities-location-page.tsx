@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import {
   GenericFormCard,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import SellerAddFacilitiesLocationForm from '../../components/seller-add-facilities-location-form/seller-add-facilities-location-form';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';

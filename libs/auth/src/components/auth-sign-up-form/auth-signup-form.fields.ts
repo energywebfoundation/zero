@@ -1,8 +1,8 @@
 import {
   GenericFormFieldType,
   TGenericFormFieldList,
-} from '@energyweb/zero-ui';
-import { UserRole } from '@energyweb/zero-ui-api';
+} from '@energyweb/zero-ui-core';
+import { UserRole } from '@energyweb/zero-api-client';
 
 export const authSignupFormFields: TGenericFormFieldList = [
   {

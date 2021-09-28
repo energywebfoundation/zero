@@ -1,9 +1,9 @@
-import React, { FC, memo, useContext, useEffect } from 'react';
+import React, { FC, memo, useContext } from 'react';
 import { BaseTextFieldProps } from '@material-ui/core';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { GreenLabelListContainer } from '../../../containers/green-label-list-container/green-label-list-container';
 import { GenericFormFieldConfig } from '../../../containers/generic-form-container/generic-form-container';
-import { GenericFormContext } from '@energyweb/zero-ui';
+import { GenericFormContext } from '@energyweb/zero-ui-core';
 
 export interface FormFieldGreenLabelListProps extends BaseTextFieldProps {
   field: Omit<

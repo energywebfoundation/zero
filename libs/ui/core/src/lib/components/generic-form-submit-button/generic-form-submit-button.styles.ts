@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
-import { variables } from '@energyweb/zero-theme';
+import { variables } from '@energyweb/zero-ui-theme';
 
 
 export const useStyles = makeStyles((theme) => {

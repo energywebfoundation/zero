@@ -3,7 +3,7 @@ import {
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { SellerAddFacilitiesLocationFormFields } from '../../pages/seller-add-facilities-location-page/seller-add-facilities-location-page';
 import { sellerAddFacilitiesLocationFormFields } from './seller-add-facilities-location-form-fields';
 import { sellerAddFacilitiesLocationFormSchema } from './seller-add-facilities-location-form.schema';

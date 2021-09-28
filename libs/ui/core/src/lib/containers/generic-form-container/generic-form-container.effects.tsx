@@ -14,7 +14,7 @@ import {
   UseFormGetValues,
 } from 'react-hook-form';
 import { Observable, Subject } from 'rxjs';
-import { GenericFormMultiStepContext } from '@energyweb/zero-ui';
+import { GenericFormMultiStepContext } from '@energyweb/zero-ui-core';
 
 type GenericFormEffectsProps<FormValuesType> = {
   mode?: Mode;

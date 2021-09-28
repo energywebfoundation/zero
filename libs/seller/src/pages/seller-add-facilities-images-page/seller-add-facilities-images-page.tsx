@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import {
   ImageListContainer,
   TGenericFormSubmitHandlerFn,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import SellerAddFacilitiesImagesForm, {
   SellerAddFacilitiesImagesFormFields,
 } from '../../components/seller-add-facilities-images-form/seller-add-facilities-images-form';

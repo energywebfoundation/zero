@@ -1,8 +1,7 @@
-import React from 'react';
 import { Meta } from '@storybook/react';
 import { useForm } from 'react-hook-form';
-import { FormFieldMap, FormFieldFileListProps } from './form-field-map';
-import { GenericFormFieldType } from '@energyweb/zero-ui';
+import { FormFieldMap, FormFieldMapProps } from './form-field-map';
+import { GenericFormFieldType } from '@energyweb/zero-ui-core';
 
 export default {
   title: 'Form / FormFieldFileList',
@@ -14,7 +13,7 @@ export default {
   },
 } as Meta;
 
-export const Standard = (args: Omit<FormFieldFileListProps, 'register'>) => {
+export const Standard = (args: Omit<FormFieldMapProps, 'register'>) => {
   const { register } = useForm();
   return <FormFieldMap register={register} {...args} />;
 };

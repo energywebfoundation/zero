@@ -4,7 +4,7 @@ import {
   TGenericFormSubmitHandlerFn,
   GenericFormCard,
   GenericFormFieldContainer,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { sellerAddFacilitiesImagesFormSchema } from './seller-add-facilities-images-form.schema';
 import { sellerAddFacilitiesImagesFormFields } from './seller-add-facilities-images-form-fields';
 import { Grid } from '@material-ui/core';

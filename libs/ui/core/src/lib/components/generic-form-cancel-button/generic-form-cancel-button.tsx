@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { Add } from '@material-ui/icons';
 import { useStyles } from './generic-form-cancel-button.styles';
-import { variables } from '@energyweb/zero-theme';
+import { variables } from '@energyweb/zero-ui-theme';
 export interface GenericFormCancelButtonProps {
   handleCancel: () => void;
 }

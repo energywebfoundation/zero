@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from '@material-ui/core';
 import {
   CallToActionButton,
   LayoutWithTopbarContainer,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { useBuyerLandingPageEffects } from './buyer-landing-page.effects';
 import SimpleSearchForm from '../../components/simple-search-form/simple-search-form';
 import { useTranslation } from 'react-i18next';

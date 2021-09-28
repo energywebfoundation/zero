@@ -1,7 +1,7 @@
 import {
   CallToActionButton,
   LayoutWithTopbarContainer,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 import { Box, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useSellerLandingPageEffects } from './seller-landing-page.effects';

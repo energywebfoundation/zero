@@ -1,7 +1,7 @@
 import {
   GenericFormFieldType,
   TGenericFormFieldList,
-} from '@energyweb/zero-ui';
+} from '@energyweb/zero-ui-core';
 
 export const sellerAddFacilitiesImagesFormFields: TGenericFormFieldList = [
   {

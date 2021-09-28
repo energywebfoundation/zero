@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
-import { GenericFormFieldContainerProps } from '@energyweb/zero-ui';
+import { GenericFormFieldContainerProps } from '@energyweb/zero-ui-core';
 
 export const useStyles = makeStyles((theme: Theme) => {
   return {

@@ -26,7 +26,8 @@
       "@energyweb/zero-ui-assets": ["libs/ui/assets/src/index.ts"],
       "@energyweb/zero-ui-localization": ["libs/ui/localization/src/index.ts"],
       "@energyweb/zero-ui-core": ["libs/ui/core/src/index.ts"],
-      "@energyweb/zero-ui-utils": ["libs/ui/utils/src/index.ts"]
+      "@energyweb/zero-ui-utils": ["libs/ui/utils/src/index.ts"],
+      "@energyweb/zero-ui-theme": ["libs/ui/theme/src/index.ts"]
     },
     "resolveJsonModule": true
   },
