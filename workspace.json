@@ -105,29 +105,6 @@
         }
       }
     },
-    "store-app-shared-state": {
-      "root": "libs/store/app-shared-state",
-      "sourceRoot": "libs/store/app-shared-state/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/store/app-shared-state/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/store/app-shared-state"],
-          "options": {
-            "jestConfig": "libs/store/app-shared-state/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "store-configure": {
       "root": "libs/store/configure",
       "sourceRoot": "libs/store/configure/src",
