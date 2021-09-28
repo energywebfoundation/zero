@@ -7,7 +7,7 @@
     "start": "concurrently --names 'FRONT,API' -c 'yellow,cyan'  'nx serve zero-ui --port=3000' 'nx serve zero-api'",
     "start:api": "nx serve zero-api",
     "clean": "rm -rf node_modules && rm -rf dist",
-    "build": "nx run-many --target=build --projects=zero,zero-api --parallel",
+    "build": "nx run-many --target=build --projects=zero-ui,zero-api --parallel",
     "build:docker": "nx run-many --target=docker-image-build --projects=zero-ui,zero-api && yarn docker:tag:canary",
     "docker:tag:canary": "docker tag zero-ui:latest zero-ui:canary && docker tag zero-ui:latest zero-ui:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0 && docker tag zero-api:latest zero-api:canary && docker tag zero-api:latest zero-api:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0",
     "test": "nx test",
