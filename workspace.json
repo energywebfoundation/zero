@@ -149,6 +149,27 @@
         }
       }
     },
+    "ui-assets": {
+      "root": "libs/ui/assets",
+      "sourceRoot": "libs/ui/assets/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/assets/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/assets"],
+          "options": {
+            "jestConfig": "libs/ui/assets/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "ui-auth": {
       "root": "libs/ui/auth",
       "sourceRoot": "libs/ui/auth/src",
@@ -512,27 +533,6 @@
           "outputs": ["coverage/apps/zero-ui"],
           "options": {
             "jestConfig": "apps/zero-ui/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "zero-ui-assets": {
-      "root": "libs/zero-ui-assets",
-      "sourceRoot": "libs/zero-ui-assets/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/zero-ui-assets/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/zero-ui-assets"],
-          "options": {
-            "jestConfig": "libs/zero-ui-assets/jest.config.js",
             "passWithNoTests": true
           }
         }

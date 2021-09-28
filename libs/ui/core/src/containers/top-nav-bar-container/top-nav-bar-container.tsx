@@ -1,5 +1,5 @@
 import { TopNavBar } from '@energyweb/zero-ui';
-import { Logo } from '@energy-web-zero/zero-ui-assets';
+import { Logo } from '@energy-web-zero/ui-assets';
 import { useTopNavContainerEffects } from './top-nav-bar-container.effects';
 import { useLocation, useNavigate } from 'react-router-dom';
 /* eslint-disable-next-line */

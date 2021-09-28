@@ -40,6 +40,9 @@
     "ui-account": {
       "tags": []
     },
+    "ui-assets": {
+      "tags": []
+    },
     "ui-auth": {
       "tags": []
     },
@@ -59,9 +62,6 @@
       "tags": []
     },
     "zero-ui": {
-      "tags": []
-    },
-    "zero-ui-assets": {
       "tags": []
     },
     "zero-ui-e2e": {
