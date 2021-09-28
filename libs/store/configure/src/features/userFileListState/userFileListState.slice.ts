@@ -1,7 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { push } from 'connected-react-router';
 import { RootState } from '../../Providers/StoreProvider';
-import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { FileMetadataDto } from '@energy-web-zero/api-client';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IUserFileListState {
   fileList: FileMetadataDto[];

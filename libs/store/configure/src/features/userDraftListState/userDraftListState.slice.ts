@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../Providers/StoreProvider';
-import { DraftDto } from '@energyweb/zero-ui-api';
+import { DraftDto } from '@energy-web-zero/api-client';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IUserdraftListState {

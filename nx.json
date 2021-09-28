@@ -25,6 +25,9 @@
     }
   },
   "projects": {
+    "api-client": {
+      "tags": []
+    },
     "buyer": {
       "tags": []
     },
@@ -53,9 +56,6 @@
       "tags": []
     },
     "ui-theme": {
-      "tags": []
-    },
-    "ui-zero-api": {
       "tags": []
     },
     "zero-api": {

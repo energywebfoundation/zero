@@ -1,7 +1,7 @@
 import {
   useUsersOwnDraftsControllerCreate,
   useUsersOwnDraftsControllerUpdate,
-} from '@energyweb/zero-ui-api';
+} from '@energy-web-zero/api-client';
 import { useSelector } from 'react-redux';
 import {
   authStateSelectors,

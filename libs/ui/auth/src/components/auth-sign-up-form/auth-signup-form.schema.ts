@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { UserRole } from '@energyweb/zero-ui-api';
+import { UserRole } from '@energy-web-zero/api-client';
 import zxcvbn from 'zxcvbn';
 import { ValidationError } from 'yup';
 

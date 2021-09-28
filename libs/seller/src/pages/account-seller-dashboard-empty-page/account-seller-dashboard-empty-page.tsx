@@ -7,7 +7,7 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined';
 import ChevronRightOutlined from '@material-ui/icons/ChevronRightOutlined';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
-import { UserDto } from '@energyweb/zero-ui-api';
+import { UserDto } from '@energy-web-zero/api-client';
 
 /* eslint-disable-next-line */
 export interface AccountSellerDashboardEmptyPageProps {

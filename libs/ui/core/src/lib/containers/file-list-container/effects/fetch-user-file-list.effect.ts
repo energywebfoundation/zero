@@ -3,7 +3,7 @@ import {
   authStateSelectors,
   userFileListStateActions,
 } from '@energy-web-zero/store-configure';
-import { useUsersFilesControllerGetUserFilesMetadata } from '@energyweb/zero-ui-api';
+import { useUsersFilesControllerGetUserFilesMetadata } from '@energy-web-zero/api-client';
 import { useEffect } from 'react';
 
 export const useFetchUserFileListEffect = () => {

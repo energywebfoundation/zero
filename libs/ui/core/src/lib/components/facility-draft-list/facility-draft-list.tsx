@@ -1,5 +1,5 @@
 import { List, ListItem } from '@material-ui/core';
-import { DraftDto } from '@energyweb/zero-ui-api';
+import { DraftDto } from '@energy-web-zero/api-client';
 import { FacilityDraft } from '@energy-web-zero/seller';
 
 /* eslint-disable-next-line */

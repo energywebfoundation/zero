@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import FileListItem from '../file-list-item/file-list-item';
-import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { FileMetadataDto } from '@energy-web-zero/api-client';
 import { Box, Button, Grid } from '@material-ui/core';
 import { FileTypeEnum } from '../file-info/file-info';
 import { useTranslation } from 'react-i18next';

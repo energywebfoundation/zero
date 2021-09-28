@@ -13,7 +13,7 @@ import { authSignUpFormSchema } from './auth-signup-form.schema';
 import { authSignupFormFields } from './auth-signup-form.fields';
 import { FC, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreateUserDto, UserRole } from '@energyweb/zero-ui-api';
+import { CreateUserDto, UserRole } from '@energy-web-zero/api-client';
 
 /* eslint-disable-next-line */
 export interface AuthSignupFormProps {

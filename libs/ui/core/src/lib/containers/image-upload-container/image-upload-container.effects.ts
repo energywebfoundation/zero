@@ -8,7 +8,7 @@ import { DropEvent, FileRejection } from 'react-dropzone';
 import {
   UploadFileDto,
   useFilesControllerUploadFiles,
-} from '@energyweb/zero-ui-api';
+} from '@energy-web-zero/api-client';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'react-i18next';
 

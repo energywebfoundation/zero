@@ -8,7 +8,7 @@ import {
   notificationStateActions,
 } from '@energy-web-zero/store-configure';
 import { useEffect } from 'react';
-import { UserDto, useUsersControllerMe } from '@energyweb/zero-ui-api';
+import { UserDto, useUsersControllerMe } from '@energy-web-zero/api-client';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import localforage from 'localforage';

@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { push } from 'connected-react-router';
-import { UserRole } from '@energyweb/zero-ui-api';
+import { UserRole } from '@energy-web-zero/api-client';
 import { RootState } from '../../Providers/StoreProvider';
 interface IAppState {
   appLanguage: AppLanguageEnum;

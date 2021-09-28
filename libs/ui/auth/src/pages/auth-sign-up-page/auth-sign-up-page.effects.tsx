@@ -2,7 +2,7 @@ import {
   UserDto,
   UserRole,
   useUsersControllerCreate,
-} from '@energyweb/zero-ui-api';
+} from '@energy-web-zero/api-client';
 import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
 import { useCallback } from 'react';
 import { AuthSignUpFormFields } from '../../components/auth-sign-up-form/auth-sign-up-form';

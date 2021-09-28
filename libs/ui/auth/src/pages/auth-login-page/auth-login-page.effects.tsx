@@ -1,4 +1,4 @@
-import { useAppControllerLogin } from '@energyweb/zero-ui-api';
+import { useAppControllerLogin } from '@energy-web-zero/api-client';
 import { useCallback } from 'react';
 import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui';
 import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';

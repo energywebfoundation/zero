@@ -15,7 +15,7 @@ import {
   RootState,
   userFileListStateSelectors,
 } from '@energy-web-zero/store-configure';
-import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { FileMetadataDto } from '@energy-web-zero/api-client';
 import { useTranslation } from 'react-i18next';
 
 export enum FileTypeEnum {

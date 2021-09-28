@@ -7,7 +7,7 @@ import './styles.scss';
 import App from './app/app';
 import { UiTheme } from '@energyweb/zero-theme';
 import { StoreProvider } from '@energy-web-zero/store-configure';
-import { ApiProvider } from '@energyweb/zero-ui-api';
+import { ApiProvider } from '@energy-web-zero/api-client';
 import { SnackbarProvider } from 'notistack';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { css, Global } from '@emotion/react';

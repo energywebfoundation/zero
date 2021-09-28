@@ -1,6 +1,6 @@
 import ImageList from '../../components/image-list/image-list';
 import { useImageListContainerEffects } from './image-list-cotainer.effects';
-import { FileMetadataDto } from '@energyweb/zero-ui-api';
+import { FileMetadataDto } from '@energy-web-zero/api-client';
 
 /* eslint-disable-next-line */
 export interface ImageListContainerProps {

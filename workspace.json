@@ -23,6 +23,46 @@
     }
   },
   "projects": {
+    "api-client": {
+      "root": "libs/api-client",
+      "sourceRoot": "libs/api-client/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/api-client",
+            "tsConfig": "libs/api-client/tsconfig.lib.json",
+            "project": "libs/api-client/package.json",
+            "entryFile": "libs/api-client/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/api-client/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-client/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api-client"],
+          "options": {
+            "jestConfig": "libs/api-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "buyer": {
       "root": "libs/buyer",
       "sourceRoot": "libs/buyer/src",
@@ -337,46 +377,6 @@
           "outputs": ["coverage/libs/ui/theme"],
           "options": {
             "jestConfig": "libs/ui/theme/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "ui-zero-api": {
-      "root": "libs/ui/zero-api",
-      "sourceRoot": "libs/ui/zero-api/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/ui/zero-api",
-            "tsConfig": "libs/ui/zero-api/tsconfig.lib.json",
-            "project": "libs/ui/zero-api/package.json",
-            "entryFile": "libs/ui/zero-api/src/index.ts",
-            "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/ui/zero-api/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/ui/zero-api/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/zero-api"],
-          "options": {
-            "jestConfig": "libs/ui/zero-api/jest.config.js",
             "passWithNoTests": true
           }
         }
