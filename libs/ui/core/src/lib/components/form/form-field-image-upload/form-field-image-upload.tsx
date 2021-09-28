@@ -1,8 +1,9 @@
-import React, { FC, forwardRef, memo } from 'react';
-import { BaseTextFieldProps, TextareaAutosize } from '@material-ui/core';
+import React, { FC, memo, useContext } from 'react';
+import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
-import ImageUpload from '../../image-upload/image-upload';
+import ImageUploadContainer from '../../../containers/image-upload-container/image-upload-container';
+import { GenericFormContext } from '@energyweb/zero-ui';
 
 export interface FormFieldImageUploadProps extends BaseTextFieldProps {
   field: Omit<
@@ -29,9 +30,17 @@ export const FormFieldImageUpload: FC<FormFieldImageUploadProps> = memo(
     disabled,
     ...rest
   }) => {
-    const { ref, name, onBlur, onChange } = register(field.name);
+    register(field.name);
+    const { setValue, getValues } = useContext(GenericFormContext)!;
+    const imageLIst: string[] = getValues(field.name);
     return (
-      <ImageUpload ref={ref} name={name} onBlur={onBlur} onChange={onChange} />
+      <ImageUploadContainer
+        disabled={true}
+        helpBoxText={field.helpBoxText}
+        handleUploadSuccess={(uploaded) => {
+          setValue(field.name, [...imageLIst, ...uploaded]);
+        }}
+      />
     );
   }
 );

@@ -1,3 +1,4 @@
+export * from './pages/seller-add-facilities-page';
 export * from './components/seller-add-facilities-images-form/seller-add-facilities-images-form';
 export * from './pages/seller-add-facilities-images-page/seller-add-facilities-images-page';
 export * from './pages/seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';
@@ -7,5 +8,4 @@ export * from './pages/seller-add-facilities-location-page/seller-add-facilities
 export * from './components/seller-add-facilities-location-form/seller-add-facilities-location-form';
 export * from './pages/seller-add-facilities-basic-information-page/seller-add-facilities-basic-information-page';
 export * from './components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
-export * from './pages/seller-add-facilities-page/seller-add-facilities-page';
 export * from './pages/seller-landing-page/seller-landing-page';

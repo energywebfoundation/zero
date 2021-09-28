@@ -65,13 +65,28 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
       styleOverrides: {
         label: {
           color: styleConfig.PRIMARY_COLOR,
-          fontWeight: 600
+          fontWeight: 600,
         },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: { fontWeight: 600, color: styleConfig.PRIMARY_COLOR },
       },
     },
     MuiInputBase: {
       styleOverrides: {
-        // root: { height: '50px' },
+        root: {
+          fontSize: '14px',
+          color: styleConfig.PRIMARY_COLOR,
+          backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
+          lineHeight: '16px',
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: { backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR },
       },
     },
     MuiFilledInput: {
@@ -97,9 +112,9 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     MuiRadio: {
       styleOverrides: {
         root: {
-          padding: "6px 8px"
-        }
-      }
+          padding: '6px 8px',
+        },
+      },
     },
     MuiFormLabel: {
       styleOverrides: {

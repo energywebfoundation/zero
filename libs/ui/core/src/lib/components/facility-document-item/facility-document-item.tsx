@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Grid from '@material-ui/core/Grid';
-import FileInfo, { FileTypeEnum } from '../file-info/file-info';
+import FileInfo from '../file-info/file-info';
 import { IconButton, TextField } from '@material-ui/core';
 import React from 'react';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
@@ -38,7 +38,7 @@ export const FacilityDocumentItem = ({
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        {<FileInfo fileType={FileTypeEnum.PDF} filename={id} />}
+        <FileInfo id={id} />
       </Grid>
       <Grid item sm={6} display={'flex'} justifyContent={'space-between'}>
         <TextField

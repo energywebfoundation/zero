@@ -2,5 +2,9 @@ import { useFetchUserFileListEffect } from './effects/fetch-user-file-list.effec
 
 export const useFileListContainerEffects = () => {
   const { data, isFetched } = useFetchUserFileListEffect();
-  return { userFileList: { data, isFetched } };
+  return {
+    userFileList: { data, isFetched },
+    isProcessing: false,
+    handleDeleteRequest: (filename: string) => {},
+  };
 };

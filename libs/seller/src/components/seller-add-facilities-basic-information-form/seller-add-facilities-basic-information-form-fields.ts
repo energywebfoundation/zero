@@ -103,7 +103,7 @@ export const sellerAddFacilitiesBasicInformationFormFields: TGenericFormFieldLis
         {
           label: 'I am a broker',
           subText: "(I've been authorized)",
-          value: DeviceOwnershipEnum.I_REC_MANAGER,
+          value: DeviceOwnershipEnum.BROKER,
         },
       ],
     },
@@ -119,7 +119,6 @@ export const sellerAddFacilitiesBasicInformationFormFields: TGenericFormFieldLis
       options: [
         { label: 'kWh', value: EnergyUnitCapacityEmum.kWh },
         { label: 'MWh', value: EnergyUnitCapacityEmum.MWh },
-        { label: 'GWh', value: EnergyUnitCapacityEmum.GWh },
       ],
     },
     {

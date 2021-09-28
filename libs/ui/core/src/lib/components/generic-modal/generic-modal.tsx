@@ -2,25 +2,29 @@ import styled from '@emotion/styled';
 import { Box, Modal, Theme, Typography } from '@material-ui/core';
 import { SxProps } from '@material-ui/system';
 import { ReactNode } from 'react';
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 
 /* eslint-disable-next-line */
 export interface GenericModalProps {
   open: boolean;
-  handleClose: () => void;
+  handleOnClose: () => void;
   children: ReactNode;
   title?: string;
   width?: string;
   p?: number | string;
+  maxHeight?: string;
 }
 
 const StyledGenericModal = styled.div``;
 
 export const GenericModal = ({
   open,
-  handleClose,
+  handleOnClose,
   title,
   children,
   width = '50vw',
+  maxHeight = '60vh',
   p = 0,
 }: GenericModalProps) => {
   const style: SxProps<Theme> = {
@@ -36,11 +40,11 @@ export const GenericModal = ({
 
   return (
     <StyledGenericModal>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleOnClose}>
         <Box sx={style}>
           {title && (
             <Typography
-              color={'secondary.light'}
+              color={'#fff'}
               bgcolor={'primary.main'}
               p={2}
               variant="h6"
@@ -49,7 +53,7 @@ export const GenericModal = ({
               {title}
             </Typography>
           )}
-          {children}
+          <SimpleBar style={{ maxHeight }}>{children}</SimpleBar>
         </Box>
       </Modal>
     </StyledGenericModal>

@@ -1,5 +1,5 @@
 module.exports = {
-  exchangeClient: {
+  apiClient: {
     input: {
       target: './src/swagger.json',
     },

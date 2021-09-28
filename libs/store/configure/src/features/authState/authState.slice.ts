@@ -42,6 +42,10 @@ export const authStateSelectors = {
     authState,
     (state: IAuthState) => state.userProfileData
   ),
+  authenticatedUserId: createSelector(
+    authState,
+    (state: IAuthState) => state.userProfileData?.id
+  ),
   isUserSeller: createSelector(authState, (state: IAuthState) =>
     Boolean(state.userProfileData?.roles.includes(UserRole.seller))
   ),

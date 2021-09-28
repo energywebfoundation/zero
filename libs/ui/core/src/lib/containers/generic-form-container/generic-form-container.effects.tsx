@@ -1,14 +1,12 @@
 import {
-  DeepMap,
   useForm,
   UseFormRegister,
   Control,
   UseFormSetValue,
   FieldErrors,
-  DeepPartial,
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { BaseSyntheticEvent, useEffect, useRef } from 'react';
+import { BaseSyntheticEvent, useContext, useEffect, useRef } from 'react';
 import { GenericFormContainerProps } from './generic-form-container';
 import {
   FieldNamesMarkedBoolean,
@@ -16,6 +14,7 @@ import {
   UseFormGetValues,
 } from 'react-hook-form';
 import { Observable, Subject } from 'rxjs';
+import { GenericFormMultiStepContext } from '@energyweb/zero-ui';
 
 type GenericFormEffectsProps<FormValuesType> = {
   mode?: Mode;
@@ -30,7 +29,7 @@ export type TGenericFormEffectsReturnType<FormValuesType> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
   onSubmit: (e?: BaseSyntheticEvent<object>) => Promise<void>;
   errors: FieldErrors;
-  dirtyFields: DeepMap<DeepPartial<FormValuesType>, true>;
+  dirtyFields: FieldNamesMarkedBoolean<FormValuesType>;
   control: Control<FormValuesType>;
   isValid: boolean;
   isDirty: boolean;
@@ -70,6 +69,8 @@ export const useGenericFormEffects: TGenericFormEffects = ({
 
   const values = watch();
   const formValuesSubjectRef$ = useRef(new Subject());
+  const genericFormMultistepContext = useContext(GenericFormMultiStepContext);
+
   const formValuesRef$ = useRef(formValuesSubjectRef$.current.asObservable());
 
   useEffect(() => {
@@ -94,6 +95,14 @@ export const useGenericFormEffects: TGenericFormEffects = ({
         console.log('request error', reason);
       });
   });
+
+  useEffect(() => {
+    genericFormMultistepContext?.handleActiveStepIsDirtyChange(isDirty);
+  }, [isDirty]);
+
+  useEffect(() => {
+    genericFormMultistepContext?.handleActiveStepIsValidChange(isValid);
+  }, [isValid]);
 
   return {
     control,

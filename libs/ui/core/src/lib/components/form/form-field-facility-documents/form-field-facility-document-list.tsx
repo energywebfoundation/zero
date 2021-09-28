@@ -20,20 +20,13 @@ export interface FormFieldFacilityDocumentListProps extends BaseTextFieldProps {
 }
 
 export const FormFieldFacilityDocumentList: FC<FormFieldFacilityDocumentListProps> =
-  ({
-    field,
-    register,
-    errorExists,
-    errorText,
-    isDirty,
-    variant,
-    disabled,
-    ...rest
-  }) => {
-    const { setValue } = useContext(GenericFormContext)!;
+  ({ field, register, errorExists, errorText, isDirty, variant, disabled }) => {
     register(field.name);
+    const { getValues, setValue } = useContext(GenericFormContext)!;
+
     return (
       <FacilityDocumentListContainer
+        data={getValues(field.name)}
         handleFacilityDocumentListChanged={(facilityDocumentList) => {
           setValue(field.name, facilityDocumentList);
         }}
