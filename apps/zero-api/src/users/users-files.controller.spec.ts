@@ -7,17 +7,9 @@ import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { User, UserRole } from '@prisma/client';
 import * as request from 'supertest';
-import {
-  createAndActivateUser,
-  createUploadedFile,
-  getAuthBearerHeader,
-  logInUser,
-  removeFolderContent
-} from '../../test/helpers';
+import { createAndActivateUser, createDocumentDbRecord, getAuthBearerHeader, logInUser } from '../../test/helpers';
 import { UsersFilesController } from './users-files.controller';
 import { FilesService } from '../files/files.service';
-import { resolve } from 'path';
-import { tmpdir } from 'os';
 import { FileMetadataDto } from '../files/dto/file-metadata.dto';
 
 describe('UsersFilesController', function() {
@@ -26,8 +18,6 @@ describe('UsersFilesController', function() {
   let controller: UsersDraftsController;
   let prisma: PrismaService;
   let usersService: UsersService;
-  let filesService: FilesService;
-  const temporaryFolder = tmpdir();
   let user1: UserDto, user2: UserDto;
   let accessToken1: string;
 
@@ -48,7 +38,6 @@ describe('UsersFilesController', function() {
     controller = module.get<UsersDraftsController>(UsersDraftsController);
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
-    filesService = module.get<FilesService>(FilesService);
 
     await prisma.clearDatabase();
 
@@ -83,18 +72,11 @@ describe('UsersFilesController', function() {
 
   describe('GET users/:userId/files', function() {
     beforeAll(async function() {
-      const uploadedFile1 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await filesService.addFile(uploadedFile1.path, uploadedFile1.originalname, uploadedFile1.mimetype, user2.id);
-
-      const uploadedFile2 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await filesService.addFile(uploadedFile2.path, uploadedFile2.originalname, uploadedFile2.mimetype, user1.id);
-
-      const uploadedFile3 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await filesService.addFile(uploadedFile3.path, uploadedFile3.originalname, uploadedFile3.mimetype, user1.id);
-
-      const uploadedFile4 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await filesService.addFile(uploadedFile4.path, uploadedFile4.originalname, uploadedFile4.mimetype, user1.id);
-    }, 20000);
+      await createDocumentDbRecord(prisma, user2.id);
+      await createDocumentDbRecord(prisma, user1.id);
+      await createDocumentDbRecord(prisma, user1.id);
+      await createDocumentDbRecord(prisma, user1.id);
+    });
 
     it('should deny access when not authenticated', async function() {
       const { body } = (await request(httpServer)
