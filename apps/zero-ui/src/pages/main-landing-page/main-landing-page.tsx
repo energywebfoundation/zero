@@ -1,14 +1,7 @@
-import styled from '@emotion/styled';
-
-/* eslint-disable-next-line */
-export interface MainLandingPageProps {}
-
-const StyledMainLandingPage = styled.div``;
-
-export const MainLandingPage = (props: MainLandingPageProps) => (
-  <StyledMainLandingPage>
+export const MainLandingPage = () => (
+  <div>
     <h1>Welcome to MainLandingPage!</h1>
-  </StyledMainLandingPage>
+  </div>
 );
 
 export default MainLandingPage;

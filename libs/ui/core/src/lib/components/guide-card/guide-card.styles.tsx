@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/system';
-import { GuideCardProps } from '@energyweb/zero-ui-core';
+import { GuideCardProps } from './guide-card';
 
 export const useStyles = makeStyles((theme: Theme) => {
   return {

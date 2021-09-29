@@ -5,6 +5,6 @@ export const useFileListContainerEffects = () => {
   return {
     userFileList: { data, isFetched },
     isProcessing: false,
-    handleDeleteRequest: (filename: string) => {},
+    handleDeleteRequest: (filename: string) => {console.log('handleDeleteRequest')},
   };
 };

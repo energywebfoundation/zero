@@ -1,17 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  PrimaryNavigationItem,
-  SecondaryNavigationItem,
-} from '@energyweb/zero-ui-core';
-import { RootState } from '../../Providers/StoreProvider';
+import { RootState } from '../../providers/StoreProvider';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface INavgationState {
+export enum IconTypeEnum {
+  PersonAddAlt1Outlined = 'PersonAddAlt1Outlined',
+  ShoppingCartOutlined = 'ShoppingCartOutlined',
+  SearchOutlined = 'SearchOutlined',
+  ListOutlined = 'ListOutlined',
+  FlashOn = 'FlashOn',
+  PeopleOutlineOutlined = 'PeopleOutlineOutlined',
+  VerifiedUserOutlined = 'VerifiedUserOutlined',
+}
+
+export interface PrimaryNavigationItem {
+  isEnabled: boolean;
+  url: string;
+  text?: string;
+  iconType: IconTypeEnum;
+  translateKey?: string;
+  prority?: number;
+  align: 'left' | 'right';
+}
+
+export interface SecondaryNavigationItem {
+  url: string;
+  text?: string;
+  translateKey?: string;
+}
+
+export interface INavigationState {
   primiaryNavigation: PrimaryNavigationItem[];
   secondaryNavigation: SecondaryNavigationItem[];
 }
 
-export const initialState: INavgationState = {
+export const initialState: INavigationState = {
   primiaryNavigation: [],
   secondaryNavigation: [],
 };

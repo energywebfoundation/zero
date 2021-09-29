@@ -1,17 +1,16 @@
 import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import localforage from 'localforage';
+import { css, Global } from '@emotion/react';
+import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 import '@energyweb/zero-ui-localization';
-import './styles.scss';
-
-import App from './app/app';
 import { UiTheme } from '@energyweb/zero-ui-theme';
 import { StoreProvider } from '@energyweb/zero-ui-store';
 import { ApiProvider } from '@energyweb/zero-api-client';
-import { SnackbarProvider } from 'notistack';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { css, Global } from '@emotion/react';
-import { HelmetProvider } from 'react-helmet-async';
+import { App } from './app/app';
+import './styles.scss';
 
 localforage.config({
   driver: localforage.LOCALSTORAGE,

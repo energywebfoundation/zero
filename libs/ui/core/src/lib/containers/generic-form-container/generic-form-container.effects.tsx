@@ -7,14 +7,14 @@ import {
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { BaseSyntheticEvent, useContext, useEffect, useRef } from 'react';
-import { GenericFormContainerProps } from './generic-form-container';
 import {
   FieldNamesMarkedBoolean,
   Mode,
   UseFormGetValues,
 } from 'react-hook-form';
 import { Observable, Subject } from 'rxjs';
-import { GenericFormMultiStepContext } from '@energyweb/zero-ui-core';
+import { GenericFormContainerProps } from './generic-form-container';
+import { GenericFormMultiStepContext } from '../../providers/generic-form-multi-step-context-provider/generic-form-multi-step-context-provider';
 
 type GenericFormEffectsProps<FormValuesType> = {
   mode?: Mode;
@@ -26,8 +26,7 @@ type GenericFormEffectsProps<FormValuesType> = {
 
 export type TGenericFormEffectsReturnType<FormValuesType> = {
   register: UseFormRegister<FormValuesType>;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onSubmit: (e?: BaseSyntheticEvent<object>) => Promise<void>;
+  onSubmit: (e?: BaseSyntheticEvent<Record<string, any>>) => Promise<void>;
   errors: FieldErrors;
   dirtyFields: FieldNamesMarkedBoolean<FormValuesType>;
   control: Control<FormValuesType>;

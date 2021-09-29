@@ -1,14 +1,7 @@
-import styled from '@emotion/styled';
-
-/* eslint-disable-next-line */
-export interface AppIndexPageProps {}
-
-const StyledAppIndexPage = styled.div``;
-
-export const AppIndexPage = (props: AppIndexPageProps) => (
-  <StyledAppIndexPage>
+export const AppIndexPage = () => (
+  <div>
     <h1>Welcome to AppIndexPage!</h1>
-  </StyledAppIndexPage>
+  </div>
 );
 
 export default AppIndexPage;

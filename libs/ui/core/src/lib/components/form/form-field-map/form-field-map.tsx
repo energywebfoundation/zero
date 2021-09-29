@@ -1,12 +1,10 @@
-import React, { FC, memo, useContext } from 'react';
+import { FC, memo, useContext } from 'react';
 import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
-import {
-  GenericFormContext,
-  GenericFormContextData,
-  GenericFormFieldConfig,
-  GenericMap,
-} from '@energyweb/zero-ui-core';
+import { GenericFormContextData, GenericFormFieldConfig } from '../../../containers';
+import { GenericFormContext } from '../../../providers';
+import GenericMap from '../../generic-map/generic-map';
+
 
 type T = Omit<
   GenericFormFieldConfig,

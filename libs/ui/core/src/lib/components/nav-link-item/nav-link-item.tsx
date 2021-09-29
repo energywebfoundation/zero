@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import { FC, memo } from 'react';
-import { Box } from '@material-ui/core';
 import IconLink from '../icon-link/icon-link';
-import { PrimaryNavigationItem } from '../top-nav-bar/top-nav-bar';
 import SvgIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import PersonAddAlt1Outlined from '@material-ui/icons/PersonAddAlt1Outlined';
 import ShoppingCartOutlined from '@material-ui/icons/ShoppingCartOutlined';
@@ -11,6 +9,7 @@ import ListOutlined from '@material-ui/icons/ListOutlined';
 import FlashOn from '@material-ui/icons/FlashOn';
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import PeopleOutlineOutlined from '@material-ui/icons/PeopleOutlineOutlined';
+import { PrimaryNavigationItem } from '@energyweb/zero-ui-store';
 
 export enum IconTypeEnum {
   PersonAddAlt1Outlined = 'PersonAddAlt1Outlined',

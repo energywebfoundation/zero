@@ -1,7 +1,7 @@
 import { Theme } from '@material-ui/core/styles';
 
 import { UiThemeVariables, variables } from '../config/variables';
-import createMaterialThemeFor from '../config/themeConfig';
+import { createMaterialTheme } from '../config/themeConfig';
 
 export interface IStyleConfig {
   PRIMARY_COLOR: string;
@@ -47,12 +47,12 @@ export function createStyleConfig(
   };
 }
 
-const makeThemeConfig = (configuration: Partial<IThemeConfiguration> = {}) => {
+export const makeThemeConfig = (configuration: Partial<IThemeConfiguration> = {}) => {
   const DEFAULT_STYLE_CONFIG = createStyleConfig(variables);
 
   const DEFAULT__CONFIGURATION: IThemeConfiguration = {
     styleConfig: DEFAULT_STYLE_CONFIG,
-    materialTheme: createMaterialThemeFor(DEFAULT_STYLE_CONFIG, 'en'),
+    materialTheme: createMaterialTheme(DEFAULT_STYLE_CONFIG, 'en'),
   };
 
   const newConfiguration: IThemeConfiguration = {
@@ -62,7 +62,7 @@ const makeThemeConfig = (configuration: Partial<IThemeConfiguration> = {}) => {
 
   if (configuration.styleConfig) {
     if (!configuration.materialTheme) {
-      newConfiguration.materialTheme = createMaterialThemeFor(
+      newConfiguration.materialTheme = createMaterialTheme(
         configuration.styleConfig,
         'en'
       );
@@ -71,5 +71,3 @@ const makeThemeConfig = (configuration: Partial<IThemeConfiguration> = {}) => {
 
   return newConfiguration;
 };
-
-export default makeThemeConfig;

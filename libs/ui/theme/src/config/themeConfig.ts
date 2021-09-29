@@ -4,9 +4,9 @@ import {
   Theme,
   ThemeOptions,
 } from '@material-ui/core/styles';
-import { variables } from './variables';
 import { enUS, plPL } from '@material-ui/core/locale';
 import { IStyleConfig } from '../utils/makeThemeConfig';
+import { variables } from './variables';
 
 const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
   breakpoints: {
@@ -235,7 +235,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
   },
 });
 
-const createMaterialTheme = (
+export const createMaterialTheme = (
   styleConfig: IStyleConfig,
   language: 'en'
 ): Theme => {
@@ -247,5 +247,3 @@ const createMaterialTheme = (
 
   return createTheme(getThemeConfig(styleConfig), materialLocale);
 };
-
-export default createMaterialTheme;

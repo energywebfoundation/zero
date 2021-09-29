@@ -1,8 +1,9 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { push } from 'connected-react-router';
 import { UserRole } from '@energyweb/zero-api-client';
-import { RootState } from '../../Providers/StoreProvider';
-interface IAppState {
+import { RootState } from '../../providers/StoreProvider';
+
+export interface IAppState {
   appLanguage: AppLanguageEnum;
   userRoles: UserRole[];
   isAuthenticated: boolean;
@@ -10,7 +11,7 @@ interface IAppState {
   isInitialized: boolean;
 }
 
-enum AppLanguageEnum {
+export enum AppLanguageEnum {
   English = 'en',
   German = 'de',
   Spanish = 'es',

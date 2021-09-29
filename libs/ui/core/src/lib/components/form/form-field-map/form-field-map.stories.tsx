@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/react';
 import { useForm } from 'react-hook-form';
+import { GenericFormFieldType } from '../../../containers';
 import { FormFieldMap, FormFieldMapProps } from './form-field-map';
-import { GenericFormFieldType } from '@energyweb/zero-ui-core';
 
 export default {
   title: 'Form / FormFieldFileList',

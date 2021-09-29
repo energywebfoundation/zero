@@ -3,7 +3,7 @@ import { BaseTextFieldProps } from '@material-ui/core';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { GreenLabelListContainer } from '../../../containers/green-label-list-container/green-label-list-container';
 import { GenericFormFieldConfig } from '../../../containers/generic-form-container/generic-form-container';
-import { GenericFormContext } from '@energyweb/zero-ui-core';
+import { GenericFormContext } from '../../../providers';
 
 export interface FormFieldGreenLabelListProps extends BaseTextFieldProps {
   field: Omit<

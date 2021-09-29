@@ -1,7 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../Providers/StoreProvider';
 import { v4 as uuid } from 'uuid';
-interface IAppState {
+import { RootState } from '../../providers/StoreProvider';
+
+export interface INotificationState {
   list: Array<NotificationConfig>;
   limit: number;
 }
@@ -11,7 +12,7 @@ export enum NotificationType {
   Info = 'Info',
   Success = 'Success',
 }
-const initialState: IAppState = {
+const initialState: INotificationState = {
   list: [],
   limit: 1,
 };
@@ -43,7 +44,7 @@ export const notificationStateSlice = createSlice({
 
 const notificationState = (state: RootState) => state.notificationState;
 export const notificationStateSelectors = {
-  list: createSelector(notificationState, (state: IAppState) => state.list),
+  list: createSelector(notificationState, (state: INotificationState) => state.list),
 };
 export const notificationStateActions = {
   addNotification: (nc: Omit<NotificationConfig, 'id'>) =>

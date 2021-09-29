@@ -1,2 +1,2 @@
-import './lib/fonts/rajdhani/stylesheet.css';
-export * from './lib/svg';
+import './fonts/rajdhani/stylesheet.css';
+export * from './svg';

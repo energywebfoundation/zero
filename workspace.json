@@ -148,8 +148,28 @@
       "sourceRoot": "libs/buyer/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/buyer",
+            "tsConfig": "libs/buyer/tsconfig.lib.json",
+            "project": "libs/buyer/package.json",
+            "entryFile": "libs/buyer/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/buyer/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": ["libs/buyer/**/*.{ts,tsx,js,jsx}"]
           }
@@ -169,8 +189,28 @@
       "sourceRoot": "libs/seller/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/seller",
+            "tsConfig": "libs/seller/tsconfig.lib.json",
+            "project": "libs/seller/package.json",
+            "entryFile": "libs/seller/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/seller/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": ["libs/seller/**/*.{ts,tsx,js,jsx}"]
           }
@@ -190,8 +230,28 @@
       "sourceRoot": "libs/store/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/store",
+            "tsConfig": "libs/store/tsconfig.lib.json",
+            "project": "libs/store/package.json",
+            "entryFile": "libs/store/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/store/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": ["libs/store/**/*.{ts,tsx,js,jsx}"]
           }
@@ -211,8 +271,28 @@
       "sourceRoot": "libs/ui/assets/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/assets",
+            "tsConfig": "libs/ui/assets/tsconfig.lib.json",
+            "project": "libs/ui/assets/package.json",
+            "entryFile": "libs/ui/assets/src/index.ts",
+            "external": ["react/jsx-runtime", "@emotion/styled/base"],
+            "rollupConfig": "rollup.config.js",
+            "assets": [
+              {
+                "glob": "libs/ui/assets/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": ["libs/ui/assets/**/*.{ts,tsx,js,jsx}"]
           }
@@ -241,7 +321,7 @@
             "project": "libs/ui/core/package.json",
             "entryFile": "libs/ui/core/src/index.ts",
             "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "rollupConfig": "rollup.config.js",
             "assets": [
               {
                 "glob": "libs/ui/core/README.md",

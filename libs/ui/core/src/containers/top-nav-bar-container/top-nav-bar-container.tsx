@@ -1,9 +1,7 @@
-import { TopNavBar } from '@energyweb/zero-ui-core';
 import { Logo } from '@energyweb/zero-ui-assets';
 import { useTopNavContainerEffects } from './top-nav-bar-container.effects';
 import { useLocation, useNavigate } from 'react-router-dom';
-/* eslint-disable-next-line */
-export interface TopNavBarContainerProps {}
+import TopNavBar from '../../lib/components/top-nav-bar/top-nav-bar';
 
 export const TopNavBarContainer = () => {
   const {

@@ -9,7 +9,6 @@ import { ChevronLeft } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import LayoutNoTopbar from '../../layouts/layout-no-topbar/layout-no-topbar';
 
-/* eslint-disable-next-line */
 export interface NotFoundPageProps {
   isAuthenticated: boolean;
   nonAuthenticatedHomeRoute: string;

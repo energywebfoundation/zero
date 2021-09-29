@@ -1,8 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../Providers/StoreProvider';
 import { UserDto, UserRole } from '@energyweb/zero-api-client';
+import { RootState } from '../../providers/StoreProvider';
 
-interface IAuthState {
+export interface IAuthState {
   isAuthenticated: boolean;
   token: string | null;
   userProfileData: UserDto | null;

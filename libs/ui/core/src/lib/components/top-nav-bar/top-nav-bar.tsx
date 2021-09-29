@@ -7,33 +7,18 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import Menu from '@material-ui/icons/Menu';
-import { FC, memo, ReactElement, useCallback } from 'react';
+import { FC, memo, ReactElement } from 'react';
 import IconLink from '../icon-link/icon-link';
 import LanguageSelect, {
   AppLanguageEnum,
 } from '../language-select/language-select';
 import { useTopNavBarStyles } from './top-nav-bar.styles';
 
-import NavLinkItem, { IconTypeEnum } from '../nav-link-item/nav-link-item';
+import NavLinkItem from '../nav-link-item/nav-link-item';
 import { PersonOutline } from '@material-ui/icons';
 import NotificationAreaContainer from '../../containers/notification-area-container/notification-area-container';
 import TopBarUserProfileContainer from '../../containers/top-bar-user-profile-container/top-bar-user-profile-container';
-
-export interface PrimaryNavigationItem {
-  isEnabled: boolean;
-  url: string;
-  text?: string;
-  iconType: IconTypeEnum;
-  translateKey?: string;
-  prority?: number;
-  align: 'left' | 'right';
-}
-
-export interface SecondaryNavigationItem {
-  url: string;
-  text?: string;
-  translateKey?: string;
-}
+import { PrimaryNavigationItem, SecondaryNavigationItem } from '@energyweb/zero-ui-store';
 
 /* eslint-disable-next-line */
 export interface TopNavBarProps {

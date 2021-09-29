@@ -1,2 +1,2 @@
-export * from './lib/ui-theme';
-export * from './lib/config/variables';
+export * from './ui-theme';
+export * from './config/variables';

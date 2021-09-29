@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Button, Grid } from '@material-ui/core';
-import React from 'react';
 import { GenericFormFieldContainer } from '../../containers/generic-form-field-container/generic-form-field-container';
 import {
   GenericFormContainer,

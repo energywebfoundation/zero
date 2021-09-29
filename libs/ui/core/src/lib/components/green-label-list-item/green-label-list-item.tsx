@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import GreenLabelForm, {
   GreenLabelDto,
   GreenLabelTypeEnum,
@@ -9,7 +8,6 @@ import { noop } from 'lodash';
 import FileInfo from '../file-info/file-info';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
-/* eslint-disable-next-line */
 export interface GreenLabelListItemProps {
   data: GreenLabelDto;
   handleUpdateGreenLabel: (
@@ -35,7 +33,7 @@ const GreenLabelListItem = ({
         <GreenLabelForm
           data={data.type}
           readOnly
-          submitHandler={async (values, resetForm) => {}}
+          submitHandler={async () => {console.log('submitHandler')}}
         />
       </Box>
     </Grid>

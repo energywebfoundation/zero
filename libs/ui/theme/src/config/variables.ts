@@ -1,8 +1,6 @@
 const $purpleExtraDark = '#2D1155';
 const $purpleDark = '#421D77';
 const $purple = '#362c45';
-const $purpleLight = '#CDABFF';
-const $purpleExtraLight = '#F6EFFF';
 
 const $green = '#00D08A';
 const $greenLight = '#b1ebcd';

@@ -1,2 +1,2 @@
 export * from './userDraftListStateEpics';
-export * from './userdraftListState.slice';
+export * from './userDraftListState.slice';

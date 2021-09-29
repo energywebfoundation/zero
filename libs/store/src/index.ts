@@ -1,2 +1,2 @@
-export * from './Providers/StoreProvider';
+export * from './providers/StoreProvider';
 export * from './features';

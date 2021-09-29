@@ -1,5 +1,5 @@
 import { combineEpics, Epic, StateObservable } from 'redux-observable';
-import { RootState } from '../../Providers/StoreProvider';
+import { RootState } from '../../providers/StoreProvider';
 import { Action } from '@reduxjs/toolkit';
 import { EMPTY, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';

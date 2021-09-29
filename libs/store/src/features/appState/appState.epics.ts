@@ -1,8 +1,8 @@
-import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
-import { RootState } from '../../Providers/StoreProvider';
-import { Action } from '@reduxjs/toolkit';
 import { EMPTY, Observable } from 'rxjs';
 import { mapTo, mergeMap, tap } from 'rxjs/operators';
+import { Action } from '@reduxjs/toolkit';
+import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
+import { RootState } from '../../providers/StoreProvider';
 import { appStateActions } from './appState.slice';
 
 export const siteLanguageChangedEpic$: Epic = (

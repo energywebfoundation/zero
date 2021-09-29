@@ -1,10 +1,10 @@
 import { combineEpics, Epic, ofType, StateObservable } from 'redux-observable';
-import { RootState } from '../../Providers/StoreProvider';
 import { Observable } from 'rxjs';
 import { mapTo, tap } from 'rxjs/operators';
-import { authStateActions } from './authState.slice';
 import * as localforage from 'localforage';
 import { AnyAction } from '@reduxjs/toolkit';
+import { authStateActions } from './authState.slice';
+import { RootState } from '../../providers/StoreProvider';
 import { appStateActions } from '../appState';
 
 export const afterUserTokenIsSet$: Epic = (
