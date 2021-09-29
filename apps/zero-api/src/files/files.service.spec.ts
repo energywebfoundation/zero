@@ -60,7 +60,7 @@ describe('FilesService', () => {
     beforeEach(async function() {
       expect(await fileExists(testFile)).toEqual(true);
       uploadedFile = await createUploadedFile(testFile, temporaryFolder);
-    });
+    }, 20000);
 
     it('should create database record', async function() {
       const res = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
@@ -69,7 +69,7 @@ describe('FilesService', () => {
       expect(databaseRecord).toBeDefined();
       expect(databaseRecord.filename).toEqual(uploadedFile.originalname);
       expect(databaseRecord.ownerId).toEqual(user.id);
-    });
+    }, 20000);
 
     it('should store a file in the S3 bucket', async function() {
       const fileMetadata = await service.addFile(uploadedFile.path, uploadedFile.originalname, uploadedFile.mimetype, user.id);
@@ -81,7 +81,7 @@ describe('FilesService', () => {
       expect(res.status).toEqual(200);
       expect(res.headers['content-disposition']).toBeDefined();
       expect(res.headers['content-disposition']).toContain(`filename=${fileMetadata.filename}`);
-    });
+    }, 20000);
   });
 
   describe('getFileMetadata()', function() {
