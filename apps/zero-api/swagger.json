@@ -554,35 +554,6 @@
         ]
       }
     },
-    "/api/users/me/files": {
-      "get": {
-        "operationId": "UsersOwnFilesController_getUserFilesMetadata",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FileMetadataDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "access-token": []
-          }
-        ],
-        "tags": [
-          "users"
-        ]
-      }
-    },
     "/api/users/{userId}/files": {
       "get": {
         "operationId": "UsersFilesController_getUserFilesMetadata",
