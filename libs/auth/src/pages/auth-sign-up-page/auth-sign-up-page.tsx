@@ -1,15 +1,11 @@
 import styled from '@emotion/styled';
 import { GenericFormCard } from '@energyweb/zero-ui-core';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { Logo } from '@energyweb/zero-ui-assets';
 import Box from '@material-ui/system/Box/Box';
 import { Grid, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-import { useAuthSignUpPageEffects } from './auth-sign-up-page.effects';
 import AuthSignUpForm from '../../components/auth-sign-up-form/auth-sign-up-form';
-
-/* eslint-disable-next-line */
-export interface AuthSIgnUpPageProps {}
+import { useAuthSignUpPageEffects } from './auth-sign-up-page.effects';
 
 const StyledAuthSIgnUpPage = styled.div`
   margin-top: 15vh;

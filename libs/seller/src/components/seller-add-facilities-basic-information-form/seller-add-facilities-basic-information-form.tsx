@@ -4,6 +4,8 @@ import {
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
+import { Box, Grid } from '@material-ui/core';
+import { ReactElement } from 'react';
 import { sellerAddFacilitiesBasicInformationFormSchema } from './seller-add-facilities-basic-information-form.schema';
 import {
   DeviceOwnershipEnum,
@@ -13,10 +15,7 @@ import {
   RenevableEnergySourceEnum,
   sellerAddFacilitiesBasicInformationFormFields,
 } from './seller-add-facilities-basic-information-form-fields';
-import { Box, Grid } from '@material-ui/core';
-import { ReactElement } from 'react';
 
-/* eslint-disable-next-line */
 export interface SellerAddFacilitiesBasicInformationFormProps {
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesBasicInformationFormFields>;
   initialFormValues: SellerAddFacilitiesBasicInformationFormFields;

@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import {
   CallToActionButton,
   GenericFormContainer,
@@ -6,18 +5,16 @@ import {
   GenericFormSubmitButton,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
-import { authLoginFormSchema } from './auth-login-form.schema';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-import { authLoginFormFields } from './auth-login-form-fields';
 import { useNavigate } from 'react-router-dom';
 import { FC } from 'react';
+import { authLoginFormFields } from './auth-login-form-fields';
+import { authLoginFormSchema } from './auth-login-form.schema';
 
 export interface AuthLoginFormProps {
-  sumbitHandler: TGenericFormSubmitHandlerFn<AuthLoginFormFields>;
+  submitHandler: TGenericFormSubmitHandlerFn<AuthLoginFormFields>;
 }
-
-const StyledAuthLoginForm = styled.div``;
 
 export interface AuthLoginFormFields {
   email: string;
@@ -25,15 +22,15 @@ export interface AuthLoginFormFields {
 }
 
 export const AuthLoginForm: FC<AuthLoginFormProps> = ({
-  sumbitHandler,
+  submitHandler,
 }: AuthLoginFormProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <StyledAuthLoginForm>
+    <div>
       <GenericFormContainer<AuthLoginFormFields>
         inputsVariant={'filled'}
-        submitHandler={sumbitHandler}
+        submitHandler={submitHandler}
         validationSchema={authLoginFormSchema}
         initialValues={{ email: '', password: '' }}
         fields={authLoginFormFields}
@@ -63,7 +60,7 @@ export const AuthLoginForm: FC<AuthLoginFormProps> = ({
           />
         </Grid>
       </GenericFormContainer>
-    </StyledAuthLoginForm>
+    </div>
   );
 };
 

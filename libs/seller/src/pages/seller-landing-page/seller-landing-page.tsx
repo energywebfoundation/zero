@@ -5,14 +5,13 @@ import {
 import { Box, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useSellerLandingPageEffects } from './seller-landing-page.effects';
-/* eslint-disable-next-line */
-export interface SellerLandingPageProps {}
 
-export const SellerLandingPage = (props: SellerLandingPageProps) => {
+export const SellerLandingPage = () => {
   const {
     handlers: { navigateToSignupPageHandler },
   } = useSellerLandingPageEffects();
   const { t } = useTranslation();
+  
   return (
     <LayoutWithTopbarContainer>
       <Box width={'100%'} textAlign={'center'}>

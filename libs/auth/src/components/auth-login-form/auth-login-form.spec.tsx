@@ -7,7 +7,7 @@ describe('AuthLoginForm', () => {
     const handleFormSubmitMockFn = jest.fn();
 
     const { baseElement } = render(
-      <AuthLoginForm sumbitHandler={handleFormSubmitMockFn} />
+      <AuthLoginForm submitHandler={handleFormSubmitMockFn} />
     );
     expect(baseElement).toBeTruthy();
   });

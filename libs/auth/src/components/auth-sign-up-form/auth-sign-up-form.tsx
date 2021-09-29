@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import {
   GenericFormContainer,
   GenericFormFieldContainer,
@@ -9,18 +8,15 @@ import {
 } from '@energyweb/zero-ui-core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import { authSignUpFormSchema } from './auth-signup-form.schema';
-import { authSignupFormFields } from './auth-signup-form.fields';
 import { FC, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreateUserDto, UserRole } from '@energyweb/zero-api-client';
+import { authSignUpFormSchema } from './auth-signup-form.schema';
+import { authSignupFormFields } from './auth-signup-form.fields';
 
-/* eslint-disable-next-line */
 export interface AuthSignupFormProps {
   submitHandler: TGenericFormSubmitHandlerFn<AuthSignUpFormFields>;
 }
-
-const StyledAuthSignupForm = styled.div``;
 
 export interface AuthSignUpFormFields {
   firstName: string;
@@ -40,7 +36,7 @@ const initialValues: Omit<CreateUserDto, 'password' | 'roles'> = {
 export const AuthSignUpForm: FC<AuthSignupFormProps> = ({ submitHandler }) => {
   const navigate = useNavigate();
   return (
-    <StyledAuthSignupForm>
+    <div>
       <GenericFormContainer<AuthSignUpFormFields>
         submitHandler={submitHandler}
         validationSchema={authSignUpFormSchema}
@@ -75,7 +71,7 @@ export const AuthSignUpForm: FC<AuthSignupFormProps> = ({ submitHandler }) => {
           </Box>
         </Grid>
       </GenericFormContainer>
-    </StyledAuthSignupForm>
+    </div>
   );
 };
 

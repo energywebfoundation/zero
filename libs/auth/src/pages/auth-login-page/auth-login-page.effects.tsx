@@ -1,17 +1,14 @@
-import { useAppControllerLogin } from '@energyweb/zero-api-client';
 import { useCallback } from 'react';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
-import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';
-import { useDispatch } from 'react-redux';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { authStateActions } from '@energyweb/zero-ui-store';
-import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useAppControllerLogin } from '@energyweb/zero-api-client';
+import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
+import { authStateActions } from '@energyweb/zero-ui-store';
+import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';
 
 export const useAuthLoginPageEffects = () => {
   const { mutateAsync } = useAppControllerLogin();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const handleFormSubmitFn: TGenericFormSubmitHandlerFn<AuthLoginFormFields> =
     useCallback(
@@ -20,15 +17,12 @@ export const useAuthLoginPageEffects = () => {
           mutateAsync({
             data: { username: loginData.email, password: loginData.password },
           })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             .then(({ accessToken }) => {
-              console.log('xxxx', accessToken);
               dispatch(authStateActions.setToken(accessToken));
               navigate('/account/dashboard/empty');
             })
             .catch((reason) => {
-              alert('Wrong email or password');
+              alert(reason);
               console.log(reason);
             })
         );

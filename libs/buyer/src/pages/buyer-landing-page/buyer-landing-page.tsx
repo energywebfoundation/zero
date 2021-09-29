@@ -3,9 +3,8 @@ import {
   CallToActionButton,
   LayoutWithTopbarContainer,
 } from '@energyweb/zero-ui-core';
-import { useBuyerLandingPageEffects } from './buyer-landing-page.effects';
-import SimpleSearchForm from '../../components/simple-search-form/simple-search-form';
 import { useTranslation } from 'react-i18next';
+import { useBuyerLandingPageEffects } from './buyer-landing-page.effects';
 
 export const BuyerLandingPage = () => {
   const {
@@ -43,7 +42,7 @@ export const BuyerLandingPage = () => {
         </Box>
         <Box my={'40px'}>
           <Paper>
-            <SimpleSearchForm />
+            Form should be here
           </Paper>
         </Box>
       </Box>

@@ -1,10 +1,9 @@
+import { ReactElement } from 'react';
+import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
 import SellerAddFacilitiesBasicInformationForm, {
   SellerAddFacilitiesBasicInformationFormFields,
 } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
-import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
-import { ReactElement } from 'react';
 
-/* eslint-disable-next-line */
 export interface SellerAddFacilitiesBasicInformationPageProps {
   initialValues: SellerAddFacilitiesBasicInformationFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesBasicInformationFormFields>;

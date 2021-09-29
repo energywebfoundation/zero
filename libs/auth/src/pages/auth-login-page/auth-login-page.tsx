@@ -1,14 +1,11 @@
 import styled from '@emotion/styled';
 import { Grid, Typography } from '@material-ui/core';
-import AuthLoginForm from '../../components/auth-login-form/auth-login-form';
-import { Logo } from '@energyweb/zero-ui-assets';
-import Box from '@material-ui/system/Box/Box';
-import { GenericFormCard } from '@energyweb/zero-ui-core';
 import { useTranslation } from 'react-i18next';
+import Box from '@material-ui/system/Box/Box';
+import { Logo } from '@energyweb/zero-ui-assets';
+import { GenericFormCard } from '@energyweb/zero-ui-core';
+import AuthLoginForm from '../../components/auth-login-form/auth-login-form';
 import { useAuthLoginPageEffects } from './auth-login-page.effects';
-
-/* eslint-disable-next-line */
-export interface AuthLoginPageProps {}
 
 const StyledAuthLoginPage = styled.div`
   margin-top: 15vh;
@@ -44,7 +41,7 @@ export const AuthLoginPage = () => {
             >
               {t('authLoginPage.subHeadText')}
             </Typography>
-            <AuthLoginForm sumbitHandler={handleFormSubmitFn} />
+            <AuthLoginForm submitHandler={handleFormSubmitFn} />
           </GenericFormCard>
         </Grid>
       </Grid>

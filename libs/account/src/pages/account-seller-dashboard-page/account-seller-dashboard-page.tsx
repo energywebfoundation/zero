@@ -1,15 +1,9 @@
-import styled from '@emotion/styled';
-import { useAccountSellerDashboardPageEffects } from './account-seller-dashboard-page.effects';
 import { Route, Routes } from 'react-router-dom';
 import {
   AccountSellerDashboardEmptyPage,
   SellerAddFacilitiesPage,
 } from '@energyweb/zero-ui-seller';
-
-/* eslint-disable-next-line */
-export interface AccountSellerDashboardPageProps {}
-
-const StyledAccountSellerDashboardPage = styled.div``;
+import { useAccountSellerDashboardPageEffects } from './account-seller-dashboard-page.effects';
 
 export const AccountSellerDashboardPage = () => {
   const {
@@ -17,7 +11,6 @@ export const AccountSellerDashboardPage = () => {
     handlers: { navigateToAddFacilitiesPageHandler },
   } = useAccountSellerDashboardPageEffects();
   return (
-    <StyledAccountSellerDashboardPage>
       <Routes>
         <Route path={'add-facilities'} element={<SellerAddFacilitiesPage />} />
         <Route
@@ -32,7 +25,6 @@ export const AccountSellerDashboardPage = () => {
           }
         />
       </Routes>
-    </StyledAccountSellerDashboardPage>
   );
 };
 

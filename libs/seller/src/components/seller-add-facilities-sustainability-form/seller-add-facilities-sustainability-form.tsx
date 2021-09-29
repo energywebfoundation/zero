@@ -1,24 +1,20 @@
-import styled from '@emotion/styled';
 import {
   FormSectionCard,
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
+import Grid from '@material-ui/core/Grid';
+import { ReactElement } from 'react';
 import { SellerAddFacilitiesSustainabilityFormFields } from '../../pages/seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';
 import { sellerAddFacilitiesSustainAbilityFormSchema } from './seller-add-facilities-sustainability-form.schema';
 import { sellerAddFacilitiesSustainabilityFormFields } from './seller-add-facilities-sustainability-form-fields';
-import Grid from '@material-ui/core/Grid';
-import { ReactElement } from 'react';
 
-/* eslint-disable-next-line */
 export interface SellerAddFacilitiesSustainabilityFormProps {
   initialValues: SellerAddFacilitiesSustainabilityFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesSustainabilityFormFields>;
   children: ReactElement;
 }
-
-const StyledSellerAddFacilitiesSustainabilityForm = styled.div``;
 
 export function SellerAddFacilitiesSustainabilityForm({
   submitHandler,
@@ -26,7 +22,6 @@ export function SellerAddFacilitiesSustainabilityForm({
   children,
 }: SellerAddFacilitiesSustainabilityFormProps) {
   return (
-    <StyledSellerAddFacilitiesSustainabilityForm>
       <GenericFormContainer
         submitHandler={submitHandler}
         validationSchema={sellerAddFacilitiesSustainAbilityFormSchema}
@@ -98,7 +93,6 @@ export function SellerAddFacilitiesSustainabilityForm({
         </Grid>
         {children}
       </GenericFormContainer>
-    </StyledSellerAddFacilitiesSustainabilityForm>
   );
 }
 

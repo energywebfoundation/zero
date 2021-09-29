@@ -1,11 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import AccountDashboardPage from '../account-dashboard-page/account-dashboard-page';
 import { Helmet } from 'react-helmet-async';
 import { LayoutWithTopbarContainer } from '@energyweb/zero-ui-core';
-/* eslint-disable-next-line */
-export interface AccountPageProps {}
+import AccountDashboardPage from '../account-dashboard-page/account-dashboard-page';
 
-export const AccountPage = (props: AccountPageProps) => {
+export const AccountPage = () => {
   return (
     <LayoutWithTopbarContainer bgColor={'#f6f3f9'}>
       <Helmet>

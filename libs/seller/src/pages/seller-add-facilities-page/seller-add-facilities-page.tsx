@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import SellerAddFacilitiesBasicInformationPage from '../seller-add-facilities-basic-information-page/seller-add-facilities-basic-information-page';
 import SellerAddFacilitiesLocationPage, {
   SellerAddFacilitiesLocationFormFields,
@@ -18,7 +17,6 @@ import { SellerAddFacilitiesImagesFormFields } from '../../components/seller-add
 import { SellerAddFacilitiesBasicInformationFormFields } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 
-const StyledSellerAddFacilitiesPage = styled.div``;
 export enum SellerAddFacilitiesSteps {
   BasicInformation = 0,
   Location = 1,
@@ -81,7 +79,6 @@ export const SellerAddFacilitiesPage = () => {
   const { t } = useTranslation();
 
   return (
-    <StyledSellerAddFacilitiesPage>
       <Grid container justifyContent={'space-between'}>
         <GenericFormMultiStep<SellerAddFacilitiesSteps>
           formTitle={'Add facilities'}
@@ -199,7 +196,6 @@ export const SellerAddFacilitiesPage = () => {
           ]}
         />
       </Grid>
-    </StyledSellerAddFacilitiesPage>
   );
 };
 

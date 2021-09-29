@@ -4,9 +4,7 @@ import zxcvbn from 'zxcvbn';
 import { ValidationError } from 'yup';
 
 yup.addMethod(yup.string, 'passwordStrength', function (args) {
-  console.log(args);
   const { message } = args;
-  // eslint-disable-next-line
   return this.test('passwordStrength', message, function testFn(value):
     | boolean
     | ValidationError {

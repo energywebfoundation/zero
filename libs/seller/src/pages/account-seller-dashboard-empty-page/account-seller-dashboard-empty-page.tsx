@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { GuideCard } from '@energyweb/zero-ui-core';
 import Edit from '@material-ui/icons/EditOutlined';
@@ -9,19 +8,16 @@ import ChevronRightOutlined from '@material-ui/icons/ChevronRightOutlined';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import { UserDto } from '@energyweb/zero-api-client';
 
-/* eslint-disable-next-line */
 export interface AccountSellerDashboardEmptyPageProps {
   navigateToAddFacilitiesPageHandler: () => void;
   userProfileData: UserDto | null;
 }
 
-const StyledAccountSellerDashboardEmptyPage = styled.div``;
-
 export const AccountSellerDashboardEmptyPage = ({
   userProfileData,
   navigateToAddFacilitiesPageHandler,
 }: AccountSellerDashboardEmptyPageProps) => (
-  <StyledAccountSellerDashboardEmptyPage>
+  <div>
     <Typography
       fontSize={'24px'}
       variant={'h6'}
@@ -90,7 +86,7 @@ export const AccountSellerDashboardEmptyPage = ({
         </Grid>
       </Grid>
     </Box>
-  </StyledAccountSellerDashboardEmptyPage>
+  </div>
 );
 
 export default AccountSellerDashboardEmptyPage;

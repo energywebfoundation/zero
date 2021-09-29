@@ -1,8 +1,8 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUsersControllerCreate } from '@energyweb/zero-api-client';
 import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
-import { useCallback } from 'react';
 import { AuthSignUpFormFields } from '../../components/auth-sign-up-form/auth-sign-up-form';
-import { useNavigate } from 'react-router-dom';
 
 export const useAuthSignUpPageEffects = () => {
   const { mutateAsync } = useUsersControllerCreate();
@@ -19,7 +19,7 @@ export const useAuthSignUpPageEffects = () => {
             roles: [createUserData.userRole],
           },
         })
-          .then((value) => {
+          .then(() => {
             navigate('/auth/sign-in');
           })
           .catch((reason) => console.log(reason)),

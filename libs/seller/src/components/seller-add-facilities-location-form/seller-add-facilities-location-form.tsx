@@ -1,30 +1,25 @@
-import styled from '@emotion/styled';
 import {
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
-import { SellerAddFacilitiesLocationFormFields } from '../../pages/seller-add-facilities-location-page/seller-add-facilities-location-page';
-import { sellerAddFacilitiesLocationFormFields } from './seller-add-facilities-location-form-fields';
-import { sellerAddFacilitiesLocationFormSchema } from './seller-add-facilities-location-form.schema';
 import { Grid } from '@material-ui/core';
 import { ReactElement } from 'react';
 
-/* eslint-disable-next-line */
+import { SellerAddFacilitiesLocationFormFields } from '../../pages/seller-add-facilities-location-page/seller-add-facilities-location-page';
+import { sellerAddFacilitiesLocationFormFields } from './seller-add-facilities-location-form-fields';
+import { sellerAddFacilitiesLocationFormSchema } from './seller-add-facilities-location-form.schema';
 export interface SellerAddFacilitiesLocationFormProps {
   initialValues: SellerAddFacilitiesLocationFormFields;
   submitHandler: TGenericFormSubmitHandlerFn<SellerAddFacilitiesLocationFormFields>;
   children: ReactElement;
 }
 
-const StyledSellerAddFacilitiesLocationForm = styled.div``;
-
 export const SellerAddFacilitiesLocationForm = ({
   submitHandler,
   initialValues,
   children,
 }: SellerAddFacilitiesLocationFormProps) => (
-  <StyledSellerAddFacilitiesLocationForm>
     <GenericFormContainer<SellerAddFacilitiesLocationFormFields>
       submitHandler={submitHandler}
       validationSchema={sellerAddFacilitiesLocationFormSchema}
@@ -58,7 +53,6 @@ export const SellerAddFacilitiesLocationForm = ({
       </Grid>
       {children}
     </GenericFormContainer>
-  </StyledSellerAddFacilitiesLocationForm>
 );
 
 export default SellerAddFacilitiesLocationForm;
