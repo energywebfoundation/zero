@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { tmpdir } from 'os';
 import { resolve } from 'path';
 import { Express } from 'express';
-import { createAndActivateUser, createUploadedFile, fileExists, removeFolderContent } from '../../test/helpers';
+import { createAndActivateUser, createDocumentDbRecord, createUploadedFile, fileExists } from '../../test/helpers';
 import { UsersService } from '../users/users.service';
 import { FileType, User, UserRole } from '@prisma/client';
 import { AppModule } from '../app/app.module';
@@ -157,17 +157,10 @@ describe('FilesService', () => {
     });
 
     beforeEach(async function() {
-      const uploadedFile1 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await service.addFile(uploadedFile1.path, uploadedFile1.originalname, uploadedFile1.mimetype, anotherUser.id);
-
-      const uploadedFile2 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await service.addFile(uploadedFile2.path, uploadedFile2.originalname, uploadedFile2.mimetype, user.id);
-
-      const uploadedFile3 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await service.addFile(uploadedFile3.path, uploadedFile3.originalname, uploadedFile3.mimetype, user.id);
-
-      const uploadedFile4 = await createUploadedFile(resolve(__dirname, '../../test/test-files/test-file.pdf'), temporaryFolder);
-      await service.addFile(uploadedFile4.path, uploadedFile4.originalname, uploadedFile4.mimetype, user.id);
+      await createDocumentDbRecord(prismaService, anotherUser.id);
+      await createDocumentDbRecord(prismaService, user.id);
+      await createDocumentDbRecord(prismaService, user.id);
+      await createDocumentDbRecord(prismaService, user.id);
     });
 
     afterEach(async function() {
