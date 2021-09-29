@@ -8,6 +8,19 @@ import { UsersService } from '../users/users.service';
 import { User, UserRole } from '@prisma/client';
 import { FacilitiesService } from '../facilities/facilities.service';
 import { FacilityDto } from '../facilities/dto/facility.dto';
+import { CreateFacilityDto } from '../facilities/dto/create-facility.dto';
+
+const newFacilityData: CreateFacilityDto = {
+  companyName: 'Company Name',
+  name: 'Facility name',
+  facilityId: 'a unique id',
+  registry: ['REC', 'I_REC'],
+  registryId: 'registry id',
+  energySource: 'BIOMASS',
+  installedCapacity: 1000,
+  country: 'PL',
+  ownershipType: 'OWNER'
+};
 
 describe('ProductsService', () => {
   let module: TestingModule;
@@ -48,8 +61,16 @@ describe('ProductsService', () => {
       password: 'test password 2'
     } as User);
 
-    facility1 = await facilitiesService.create({ name: 'facility 1' }, user1.id);
-    facility2 = await facilitiesService.create({ name: 'facility 2' }, user2.id);
+    facility1 = await facilitiesService.create({
+      ...newFacilityData,
+      facilityId: 'a unique id 1',
+      name: 'New facility name 1'
+    }, user1.id);
+    facility2 = await facilitiesService.create({
+      ...newFacilityData,
+      facilityId: 'a unique id 2',
+      name: 'New facility name 2'
+    }, user2.id);
   });
 
   afterAll(async function() {

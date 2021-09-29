@@ -18,7 +18,7 @@ import {
   UsePipes,
   ValidationPipe
 } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { FilesService, supportedDocumentsFormats, supportedImagesFormats } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
 import * as multer from 'multer';
@@ -45,6 +45,7 @@ import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { fromFile } from 'file-type';
 import { extname } from 'path';
 
+
 const filesInterceptor = FileInterceptor('file', {
   // TODO: use custom storage engine if required according to runtime environment requirements.
   //  This is a temporary storage for files to be processed
@@ -63,10 +64,6 @@ const filesInterceptor = FileInterceptor('file', {
 @UseFilters(PrismaClientExceptionFilter)
 export class FilesController {
   private readonly logger = new Logger(FilesController.name, { timestamp: true });
-
-  private readonly supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
-
-  private readonly supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
 
   constructor(private readonly filesService: FilesService) {}
 
@@ -101,7 +98,7 @@ export class FilesController {
       throw new BadRequestException(`unrecognized mimetype: ${file.mimetype}`);
     }
 
-    if ([...this.supportedDocumentsFormats, ...this.supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
+    if ([...supportedDocumentsFormats, ...supportedImagesFormats].indexOf(fileExtensionDetected) < 0) {
       this.logger.warn(`unsupported file extension detected (${fileExtensionDetected}) for ${file.mimetype} mimetype`);
       throw new BadRequestException(`unsupported mimetype (${file.mimetype})`);
     }
@@ -131,16 +128,17 @@ export class FilesController {
   @ApiOkResponse({ type: FileMetadataDto })
   @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
   async updateFileMetadata(
+    @User() user: UserDto,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateFileMetadataDto: UpdateFileMetadataDto
   ): Promise<FileMetadataDto> {
-    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto);
+    return await this.filesService.updateFileMetadata(id, updateFileMetadataDto, user.id);
   }
 
   @Get(':id')
   @ApiBearerAuth('access-token')
   @ApiTags('files')
-  @ApiResponse({status: 308, description: 'http redirect' })
+  @ApiResponse({ status: 308, description: 'http redirect' })
   async getFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
@@ -157,7 +155,7 @@ export class FilesController {
   @Get('images/:id')
   @Public()
   @ApiTags('files')
-  @ApiResponse({status: 308, description: 'http redirect' })
+  @ApiResponse({ status: 308, description: 'http redirect' })
   async getImageFileContent(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Res() res: Response
