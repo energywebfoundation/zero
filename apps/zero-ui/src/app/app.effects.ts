@@ -1,33 +1,32 @@
 
-import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
-import { UserDto, useUsersControllerMe } from '@energyweb/zero-api-client';
+import { useAxiosInterceptors, useUsersControllerMe } from '@energyweb/zero-api-client';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import localforage from 'localforage';
+import { toast } from 'react-toastify';
 
 export const useAppEffects = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  useAxiosInterceptors();
   const navigate = useNavigate();
   const authToken = localStorage.getItem('token');
 
-  const { isFetched, data, error } = useUsersControllerMe({
+  const { isFetched, data: user, error, isLoading } = useUsersControllerMe({
     query: {
       enabled: Boolean(authToken),
     },
   });
 
-  useEffect(() => {
-    if (isFetched && data) {
-      navigate('/account/dashboard/empty');
-      enqueueSnackbar(`Welcome back ${data.firstName}!`);
-    } else if (error && authToken) {
-      localforage.removeItem('token').then((value) => {
-        enqueueSnackbar('You were logged out');
-        navigate('/auth/sign-in');
-      });
-    }
-  }, [isFetched, data]);
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
 
-  return { isFetched };
+  useEffect(() => {
+    if (isFetched && user) {
+      navigate('/account/dashboard');
+      toast(`Welcome back ${user.firstName}!`);
+    } else if (error && authToken) {
+      localStorage.removeItem('token')
+      toast('You were logged out');
+      navigate('/auth/sign-in');
+    }
+  }, [isFetched, user]);
+
+  return { isLoading, isAuthenticated };
 };

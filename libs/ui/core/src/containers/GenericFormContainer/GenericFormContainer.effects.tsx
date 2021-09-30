@@ -85,13 +85,6 @@ export const useGenericFormEffects: TGenericFormEffects = ({
 
   const onSubmit = handleSubmit(async (values) => {
     submitHandler(values, reset)
-      .then((res) => {
-        console.log('submitHandler response', res);
-        reset();
-      })
-      .catch((reason) => {
-        console.log('request error', reason);
-      });
   });
 
   useEffect(() => {

@@ -1,12 +1,13 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-export const useAxiosInterceptors = (token: string | null) => {
+export const useAxiosInterceptors = () => {
   axios.defaults.baseURL = process.env.NX_BACKEND_URL;
-  const isTokenHeaderSet = useRef(false);
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (token) {
+    if (Boolean(token)) {
       axios.interceptors.request.use(
         (config: AxiosRequestConfig): AxiosRequestConfig => {
           config.baseURL = process.env.NX_BACKEND_URL;
@@ -21,9 +22,6 @@ export const useAxiosInterceptors = (token: string | null) => {
           return Promise.reject(error);
         }
       );
-      isTokenHeaderSet.current = true;
     }
   }, [token]);
-
-  return isTokenHeaderSet.current;
 };
