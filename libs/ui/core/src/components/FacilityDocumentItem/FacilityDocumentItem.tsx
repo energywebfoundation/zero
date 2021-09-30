@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Grid from '@material-ui/core/Grid';
 import { IconButton, TextField } from '@material-ui/core';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
-import FileInfo from '../FileInfo/file-info';
+import FileInfo from '../FileInfo/FileInfo';
 
 export interface FacilityDocument {
   id: string;

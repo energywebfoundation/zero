@@ -9,7 +9,7 @@ import { useAppEffects } from './app.effects';
 
 export const App: FC = () => {
   const { selectors } = useAppEffects();
-
+  console.log(selectors.isLoading);
   return (
     <LoadingPage isLoading={selectors.isLoading}>
       <Routes>

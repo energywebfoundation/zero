@@ -1,8 +1,7 @@
 import { FC, memo, useContext } from 'react';
 import { BaseTextFieldProps } from '@material-ui/core';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
-import { GreenLabelListContainer } from '../../containers/GreenLabelListContainer/GreenLabelListContainer';
-import { GenericFormFieldConfig } from '../../containers/GenericFormContainer/GenericFormContainer';
+import { GreenLabelListContainer, GenericFormFieldConfig } from '../../containers';
 import { GenericFormContext } from '../../providers';
 
 export interface FormFieldGreenLabelListProps extends BaseTextFieldProps {
@@ -23,15 +22,9 @@ export const FormFieldGreenLabelList: FC<FormFieldGreenLabelListProps> = memo(
   ({
     field,
     register,
-    errorExists,
-    errorText,
-    isDirty,
-    variant,
-    disabled,
-    ...rest
   }) => {
-    register(field.name);
     const { getValues, setValue } = useContext(GenericFormContext)!;
+    register(field.name);
     return (
       <GreenLabelListContainer
         data={getValues(field.name)}

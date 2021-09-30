@@ -1,6 +1,5 @@
 import { Logo } from '@energyweb/zero-ui-assets';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import { useTopNavContainerEffects } from './TopNavBarContainer.effects';
 

@@ -32,5 +32,3 @@ export const GreenLabelListContainer = ({
     </StyledGreenLabelListContainer>
   );
 };
-
-export default GreenLabelListContainer;

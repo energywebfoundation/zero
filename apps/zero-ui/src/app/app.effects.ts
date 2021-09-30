@@ -21,13 +21,12 @@ export const useAppEffects = () => {
 
   const { isFetched, isFetching, data, error } = useUsersControllerMe({
     query: {
-      retry: 1,
       enabled: Boolean(authToken),
     },
   });
 
   useEffect(() => {
-    if (authToken) {
+    if (Boolean(authToken)) {
       dispatch(appStateActions.setLoading(isFetching));
     }
   }, [isFetching, authToken]);
