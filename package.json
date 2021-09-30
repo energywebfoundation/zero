@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "nx": "nx",
+    "prisma": "prisma",
     "start": "concurrently --names 'FRONT,API' -c 'yellow,cyan'  'nx serve zero --port=3000' 'nx serve zero-api'",
     "start:api": "nx serve zero-api",
     "build": "nx run-many --target=build --projects=zero,zero-api --parallel",
