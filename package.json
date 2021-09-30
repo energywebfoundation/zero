@@ -60,7 +60,7 @@
     "@nestjs/passport": "8.0.1",
     "@nestjs/platform-express": "8.0.5",
     "@nestjs/swagger": "5.0.9",
-    "@prisma/client": "2.29.0",
+    "@prisma/client": "3.1.1",
     "@reduxjs/toolkit": "^1.6.1",
     "@tippyjs/react": "^4.2.5",
     "@types/numeral": "^2.0.1",
@@ -193,7 +193,7 @@
     "mailhog": "^4.15.0",
     "orval": "^5.4.7",
     "prettier": "2.3.2",
-    "prisma": "2.29.0",
+    "prisma": "3.1.1",
     "react-hook-form-devtools": "^1.2.0",
     "redux-logger": "^4.0.0",
     "rxjs-marbles": "^7.0.0",
@@ -206,7 +206,8 @@
     "url-loader": "^3.0.0"
   },
   "prisma": {
-    "schema": "apps/zero-api/prisma/schema.prisma"
+    "schema": "apps/zero-api/prisma/schema.prisma",
+    "seed": "ts-node apps/zero-api/prisma/seed.ts"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,
