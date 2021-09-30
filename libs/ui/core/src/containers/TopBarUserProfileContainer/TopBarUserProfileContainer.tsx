@@ -4,21 +4,26 @@ import { useTopBarUserProfileContainerEffects } from './TopBarUserProfileContain
 
 export const TopBarUserProfileContainer = () => {
   const {
-    selectors,
+    userProfileData,
+    isAuthenticated,
+    isLoading,
     handlers: {
       logoutHandler,
       navigateToMyAccountHandler,
       navigateToProfileHandler,
     },
   } = useTopBarUserProfileContainerEffects();
+
+  if(isLoading) return null;
+
   return (
     <div>
-      {selectors.isAuthenticated && (
+      {isAuthenticated && (
         <TopBarUserProfile
           logoutHandler={logoutHandler}
           navigateToMyAccountHandler={navigateToMyAccountHandler}
           navigateToProfileHandler={navigateToProfileHandler}
-          data={selectors.userProfileData}
+          data={userProfileData}
         />
       )}
     </div>

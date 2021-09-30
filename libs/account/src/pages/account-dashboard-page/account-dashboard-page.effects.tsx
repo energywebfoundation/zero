@@ -1,12 +1,10 @@
-import { authStateSelectors } from '@energyweb/zero-ui-store';
-import { useSelector } from 'react-redux';
+import { UserRole, useUsersControllerMe } from '@energyweb/zero-api-client'
 
 export const useAccountDasboardPageEffects = () => {
-  return {
-    selectors: {
-      userProfileData: useSelector(authStateSelectors.userProfileData),
-      isUserSeller: useSelector(authStateSelectors.isUserSeller),
-      isUserBuyer: useSelector(authStateSelectors.isUserBuyer),
-    },
-  };
+  const { data: user, isLoading } = useUsersControllerMe();
+
+  const isUserSeller = user?.roles?.includes(UserRole.seller);
+  const isUserBuyer = user?.roles?.includes(UserRole.buyer);
+
+  return { user, isUserBuyer, isUserSeller, isLoading };
 };

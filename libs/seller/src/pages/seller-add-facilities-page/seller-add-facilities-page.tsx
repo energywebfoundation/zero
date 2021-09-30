@@ -11,7 +11,7 @@ import SellerAddFacilitiesSustainabilityPage, {
   SellerAddFacilitiesSustainabilityFormFields,
 } from '../seller-add-facilities-sustainability-page/seller-add-facilities-sustainability-page';
 import SellerAddFacilitiesImagesPage from '../seller-add-facilities-images-page/seller-add-facilities-images-page';
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, CircularProgress, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { SellerAddFacilitiesImagesFormFields } from '../../components/seller-add-facilities-images-form/seller-add-facilities-images-form';
 import { SellerAddFacilitiesBasicInformationFormFields } from '../../components/seller-add-facilities-basic-information-form/seller-add-facilities-basic-information-form';
@@ -75,8 +75,11 @@ export const SellerAddFacilitiesPage = () => {
     showDraftSavedMsg,
     handleNavigateToPrevStep,
     handleNavigateToNextStep,
+    isLoading
   } = useSellerAddFacilititesEffects();
   const { t } = useTranslation();
+
+  if(isLoading) return <CircularProgress />;
 
   return (
       <Grid container justifyContent={'space-between'}>

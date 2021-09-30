@@ -7,7 +7,6 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import { PersonOutline } from '@material-ui/icons';
-import { PrimaryNavigationItem, SecondaryNavigationItem } from '@energyweb/zero-ui-store';
 import Menu from '@material-ui/icons/Menu';
 import { FC, memo, ReactElement } from 'react';
 import IconLink from '../IconLink/IconLink';
@@ -16,7 +15,7 @@ import LanguageSelect, {
 } from '../LanguageSelect/LanguageSelect';
 import { useTopNavBarStyles } from './TopNavBar.styles';
 
-import NavLinkItem from '../NavLinkItem/NavLinkItem';
+import NavLinkItem, { PrimaryNavigationItem, SecondaryNavigationItem } from '../NavLinkItem/NavLinkItem';
 import NotificationAreaContainer from '../../containers/NotificationAreaContainer/NotificationAreaContainer';
 import TopBarUserProfileContainer from '../../containers/TopBarUserProfileContainer/TopBarUserProfileContainer';
 

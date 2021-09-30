@@ -1,7 +1,4 @@
-import { useSelector } from 'react-redux';
-import { userFileListStateSelectors } from '@energyweb/zero-ui-store';
-
 export const useImageListContainerEffects = () => {
-  const userFileList = useSelector(userFileListStateSelectors.list);
+  const userFileList: any = [];
   return { selectors: { userFileList } };
 };

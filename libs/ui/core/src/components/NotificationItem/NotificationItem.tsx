@@ -1,7 +1,20 @@
 import { Box, Container, IconButton, Typography } from '@material-ui/core';
-import { NotificationConfig, NotificationType } from '@energyweb/zero-ui-store';
 import { Close } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
+
+export enum NotificationType {
+  Error = 'Error',
+  Warning = 'Warning',
+  Info = 'Info',
+  Success = 'Success',
+}
+
+export interface NotificationConfig {
+  type: NotificationType;
+  text: { firstLine: string; secondLine?: string };
+  id: string;
+  timeout?: number;
+}
 
 export interface NotificationItemProps {
   data: NotificationConfig;

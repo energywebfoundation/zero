@@ -1,20 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { authStateSelectors, authStateActions } from '@energyweb/zero-ui-store';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import localforage from 'localforage';
+import { UserDto, useUsersControllerMe } from '@energyweb/zero-api-client';
 
 export const useTopBarUserProfileContainerEffects = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { data: user, isLoading } = useUsersControllerMe();
+
+  const isAuthenticated = localStorage.getItem('token');
 
   const logoutHandler = useCallback(() => {
     localforage.removeItem('token').then((value) => {
-      dispatch(authStateActions.setIsAuthenticated(false));
-      dispatch(authStateActions.setToken(null));
       navigate('/auth/sign-out');
     });
-  }, [dispatch]);
+  }, []);
   const navigateToProfileHandler = useCallback(() => {
     console.log('navigateToProfileHandler');
   }, []);
@@ -24,11 +24,9 @@ export const useTopBarUserProfileContainerEffects = () => {
   }, []);
 
   return {
-    selectors: {
-      userProfileData: useSelector(authStateSelectors.userProfileData),
-      isAuthenticated: useSelector(authStateSelectors.isAuthenticated),
-    },
-
+    userProfileData: !!user ? user : ({} as UserDto),
+    isAuthenticated,
+    isLoading,
     handlers: {
       navigateToMyAccountHandler,
       navigateToProfileHandler,

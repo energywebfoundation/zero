@@ -8,10 +8,9 @@ import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui-core';
 import { useAppEffects } from './app.effects';
 
 export const App: FC = () => {
-  const { selectors } = useAppEffects();
-  console.log(selectors.isLoading);
+  const { isFetched } = useAppEffects();
   return (
-    <LoadingPage isLoading={selectors.isLoading}>
+    <LoadingPage isLoading={!isFetched}>
       <Routes>
         <Route path={'auth/*'} element={<AuthPage />} />
         <Route path={'sellers'} element={<SellerLandingPage />} />
@@ -21,9 +20,9 @@ export const App: FC = () => {
           path={'*'}
           element={
             <NotFoundPage
-              isAuthenticated={selectors.isAuthenticated}
+              isAuthenticated={true}
               nonAuthenticatedHomeRoute={'/auth/sign-in'}
-              authenticatedHomeRoute={selectors.authenticatedHomeRoute}
+              authenticatedHomeRoute={'/account/dashboard/empty'}
             />
           }
         />

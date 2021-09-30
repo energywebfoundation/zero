@@ -10,8 +10,6 @@ import {
   IconButton,
   Typography,
 } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { RootState, userFileListStateSelectors } from '@energyweb/zero-ui-store';
 import { FileMetadataDto } from '@energyweb/zero-api-client';
 import { useTranslation } from 'react-i18next';
 
@@ -36,9 +34,7 @@ export interface FileInfoProps {
 }
 
 export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
-  const fileMetadata: FileMetadataDto | undefined = useSelector((state) =>
-    userFileListStateSelectors.getFileMetadataById(state as RootState, id)
-  );
+  const fileMetadata: any = {};
   const { t } = useTranslation();
   return (
     <Box display={'flex'} alignItems={'center'}>

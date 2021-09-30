@@ -7,7 +7,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import '@energyweb/zero-ui-localization';
 import { UiTheme } from '@energyweb/zero-ui-theme';
-import { StoreProvider } from '@energyweb/zero-ui-store';
 import { ApiProvider } from '@energyweb/zero-api-client';
 import { App } from './app/app';
 import './styles.scss';
@@ -23,7 +22,6 @@ ReactDOM.render(
   <StrictMode>
     <Router>
       <HelmetProvider>
-        <StoreProvider>
           <ApiProvider>
             <UiTheme>
               <Global
@@ -46,7 +44,6 @@ ReactDOM.render(
               </SnackbarProvider>
             </UiTheme>
           </ApiProvider>
-        </StoreProvider>
       </HelmetProvider>
     </Router>
   </StrictMode>,

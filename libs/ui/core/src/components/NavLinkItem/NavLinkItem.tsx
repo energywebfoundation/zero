@@ -8,7 +8,6 @@ import ListOutlined from '@material-ui/icons/ListOutlined';
 import FlashOn from '@material-ui/icons/FlashOn';
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import PeopleOutlineOutlined from '@material-ui/icons/PeopleOutlineOutlined';
-import { PrimaryNavigationItem } from '@energyweb/zero-ui-store';
 import IconLink from '../IconLink/IconLink';
 
 export enum IconTypeEnum {
@@ -19,6 +18,22 @@ export enum IconTypeEnum {
   FlashOn = 'FlashOn',
   PeopleOutlineOutlined = 'PeopleOutlineOutlined',
   VerifiedUserOutlined = 'VerifiedUserOutlined',
+}
+
+export interface PrimaryNavigationItem {
+  isEnabled: boolean;
+  url: string;
+  text?: string;
+  iconType: IconTypeEnum;
+  translateKey?: string;
+  prority?: number;
+  align: 'left' | 'right';
+}
+
+export interface SecondaryNavigationItem {
+  url: string;
+  text?: string;
+  translateKey?: string;
 }
 
 const getIconByIconType = (iconType: IconTypeEnum): typeof SvgIcon => {

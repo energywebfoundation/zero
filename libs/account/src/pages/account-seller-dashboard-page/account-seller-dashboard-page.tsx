@@ -4,12 +4,17 @@ import {
   SellerAddFacilitiesPage,
 } from '@energyweb/zero-ui-seller';
 import { useAccountSellerDashboardPageEffects } from './account-seller-dashboard-page.effects';
+import { CircularProgress } from '@material-ui/core';
 
 export const AccountSellerDashboardPage = () => {
   const {
-    selectors,
-    handlers: { navigateToAddFacilitiesPageHandler },
+    navigateToAddFacilitiesPageHandler,
+    user,
+    isLoading
   } = useAccountSellerDashboardPageEffects();
+
+  if(isLoading) return <CircularProgress />
+
   return (
       <Routes>
         <Route path={'add-facilities'} element={<SellerAddFacilitiesPage />} />
@@ -20,7 +25,7 @@ export const AccountSellerDashboardPage = () => {
               navigateToAddFacilitiesPageHandler={
                 navigateToAddFacilitiesPageHandler
               }
-              userProfileData={selectors.userProfileData}
+              userProfileData={user}
             />
           }
         />

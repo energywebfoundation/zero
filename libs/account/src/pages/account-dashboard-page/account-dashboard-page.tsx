@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { CircularProgress } from '@material-ui/core';
 import AccountSellerDashboardPage from '../account-seller-dashboard-page/account-seller-dashboard-page';
 import { useAccountDasboardPageEffects } from './account-dashboard-page.effects';
 
@@ -7,10 +8,13 @@ const StyledAccountDashboardPage = styled.div`
 `;
 
 export const AccountDashboardPage = () => {
-  const { selectors } = useAccountDasboardPageEffects();
+  const { isUserSeller, isLoading } = useAccountDasboardPageEffects();
+
+  if(isLoading) return <CircularProgress />
+
   return (
     <StyledAccountDashboardPage>
-      {selectors.isUserSeller && <AccountSellerDashboardPage />}
+      {isUserSeller && <AccountSellerDashboardPage />}
     </StyledAccountDashboardPage>
   );
 };

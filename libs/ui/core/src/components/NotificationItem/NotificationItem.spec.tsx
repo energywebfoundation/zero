@@ -1,7 +1,6 @@
-import { NotificationType } from '@energyweb/zero-ui-store';
 import { render } from '@testing-library/react';
 
-import NotificationItem from './NotificationItem';
+import NotificationItem, { NotificationType } from './NotificationItem';
 
 describe('NotificationItem', () => {
   it('should render successfully', () => {

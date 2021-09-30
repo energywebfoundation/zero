@@ -1,33 +1,40 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useAppControllerLogin } from '@energyweb/zero-api-client';
 import { TGenericFormSubmitHandlerFn } from '@energyweb/zero-ui-core';
-import { authStateActions } from '@energyweb/zero-ui-store';
+import axios from 'axios';
+import { useQueryClient } from 'react-query';
 import { AuthLoginFormFields } from '../../components/auth-login-form/auth-login-form';
+import localforage from 'localforage';
 
 export const useAuthLoginPageEffects = () => {
-  const { mutateAsync } = useAppControllerLogin();
-  const dispatch = useDispatch();
+  const { mutate } = useAppControllerLogin();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const handleFormSubmitFn: TGenericFormSubmitHandlerFn<AuthLoginFormFields> =
     useCallback(
       (loginData: AuthLoginFormFields) => {
         return (
-          mutateAsync({
+          mutate({
             data: { username: loginData.email, password: loginData.password },
-          })
-            .then(({ accessToken }) => {
-              dispatch(authStateActions.setToken(accessToken));
+          }, {
+            onSuccess: async ({ accessToken }) => {
+              localforage.setItem('token', accessToken);
+              axios.defaults.headers.common[
+                'Authorization'
+              ] = `Bearer ${accessToken}`;
+              queryClient.resetQueries();
               navigate('/account/dashboard/empty');
-            })
-            .catch((reason) => {
-              alert(reason);
-              console.log(reason);
-            })
+           },
+           onError: (error) => {
+             alert(error);
+             console.log(error);
+           }
+          })
         );
       },
-      [mutateAsync]
+      [mutate]
     );
   return {
     handleFormSubmitFn,

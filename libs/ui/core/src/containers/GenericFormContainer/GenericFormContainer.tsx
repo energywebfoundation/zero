@@ -68,7 +68,7 @@ export type TGenericFormSubmitHandlerFn<
 > = (
   values: UnpackNestedValue<FormValuesType>,
   resetForm: UseFormReset<FormValuesType>
-) => Promise<ResponseType>;
+) => ResponseType | Promise<ResponseType>;
 
 export interface GenericFormContainerProps<FormValuesType> {
   formName?: string;

@@ -1,13 +1,8 @@
 import {
+  useUsersControllerMe,
   useUsersOwnDraftsControllerCreate,
   useUsersOwnDraftsControllerUpdate,
 } from '@energyweb/zero-api-client';
-import { useSelector } from 'react-redux';
-import {
-  authStateSelectors,
-  notificationStateActions,
-  NotificationType,
-} from '@energyweb/zero-ui-store';
 import { useCallback, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { FacilityDraft } from './seller-add-facilities-page.types';
@@ -55,8 +50,9 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
   const [facilityDraft, setFacilityDraft] =
     useImmer<FacilityDraft>(initialDraftState);
 
-  const authenticatedUserId = useSelector(authStateSelectors.userProfileData)
-    ?.id as number;
+  const { data: user, isLoading } = useUsersControllerMe();
+
+  const authenticatedUserId = user?.id;
 
   const {
     mutateAsync: draftCreateMutateAsync,
@@ -78,19 +74,19 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
           setFacilityDraftId(id);
           setShowDraftSavedMsg(true);
           setTimeout((args) => setShowDraftSavedMsg(false), 2000);
-          notificationStateActions.addNotification({
-            text: { firstLine: 'Facility draft created successfully' },
-            type: NotificationType.Success,
-          });
+          // notificationStateActions.addNotification({
+          //   text: { firstLine: 'Facility draft created successfully' },
+          //   type: NotificationType.Success,
+          // });
         })
         .catch((reason) => {
           console.log(reason);
-          notificationStateActions.addNotification({
-            text: {
-              firstLine: 'Error creating facility draft',
-            },
-            type: NotificationType.Error,
-          });
+          // notificationStateActions.addNotification({
+          //   text: {
+          //     firstLine: 'Error creating facility draft',
+          //   },
+          //   type: NotificationType.Error,
+          // });
         }),
     [draftCreateMutateAsync, authenticatedUserId]
   );
@@ -104,19 +100,19 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
         .then((value) => {
           setShowDraftSavedMsg(true);
           setTimeout((args) => setShowDraftSavedMsg(false), 2000);
-          notificationStateActions.addNotification({
-            text: { firstLine: 'Facility draft updated successfully' },
-            type: NotificationType.Success,
-          });
+          // notificationStateActions.addNotification({
+          //   text: { firstLine: 'Facility draft updated successfully' },
+          //   type: NotificationType.Success,
+          // });
         })
         .catch((reason) => {
           console.log(reason);
-          notificationStateActions.addNotification({
-            text: {
-              firstLine: 'Error updating facility draft',
-            },
-            type: NotificationType.Error,
-          });
+          // notificationStateActions.addNotification({
+          //   text: {
+          //     firstLine: 'Error updating facility draft',
+          //   },
+          //   type: NotificationType.Error,
+          // });
         }),
     [draftUpdateMutateAsync, authenticatedUserId]
   );
@@ -136,6 +132,7 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
   }, [isDraftDirty]);
 
   return {
+    isLoading,
     handleNavigateToPrevStep: () =>
       setActiveStep(activeStep > 0 ? activeStep - 1 : 0),
     handleNavigateToNextStep: () => setActiveStep(activeStep + 1),

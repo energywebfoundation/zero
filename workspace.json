@@ -225,47 +225,6 @@
         }
       }
     },
-    "store": {
-      "root": "libs/store",
-      "sourceRoot": "libs/store/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/store",
-            "tsConfig": "libs/store/tsconfig.lib.json",
-            "project": "libs/store/package.json",
-            "entryFile": "libs/store/src/index.ts",
-            "external": ["react/jsx-runtime"],
-            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [
-              {
-                "glob": "libs/store/README.md",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/store/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/store"],
-          "options": {
-            "jestConfig": "libs/store/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "ui-assets": {
       "root": "libs/ui/assets",
       "sourceRoot": "libs/ui/assets/src",

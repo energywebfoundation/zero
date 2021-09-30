@@ -1,24 +1,19 @@
-import { useDispatch } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  notificationStateActions,
-  NotificationType,
-} from '@energyweb/zero-ui-store';
 import { DropEvent, FileRejection } from 'react-dropzone';
 import {
   UploadFileDto,
   useFilesControllerUploadFiles,
 } from '@energyweb/zero-api-client';
 import { useImmer } from 'use-immer';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 export const useImageUploadContainerEffects = (
   handleUploadSuccess: (fileList: string[]) => void,
   uploadSuccessMsg?: string,
   uploadErrorMsg?: string
 ) => {
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
+  // const dispatch = useDispatch();
+  // const { t } = useTranslation();
   const [imageList, setImageList] = useImmer<Array<string>>([]);
   const [previewList, setPreviewList] = useState<Array<string>>([]);
 
@@ -44,31 +39,31 @@ export const useImageUploadContainerEffects = (
         setPreviewList([...previewList, URL.createObjectURL(file)]);
         submitHandler({ file })
           .then((res) => {
-            const { id } = res as { id: string };
+            // const { id } = res as { id: string };
             setPreviewList([]);
-            setImageList((draft) => (draft = [id]));
-            dispatch(
-              notificationStateActions.addNotification({
-                type: NotificationType.Success,
-                text: {
-                  firstLine:
-                    uploadSuccessMsg ??
-                    t('components.ImageUploadContainer.uploadSuccessfullMsg'),
-                },
-              })
-            );
+            // setImageList((draft) => (draft = [id]));
+            // dispatch(
+            //   notificationStateActions.addNotification({
+            //     type: NotificationType.Success,
+            //     text: {
+            //       firstLine:
+            //         uploadSuccessMsg ??
+            //         t('components.ImageUploadContainer.uploadSuccessfullMsg'),
+            //     },
+            //   })
+            // );
           })
           .catch(() => {
-            dispatch(
-              notificationStateActions.addNotification({
-                type: NotificationType.Error,
-                text: {
-                  firstLine:
-                    uploadErrorMsg ??
-                    t('components.ImageUploadContainer.uploadErrorMsg'),
-                },
-              })
-            );
+            // dispatch(
+            //   notificationStateActions.addNotification({
+            //     type: NotificationType.Error,
+            //     text: {
+            //       firstLine:
+            //         uploadErrorMsg ??
+            //         t('components.ImageUploadContainer.uploadErrorMsg'),
+            //     },
+            //   })
+            // );
           });
       });
     },
@@ -89,17 +84,17 @@ export const useImageUploadContainerEffects = (
     imageList,
     fileValidationErrorHandler: useCallback(
       (fileRejections: FileRejection[]) => {
-        fileRejections.map((value) => {
-          dispatch(
-            notificationStateActions.addNotification({
-              type: NotificationType.Error,
-              text: {
-                firstLine: `${value.file.name} ${t(
-                  'components.FileUploadContainer.doesNotPassValidation'
-                )}`,
-              },
-            })
-          );
+        fileRejections.forEach((value) => {
+          // dispatch(
+          //   notificationStateActions.addNotification({
+          //     type: NotificationType.Error,
+          //     text: {
+          //       firstLine: `${value.file.name} ${t(
+          //         'components.FileUploadContainer.doesNotPassValidation'
+          //       )}`,
+          //     },
+          //   })
+          // );
         });
       },
       []
