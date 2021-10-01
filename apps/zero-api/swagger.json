@@ -381,177 +381,6 @@
         "tags": [
           "users"
         ]
-      },
-      "post": {
-        "operationId": "UsersDraftsController_create",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDraftDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DraftDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "access-token": []
-          }
-        ],
-        "tags": [
-          "users"
-        ]
-      }
-    },
-    "/api/users/{userId}/drafts/{id}": {
-      "get": {
-        "operationId": "UsersDraftsController_findOne",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DraftDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "access-token": []
-          }
-        ],
-        "tags": [
-          "users"
-        ]
-      },
-      "put": {
-        "operationId": "UsersDraftsController_update",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDraftDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DraftDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "access-token": []
-          }
-        ],
-        "tags": [
-          "users"
-        ]
-      },
-      "delete": {
-        "operationId": "UsersDraftsController_remove",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "access-token": []
-          }
-        ],
-        "tags": [
-          "users"
-        ]
       }
     },
     "/api/users/{userId}/files": {
@@ -589,6 +418,153 @@
         ],
         "tags": [
           "users"
+        ]
+      }
+    },
+    "/api/drafts": {
+      "post": {
+        "operationId": "DraftsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDraftDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "drafts"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/drafts/{id}": {
+      "get": {
+        "operationId": "DraftsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "drafts"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "DraftsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDraftDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "drafts"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "DraftsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "drafts"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
         ]
       }
     },
@@ -887,7 +863,7 @@
           }
         ]
       },
-      "put": {
+      "patch": {
         "operationId": "FacilitiesController_update",
         "parameters": [
           {
@@ -1398,29 +1374,6 @@
           "draftType"
         ]
       },
-      "CreateDraftDto": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object"
-          },
-          "draftType": {
-            "$ref": "#/components/schemas/DraftType"
-          }
-        },
-        "required": [
-          "data",
-          "draftType"
-        ]
-      },
-      "UpdateDraftDto": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object"
-          }
-        }
-      },
       "FileType": {
         "type": "string",
         "enum": [
@@ -1462,11 +1415,11 @@
           },
           "uploadedAt": {
             "type": "object",
-            "example": "2021-09-23T12:05:03.209Z"
+            "example": "2021-10-01T12:10:01.375Z"
           },
           "processingCompletedAt": {
             "type": "object",
-            "example": "2021-09-23T12:05:04.192Z"
+            "example": "2021-10-01T12:10:02.358Z"
           },
           "imageOfFacilityId": {
             "type": "string",
@@ -1489,6 +1442,29 @@
           "uploadedAt",
           "processingCompletedAt"
         ]
+      },
+      "CreateDraftDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "draftType": {
+            "$ref": "#/components/schemas/DraftType"
+          }
+        },
+        "required": [
+          "data",
+          "draftType"
+        ]
+      },
+      "UpdateDraftDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        }
       },
       "UploadFileDto": {
         "type": "object",
