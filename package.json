@@ -104,7 +104,8 @@
     "use-immer": "^0.6.0",
     "uuid": "^8.3.2",
     "yup": "^0.32.9",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "rxjs": "7.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
