@@ -1,27 +1,15 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import { useEffect } from 'react';
+import axios from 'axios';
 
 export const useAxiosInterceptors = () => {
-  axios.defaults.baseURL = process.env.NX_BACKEND_URL;
-
   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    if (Boolean(token)) {
-      axios.interceptors.request.use(
-        (config: AxiosRequestConfig): AxiosRequestConfig => {
-          config.baseURL = process.env.NX_BACKEND_URL;
-          config.headers.Authorization = `Bearer ${token}`;
-          return config;
-        }
-      );
+  axios.defaults.baseURL = process.env.NX_BACKEND_URL;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      axios.interceptors.response.use(
-        (response) => response,
-        async (error) => {
-          return Promise.reject(error);
-        }
-      );
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      return Promise.reject(error);
     }
-  }, [token]);
+  );
 };

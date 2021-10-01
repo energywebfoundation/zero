@@ -2,6 +2,7 @@ import {
   GenericFormMultiStep,
 } from '@energyweb/zero-ui-core';
 import { CircularProgress, Grid } from '@material-ui/core';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -45,6 +46,9 @@ export const AddFacilitiesPage = () => {
 
   return (
       <Grid container justifyContent={'space-between'}>
+        <Helmet>
+          <title>Seller / Add Facilities</title>
+        </Helmet>
         <GenericFormMultiStep<SellerAddFacilitiesSteps>
           formTitle={'Add facilities'}
           isProcessing={isProcessingFacilityDraft}

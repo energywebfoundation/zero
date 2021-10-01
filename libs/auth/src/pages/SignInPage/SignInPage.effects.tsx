@@ -28,7 +28,7 @@ export const useSignInPageEffects = () => {
 
               queryClient.resetQueries();
 
-              navigate('/account/dashboard/empty');
+              navigate('/account/dashboard');
            },
            onError: (error) => {
              toast('Error while signing in' + error)

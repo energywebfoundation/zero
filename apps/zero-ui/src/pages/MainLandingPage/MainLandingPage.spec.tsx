@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import MainLandingPage from './main-landing-page';
+import MainLandingPage from './MainLandingPage';
 
 describe('MainLandingPage', () => {
   it('should render successfully', () => {

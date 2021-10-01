@@ -7,7 +7,6 @@ import { UiTheme } from '@energyweb/zero-ui-theme';
 import { ApiProvider } from '@energyweb/zero-api-client';
 import { App } from './app/app';
 import './styles.scss';
-import { GlobalStyles } from './components';
 
 ReactDOM.render(
   <StrictMode>
@@ -16,7 +15,6 @@ ReactDOM.render(
         <ApiProvider>
           <UiTheme>
             <App />
-            <GlobalStyles />
           </UiTheme>
         </ApiProvider>
       </HelmetProvider>

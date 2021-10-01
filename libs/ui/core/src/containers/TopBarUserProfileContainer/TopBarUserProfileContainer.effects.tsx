@@ -16,11 +16,10 @@ export const useTopBarUserProfileContainerEffects = () => {
     });
   }, []);
   const navigateToProfileHandler = useCallback(() => {
-    console.log('navigateToProfileHandler');
+
   }, []);
   const navigateToMyAccountHandler = useCallback(() => {
-    console.log('navigateToMyAccountHandler');
-    navigate('/account/dashboard/empty');
+    navigate('/account/dashboard');
   }, []);
 
   return {

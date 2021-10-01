@@ -1,10 +1,10 @@
 import {
   CallToActionButton,
-  LayoutWithTopbarContainer,
 } from '@energyweb/zero-ui-core';
 import { Box, Typography } from '@material-ui/core';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { useSellerLandingPageEffects } from './LandingPage.effects';
+import { useSellerLandingPageEffects } from './SellerLandingPage.effects';
 
 export const SellerLandingPage = () => {
   const {
@@ -13,7 +13,10 @@ export const SellerLandingPage = () => {
   const { t } = useTranslation();
 
   return (
-    <LayoutWithTopbarContainer>
+    <>
+      <Helmet>
+        <title>Seller</title>
+      </Helmet>
       <Box width={'100%'} textAlign={'center'}>
         <Box my={'40px'}>
           <Typography
@@ -42,6 +45,6 @@ export const SellerLandingPage = () => {
           />
         </Box>
       </Box>
-    </LayoutWithTopbarContainer>
+    </>
   );
 };

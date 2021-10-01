@@ -67,7 +67,7 @@ export const TopNavBar = memo(
                   onClick={() =>
                     handleNavigate(
                       isAuthenticated
-                        ? '/account/dashboard/empty'
+                        ? '/account/dashboard'
                         : '/auth/sign-up'
                     )
                   }

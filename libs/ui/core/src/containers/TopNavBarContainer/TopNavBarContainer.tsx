@@ -1,26 +1,27 @@
-// import { Logo } from '@energyweb/zero-ui-assets';
-// import { useLocation, useNavigate } from 'react-router-dom';
-// import TopNavBar from '../../components/TopNavBar/TopNavBar';
+import { Logo } from '@energyweb/zero-ui-assets';
+import { useLocation, useNavigate } from 'react-router-dom';
+import TopNavBar from '../../components/TopNavBar/TopNavBar';
 import { useTopNavContainerEffects } from './TopNavBarContainer.effects';
 
 export const TopNavBarContainer = () => {
   const {
-    // selectors: { isAuthenticated, primiaryNavigation, secondaryNavigation },
-    // actions: { changeLanguage },
+    isAuthenticated, isLoading, primaryNavigation
   } = useTopNavContainerEffects();
-  // const navigate = useNavigate();
-  // const location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  if (isLoading) return null;
+
   return (
-  <div></div>
-    // <TopNavBar
-    //   isAuthenticated={isAuthenticated}
-    //   hidden={location.pathname.includes('auth/')}
-    //   secondaryNavigationItemList={secondaryNavigation}
-    //   handleNavigate={(url) => navigate(url)}
-    //   handleLanguageChange={(language) => changeLanguage(language)}
-    //   logo={<Logo width="102" height="47" />}
-    //   primaryNavigationItemList={primiaryNavigation}
-    // />
+    <TopNavBar
+      isAuthenticated={isAuthenticated}
+      hidden={location.pathname.includes('auth/')}
+      secondaryNavigationItemList={[]}
+      handleNavigate={(url: string) => navigate(url)}
+      handleLanguageChange={(language: string) => console.log(language)}
+      logo={<Logo width="102" height="47" />}
+      primaryNavigationItemList={primaryNavigation}
+    />
   );
 };
 

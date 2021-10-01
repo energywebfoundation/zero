@@ -18,8 +18,9 @@ export interface NotFoundPageProps {
 const StyledNotFoundPage = styled.div`
   display: flex;
   justify-content: center;
-  height: calc(100vh - 88px);
   align-items: center;
+  background-color: #2d1155;
+  height: calc(100vh);
 `;
 
 export const NotFoundPage: FC<NotFoundPageProps> = memo(

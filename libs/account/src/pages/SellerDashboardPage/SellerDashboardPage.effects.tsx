@@ -11,7 +11,7 @@ export const useSellerDashboardPageEffects = () => {
   const isUserBuyer = user.roles?.includes(UserRole.buyer);
 
   const navigateToAddFacilitiesPageHandler = () => {
-    navigate('/account/dashboard/add-facilities');
+    navigate('/seller/add-facilities');
   }
 
   return { user, isUserBuyer, isUserSeller, isLoading, navigateToAddFacilitiesPageHandler };

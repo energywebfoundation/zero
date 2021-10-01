@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import AppIndexPage from './app-index-page';
+import AppIndexPage from './IndexPage';
 
 describe('AppIndexPage', () => {
   it('should render successfully', () => {

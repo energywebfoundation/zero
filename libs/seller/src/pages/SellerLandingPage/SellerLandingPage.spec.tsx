@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { SellerLandingPage } from './LandingPage';
+import { SellerLandingPage } from './SellerLandingPage';
 import { UiTheme } from '@energyweb/zero-ui-theme';
 
 describe('SellerLandingPage', () => {
