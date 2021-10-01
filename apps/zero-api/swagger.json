@@ -347,7 +347,7 @@
     },
     "/api/users/{userId}/drafts": {
       "get": {
-        "operationId": "UsersDraftsController_findAll",
+        "operationId": "UsersController_findAllUserDrafts",
         "parameters": [
           {
             "name": "userId",

@@ -8,8 +8,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
 import { UserDto } from './dto/user.dto';
-import { User, UserRole, EmailConfirmation } from '@prisma/client';
+import { DraftType, EmailConfirmation, User, UserRole } from '@prisma/client';
 import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
+import { DraftDto } from '../drafts/dto/draft.dto';
+import { DraftsService } from '../drafts/drafts.service';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -17,6 +19,7 @@ describe('UsersController', () => {
   let controller: UsersController;
   let prisma: PrismaService;
   let usersService: UsersService;
+  let draftsService: DraftsService;
 
   const validPayload: CreateUserDto = {
     firstName: 'test first name',
@@ -29,7 +32,7 @@ describe('UsersController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, PrismaService],
+      providers: [DraftsService, UsersService, PrismaService],
       imports: [AppModule]
     }).compile();
 
@@ -40,6 +43,7 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
+    draftsService = module.get<DraftsService>(DraftsService);
     prisma = module.get<PrismaService>(PrismaService);
 
     await prisma.clearDatabase();
@@ -480,6 +484,82 @@ describe('UsersController', () => {
         .put('/users/email-confirmation')
         .send({ token: emailConfirmation.id })
         .expect(HttpStatus.NOT_FOUND);
+    });
+  });
+
+  describe('GET users/:userId/drafts', function() {
+    let user1: UserDto, user2: UserDto;
+    let accessToken1: string;
+
+    beforeEach(async function() {
+      user1 = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name 1',
+        lastName: 'test last name 1',
+        email: 'test-email1@foo.bar',
+        roles: [UserRole.seller],
+        password: 'password1'
+      } as User);
+
+      accessToken1 = await logInUser(app, user1.email, 'password1');
+
+      user2 = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name 2',
+        lastName: 'test last name 2',
+        email: 'test-email2@foo.bar',
+        roles: [UserRole.seller],
+        password: 'password2'
+      } as User);
+
+    });
+
+    it('should respond with drafts of a logged in user', async function() {
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
+
+      const drafts = (await request(httpServer)
+        .get(`/users/${user1.id}/drafts`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.OK)).body as DraftDto[];
+
+      expect(drafts.length).toEqual(3);
+      expect(drafts.filter(d => d.userId === user1.id).length).toEqual(drafts.length);
+    });
+
+    it('should deny access to drafts of another user if not admin', async function() {
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
+
+      const body = (await request(httpServer)
+        .get(`/users/${user2.id}/drafts`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN)).body;
+
+      expect(body.drafts).not.toBeDefined();
+    });
+
+    it('should allow access to drafts of another user if admin', async function() {
+      const adminUser = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name admin',
+        lastName: 'test last name admin',
+        email: 'test-email-admin@foo.bar',
+        roles: [UserRole.admin],
+        password: 'admin password'
+      } as User);
+
+      const adminAccessToken = await logInUser(app, adminUser.email, 'admin password');
+
+      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
+      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
+
+      const drafts = (await request(httpServer)
+        .get(`/users/${user2.id}/drafts`)
+        .set(getAuthBearerHeader(adminAccessToken))
+        .expect(HttpStatus.OK)).body as DraftDto[];
+
+      expect(drafts.length).toEqual(1);
     });
   });
 });
