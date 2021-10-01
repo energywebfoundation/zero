@@ -1,13 +1,13 @@
 import {
   useUsersControllerMe,
-  useUsersFilesControllerGetUserFilesMetadata
+  useUsersControllerGetAllUserFilesMetadata
 } from '@energyweb/zero-api-client';
 
 export const useFileListContainerEffects = () => {
   const { data: user } = useUsersControllerMe();
   const authenticatedUserId = user!.id;
   const { data, isFetched } =
-    useUsersFilesControllerGetUserFilesMetadata(authenticatedUserId, {
+    useUsersControllerGetAllUserFilesMetadata(authenticatedUserId, {
       query: { enabled: Boolean(authenticatedUserId) },
     });
 

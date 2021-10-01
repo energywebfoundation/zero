@@ -1,7 +1,7 @@
 import {
   useUsersControllerMe,
-  useUsersOwnDraftsControllerCreate,
-  useUsersOwnDraftsControllerUpdate,
+  useDraftsControllerCreate,
+  useDraftsControllerUpdate,
 } from '@energyweb/zero-api-client';
 import { useCallback, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
@@ -57,12 +57,12 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
   const {
     mutateAsync: draftCreateMutateAsync,
     isLoading: isProcessingDraftCreate,
-  } = useUsersOwnDraftsControllerCreate();
+  } = useDraftsControllerCreate();
 
   const {
     mutateAsync: draftUpdateMutateAsync,
     isLoading: isProcessingDraftUpdate,
-  } = useUsersOwnDraftsControllerUpdate();
+  } = useDraftsControllerUpdate();
 
   const handleCreateFacility = useCallback(
     () =>
