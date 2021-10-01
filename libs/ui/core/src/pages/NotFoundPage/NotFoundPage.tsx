@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
 import { FC, memo } from 'react';
-import { ReactComponent as NotFoundSvg } from './not_found.svg';
 import { Helmet } from 'react-helmet-async';
-import { Logo } from '@energyweb/zero-ui-assets';
+import { Logo, NotFound404 } from '@energyweb/zero-ui-assets';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import LayoutNoTopbar from '../../layouts/LayoutNoTopbar/LayoutNoTopbar';
+import { LayoutWithTopbarContainer } from '@energyweb/zero-ui-core';
 
 export interface NotFoundPageProps {
   isAuthenticated: boolean;
@@ -27,7 +26,7 @@ export const NotFoundPage: FC<NotFoundPageProps> = memo(
   ({ isAuthenticated, authenticatedHomeRoute, nonAuthenticatedHomeRoute }) => {
     const { t } = useTranslation();
     return (
-      <LayoutNoTopbar>
+      <LayoutWithTopbarContainer disableTopbar>
         <StyledNotFoundPage>
           <Helmet>
             <title>{t('pages.NotFoundPage.title')}</title>
@@ -69,12 +68,12 @@ export const NotFoundPage: FC<NotFoundPageProps> = memo(
             </Grid>
             <Grid item xs={12} textAlign={'center'}>
               <Box mt={7}>
-                <NotFoundSvg />
+                <NotFound404 />
               </Box>
             </Grid>
           </Grid>
         </StyledNotFoundPage>
-      </LayoutNoTopbar>
+      </LayoutWithTopbarContainer>
     );
   }
 );

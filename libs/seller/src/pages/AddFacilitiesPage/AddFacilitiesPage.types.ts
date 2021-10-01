@@ -3,7 +3,8 @@ import {
   IAddFacilitiesImagesFormFields,
   IAddFacilitiesLocationFormFields,
   IAddFacilitiesSustainabilityFormFields
-} from "../../components";
+} from "../../containers";
+
 
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 

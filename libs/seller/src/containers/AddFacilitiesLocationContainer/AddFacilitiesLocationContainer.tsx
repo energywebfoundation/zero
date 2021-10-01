@@ -5,7 +5,7 @@ import {
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
-import { AddFacilitiesLocationForm, IAddFacilitiesLocationFormFields } from '../../components';
+import { AddFacilitiesLocationForm, IAddFacilitiesLocationFormFields } from '../AddFacilitiesLocationForm';
 
 export interface AddFacilitiesLocationContainerProps {
   submitHandler: TGenericFormSubmitHandlerFn<IAddFacilitiesLocationFormFields>;

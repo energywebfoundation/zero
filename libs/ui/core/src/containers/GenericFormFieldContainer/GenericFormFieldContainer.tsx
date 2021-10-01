@@ -22,8 +22,6 @@ import {
   FormFieldTextarea,
   FormFieldImageUpload,
   FormFieldFileList,
-  FormFieldGreenLabelList,
-  FormFieldFacilityDocumentList,
   FormFieldMap,
   FormFieldMapConfig
 } from '../../components';
@@ -138,32 +136,6 @@ const renderField = (
         />
       );
 
-    case GenericFormFieldType.FacilityDocumentList:
-      return (
-        <FormFieldFacilityDocumentList
-          disabled={disabled}
-          field={genericFormFieldConfig}
-          register={formConfigContextData.register}
-          errorExists={isFieldInvalid}
-          errorText={''}
-          isDirty={isFieldDirty}
-          variant={formConfigContextData.inputsVariant}
-        />
-      );
-
-    case GenericFormFieldType.GreenLabelList:
-      return (
-        <FormFieldGreenLabelList
-          disabled={disabled}
-          field={genericFormFieldConfig}
-          register={formConfigContextData.register}
-          errorExists={isFieldInvalid}
-          errorText={''}
-          isDirty={isFieldDirty}
-          variant={formConfigContextData.inputsVariant}
-        />
-      );
-
     case GenericFormFieldType.ImageUpload:
       return (
         <FormFieldImageUpload
@@ -178,7 +150,6 @@ const renderField = (
       );
 
     case GenericFormFieldType.RadioGroup:
-      // eslint-disable-next-line no-case-declarations
       const radioGroupFieldConfig =
         genericFormFieldConfig as FormFieldRadioGroupConfig;
       return (
@@ -263,5 +234,3 @@ const renderField = (
       throw new Error('Field type not supported!');
   }
 };
-
-export default GenericFormFieldContainer;

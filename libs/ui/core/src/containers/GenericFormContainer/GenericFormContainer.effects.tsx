@@ -6,19 +6,17 @@ import {
   FieldErrors,
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { BaseSyntheticEvent, useContext, useEffect, useRef } from 'react';
+import { BaseSyntheticEvent, useContext, useEffect } from 'react';
 import {
   FieldNamesMarkedBoolean,
   Mode,
   UseFormGetValues,
 } from 'react-hook-form';
-import { Observable, Subject } from 'rxjs';
+import { GenericFormMultiStepContext } from '../../providers';
 import { GenericFormContainerProps } from './GenericFormContainer';
-import { GenericFormMultiStepContext } from '../../providers/GenericFormMultiStepContextProvider/GenericFormMultiStepContextProvider';
 
 type GenericFormEffectsProps<FormValuesType> = {
   mode?: Mode;
-  subscribeValuesChanged$?: (values$: Observable<FormValuesType>) => void;
 } & Pick<
   GenericFormContainerProps<FormValuesType>,
   'validationSchema' | 'initialValues' | 'submitHandler'
@@ -47,10 +45,8 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   initialValues,
   submitHandler,
   mode = 'onChange',
-  subscribeValuesChanged$,
 }) => {
   const {
-    watch,
     control,
     register,
     handleSubmit,
@@ -66,22 +62,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   const { errors, dirtyFields, isValid, isDirty, touchedFields, isSubmitting } =
     formState;
 
-  const values = watch();
-  const formValuesSubjectRef$ = useRef(new Subject());
   const genericFormMultistepContext = useContext(GenericFormMultiStepContext);
-
-  const formValuesRef$ = useRef(formValuesSubjectRef$.current.asObservable());
-
-  useEffect(() => {
-    if (subscribeValuesChanged$) {
-      subscribeValuesChanged$(formValuesRef$.current as any);
-    }
-  }, [subscribeValuesChanged$]);
-
-  useEffect(() => {
-    formValuesSubjectRef$.current.next(values);
-    return () => formValuesSubjectRef$.current.complete();
-  }, [values]);
 
   const onSubmit = handleSubmit(async (values) => {
     submitHandler(values, reset)

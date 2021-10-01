@@ -1,24 +1,20 @@
 import {
+  FormNavigation,
   GenericFormMultiStep,
 } from '@energyweb/zero-ui-core';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-
 import {
   AddFacilitiesBasicInformationForm,
+  AddFacilitiesImagesContainer,
+  AddFacilitiesLocationContainer,
   AddFacilitiesSustainabilityForm,
   IAddFacilitiesBasicInformationFormFields,
   IAddFacilitiesImagesFormFields,
   IAddFacilitiesLocationFormFields,
-  IAddFacilitiesSustainabilityFormFields,
-  FormNavigation
-} from '../../components';
-import {
-  AddFacilitiesImagesContainer,
-  AddFacilitiesLocationContainer
+  IAddFacilitiesSustainabilityFormFields
 } from '../../containers';
-
 import { useSellerAddFacilititesEffects } from './AddFacilitiesPage.effects';
 
 export enum SellerAddFacilitiesSteps {
@@ -49,7 +45,8 @@ export const AddFacilitiesPage = () => {
         <Helmet>
           <title>Seller / Add Facilities</title>
         </Helmet>
-        <GenericFormMultiStep<SellerAddFacilitiesSteps>
+        <GenericFormMultiStep
+          // should localize
           formTitle={'Add facilities'}
           isProcessing={isProcessingFacilityDraft}
           showDraftSavedMsg={showDraftSavedMsg}
@@ -119,7 +116,7 @@ export const AddFacilitiesPage = () => {
                       Number(SellerAddFacilitiesSteps.Sustainability)
                     ] as IAddFacilitiesSustainabilityFormFields
                   }
-                  submitHandler={async (values, resetForm) => {
+                  submitHandler={(values) => {
                     updateFacilityDraft(
                       SellerAddFacilitiesSteps.Sustainability,
                       values

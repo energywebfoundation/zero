@@ -1,14 +1,10 @@
 import { Box, Paper } from '@material-ui/core';
 import { ReactElement } from 'react';
 import {
-  ImageListContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
-import {
-  AddFacilitiesImagesForm,
-  IAddFacilitiesImagesFormFields,
-} from '../../components';
-
+import { AddFacilitiesImagesForm, IAddFacilitiesImagesFormFields } from '../AddFacilitiesImagesForm';
+import { ImageListContainer } from '../../components';
 
 export interface AddFacilitiesImagesContainerProps {
   initialValues: IAddFacilitiesImagesFormFields;

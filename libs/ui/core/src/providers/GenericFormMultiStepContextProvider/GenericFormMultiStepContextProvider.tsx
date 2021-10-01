@@ -35,5 +35,3 @@ export const GenericFormMultiStepContextProvider = ({
     />
   );
 };
-
-export default GenericFormMultiStepContextProvider;

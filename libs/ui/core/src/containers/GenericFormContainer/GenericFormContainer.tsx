@@ -4,16 +4,16 @@ import {
   ReactElement,
   ReactNode,
 } from 'react';
-
 import { DeepPartial, UnpackNestedValue, UseFormReset } from 'react-hook-form';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { Observable } from 'rxjs';
 import { ValidationError } from 'yup';
-import GenericFormContextProvider from '../../providers/GenericFormContextProvider/GenericFormContextProvider';
-import { FormFieldRadioGroupConfig } from '../../components/FormFieldRadioGroup';
-import { FormFieldSelectConfig } from '../../components/FormFieldSelect';
-import { FormFieldTextInputProps } from '../../components/FormFieldTextInput';
+import {GenericFormContextProvider} from '../../providers';
+import {
+  FormFieldRadioGroupConfig,
+  FormFieldSelectConfig,
+  FormFieldTextInputProps
+} from '../../components/form';
 import {
   TGenericFormEffectsReturnType,
   useGenericFormEffects,
@@ -82,7 +82,6 @@ export interface GenericFormContainerProps<FormValuesType> {
   inputsVariant?: FormFieldTextInputProps['variant'];
   formInputsProps?: BaseTextFieldProps;
   processing?: boolean;
-  subscribeValuesChanged$?: (values$: Observable<FormValuesType>) => void;
   handleValidityChange?: (
     isFormValid: boolean,
     errors: ValidationError[]
@@ -117,7 +116,6 @@ export const GenericFormContainer: TGenericForm = ({
   inputsVariant,
   formInputsProps,
   processing,
-  subscribeValuesChanged$,
   nested,
   readOnlyForm,
 }) => {
@@ -137,7 +135,6 @@ export const GenericFormContainer: TGenericForm = ({
     validationSchema,
     submitHandler,
     initialValues,
-    subscribeValuesChanged$,
   });
 
   const { t } = useTranslation();

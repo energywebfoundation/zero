@@ -18,5 +18,3 @@ export const GenericFormContextProvider = ({
     {children}
   </GenericFormContext.Provider>
 );
-
-export default GenericFormContextProvider;

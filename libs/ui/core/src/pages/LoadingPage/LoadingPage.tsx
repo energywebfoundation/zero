@@ -2,9 +2,8 @@ import styled from '@emotion/styled';
 import { Helmet } from 'react-helmet-async';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { FC, memo, ReactNode } from 'react';
-import { Logo } from '@energyweb/zero-ui-assets';
+import { Logo, Windmill } from '@energyweb/zero-ui-assets';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as WindMillSvg } from './windmill.svg';
 
 export interface LoadingPageProps {
   isLoading: boolean;
@@ -57,7 +56,7 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
                   >
                     {t('pages.LoadingPage.pleaseWait')}
                   </Typography>
-                  <WindMillSvg />
+                  <Windmill />
                 </Box>
               </Grid>
             </Grid>
@@ -70,5 +69,3 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
 );
 
 LoadingPage.displayName = 'LoadingPage';
-
-export default LoadingPage;
