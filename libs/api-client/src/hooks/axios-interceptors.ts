@@ -3,7 +3,7 @@ import axios from 'axios';
 declare global {
   interface Window {
     config: {
-      BACKEND_URL: string;
+      API_BASE_URL: string;
     };
   }
 }
@@ -11,7 +11,7 @@ declare global {
 export const useAxiosInterceptors = () => {
   const token = localStorage.getItem('token');
 
-  axios.defaults.baseURL = window.config.BACKEND_URL;
+  axios.defaults.baseURL = window.config.API_BASE_URL;
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   axios.interceptors.response.use(
