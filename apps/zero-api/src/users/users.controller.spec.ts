@@ -9,9 +9,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AppModule } from '../app/app.module';
 import { UserDto } from './dto/user.dto';
 import { DraftType, EmailConfirmation, User, UserRole } from '@prisma/client';
-import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
+import { createAndActivateUser, createDocumentDbRecord, getAuthBearerHeader, logInUser } from '../../test/helpers';
 import { DraftDto } from '../drafts/dto/draft.dto';
 import { DraftsService } from '../drafts/drafts.service';
+import { FileMetadataDto } from '../files/dto/file-metadata.dto';
+import { FilesService } from '../files/files.service';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -32,7 +34,7 @@ describe('UsersController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [DraftsService, UsersService, PrismaService],
+      providers: [DraftsService, FilesService, UsersService, PrismaService],
       imports: [AppModule]
     }).compile();
 
@@ -560,6 +562,96 @@ describe('UsersController', () => {
         .expect(HttpStatus.OK)).body as DraftDto[];
 
       expect(drafts.length).toEqual(1);
+    });
+  });
+
+  describe('GET users/:userId/files', function() {
+    let user1: UserDto, user2: UserDto;
+    let accessToken1: string;
+
+    beforeEach(async function() {
+      user1 = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name 1',
+        lastName: 'test last name 1',
+        email: 'test-email1@foo.bar',
+        roles: [UserRole.seller],
+        password: 'password1'
+      } as User);
+
+      accessToken1 = await logInUser(app, user1.email, 'password1');
+
+      user2 = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name 2',
+        lastName: 'test last name 2',
+        email: 'test-email2@foo.bar',
+        roles: [UserRole.seller],
+        password: 'password2'
+      } as User);
+
+      await createDocumentDbRecord(prisma, user2.id);
+      await createDocumentDbRecord(prisma, user1.id);
+      await createDocumentDbRecord(prisma, user1.id);
+      await createDocumentDbRecord(prisma, user1.id);
+    });
+
+    it('should deny access when not authenticated', async function() {
+      const { body } = (await request(httpServer)
+        .get(`/users/${user1.id}/files`)
+        .expect(HttpStatus.UNAUTHORIZED));
+
+      expect(body.length).not.toBeDefined();
+    });
+
+    it('should respond with list of files metadata', async function() {
+      const entities: FileMetadataDto[] = (await request(httpServer)
+        .get(`/users/${user1.id}/files`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.OK)).body;
+
+      expect(entities.length).toBeDefined();
+      expect(entities.length).toEqual(3);
+      expect(entities[0].id).toBeDefined();
+      expect(entities[0].filename).toBeDefined();
+      expect(entities[0].ownerId).toBeDefined();
+      expect(entities[0].ownerId).toEqual(user1.id);
+    });
+
+    it('should respond with only metadata files owned by the user', async function() {
+      const entities: FileMetadataDto[] = (await request(httpServer)
+        .get(`/users/${user1.id}/files`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.OK)).body;
+
+      expect(entities.filter(e => e.ownerId !== user1.id).length).toEqual(0);
+    });
+
+    it('should deny access to drafts of another user if not admin', async function() {
+      const body = (await request(httpServer)
+        .get(`/users/${user2.id}/files`)
+        .set(getAuthBearerHeader(accessToken1))
+        .expect(HttpStatus.FORBIDDEN)).body;
+
+      expect(body.drafts).not.toBeDefined();
+    });
+
+    it('should allow access to drafts of another user when admin', async function() {
+      const adminUser = await createAndActivateUser(usersService, prisma, {
+        firstName: 'test first name 3',
+        lastName: 'test last name 3',
+        email: 'test-email3@foo.bar',
+        roles: [UserRole.admin],
+        password: 'admin password'
+      } as User);
+
+      const adminAccessToken = await logInUser(app, adminUser.email, 'admin password');
+
+      const body = (await request(httpServer)
+        .get(`/users/${user1.id}/files`)
+        .set(getAuthBearerHeader(adminAccessToken))
+        .expect(HttpStatus.OK)).body;
+
+      expect(body.length).toEqual(3);
+      expect(body.filter(f => f.ownerId !== user1.id).length).toEqual(0);
     });
   });
 });

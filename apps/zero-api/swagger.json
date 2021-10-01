@@ -385,7 +385,7 @@
     },
     "/api/users/{userId}/files": {
       "get": {
-        "operationId": "UsersFilesController_getUserFilesMetadata",
+        "operationId": "UsersController_getAllUserFilesMetadata",
         "parameters": [
           {
             "name": "userId",

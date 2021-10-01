@@ -40,6 +40,8 @@ import { UpdateEmailConfirmationDto } from './dto/update-email-confirmation.dto'
 import { CreateEmailConfirmationDto } from './dto/create-email-confirmation.dto';
 import { DraftDto } from '../drafts/dto/draft.dto';
 import { DraftsService } from '../drafts/drafts.service';
+import { FileMetadataDto } from '../files/dto/file-metadata.dto';
+import { FilesService } from '../files/files.service';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -48,7 +50,8 @@ import { DraftsService } from '../drafts/drafts.service';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly draftsService: DraftsService
+    private readonly draftsService: DraftsService,
+    private readonly filesService: FilesService
   ) {}
 
   @Get()
@@ -191,5 +194,20 @@ export class UsersController {
     }
 
     return this.draftsService.findAllForUser(userId);
+  }
+
+  @Get('/:userId/files')
+  @ApiBearerAuth('access-token')
+  @ApiTags('users')
+  @ApiOkResponse({ type: [FileMetadataDto] })
+  async getAllUserFilesMetadata(
+    @User() user: UserDto,
+    @Param('userId', new ParseIntPipe()) userId: number
+  ): Promise<FileMetadataDto[]> {
+    if (user.id !== userId && !user.roles.includes(UserRole.admin)) {
+      throw new ForbiddenException();
+    }
+
+    return this.filesService.getUserFilesMetadata(userId);
   }
 }
