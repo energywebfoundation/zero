@@ -38,13 +38,21 @@ import { PasswordResetInitDto } from './dto/password-reset-init.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { UpdateEmailConfirmationDto } from './dto/update-email-confirmation.dto';
 import { CreateEmailConfirmationDto } from './dto/create-email-confirmation.dto';
+import { DraftDto } from '../drafts/dto/draft.dto';
+import { DraftsService } from '../drafts/drafts.service';
+import { FileMetadataDto } from '../files/dto/file-metadata.dto';
+import { FilesService } from '../files/files.service';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
 @UseInterceptors(ClassSerializerInterceptor, NoDataInterceptor)
 @UseFilters(PrismaClientExceptionFilter)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly draftsService: DraftsService,
+    private readonly filesService: FilesService
+  ) {}
 
   @Get()
   @ApiBearerAuth('access-token')
@@ -171,5 +179,35 @@ export class UsersController {
     await this.usersService.confirmEmail(confirmEmailDto.token);
 
     return { status: 'OK' };
+  }
+
+  @Get('/:userId/drafts')
+  @ApiBearerAuth('access-token')
+  @ApiTags('users')
+  @ApiOkResponse({ type: DraftDto, isArray: true })
+  findAllUserDrafts(
+    @User() user: UserDto,
+    @Param('userId', new ParseIntPipe()) userId: number
+  ) {
+    if (user.id !== userId && !user.roles.includes(UserRole.admin)) {
+      throw new ForbiddenException();
+    }
+
+    return this.draftsService.findAllForUser(userId);
+  }
+
+  @Get('/:userId/files')
+  @ApiBearerAuth('access-token')
+  @ApiTags('users')
+  @ApiOkResponse({ type: [FileMetadataDto] })
+  async getAllUserFilesMetadata(
+    @User() user: UserDto,
+    @Param('userId', new ParseIntPipe()) userId: number
+  ): Promise<FileMetadataDto[]> {
+    if (user.id !== userId && !user.roles.includes(UserRole.admin)) {
+      throw new ForbiddenException();
+    }
+
+    return this.filesService.getUserFilesMetadata(userId);
   }
 }

@@ -9,6 +9,19 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { FacilitiesService } from '../facilities/facilities.service';
 import { FacilityDto } from '../facilities/dto/facility.dto';
+import { CreateFacilityDto } from '../facilities/dto/create-facility.dto';
+
+const newFacilityData: CreateFacilityDto = {
+  companyName: 'Company Name',
+  name: 'Facility name',
+  facilityId: 'a unique id',
+  registry: ['REC', 'I_REC'],
+  registryId: 'registry id',
+  energySource: 'BIOMASS',
+  installedCapacity: 1000,
+  country: 'PL',
+  ownershipType: 'OWNER'
+};
 
 describe('ProductsController', () => {
   let controller: ProductsController;
@@ -70,8 +83,16 @@ describe('ProductsController', () => {
 
     adminAccessToken = await logInUser(app, adminUser.email, 'admin password');
 
-    facility1 = await facilitiesService.create({ name: 'Facility 1' }, user1.id);
-    facility2 = await facilitiesService.create({ name: 'Facility 2' }, user2.id);
+    facility1 = await facilitiesService.create({
+      ...newFacilityData,
+      facilityId: 'a unique id 1',
+      name: 'New facility name 1'
+    }, user1.id);
+    facility2 = await facilitiesService.create({
+      ...newFacilityData,
+      facilityId: 'a unique id 2',
+      name: 'New facility name 2'
+    }, user2.id);
   });
 
   afterAll(async function() {
@@ -124,13 +145,13 @@ describe('ProductsController', () => {
 
       const resBody = (await request(httpServer)
         .post('/products')
-        .send({ name: 'My first awesome product', facilityId: 9999 })
+        .send({ name: 'My first awesome product', facilityId: '91fa679d-9bfe-456f-b564-d57107182068' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.BAD_REQUEST)).body;
 
       expect(resBody).toEqual({
         'error': 'Bad Request',
-        'message': 'non-existing facilityId=9999',
+        'message': 'non-existing facilityId=91fa679d-9bfe-456f-b564-d57107182068',
         'statusCode': 400
       });
     });
@@ -288,13 +309,13 @@ describe('ProductsController', () => {
 
       const resBody = (await request(httpServer)
         .put(`/products/${product.id}`)
-        .send({ name: 'My product name updated', facilityId: 9999 })
+        .send({ name: 'My product name updated', facilityId: '14b4a132-69d3-4512-86ea-784522196f6f' })
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.BAD_REQUEST)).body;
 
       expect(resBody).toEqual({
         'error': 'Bad Request',
-        'message': 'non-existing facilityId=9999',
+        'message': 'non-existing facilityId=14b4a132-69d3-4512-86ea-784522196f6f',
         'statusCode': 400
       });
     });

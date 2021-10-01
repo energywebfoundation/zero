@@ -58,7 +58,6 @@ services:
       - '3333:3333'
     volumes:
     - qa-backend-temp:/tmp
-    - qa-backend-uploaded_files:/uploaded-files
     environment:
       LOG_LEVELS: "log,error,warn,debug,verbose"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/zero"
@@ -80,7 +79,6 @@ services:
 volumes:
   qa-db-data:
   qa-backend-temp:
-  qa-backend-uploaded_files:
 
 networks:
   zero:

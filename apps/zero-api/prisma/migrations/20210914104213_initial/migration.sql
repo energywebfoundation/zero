@@ -1,4 +1,16 @@
 -- CreateEnum
+CREATE TYPE "DeviceRegistryEnum" AS ENUM ('REC', 'I_REC', 'TIGR', 'ALL');
+
+-- CreateEnum
+CREATE TYPE "RenevableEnergySourceEnum" AS ENUM ('SOLAR', 'WIND', 'HYDRO', 'BIOMASS', 'GEOTHERMAL');
+
+-- CreateEnum
+CREATE TYPE "FacilityFinancialSupportTypeEnum" AS ENUM ('GOVERNMENT_SUBSIDIES', 'TAX_REBATES', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "DeviceOwnershipEnum" AS ENUM ('OWNER', 'I_REC_MANAGER', 'BROKER');
+
+-- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('seller', 'buyer', 'admin');
 
 -- CreateEnum
@@ -32,6 +44,8 @@ CREATE TABLE "File" (
     "meta" JSONB,
     "uploadedAt" TIMESTAMP(3) NOT NULL,
     "processingCompletedAt" TIMESTAMP(3),
+    "imageOfFacilityId" TEXT,
+    "documentOfFacilityId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -77,9 +91,27 @@ CREATE TABLE "EmailConfirmation" (
 
 -- CreateTable
 CREATE TABLE "Facility" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
+    "companyName" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "facilityId" TEXT NOT NULL,
+    "registry" "DeviceRegistryEnum"[],
+    "registryId" TEXT NOT NULL,
+    "energySource" "RenevableEnergySourceEnum" NOT NULL,
+    "installedCapacity" INTEGER NOT NULL,
+    "certifiedEnergy" INTEGER,
+    "energyToBeCertified" INTEGER,
+    "commercialOperationDate" TIMESTAMP(3),
+    "financialSupport" "FacilityFinancialSupportTypeEnum",
+    "country" TEXT NOT NULL,
+    "region" TEXT,
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
+    "gridOperator" TEXT,
+    "story" TEXT,
+    "impactStory" TEXT,
     "ownerId" INTEGER NOT NULL,
+    "ownershipType" "DeviceOwnershipEnum" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -90,7 +122,7 @@ CREATE TABLE "Facility" (
 CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "facilityId" INTEGER NOT NULL,
+    "facilityId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -100,8 +132,17 @@ CREATE TABLE "Product" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Facility.facilityId_unique" ON "Facility"("facilityId");
+
 -- AddForeignKey
 ALTER TABLE "File" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD FOREIGN KEY ("imageOfFacilityId") REFERENCES "Facility"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD FOREIGN KEY ("documentOfFacilityId") REFERENCES "Facility"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Draft" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

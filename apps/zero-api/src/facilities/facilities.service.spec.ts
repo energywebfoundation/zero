@@ -4,8 +4,23 @@ import { AppModule } from '../app/app.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from '../users/dto/user.dto';
 import { UsersService } from '../users/users.service';
-import { createAndActivateUser } from '../../test/helpers';
-import { User, UserRole } from '@prisma/client';
+import { createAndActivateUser, createDocumentDbRecord, createImageDbRecord } from '../../test/helpers';
+import { File, User, UserRole } from '@prisma/client';
+import { CreateFacilityDto } from './dto/create-facility.dto';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
+
+
+const newFacilityData: CreateFacilityDto = {
+  companyName: 'Company Name',
+  name: 'Facility name',
+  facilityId: 'a unique id',
+  registry: ['REC', 'I_REC'],
+  registryId: 'registry id',
+  energySource: 'BIOMASS',
+  installedCapacity: 1000,
+  country: 'PL',
+  ownershipType: 'OWNER'
+};
 
 describe('FacilitiesService', () => {
   let module: TestingModule;
@@ -13,7 +28,11 @@ describe('FacilitiesService', () => {
   let service: FacilitiesService;
   let usersService: UsersService;
   let user1: UserDto;
+  let user1Doc: File;
+  let user1Img: File;
   let user2: UserDto;
+  let user2Doc: File;
+  let user2Img: File;
 
   beforeAll(async function() {
     module = await Test.createTestingModule({
@@ -34,6 +53,9 @@ describe('FacilitiesService', () => {
       password: 'test password 1'
     } as User);
 
+    user1Doc = await createDocumentDbRecord(prisma, user1.id);
+    user1Img = await createImageDbRecord(prisma, user1.id);
+
     user2 = await createAndActivateUser(usersService, prisma, {
       firstName: 'test first name 2',
       lastName: 'test last name 2',
@@ -41,7 +63,12 @@ describe('FacilitiesService', () => {
       roles: [UserRole.seller],
       password: 'test password 2'
     } as User);
+
+    user2Doc = await createDocumentDbRecord(prisma, user2.id);
+    user2Img = await createImageDbRecord(prisma, user2.id);
+
   });
+
 
   afterAll(async function() {
     await module.close();
@@ -58,7 +85,7 @@ describe('FacilitiesService', () => {
   describe('create()', function() {
     it('should create a new db record', async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      const result = await service.create({ name: 'New facility name' }, user1.id);
+      const result = await service.create(newFacilityData, user1.id);
 
       expect(result).toBeDefined();
       expect(result.id).toBeDefined();
@@ -67,9 +94,96 @@ describe('FacilitiesService', () => {
       const dbRecords = await prisma.facility.findMany();
 
       expect(dbRecords.length).toEqual(1);
-      expect(dbRecords[0].name).toEqual('New facility name');
+      expect(dbRecords[0].name).toEqual(newFacilityData.name);
 
-      expect(result).toEqual(dbRecords[0]);
+      expect(result).toEqual({ ...dbRecords[0], documents: [], images: [] });
+    });
+
+    it('should accept owned document', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+    });
+
+    it('should accept owned image', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+    });
+
+    it('should refuse to link not-image mimetype file as an image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user1Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing document', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: ['00000000-0000-0000-0000-000000000000']
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: ['00000000-0000-0000-0000-000000000000']
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link not-owned document', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: [user2Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link not-owned image', async function() {
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user2Img.id]
+        }, user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link a document already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          documents: [user1Doc.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link an image already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.create({
+          ...newFacilityData,
+          images: [user1Img.id]
+        }, user1.id);
+      }).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -78,9 +192,21 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should return all db records', async function() {
@@ -91,18 +217,30 @@ describe('FacilitiesService', () => {
       expect(result[1].name).toEqual('New facility name 2');
       expect(result[2].name).toEqual('New facility name 3');
 
-      expect(r1).toEqual(result[0]);
-      expect(r2).toEqual(result[1]);
-      expect(r3).toEqual(result[2]);
+      expect(r1).toEqual({ ...result[0], documents: [], images: [] });
+      expect(r2).toEqual({ ...result[1], documents: [], images: [] });
+      expect(r3).toEqual({ ...result[2], documents: [], images: [] });
     });
   });
 
   describe('findOne()', function() {
     it('should return a record', async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      const r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      await service.create({ name: 'New facility name 2' }, user1.id);
-      await service.create({ name: 'New facility name 3' }, user2.id);
+      const r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
 
       const result = await service.findOne(r1.id);
 
@@ -115,18 +253,154 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should update a given record', async function() {
-      await service.update(r1.id, { name: 'Updated facility name 1' });
+      await service.update(r1.id, { name: 'Updated facility name 1' }, user1.id);
 
       expect((await prisma.facility.findUnique({ where: { id: r1.id } })).name).toEqual('Updated facility name 1');
-      expect((await prisma.facility.findUnique({ where: { id: r2.id } }))).toEqual(r2);
-      expect((await prisma.facility.findUnique({ where: { id: r3.id } }))).toEqual(r3);
+
+      expect({
+        ...(await prisma.facility.findUnique({ where: { id: r2.id } })),
+        documents: [],
+        images: []
+      }).toEqual(r2);
+      expect({
+        ...(await prisma.facility.findUnique({ where: { id: r3.id } })),
+        documents: [],
+        images: []
+      }).toEqual(r3);
     });
+
+    it('should accept owned document', async function() {
+      await service.update(
+        r1.id,
+        {
+          ...newFacilityData,
+          documents: [user1Doc.id]
+        },
+        user1.id);
+    });
+
+    it('should accept owned image', async function() {
+      await service.update(
+        r1.id,
+        {
+          ...newFacilityData,
+          images: [user1Img.id]
+        },
+        user1.id);
+    });
+
+    it('should refuse to link not-image mimetype file as an image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user1Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing document', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: ['00000000-0000-0000-0000-000000000000']
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link non-existing image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: ['00000000-0000-0000-0000-000000000000']
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link not-owned document', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: [user2Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link not-owned image', async function() {
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user2Img.id]
+          },
+          user1.id);
+      }).rejects.toThrow(ForbiddenException);
+    });
+
+    it('should refuse to link a document already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        documents: [user1Doc.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            documents: [user1Doc.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
+    it('should refuse to link an image already linked to other facility', async function() {
+      await service.create({
+        ...newFacilityData,
+        images: [user1Img.id]
+      }, user1.id);
+
+      await expect(async () => {
+        await service.update(
+          r1.id,
+          {
+            ...newFacilityData,
+            images: [user1Img.id]
+          },
+          user1.id);
+      }).rejects.toThrow(BadRequestException);
+    });
+
   });
 
   describe('remove()', function() {
@@ -134,9 +408,21 @@ describe('FacilitiesService', () => {
 
     beforeEach(async function() {
       expect((await prisma.facility.findMany()).length).toEqual(0);
-      r1 = await service.create({ name: 'New facility name 1' }, user1.id);
-      r2 = await service.create({ name: 'New facility name 2' }, user1.id);
-      r3 = await service.create({ name: 'New facility name 3' }, user2.id);
+      r1 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 1',
+        name: 'New facility name 1'
+      }, user1.id);
+      r2 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 2',
+        name: 'New facility name 2'
+      }, user1.id);
+      r3 = await service.create({
+        ...newFacilityData,
+        facilityId: 'a unique id 3',
+        name: 'New facility name 3'
+      }, user2.id);
     });
 
     it('should remove a given record', async function() {

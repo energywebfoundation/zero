@@ -11,6 +11,7 @@
     "build:prod": "yarn swagger:schema:generate && yarn build:api-client && cp apps/zero-ui/src/index.html.template apps/zero-ui/src/index.html  && nx run-many --target=build --projects=zero-ui,zero-api --parallel --prod",
     "build:docker": "yarn build:prod && nx run-many --target=docker-image-build --projects=zero-ui,zero-api && yarn docker:tag:canary",
     "docker:tag:canary": "docker tag zero-ui:latest zero-ui:canary && docker tag zero-ui:latest zero-ui:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0 && docker tag zero-api:latest zero-api:canary && docker tag zero-api:latest zero-api:canary.$(date \"+%Y%m%d%H%M%S\") || exit 0",
+    "prisma": "prisma",
     "test": "nx test",
     "test:zero": "nx run zero:test",
     "test:zero-api": "nx run zero-api:test",
@@ -186,7 +187,8 @@
     "url-loader": "^3.0.0"
   },
   "prisma": {
-    "schema": "apps/zero-api/prisma/schema.prisma"
+    "schema": "apps/zero-api/prisma/schema.prisma",
+    "seed": "ts-node apps/zero-api/prisma/seed.ts"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,

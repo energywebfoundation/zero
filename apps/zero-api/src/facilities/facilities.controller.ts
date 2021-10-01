@@ -8,9 +8,8 @@ import {
   Logger,
   NotFoundException,
   Param,
-  ParseIntPipe,
+  Patch,
   Post,
-  Put,
   UseFilters,
   UseInterceptors,
   UsePipes,
@@ -57,15 +56,15 @@ export class FacilitiesController {
 
   @Get(':id')
   @ApiOkResponse({ type: FacilityDto })
-  findOne(@Param('id', new ParseIntPipe()) id: number) {
+  findOne(@Param('id') id: string) {
     return this.facilitiesService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOkResponse({ type: FacilityDto })
   async update(
     @User() user: UserDto,
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param('id') id: string,
     @Body() updateFacilityDto: UpdateFacilityDto
   ) {
     const facility = await this.facilitiesService.findOne(id);
@@ -76,18 +75,18 @@ export class FacilitiesController {
     }
 
     if (facility && facility.ownerId !== user.id) {
-      this.logger.warn(`userId=${user.id} tried to update productId=${id} of not-owned facilityId=${facility.id}`);
+      this.logger.warn(`userId=${user.id} attempts to update not-owned facilityId=${facility.id}`);
       throw new ForbiddenException(`userId=${user.id} is not an owner of facilityId=${facility.id}`);
     }
 
-    return this.facilitiesService.update(id, updateFacilityDto);
+    return this.facilitiesService.update(id, updateFacilityDto, user.id);
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: FacilityDto })
   async remove(
     @User() user: UserDto,
-    @Param('id', new ParseIntPipe()) id: number
+    @Param('id') id: string
   ) {
     const facility = await this.facilitiesService.findOne(id);
 
