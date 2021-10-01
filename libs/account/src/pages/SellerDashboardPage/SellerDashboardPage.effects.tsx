@@ -5,7 +5,7 @@ export const useSellerDashboardPageEffects = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useUsersControllerMe();
 
-  const user = !!data ? data : ({} as UserDto);
+  const user = data ?? ({} as UserDto);
 
   const isUserSeller = user.roles?.includes(UserRole.seller);
   const isUserBuyer = user.roles?.includes(UserRole.buyer);

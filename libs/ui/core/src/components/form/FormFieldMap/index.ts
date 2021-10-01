@@ -1,1 +1,1 @@
-export * from './FormFieldMap'
+export * from './FormFieldMap';
