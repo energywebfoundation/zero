@@ -2,7 +2,6 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app/app.module';
-import { UsersDraftsController } from './users-drafts.controller';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { User, UserRole } from '@prisma/client';
@@ -15,7 +14,7 @@ import { FileMetadataDto } from '../files/dto/file-metadata.dto';
 describe('UsersFilesController', function() {
   let app: INestApplication;
   let httpServer;
-  let controller: UsersDraftsController;
+  let controller: UsersFilesController;
   let prisma: PrismaService;
   let usersService: UsersService;
   let user1: UserDto, user2: UserDto;
@@ -35,7 +34,7 @@ describe('UsersFilesController', function() {
 
     httpServer = app.getHttpServer();
 
-    controller = module.get<UsersDraftsController>(UsersDraftsController);
+    controller = module.get<UsersFilesController>(UsersFilesController);
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
 
