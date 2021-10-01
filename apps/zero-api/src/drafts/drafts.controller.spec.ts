@@ -1,22 +1,22 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { UsersService } from '../users/users.service';
+import { DraftsService } from './drafts.service';
+import { UserDto } from '../users/dto/user.dto';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app/app.module';
-import { UsersDraftsController } from './users-drafts.controller';
-import { DraftsService } from '../drafts/drafts.service';
-import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
-import { User, UserRole, DraftType } from '@prisma/client';
-import * as request from 'supertest';
-import { DraftDto } from '../drafts/dto/draft.dto';
-import { CreateDraftDto } from '../drafts/dto/create-draft.dto';
-import { UpdateDraftDto } from '../drafts/dto/update-draft.dto';
 import { createAndActivateUser, getAuthBearerHeader, logInUser } from '../../test/helpers';
+import { DraftType, User, UserRole } from '@prisma/client';
+import { CreateDraftDto } from './dto/create-draft.dto';
+import { DraftDto } from './dto/draft.dto';
+import * as request from 'supertest';
+import { UpdateDraftDto } from './dto/update-draft.dto';
+import { DraftsController } from './drafts.controller';
 
-describe('UsersDraftsController', function() {
+describe('DraftsController', function() {
   let app: INestApplication;
   let httpServer;
-  let controller: UsersDraftsController;
+  let controller: DraftsController;
   let prisma: PrismaService;
   let usersService: UsersService;
   let draftsService: DraftsService;
@@ -28,7 +28,7 @@ describe('UsersDraftsController', function() {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersDraftsController],
+      controllers: [DraftsController],
       providers: [UsersService, DraftsService, PrismaService],
       imports: [AppModule]
     }).compile();
@@ -38,7 +38,7 @@ describe('UsersDraftsController', function() {
 
     httpServer = app.getHttpServer();
 
-    controller = module.get<UsersDraftsController>(UsersDraftsController);
+    controller = module.get<DraftsController>(DraftsController);
     prisma = module.get<PrismaService>(PrismaService);
     usersService = module.get<UsersService>(UsersService);
     draftsService = module.get<DraftsService>(DraftsService);
@@ -87,52 +87,17 @@ describe('UsersDraftsController', function() {
     expect(controller).toBeDefined();
   });
 
-  describe('GET users/:userId/drafts', function() {
-    it('should respond with drafts of a logged in user', async function() {
-      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
-
-      const drafts = (await request(httpServer)
-        .get(`/users/${user1.id}/drafts`)
-        .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.OK)).body as DraftDto[];
-
-      expect(drafts.length).toEqual(3);
-      expect(drafts.filter(d => d.userId === user1.id).length).toEqual(drafts.length);
+  describe('POST /drafts', function() {
+    it('should require a logged in user', async function() {
+      await request(httpServer)
+        .post(`/drafts`)
+        .send({ data: {}, draftType: DraftType.facility } as CreateDraftDto)
+        .expect(HttpStatus.UNAUTHORIZED);
     });
 
-    it('should deny access to drafts of another user if not admin', async function() {
-      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
-
-      const body = (await request(httpServer)
-        .get(`/users/${user2.id}/drafts`)
-        .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.FORBIDDEN)).body;
-
-      expect(body.drafts).not.toBeDefined();
-    });
-
-    it('should allow access to drafts of another user if admin', async function() {
-      await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
-      await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
-
-      const drafts = (await request(httpServer)
-        .get(`/users/${user2.id}/drafts`)
-        .set(getAuthBearerHeader(adminAccessToken))
-        .expect(HttpStatus.OK)).body as DraftDto[];
-
-      expect(drafts.length).toEqual(1);
-    });
-  });
-
-  describe('POST users/:userId/drafts', function() {
     it('should create a draft for a logged in user', async function() {
       const newDraft = (await request(httpServer)
-        .post(`/users/${user1.id}/drafts`)
+        .post(`/drafts`)
         .send({ data: {}, draftType: DraftType.facility } as CreateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.CREATED)).body as DraftDto;
@@ -141,39 +106,15 @@ describe('UsersDraftsController', function() {
 
       expect(await prisma.draft.findUnique({ where: { id: newDraft.id } })).not.toBeNull();
     });
-
-    it('should deny creation of a draft for another user if not admin', async function() {
-      const body = (await request(httpServer)
-        .post(`/users/${user2.id}/drafts`)
-        .send({ data: {}, draftType: DraftType.facility } as CreateDraftDto)
-        .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.FORBIDDEN)).body;
-
-      expect(body.id).not.toBeDefined();
-
-      expect((await prisma.draft.findMany()).length).toEqual(0);
-    });
-
-    it('should allow creation of a draft for another user if admin', async function() {
-      const body = (await request(httpServer)
-        .post(`/users/${user2.id}/drafts`)
-        .send({ data: {}, draftType: DraftType.facility } as CreateDraftDto)
-        .set(getAuthBearerHeader(adminAccessToken))
-        .expect(HttpStatus.CREATED)).body;
-
-      expect(body.id).toBeDefined();
-
-      expect((await prisma.draft.findMany({ where: { userId: user2.id } })).length).toEqual(1);
-    });
   });
 
-  describe('GET users/:userId/drafts/:id', function() {
-    it('should return a user\'s draft', async function() {
+  describe('GET /drafts/:id', function() {
+    it('should respond with a draft', async function() {
       const user1Draft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
       await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       const draft = (await request(httpServer)
-        .get(`/users/${user1.id}/drafts/${user1Draft.id}`)
+        .get(`/drafts/${user1Draft.id}`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body as DraftDto;
 
@@ -185,7 +126,7 @@ describe('UsersDraftsController', function() {
       await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       (await request(httpServer)
-        .get(`/users/${user1.id}/drafts/123`)
+        .get(`/drafts/123`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND));
     });
@@ -195,7 +136,7 @@ describe('UsersDraftsController', function() {
       const user2Draft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       const body = (await request(httpServer)
-        .get(`/users/${user1.id}/drafts/${user2Draft.id}`)
+        .get(`/${user2Draft.id}`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND)).body;
 
@@ -206,7 +147,7 @@ describe('UsersDraftsController', function() {
       const { id: draftId } = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       const body = (await request(httpServer)
-        .get(`/users/${user1.id}/drafts/${draftId}`)
+        .get(`/drafts/${draftId}`)
         .set(getAuthBearerHeader(adminAccessToken))
         .expect(HttpStatus.OK)).body as DraftDto;
 
@@ -215,12 +156,12 @@ describe('UsersDraftsController', function() {
     });
   });
 
-  describe('PUT users/:userId/drafts/:id', function() {
+  describe('PUT /drafts/:id', function() {
     it('should update existing draft of a logged-in user', async function() {
       const existingDraft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       const draftModified = (await request(httpServer)
-        .put(`/users/${user1.id}/drafts/${existingDraft.id}`)
+        .put(`/drafts/${existingDraft.id}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK)).body as DraftDto;
@@ -234,7 +175,7 @@ describe('UsersDraftsController', function() {
       const draft2 = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .put(`/users/${user1.id}/drafts/${draft1.id}`)
+        .put(`/drafts/${draft1.id}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK);
@@ -247,7 +188,7 @@ describe('UsersDraftsController', function() {
       const existingDraft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       const body = (await request(httpServer)
-        .put(`/users/${user1.id}/drafts/${existingDraft.id + 1}`)
+        .put(`/drafts/${existingDraft.id + 1}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND)).body;
@@ -259,10 +200,10 @@ describe('UsersDraftsController', function() {
       const anotherUsersDraft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       const body = (await request(httpServer)
-        .put(`/users/${user1.id}/drafts/${anotherUsersDraft.id}`)
+        .put(`/drafts/${anotherUsersDraft.id}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.NOT_FOUND)).body;
+        .expect(HttpStatus.FORBIDDEN)).body;
 
       expect(body.id).not.toBeDefined();
     });
@@ -271,7 +212,7 @@ describe('UsersDraftsController', function() {
       const draft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .put(`/users/${user2.id}/drafts/${draft.id}`)
+        .put(`/drafts/${draft.id}`)
         .send({ data: {}, draftType: DraftType.facility } as UpdateDraftDto)
         .set(getAuthBearerHeader(adminAccessToken))
         .expect(HttpStatus.OK);
@@ -283,12 +224,12 @@ describe('UsersDraftsController', function() {
     });
   });
 
-  describe('DELETE users/:userId/drafts/:id', function() {
+  describe('DELETE /drafts/:id', function() {
     it('should delete existing draft of a user', async function() {
       const existingDraft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .delete(`/users/${user1.id}/drafts/${existingDraft.id}`)
+        .delete(`/drafts/${existingDraft.id}`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK);
 
@@ -300,7 +241,7 @@ describe('UsersDraftsController', function() {
       const anotherDraft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .delete(`/users/${user1.id}/drafts/${existingDraft.id}`)
+        .delete(`/drafts/${existingDraft.id}`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.OK);
 
@@ -311,7 +252,7 @@ describe('UsersDraftsController', function() {
       const existingDraft = await draftsService.create(user1.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .delete(`/users/${user1.id}/drafts/${existingDraft.id + 1}`)
+        .delete(`/drafts/${existingDraft.id + 1}`)
         .set(getAuthBearerHeader(accessToken1))
         .expect(HttpStatus.NOT_FOUND);
 
@@ -323,9 +264,9 @@ describe('UsersDraftsController', function() {
       const anotherDraft = await draftsService.create(user2.id, { data: [], draftType: DraftType.facility });
 
       await request(httpServer)
-        .delete(`/users/${user1.id}/drafts/${anotherDraft.id}`)
+        .delete(`/drafts/${anotherDraft.id}`)
         .set(getAuthBearerHeader(accessToken1))
-        .expect(HttpStatus.NOT_FOUND);
+        .expect(HttpStatus.FORBIDDEN);
 
       expect(await prisma.draft.findUnique({ where: { id: existingDraft.id } })).not.toBeNull();
       expect(await prisma.draft.findUnique({ where: { id: anotherDraft.id } })).not.toBeNull();
