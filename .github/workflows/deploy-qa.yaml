@@ -74,6 +74,12 @@ jobs:
 
       - name: Build Docker images
         run: yarn build:docker
+        env:
+          JWT_SECRET: "secret"
+          AWS_BUCKET: "ew-zero-uploaded-files-dev"
+          AWS_REGION: "us-west-2"
+          AWS_ACCESS_KEY_ID: "foobar"
+          AWS_SECRET_ACCESS_KEY: "foobar"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -85,19 +91,19 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        
+
       - name: Push docker images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           SEM_VER: ${{ needs.semantic-version.outputs.version_tag }}
         run: |
-          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest 
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest
           docker push $ECR_REGISTRY/ew-zero-ui:latest
-          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER 
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER
           docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
-          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest 
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest
           docker push $ECR_REGISTRY/ew-zero-api:latest
-          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER 
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER
           docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
 
       - name: Push git tag
@@ -106,7 +112,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ needs.semantic-version.outputs.version_tag }}
           RELEASE_BRANCHES: chore/github-actions-qa-deployment
-      
+
       - name: Logout of Amazon ECR
         if: always()
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
