@@ -17,21 +17,22 @@
 
 - [Table of Contents](#table-of-contents)
 - [Versions](#versions)
-  * [Stable](#stable)
-  * [Canary](#canary)
-  * [Preview](#preview)
+  - [Stable](#stable)
+  - [Canary](#canary)
+  - [Preview](#preview)
 - [Running locally](#running-locally)
-  * [Preparation](#preparation)
-  * [Install dependencies](#install-dependencies)
-  * [Test](#test)
-  * [Run demo](#run-demo)
-  * [Build](#build)
+  - [Preparation](#preparation)
+  - [Install dependencies](#install-dependencies)
+  - [Deploy database schema](#deploy-database-schema)
+  - [Test](#test)
+  - [Build](#build)
+  - [Run demo](#run-demo)
 - [Docker](#docker)
-  * [Images building](#images-building)
-  * [Running containers](#running-containers)
-  * [Database schema setup](#database-schema-setup)
-    + [Deploying schema migrations](#deploying-schema-migrations)
-    + [Resetting the database schema](#resetting-the-database-schema)
+  - [Images building](#images-building)
+  - [Running containers](#running-containers)
+  - [Database schema setup](#database-schema-setup)
+    - [Deploying schema migrations](#deploying-schema-migrations)
+    - [Resetting the database schema](#resetting-the-database-schema)
 - [Contribution guidelines](#contribution-guidelines)
 
 # Versions
@@ -100,15 +101,15 @@ prisma migrate reset
 yarn e2e
 ```
 
-## Run demo
-```shell
-yarn start
-```
-
 ## Build
 
 ```shell
 yarn build
+```
+
+## Run demo
+```shell
+yarn start
 ```
 
 Visit the UI at: http://localhost:3000 to access user interface or http://localhost:3333/swagger to access Swagger

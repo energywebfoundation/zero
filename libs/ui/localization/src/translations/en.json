@@ -1,0 +1,166 @@
+{
+  "translation": {
+    "authLoginPage": {
+      "headText": "Welcome back!",
+      "subHeadText": "To login, please enter your email and password"
+    },
+    "authSignUpPage": {
+      "headText": "User registration",
+      "subHeadText": "To create account please fill out all fields"
+    },
+    "buyerLandingPage": {
+      "callToAction": "Get started now!",
+      "welcomeToZero": "Welcome to Zero!",
+      "aGlobalSearchEngineForRenevableEnergy": "a global search engine for buying Renevable Energy"
+    },
+    "sellerLandingPage": {
+      "callToAction": "Create account",
+      "whatIsZero": "What is Zero?",
+      "zeroIsGlobalSearchEngineForRenewableEnergy": "Zero is global search engine for Renevable Energy"
+    },
+    "accountSellerDashboardEmptyPage": {
+      "GuideCard-1": {
+        "headText": "1. Setup your public page",
+        "subHeadText": "Upload your inventory through manual or automatic means",
+        "btnText": "Edit seller page"
+      },
+      "GuideCard-2": {
+        "headText": "2. Add facilities and products",
+        "subHeadText": "Tell buyers who you are by providing practical information about your business",
+        "btnText": "Add facilities"
+      },
+      "GuideCard-3": {
+        "headText": "3. Review & reply to customer's RFPs",
+        "subHeadText": "Read through the Requests For Proposals that buyers have posted while searching for their needs",
+        "btnText": "View RFPs",
+        "disabledInfoText": "only available once you complete the other 2 steps"
+      }
+    },
+    "auth": {
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    },
+    "navigation": {
+      "searchOnZero": "Search on Zero",
+      "sellOnZero": "Sell on Zero",
+      "searches": "Searches",
+      "productList": "Product list",
+      "facilities": "Facilities",
+      "products": "Products",
+      "clientRequests": "Client requests"
+    },
+    "components": {
+      "LanguageSelect": {
+        "en": "Eng",
+        "tr": "Tur",
+        "es": "Spa",
+        "de": "Ger",
+        "vi": "Viet"
+      },
+      "PasswordStrengthInfo": {
+        "veryWeak": "Very weak",
+        "weak": "Weak",
+        "almostOk": "Almost ok",
+        "goodPassword": "Good password!",
+        "strongPassword": "Strong password"
+      },
+      "TopBarUserProfile": {
+        "welcome": "Welcome",
+        "logout": "Logout",
+        "profile": "Profile",
+        "myAccount": "My account"
+      },
+      "ImageUpload": {
+        "addImage": "Add image",
+        "dragDropImage": "Drag and drop image anywhere"
+      },
+      "ImageUploadContainer": {
+        "uploadSuccessfullMsg": "Image uploaded successfully",
+        "uploadErrorMsg": "There has been error uploading image",
+        "fileDoesntPassTheValidation": "does not pass validation and has been removed from upload list",
+        "helpText": "A JPG or PNG image must not be more than 4,000 pixels wide high, and its file size must be less than 5MB."
+      },
+      "FileInfo": {
+        "loading": "Loading..."
+      }
+    },
+    "forms": {
+      "cancelBtnText": "Cancel",
+      "submitBtnText": "Submit",
+      "signInBtnText": "Log in",
+      "signUpBtnText": "Register",
+      "AuthLoginForm": {
+        "email": "Email",
+        "password": "Password",
+        "createAccountBtnText": "Create an account",
+        "resetPasswordBtnText": "Forget the password?",
+        "submitBtnText": "Login"
+      },
+      "AuthSignUpForm": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirm": "Confirm password",
+        "userRole": {
+          "options": {
+            "buyer": "I want to BUY RE Products",
+            "seller": "I want to SELL RE Products"
+          }
+        }
+      },
+      "SellerAddFacilitiesBasicInformationForm": {
+        "deviceOwnerCompanyName": "Device owner / Company name",
+        "facilityName": "Facility name",
+        "registryId": "Registry ID",
+        "eacRegistries": "EAC registries",
+        "source": "Source",
+        "deviceOwnership": "Device ownership",
+        "installedCapacity": "Installed capacity",
+        "projectSupportedFinancially": "This project is supported financially",
+        "typeOfFinancialSupport": "Type of support",
+        "commercialOperationDate": "Commercial operation date"
+      },
+      "SellerAddFacilitiesLocationForm": {
+        "location": "Location",
+        "country": "Country",
+        "region": "Region / Province",
+        "address": "Address",
+        "gridOperator": "Grid operator",
+        "latitude": "Latitude",
+        "longitude": "Longitude"
+      },
+      "SellerAddFacilitiesSustainabilityForm": {
+        "facilityStory": "Facility story",
+        "impactStory": "Impact story",
+        "impactStoryPlaceholderText": "Briefly describe facility and its story"
+      },
+      "FileList": {
+        "submitSelection": "Submit selection",
+        "cancel": "Cancel"
+      },
+      "ImageUploadContainer": {
+        "uploadErrorMsg": "Error uploading image",
+        "uploadSuccessfullMsg": "Image uploaded successfully"
+      }
+    },
+    "pages": {
+      "SellerAddFacilitiesImagesPage": {
+        "basicInformation": "Basic Information",
+        "location": "Location",
+        "sustainability": "Sustainability",
+        "images": "Images",
+        "products": "Products"
+      },
+      "LoadingPage": {
+        "title": "Loading - Please Wait",
+        "pleaseWait": "Please wait!"
+      },
+      "NotFoundPage": {
+        "title": "404 - Page Not found",
+        "back": "Back to Home page",
+        "whoops": "Whoops! Something went wrong!"
+      }
+    }
+  }
+}

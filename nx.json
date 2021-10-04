@@ -9,7 +9,7 @@
   "affected": {
     "defaultBase": "develop"
   },
-  "npmScope": "energy-web-zero",
+  "npmScope": "@energyweb/zero",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
@@ -25,58 +25,42 @@
     }
   },
   "projects": {
-    "buyer": {
+    "account": {
       "tags": []
     },
-    "localization": {
+    "api-client": {
+      "tags": []
+    },
+    "auth": {
+      "tags": []
+    },
+    "buyer": {
       "tags": []
     },
     "seller": {
       "tags": []
     },
-    "store-app-shared-state": {
-      "tags": []
-    },
-    "store-configure": {
-      "tags": []
-    },
-    "ui-account": {
-      "tags": []
-    },
-    "ui-auth": {
+    "ui-assets": {
       "tags": []
     },
     "ui-core": {
       "tags": []
     },
-    "ui-core-e2e": {
-      "tags": [],
-      "implicitDependencies": ["ui-core"]
-    },
-    "ui-forms": {
+    "ui-localization": {
       "tags": []
     },
     "ui-theme": {
       "tags": []
     },
-    "ui-utils": {
-      "tags": []
-    },
-    "ui-zero-api": {
-      "tags": []
-    },
-    "zero": {
-      "tags": []
-    },
     "zero-api": {
       "tags": []
     },
-    "zero-e2e": {
-      "tags": [],
-      "implicitDependencies": ["zero"]
-    },
-    "zero-ui-assets": {
+    "zero-ui": {
       "tags": []
+    },
+    "zero-ui-e2e": {
+      "tags": [],
+      "implicitDependencies": ["zero-ui"]
     }
   },
   "targetDependencies": {

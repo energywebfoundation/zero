@@ -1,6 +1,6 @@
 import { addDecorator } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { UiTheme } from '@energyweb/zero-theme';
+import { UiTheme } from '@energyweb/zero-ui-theme';
 
 addDecorator(withKnobs);
 
