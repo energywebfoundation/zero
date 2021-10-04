@@ -17,21 +17,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@energy-web-zero/buyer": ["libs/buyer/src/index.ts"],
-      "@energy-web-zero/localization": ["libs/localization/src/index.ts"],
-      "@energy-web-zero/seller": ["libs/seller/src/index.ts"],
-      "@energy-web-zero/store-configure": ["libs/store/configure/src/index.ts"],
-      "@energy-web-zero/store/app-shared-state": [
-        "libs/store/app-shared-state/src/index.ts"
-      ],
-      "@energy-web-zero/ui-auth": ["libs/ui/auth/src/index.ts"],
-      "@energy-web-zero/ui/account": ["libs/ui/account/src/index.ts"],
-      "@energy-web-zero/zero-ui-assets": ["libs/zero-ui-assets/src/index.ts"],
-      "@energyweb/zero-forms": ["libs/ui/forms/src/index.ts"],
-      "@energyweb/zero-theme": ["libs/ui/theme/src/index.ts"],
-      "@energyweb/zero-ui": ["libs/ui/core/src/index.ts"],
-      "@energyweb/zero-ui-api": ["libs/ui/zero-api/src/index.ts"],
-      "@energyweb/zero-ui-utils": ["libs/ui/utils/src/index.ts"]
+      "@energyweb/zero-api-client": ["libs/api-client/src/index.ts"],
+      "@energyweb/zero-ui-account": ["libs/account/src/index.ts"],
+      "@energyweb/zero-ui-auth": ["libs/auth/src/index.ts"],
+      "@energyweb/zero-ui-buyer": ["libs/buyer/src/index.ts"],
+      "@energyweb/zero-ui-seller": ["libs/seller/src/index.ts"],
+      "@energyweb/zero-ui-assets": ["libs/ui/assets/src/index.ts"],
+      "@energyweb/zero-ui-core": ["libs/ui/core/src/index.ts"],
+      "@energyweb/zero-ui-localization": ["libs/ui/localization/src/index.ts"],
+      "@energyweb/zero-ui-theme": ["libs/ui/theme/src/index.ts"]
     },
     "resolveJsonModule": true
   },

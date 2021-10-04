@@ -1,0 +1,10 @@
+{
+  "name": "@energyweb/zero-api-client",
+  "version": "0.0.1",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "client:clean": "rm -rf src/client",
+    "client:generate": "orval && barrelsby -d src/client",
+    "build": "yarn client:clean && yarn client:generate"
+  }
+}

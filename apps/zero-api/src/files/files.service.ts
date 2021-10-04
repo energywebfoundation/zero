@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { unlink } from 'fs/promises';
 import { File } from '@prisma/client';
@@ -7,6 +7,16 @@ import { FileMetadataDto } from './dto/file-metadata.dto';
 import { UpdateFileMetadataDto } from './dto/update-file-metadata.dto';
 import { UploadFileResponseDto } from './dto/upload-file-response.dto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { isNil } from '@nestjs/common/utils/shared.utils';
+import * as mimeTypes from 'mime-types';
+
+export const supportedDocumentsFormats = ['doc', 'docx', 'pdf', 'xml', 'ppt', 'pptx'];
+export const supportedImagesFormats = ['jpg', 'jpeg', 'gif', 'png'];
+
+export function mimetypeIsAnImage(mimetype) {
+  const extension = mimeTypes.extension(mimetype);
+  return supportedImagesFormats.indexOf(extension) > -1;
+}
 
 @Injectable()
 export class FilesService {
@@ -105,7 +115,56 @@ export class FilesService {
     return `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${metadata.id}`;
   }
 
-  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto): Promise<FileMetadataDto> {
+  async updateFileMetadata(fileId: string, data: UpdateFileMetadataDto, requestingUserId: number): Promise<FileMetadataDto> {
+    if (!isNil(data.documentOfFacilityId) && !isNil(data.imageOfFacilityId)) {
+      this.logger.warn('file cannot be both document and image of a facility');
+      throw new BadRequestException('file cannot be both document and image of a facility');
+    }
+
+    const facilityId = data.documentOfFacilityId || data.imageOfFacilityId;
+
+    const facility = facilityId ? (await this.prisma.facility.findUnique({ where: { id: facilityId } })) : null;
+
+    if (facilityId && !facility) {
+      this.logger.warn(`no facility found with id=${facilityId}`);
+      throw new BadRequestException(`unknown facilityId: ${facilityId}`);
+    }
+
+    const existingFileRecord = await this.prisma.file.findUnique({ where: { id: fileId } });
+
+    if (!existingFileRecord) {
+      throw new NotFoundException();
+    }
+
+    if (existingFileRecord.ownerId != requestingUserId) {
+      this.logger.warn(`userId=${requestingUserId} attempts to update fileId=${fileId} owned by ${existingFileRecord.ownerId}`);
+      throw new ForbiddenException(`file not owned by userId=${requestingUserId}`);
+    }
+
+    if (facility && existingFileRecord.ownerId !== facility.ownerId) {
+      this.logger.warn(`file owner (${existingFileRecord.ownerId}) and facility owner (${facility.ownerId}) do not match`);
+      throw new BadRequestException('file owner and facility owner do not match');
+    }
+
+    if (
+      (existingFileRecord.documentOfFacilityId !== null
+        && data.documentOfFacilityId !== null
+        && data.imageOfFacilityId !== null
+      )
+      ||
+      (existingFileRecord.imageOfFacilityId !== null
+        && data.imageOfFacilityId !== null
+        && data.documentOfFacilityId !== null
+      )
+    ) {
+      this.logger.warn('file cannot be both document and image of a facility');
+      throw new BadRequestException('file cannot be both document and image of a facility');
+    }
+
+    if (data.imageOfFacilityId && !mimetypeIsAnImage(existingFileRecord.mimetype)) {
+      throw new BadRequestException(`cannot set non-image format file as a facility image`);
+    }
+
     return new FileMetadataDto(await this.prisma.file.update({ where: { id: fileId }, data }));
   }
 

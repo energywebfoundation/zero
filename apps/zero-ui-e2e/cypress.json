@@ -1,0 +1,13 @@
+{
+  "fileServerFolder": ".",
+  "fixturesFolder": "./src/fixtures",
+  "integrationFolder": "./src/integration",
+  "modifyObstructiveCode": false,
+  "pluginsFile": "./src/plugins/index",
+  "supportFile": "./src/support/index.ts",
+  "video": false,
+  "videosFolder": "../../dist/cypress/apps/zero-ui-e2e/videos",
+  "screenshotsFolder": "../../dist/cypress/apps/zero-ui-e2e/screenshots",
+  "chromeWebSecurity": false,
+  "testFiles": "**/*.{feature,features}"
+}

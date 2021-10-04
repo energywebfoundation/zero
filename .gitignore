@@ -4,6 +4,9 @@
 /dist
 /tmp
 /out-tsc
+/swagger.json
+index.html
+
 
 # dependencies
 /node_modules

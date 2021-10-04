@@ -46,7 +46,10 @@ export class DraftsService {
     return new DraftDto(await this.prisma.draft.update({ where: { id }, data: updateDraftDto }));
   }
 
-  remove(id: number) {
-    return this.prisma.draft.deleteMany({ where: { id } });
+  async remove(id: number) {
+    const row = await this.prisma.draft.delete({ where: { id } });
+    if (!row) return null;
+
+    return new DraftDto(row);
   }
 }
