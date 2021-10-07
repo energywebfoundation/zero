@@ -11,10 +11,7 @@ import { resolve } from 'path';
       useFactory: () => ({
         transport: process.env.SMTP_URL,
         defaults: {
-          from: {
-            name: 'EW Zero',
-            address: 'no-reply@energyweb.org'
-          }
+          from: process.env.SMTP_FROM
         },
         template: {
           dir: resolve(__dirname, 'templates'),
