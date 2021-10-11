@@ -5,6 +5,9 @@ export const useStyles = makeStyles({
     zIndex: 1,
     overflow: 'auto'
   },
+  bg: {
+    margin: 40
+  },
   content: {
     zIndex: 2,
     position: 'absolute',

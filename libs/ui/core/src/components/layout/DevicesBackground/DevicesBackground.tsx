@@ -11,7 +11,7 @@ export const DevicesBackground = ({ children }: DevicesBackgroundProps) => {
   return (
     <div>
       <div className={classes.svgBg}>
-        <DevicesBackgroundSvg />
+        <DevicesBackgroundSvg className={classes.bg} />
       </div>
       <div className={classes.content}>
         {children}

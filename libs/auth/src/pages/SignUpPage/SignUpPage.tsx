@@ -14,7 +14,7 @@ const StyledDiv = styled.div`
 export const SignUpPage = () => {
   const { t } = useTranslation();
   const { handleFormSubmitFn } = useSignUpPageEffects();
-  
+
   return (
   <DevicesBackground>
     <StyledDiv>
@@ -40,6 +40,7 @@ export const SignUpPage = () => {
               variant={'body1'}
               fontWeight={500}
               fontSize={'20px'}
+              sx={{ marginBottom: '10px' }}
             >
               {t('authSignUpPage.subHeadText')}
             </Typography>

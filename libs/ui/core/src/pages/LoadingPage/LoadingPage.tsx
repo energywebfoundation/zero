@@ -63,7 +63,13 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
           </StyledLoadingPage>
         </div>
         {children}
-      </> : <>{children}</>
+      </> :(
+      <>
+        <Helmet>
+          <title>{'Zero'}</title>
+        </Helmet>
+        {children}
+      </>)
     );
   }
 );
