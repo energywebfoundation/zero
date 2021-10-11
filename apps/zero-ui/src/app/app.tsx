@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { SellerApp } from '@energyweb/zero-ui-seller';
 import { BuyerApp } from '@energyweb/zero-ui-buyer';
-import { AuthPage } from '@energyweb/zero-ui-auth';
+import { AuthApp } from '@energyweb/zero-ui-auth';
 import { AccountApp } from '@energyweb/zero-ui-account';
 import { LoadingPage, NotFoundPage } from '@energyweb/zero-ui-core';
 import { MainLandingPage } from '../pages';
@@ -20,7 +20,7 @@ export const App: FC = () => {
 
         <Route path={'buyer/*'} element={<BuyerApp />} />
 
-        <Route path={'auth/*'} element={<AuthPage />} />
+        <Route path={'auth/*'} element={<AuthApp />} />
 
         <Route path={'account/*'} element={<AccountApp />} />
 

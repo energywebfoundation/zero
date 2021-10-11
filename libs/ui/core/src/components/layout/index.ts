@@ -11,3 +11,4 @@ export * from './NotificationItem';
 export * from './PopOver';
 export * from './TopBarUserProfile';
 export * from './ProcessingContainer';
+export * from './DevicesBackground';

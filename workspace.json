@@ -339,20 +339,31 @@
     },
     "ui-localization": {
       "root": "libs/ui/localization",
-      "sourceRoot": "libs/ui/localization/src",
+      "sourceRoot": "libs/ui/zero-localization/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ui/localization",
+            "main": "libs/ui/localization/src/index.ts",
+            "tsConfig": "libs/ui/localization/tsconfig.lib.json",
+            "assets": ["libs/ui/localization/*.md"]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/ui/localization/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/ui/localization/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ui/localization"],
+          "outputs": ["coverage/libs/ui/zero-localization"],
           "options": {
-            "jestConfig": "libs/ui/localization/jest.config.js",
+            "jestConfig": "libs/ui/zero-localization/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -477,7 +488,7 @@
             "polyfills": "apps/zero-ui/src/polyfills.ts",
             "tsConfig": "apps/zero-ui/tsconfig.app.json",
             "assets": [
-              "apps/zero-ui/src/favicon.ico",
+              "apps/zero-ui/src/favicon.png",
               "apps/zero-ui/src/assets"
             ],
             "styles": [],

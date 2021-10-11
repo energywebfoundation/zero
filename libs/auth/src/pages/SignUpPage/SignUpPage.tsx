@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GenericFormCard } from '@energyweb/zero-ui-core';
+import { DevicesBackground, GenericFormCard } from '@energyweb/zero-ui-core';
 import { Logo } from '@energyweb/zero-ui-assets';
 import Box from '@material-ui/system/Box/Box';
 import { Grid, Typography } from '@material-ui/core';
@@ -7,15 +7,17 @@ import { useTranslation } from 'react-i18next';
 import { SignUpForm } from '../../components';
 import { useSignUpPageEffects } from './SignUpPage.effects';
 
-const StyledAuthSIgnUpPage = styled.div`
+const StyledDiv = styled.div`
   margin-top: 15vh;
 `;
 
 export const SignUpPage = () => {
   const { t } = useTranslation();
   const { handleFormSubmitFn } = useSignUpPageEffects();
+
   return (
-    <StyledAuthSIgnUpPage>
+  <DevicesBackground>
+    <StyledDiv>
       <Grid container justifyContent={'center'}>
         <Grid item sm={8}>
           <Box mb={'32px'} textAlign={'center'}>
@@ -38,6 +40,7 @@ export const SignUpPage = () => {
               variant={'body1'}
               fontWeight={500}
               fontSize={'20px'}
+              sx={{ marginBottom: '10px' }}
             >
               {t('authSignUpPage.subHeadText')}
             </Typography>
@@ -45,6 +48,7 @@ export const SignUpPage = () => {
           </GenericFormCard>
         </Grid>
       </Grid>
-    </StyledAuthSIgnUpPage>
+    </StyledDiv>
+  </DevicesBackground>
   );
 };

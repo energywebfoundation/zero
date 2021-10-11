@@ -1,16 +1,16 @@
 import { UserRole, useUsersControllerMe } from '@energyweb/zero-api-client';
 import { IconTypeEnum } from '@energyweb/zero-ui-core';
+import { useLocation } from 'react-router-dom';
 
 export const useTopNavContainerEffects = () => {
   const isAuthenticated = Boolean(localStorage.getItem('token'));
+  const location = useLocation();
 
   const { data: user, isLoading } = useUsersControllerMe();
   const isUserBuyer = user ? user.roles?.includes(UserRole.buyer) : false;
   const isUserSeller = user ? user.roles?.includes(UserRole.seller) : false;
   const isSellerPath = location.pathname.includes('/seller');
   const isBuyerPath = location.pathname.includes('/buyer');
-
-  console.log(user);
 
   const primaryNavigation = [
           {

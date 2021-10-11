@@ -5,16 +5,17 @@ export const useCallToActionButtonStyles = makeStyles((theme: Theme) => {
   return {
     root: {
       padding: '10px 40px',
-      // should remove hardcoded colors
-      backgroundColor: '#fff',
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.primary.main,
+      '& > span > svg': {
+        fill: theme.palette.secondary.main
+      },
       '&:hover': {
         backgroundColor: theme.palette.secondary.main,
-        color: 'white',
-      },
-    },
-    icon: {
-      '&:hover': {
-        color: 'white',
+        color: theme.palette.background.paper,
+        '& > span > svg': {
+          fill: theme.palette.primary.main
+        },
       },
     },
   };

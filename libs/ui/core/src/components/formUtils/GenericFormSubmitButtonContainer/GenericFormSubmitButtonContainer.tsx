@@ -5,7 +5,7 @@ import { GenericFormContext } from '../../../providers';
 interface GenericFormSubmitButtonContainerRenderProps {
   isValid: boolean;
   isDirty: boolean;
-  onSubmit: (e?: BaseSyntheticEvent<object>) => Promise<void>;
+  onSubmit: (e?: BaseSyntheticEvent<Record<string, any>>) => Promise<void>;
   isSubmitting: boolean;
 }
 
