@@ -6,7 +6,7 @@ import { Box, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { LayoutWithTopbarContainer } from '@energyweb/zero-ui-core';
+import { LayoutWithTopbarContainer } from '../../components/layout';
 
 export interface NotFoundPageProps {
   isAuthenticated: boolean;

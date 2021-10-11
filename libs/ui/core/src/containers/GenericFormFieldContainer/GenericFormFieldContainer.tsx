@@ -87,15 +87,13 @@ const renderField = (
 
   switch (genericFormFieldConfig.type) {
     case GenericFormFieldType.DatePicker:
-      const formFieldDatePickerConfig =
-        genericFormFieldConfig as FormFieldDatePickerConfig;
       return (
         <FormFieldDatePicker
-          field={formFieldDatePickerConfig}
+          field={genericFormFieldConfig as FormFieldDatePickerConfig}
           errorExists={isFieldInvalid}
           errorText={''}
           control={formConfigContextData.control}
-          disabled={Boolean(formFieldDatePickerConfig.frozen || disabled)}
+          disabled={Boolean((genericFormFieldConfig as FormFieldDatePickerConfig).frozen || disabled)}
         />
       );
     case GenericFormFieldType.TextInput:
@@ -151,13 +149,11 @@ const renderField = (
       );
 
     case GenericFormFieldType.RadioGroup:
-      const radioGroupFieldConfig =
-        genericFormFieldConfig as FormFieldRadioGroupConfig;
       return (
         <FormFieldRadioGroup
-          field={radioGroupFieldConfig}
+          field={genericFormFieldConfig as FormFieldRadioGroupConfig}
           control={formConfigContextData.control}
-          disable={(radioGroupFieldConfig.frozen || disabled) ?? false}
+          disable={((genericFormFieldConfig as FormFieldRadioGroupConfig).frozen || disabled) ?? false}
           variant={formConfigContextData.inputsVariant}
           errorExists={isFieldInvalid}
           errorText={''}
@@ -178,13 +174,11 @@ const renderField = (
       );
 
     case GenericFormFieldType.Select:
-      const selectFieldConfig = genericFormFieldConfig as FormFieldSelectConfig;
-
       return (
         <FormFieldSelect
           disabled={disabled}
           control={formConfigContextData.control}
-          field={selectFieldConfig}
+          field={genericFormFieldConfig as FormFieldSelectConfig}
           errorExists={isFieldInvalid}
           errorText={''}
           variant={formConfigContextData.inputsVariant}
@@ -192,14 +186,11 @@ const renderField = (
       );
 
     case GenericFormFieldType.Autocomplete:
-      const autocompleteFieldConfig =
-        genericFormFieldConfig as FormFieldSelectConfig;
-
       return (
         <FormFieldSelect
           disabled={disabled}
           control={formConfigContextData.control}
-          field={autocompleteFieldConfig}
+          field={genericFormFieldConfig as FormFieldSelectConfig}
           errorExists={isFieldInvalid}
           errorText={''}
           variant={formConfigContextData.inputsVariant}
@@ -207,12 +198,11 @@ const renderField = (
       );
 
     case GenericFormFieldType.Switch:
-      const switchFieldConfig = genericFormFieldConfig as FormFieldSwitch;
       return (
         <FormFieldSwitch
-          field={switchFieldConfig}
+          field={genericFormFieldConfig as FormFieldSwitch}
           control={formConfigContextData.control}
-          disable={switchFieldConfig.frozen ?? false}
+          disable={(genericFormFieldConfig as FormFieldSwitch).frozen ?? false}
           variant={formConfigContextData.inputsVariant}
           errorExists={isFieldInvalid}
           errorText={''}
@@ -220,14 +210,13 @@ const renderField = (
       );
 
     case GenericFormFieldType.Map:
-      const mapFieldConfig = genericFormFieldConfig as FormFieldMapConfig;
       return (
         <FormFieldMap
           register={formConfigContextData.register}
-          disabled={mapFieldConfig.disabled ?? false}
+          disabled={(genericFormFieldConfig as FormFieldMapConfig).disabled ?? false}
           errorExists={isFieldInvalid}
           errorText={''}
-          field={mapFieldConfig}
+          field={genericFormFieldConfig as FormFieldMapConfig}
         />
       );
 
