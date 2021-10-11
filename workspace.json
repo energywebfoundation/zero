@@ -477,7 +477,7 @@
             "polyfills": "apps/zero-ui/src/polyfills.ts",
             "tsConfig": "apps/zero-ui/tsconfig.app.json",
             "assets": [
-              "apps/zero-ui/src/favicon.ico",
+              "apps/zero-ui/src/favicon.png",
               "apps/zero-ui/src/assets"
             ],
             "styles": [],

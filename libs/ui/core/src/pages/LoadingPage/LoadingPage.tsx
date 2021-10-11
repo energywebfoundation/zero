@@ -24,10 +24,10 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
   ({ children, isLoading }) => {
     const { t } = useTranslation();
     return (
+      isLoading ?
       <>
         <div
           style={{
-            display: isLoading ? 'block' : 'none',
             zIndex: 2000,
             position: 'absolute',
             top: 0,
@@ -63,7 +63,7 @@ export const LoadingPage: FC<LoadingPageProps> = memo(
           </StyledLoadingPage>
         </div>
         {children}
-      </>
+      </> : <>{children}</>
     );
   }
 );

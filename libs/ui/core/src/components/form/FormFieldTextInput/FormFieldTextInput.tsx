@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import {
   InputAdornment,
   BaseTextFieldProps,
-  TextField,
+  TextField
 } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
@@ -48,6 +48,11 @@ export const FormFieldTextInput: FC<FormFieldTextInputProps> = memo(
         helperText={errorText ?? ''}
         fullWidth
         margin="normal"
+        // should be changed to a proper soultion with custom inputs
+        InputLabelProps={{
+          shrink: true,
+          style: { marginTop: -30, fontSize: 18, color: '#6a658a' }
+        }}
         InputProps={{
           disableUnderline: true,
           startAdornment: field.startAdornment && (

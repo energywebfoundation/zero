@@ -4,26 +4,26 @@ import { useTranslation } from 'react-i18next';
 import { FC, useContext } from 'react';
 import { GenericFormContext } from '../../../providers';
 import { useStyles } from './GenericFormSubmitButton.styles';
+import clsx from 'clsx';
 
 export interface GenericFormSubmitButtonProps {
   name: string;
+  className?: string;
 }
 
-export const GenericFormSubmitButton: FC<GenericFormSubmitButtonProps> = ({ name }) => {
+export const GenericFormSubmitButton: FC<GenericFormSubmitButtonProps> = ({ name, className }) => {
   const { t } = useTranslation();
   const styles = useStyles();
   const context = useContext(GenericFormContext);
 
   return (
     <Button
-      className={styles.btn}
-      disabled={
-        !context?.isDirty || context?.isSubmitting || !context?.isValid
-      }
+      className={clsx(styles.btn, className)}
+      disabled={context?.isSubmitting}
       type="submit"
       variant={'contained'}
       color={'primary'}
-      endIcon={<ChevronRight className={styles.icon} />}
+      endIcon={<ChevronRight />}
     >
       {/* should be fixed to more generic */}
       {name === 'sign-in'

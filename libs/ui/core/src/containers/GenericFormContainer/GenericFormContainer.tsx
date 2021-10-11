@@ -4,11 +4,11 @@ import {
   ReactElement,
   ReactNode,
 } from 'react';
-import { DeepPartial, UnpackNestedValue, UseFormReset } from 'react-hook-form';
+import { DeepPartial, UnpackNestedValue, UseFormReset, ValidationMode } from 'react-hook-form';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { ValidationError } from 'yup';
-import {GenericFormContextProvider} from '../../providers';
+import { GenericFormContextProvider } from '../../providers';
 import {
   FormFieldRadioGroupConfig,
   FormFieldSelectConfig,
@@ -87,6 +87,7 @@ export interface GenericFormContainerProps<FormValuesType> {
     errors: ValidationError[]
   ) => void;
   handleDirtyChange?: (isFormDirty: boolean) => void;
+  validationMode?: keyof ValidationMode;
 }
 
 export type TGenericForm = <FormValuesType>(
@@ -118,6 +119,7 @@ export const GenericFormContainer: TGenericForm = ({
   processing,
   nested,
   readOnlyForm,
+  validationMode
 }) => {
   const {
     control,
@@ -135,6 +137,7 @@ export const GenericFormContainer: TGenericForm = ({
     validationSchema,
     submitHandler,
     initialValues,
+    validationMode
   });
 
   const { t } = useTranslation();

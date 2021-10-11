@@ -93,7 +93,7 @@
         "email": "Email",
         "password": "Password",
         "createAccountBtnText": "Create an account",
-        "resetPasswordBtnText": "Forget the password?",
+        "resetPasswordBtnText": "Forgot your password?",
         "submitBtnText": "Login"
       },
       "AuthSignUpForm": {

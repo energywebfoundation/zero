@@ -34,8 +34,9 @@ export interface GenericFormFieldContainerProps {
   disabled?: boolean;
 }
 
-const StyledGenericFormFieldContainer = styled(Box)`
+const StyledBox = styled(Box)`
   display: flex;
+  margin-top: 24px;
 `;
 
 export const GenericFormFieldContainer = ({
@@ -55,13 +56,13 @@ export const GenericFormFieldContainer = ({
     return null;
   } else
     return (
-      <StyledGenericFormFieldContainer
+      <StyledBox
         flexGrow={fullWidth ? 1 : 0}
         width={boxWidth}
         maxWidth={boxWidth}
       >
         {renderField(genericFormContext, fieldName, disabled)}
-      </StyledGenericFormFieldContainer>
+      </StyledBox>
     );
 };
 

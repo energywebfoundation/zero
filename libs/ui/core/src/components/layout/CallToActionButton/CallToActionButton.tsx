@@ -1,6 +1,6 @@
-import PersonAddAltOutlinedIcon from '@material-ui/icons/PersonAddAltOutlined';
 import { Button } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import { PersonAccept } from '@energyweb/zero-ui-assets';
 import { OverridableStringUnion } from '@material-ui/types';
 import { ButtonPropsColorOverrides } from '@material-ui/core/Button/Button';
 import { useCallToActionButtonStyles } from './CallToActionButton.styles';
@@ -40,9 +40,7 @@ export const CallToActionButton = ({
       variant={'contained'}
       color={color}
       className={disableRootStyles ? '' : styles.root}
-      endIcon={
-        <PersonAddAltOutlinedIcon className={styles.icon} color={'secondary'} />
-      }
+      endIcon={<PersonAccept />}
     >
       {text ?? (translateKey && t(translateKey))}
     </Button>
