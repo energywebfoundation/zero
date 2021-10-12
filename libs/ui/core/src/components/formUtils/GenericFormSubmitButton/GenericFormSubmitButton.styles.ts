@@ -2,16 +2,17 @@ import { makeStyles } from '@material-ui/styles';
 import { variables } from '@energyweb/zero-ui-theme';
 
 export const useStyles = makeStyles({
-  icon: {
-    color: variables.secondaryColor,
-    '&:hover': {
-    color: variables.primaryColor,
-    }
-  },
   btn: {
+    '& > span > svg': {
+      color: variables.secondaryColor,
+    },
     '&:hover': {
       backgroundColor: variables.secondaryColor,
-      color: variables.hoverTextColor
-    }
+      color: variables.hoverTextColor,
+      '& > span > svg': {
+        color: variables.primaryColor,
+      }
+    },
+
   }
 });

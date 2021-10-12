@@ -9,17 +9,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { BaseSyntheticEvent, useContext, useEffect } from 'react';
 import {
   FieldNamesMarkedBoolean,
-  Mode,
   UseFormGetValues,
 } from 'react-hook-form';
 import { GenericFormMultiStepContext } from '../../providers';
 import { GenericFormContainerProps } from './GenericFormContainer';
 
-type GenericFormEffectsProps<FormValuesType> = {
-  mode?: Mode;
-} & Pick<
+type GenericFormEffectsProps<FormValuesType> = Pick<
   GenericFormContainerProps<FormValuesType>,
-  'validationSchema' | 'initialValues' | 'submitHandler'
+  'validationSchema' | 'initialValues' | 'submitHandler' | 'validationMode'
 >;
 
 export type TGenericFormEffectsReturnType<FormValuesType> = {
@@ -44,7 +41,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
   validationSchema,
   initialValues,
   submitHandler,
-  mode = 'onChange',
+  validationMode = 'onChange',
 }) => {
   const {
     control,
@@ -55,7 +52,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
     getValues,
     setValue,
   } = useForm({
-    mode,
+    mode: validationMode,
     resolver: yupResolver(validationSchema),
     defaultValues: initialValues,
   });

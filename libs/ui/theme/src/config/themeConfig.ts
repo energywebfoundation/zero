@@ -91,6 +91,9 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiFilledInput: {
       styleOverrides: {
+        input: {
+          padding: '16px 0 16px 12px',
+        },
         root: {
           color: styleConfig.INPUT_TEXT_COLOR,
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
@@ -138,8 +141,12 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiButton: {
       styleOverrides: {
-        root: {},
+        root: {
+          fontWeight: 700,
+          fontSize: 16
+        },
         contained: {
+          color: styleConfig.MAIN_BACKGROUND_COLOR,
           '&.Mui-disabled': {
             color: styleConfig.TEXT_COLOR_DEFAULT,
           },

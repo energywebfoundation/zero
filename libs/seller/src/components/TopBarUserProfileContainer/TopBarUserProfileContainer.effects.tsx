@@ -14,20 +14,17 @@ export const useTopBarUserProfileContainerEffects = () => {
     navigate('/');
   }, []);
 
-  const navigateToProfileHandler = useCallback(() => {
-
-  }, []);
   const navigateToMyAccountHandler = useCallback(() => {
     navigate('/account/dashboard');
   }, []);
 
   return {
-    userProfileData: !!user ? user : ({} as UserDto),
+    userProfileData: user ? user : ({} as UserDto),
     isAuthenticated,
     isLoading,
     handlers: {
       navigateToMyAccountHandler,
-      navigateToProfileHandler,
+      navigateToProfileHandler: () => { console.log('navigate to profile') },
       logoutHandler,
     },
   };
