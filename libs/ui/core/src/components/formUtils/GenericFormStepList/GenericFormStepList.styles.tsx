@@ -10,6 +10,9 @@ export const useStyles = makeStyles((theme: Theme) => {
         borderColor: theme.palette.secondary.main,
       },
     },
+    container: {
+      alignItems: 'center'
+    },
     circle: {
       height: '40px',
       width: '40px',

@@ -12,3 +12,4 @@ export * from './PopOver';
 export * from './TopBarUserProfile';
 export * from './ProcessingContainer';
 export * from './DevicesBackground';
+export * from './Breadcrumbs';

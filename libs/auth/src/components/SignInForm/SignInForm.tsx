@@ -13,6 +13,7 @@ import { FC } from 'react';
 import { authLoginFormFields } from './SignInForm.fields';
 import { authLoginFormSchema } from './SignInForm.schema';
 import { useStyles } from './SignInForm.styles';
+import { PersonAccept } from '@energyweb/zero-ui-assets';
 
 export interface SignInFormFields {
   email: string;
@@ -64,6 +65,7 @@ export const SignInForm: FC<SignInFormProps> = ({
             onClick={() => {
               navigate('/auth/sign-up');
             }}
+            endIcon={<PersonAccept />}
             translateKey={'forms.AuthLoginForm.createAccountBtnText'}
           />
         </Grid>

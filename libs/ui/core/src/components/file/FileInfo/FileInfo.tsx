@@ -11,6 +11,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import { FormDocument } from '../../form';
+import { FC } from 'react';
 
 export enum FileTypeEnum {
   PDF = 'application/pdf',
@@ -27,30 +29,27 @@ export enum FileTypeEnum {
 }
 
 export interface FileInfoProps {
-  id: string;
+  document: FormDocument;
   handleDeleteRequest?: (filename: string) => void;
   selected?: boolean;
 }
 
-export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
-  // this should be handled differently
-  const fileMetadata: any = {};
+export const FileInfo: FC<FileInfoProps> = ({ document, handleDeleteRequest }) => {
   const { t } = useTranslation();
   return (
     <Box display={'flex'} alignItems={'center'}>
-      {fileMetadata ? (
+      {document ? (
         <Box display={'flex'}>
           <Box mr={2}>
-            {renderFileTypeIcon(fileMetadata.mimetype as FileTypeEnum)}
+            {renderFileTypeIcon(document.type as FileTypeEnum)}
           </Box>
           <Typography
-            sx={{ textDecoration: 'underline' }}
             component={'div'}
             fontWeight={600}
             fontSize={'16px'}
             color={'primary'}
           >
-            {fileMetadata.filename}
+            {document.name}
           </Typography>
         </Box>
       ) : (
@@ -71,7 +70,7 @@ export const FileInfo = ({ id, handleDeleteRequest }: FileInfoProps) => {
         </Box>
       )}
       {handleDeleteRequest && (
-        <IconButton onClick={() => handleDeleteRequest(id)}>
+        <IconButton onClick={() => handleDeleteRequest(document.id)}>
           <DeleteForeverOutlined />
         </IconButton>
       )}

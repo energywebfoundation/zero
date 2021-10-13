@@ -1,4 +1,4 @@
-import { BaseTextFieldProps } from '@material-ui/core';
+import { TextFieldProps } from '@material-ui/core';
 import {
   PropsWithChildren,
   ReactElement,
@@ -30,8 +30,8 @@ export enum GenericFormFieldType {
   Switch = 'Switch',
   ImageUpload = 'ImageUpload',
   FileList = 'FileList',
-  GreenLabelList = 'GreenLabelList',
-  FacilityDocumentList = 'FacilityDocumentList',
+  LabelList = 'LabelList',
+  DocumentList = 'DocumentList',
   Autocomplete = 'Autocomplete',
   Map = 'Map',
 }
@@ -52,7 +52,7 @@ export interface GenericFormFieldConfig {
     element: ReactNode;
     isValidCheck?: boolean;
   };
-  textFieldProps?: BaseTextFieldProps;
+  textFieldProps?: TextFieldProps;
   infoTooltip?: string;
   characterCountLimit?: number;
   helpBoxText?: string;
@@ -80,7 +80,7 @@ export interface GenericFormContainerProps<FormValuesType> {
   fields: TGenericFormFieldList;
   formClass?: string;
   inputsVariant?: FormFieldTextInputProps['variant'];
-  formInputsProps?: BaseTextFieldProps;
+  formInputsProps?: TextFieldProps;
   processing?: boolean;
   handleValidityChange?: (
     isFormValid: boolean,

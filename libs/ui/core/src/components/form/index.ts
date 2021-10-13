@@ -10,3 +10,5 @@ export * from './FormFieldTextInput';
 export * from './FormFieldTextarea';
 export * from './FormFieldFileList';
 export * from './FormFieldDatePicker';
+export * from './FormFieldDocumentList';
+export * from './FormDocumentItem';

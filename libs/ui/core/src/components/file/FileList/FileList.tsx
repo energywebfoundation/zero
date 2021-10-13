@@ -1,14 +1,13 @@
 import styled from '@emotion/styled';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import { FormDocument } from '../../form';
 import { FileListItem } from '../FileListItem';
 
 export interface FileListProps {
   selectable?: boolean;
   loading: boolean;
-  // Here was used and import from api-client
-  // should be handled in a more generic way
-  fileList: Array<any>;
+  fileList: Array<FormDocument>;
   selectedFileIdList: string[];
   multiple?: boolean;
   handleDeleteRequest?: (id: string) => void;

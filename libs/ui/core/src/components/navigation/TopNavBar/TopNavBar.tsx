@@ -6,12 +6,11 @@ import {
   IconButton,
   Toolbar,
 } from '@material-ui/core';
-import { PersonOutline } from '@material-ui/icons';
 import Menu from '@material-ui/icons/Menu';
 import { FC, memo, ReactElement } from 'react';
 import { NotificationAreaContainer } from '../../../containers';
-import { IconLink } from '../../layout';
-import { AppLanguageEnum, LanguageSelect } from '../../layout/LanguageSelect';
+import { AppLanguageEnum, IUserTopBar, LanguageSelect, TopBarUserProfile } from '../../layout';
+import { AuthLinksSection } from '../AuthLinksSection';
 import { NavLinkItem, PrimaryNavigationItem, SecondaryNavigationItem } from '../NavLinkItem';
 import { useTopNavBarStyles } from './TopNavBar.styles';
 
@@ -22,46 +21,34 @@ export interface TopNavBarProps {
   secondaryNavigationItemList: SecondaryNavigationItem[];
   handleLanguageChange: (language: AppLanguageEnum) => void;
   handleNavigate: (url: string) => void;
-  hidden?: boolean;
   isAuthenticated: boolean;
+  user: IUserTopBar;
+  navigateToProfileHandler: () => void;
+  navigateToMyAccountHandler: () => void;
+  logoutHandler: () => void;
 }
 
-// should be as a separate component
-const AuthLinksSection: FC<{
-  isAuthenticated: boolean;
-  handleNavigate: (url: string) => void;
-}> = ({ isAuthenticated, handleNavigate }) => {
-  return !isAuthenticated ? (
-    <IconLink
-      icon={PersonOutline}
-      url={'auth/sign-in'}
-      handleNavigate={handleNavigate}
-      translateKey={'auth.signIn'}
-    />
-  ) : null;
-};
-
-// should remove hard coded colors
-export const TopNavBar = memo(
+export const TopNavBar: FC<TopNavBarProps> = memo(
   ({
     sideNavToogleEnabled = false,
     primaryNavigationItemList = [],
     logo,
     handleLanguageChange,
     handleNavigate,
-    hidden,
     isAuthenticated,
-  }: TopNavBarProps) => {
+    user,
+    logoutHandler,
+    navigateToProfileHandler,
+    navigateToMyAccountHandler
+  }) => {
     const styles = useTopNavBarStyles();
 
     return (
       <AppBar
         style={{
-          display: hidden ? 'none' : 'inherit',
           position: 'fixed',
           zIndex: 1000,
         }}
-        hidden={hidden}
         className={styles.root}
         position="static"
       >
@@ -136,8 +123,14 @@ export const TopNavBar = memo(
                   isAuthenticated={isAuthenticated}
                   handleNavigate={handleNavigate}
                 />
-                {/* should not be used here */}
-                {/* <TopBarUserProfileContainer /> */}
+                {isAuthenticated && (
+                  <TopBarUserProfile
+                    logoutHandler={logoutHandler}
+                    navigateToMyAccountHandler={navigateToMyAccountHandler}
+                    navigateToProfileHandler={navigateToProfileHandler}
+                    user={user}
+                  />
+                )}
               </Box>
               <Box
                 alignItems={'center'}
