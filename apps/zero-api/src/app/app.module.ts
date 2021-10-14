@@ -16,6 +16,7 @@ import * as Joi from 'joi';
 import { ConnectionCloseMiddleware } from '../middlewares/connection-close.middleware';
 import { FacilitiesModule } from '../facilities/facilities.module';
 import { ProductsModule } from '../products/products.module';
+import { HealthckeckModule } from '../healthckeck/healthckeck.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { ProductsModule } from '../products/products.module';
         CORS_MAX_AGE: Joi.number().default(60)
       })
     }),
+    HealthckeckModule,
     PrismaModule,
     UsersModule,
     AuthModule,
