@@ -3,8 +3,8 @@ import { HealthcheckDto } from './dto/healthcheck.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class HealthckeckService {
-  private readonly logger = new Logger(HealthckeckService.name, { timestamp: true });
+export class HealthcheckService {
+  private readonly logger = new Logger(HealthcheckService.name, { timestamp: true });
 
   constructor(private prisma: PrismaService) {}
 

@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HealthckeckController } from './healthckeck.controller';
+import { HealthcheckController } from './healthcheck.controller';
 import { AppModule } from '../app/app.module';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-describe('HealthckeckController', () => {
-  let controller: HealthckeckController;
+describe('HealthcheckController', () => {
+  let controller: HealthcheckController;
   let app: INestApplication;
   let httpServer;
 
@@ -19,7 +19,7 @@ describe('HealthckeckController', () => {
 
     httpServer = app.getHttpServer();
 
-    controller = module.get<HealthckeckController>(HealthckeckController);
+    controller = module.get<HealthcheckController>(HealthcheckController);
   });
 
   it('should be defined', () => {

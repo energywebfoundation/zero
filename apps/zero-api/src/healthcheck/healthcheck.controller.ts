@@ -1,18 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
-import { HealthckeckService } from './healthckeck.service';
+import { HealthcheckService } from './healthcheck.service';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/decorators/public.decorator';
 import { HealthcheckDto } from './dto/healthcheck.dto';
 
 @Controller('healthcheck')
 @ApiTags('healthcheck')
-export class HealthckeckController {
-  constructor(private readonly healthckeckService: HealthckeckService) {}
+export class HealthcheckController {
+  constructor(private readonly healthcheckService: HealthcheckService) {}
 
   @Get()
   @Public()
   @ApiOkResponse({ type: HealthcheckDto })
   getHealth() {
-    return this.healthckeckService.getHealth();
+    return this.healthcheckService.getHealth();
   }
 }
