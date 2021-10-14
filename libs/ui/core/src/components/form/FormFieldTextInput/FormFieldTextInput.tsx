@@ -1,18 +1,16 @@
 import { FC, memo } from 'react';
 import {
   InputAdornment,
-  BaseTextFieldProps,
   TextField
 } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
 
-export interface FormFieldTextInputProps extends BaseTextFieldProps {
+export interface FormFieldTextInputProps {
   field: Omit<
     GenericFormFieldConfig,
     'autocomplete' | 'multiple' | 'maxValues'
-  > &
-    BaseTextFieldProps;
+  >;
   register: UseFormRegister<FieldValues>;
   errorExists: boolean;
   errorText: string;
@@ -39,6 +37,7 @@ export const FormFieldTextInput: FC<FormFieldTextInputProps> = memo(
 
     return (
       <TextField
+        fullWidth
         name={name}
         disabled={disabled}
         label={field.label ?? ''}
@@ -46,9 +45,10 @@ export const FormFieldTextInput: FC<FormFieldTextInputProps> = memo(
         inputRef={ref}
         error={errorExists}
         helperText={errorText ?? ''}
-        fullWidth
+        placeholder={field.placeholderText}
+        required={field.required}
         margin="normal"
-        // should be changed to a proper soultion with custom inputs
+        // should be changed to a proper solution with custom inputs
         InputLabelProps={{
           shrink: true,
           style: { marginTop: -30, fontSize: 18, color: '#6a658a' }

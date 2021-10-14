@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import {
   DeviceOwnershipEnum,
-  EnergyUnitCapacityEmum,
+  EnergyUnitCapacityEnum,
   FacilityFinancialSupportTypeEnum,
   RenevableEnergySourceEnum,
 } from './AddFacilitiesBasicInformationForm.fields';
@@ -11,6 +11,7 @@ export const addFacilitiesBasicInformationFormSchema = yup
   .shape({
     deviceOwner: yup.string().required('Company name is required'),
     facilityName: yup.string().required('Facility name is required'),
+    facilityId: yup.string(),
     registryId: yup.string().required('Registry ID is required'),
     eacRegistries: yup.string(),
     source: yup
@@ -34,8 +35,10 @@ export const addFacilitiesBasicInformationFormSchema = yup
     installedCapacity: yup.number(),
     capacityUnit: yup
       .string()
-      .oneOf([EnergyUnitCapacityEmum.MWh, EnergyUnitCapacityEmum.kWh]),
+      .oneOf([EnergyUnitCapacityEnum.MWh, EnergyUnitCapacityEnum.kWh]),
     commercialOperationDate: yup.date(),
+    certifiedAmount: yup.number(),
+    amountToBeCertified: yup.number(),
     typeOfFinancialSupport: yup
       .string()
       .oneOf([

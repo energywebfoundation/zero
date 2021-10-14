@@ -1,9 +1,10 @@
-import { Button } from '@material-ui/core';
+import { Button, Theme } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-import { PersonAccept } from '@energyweb/zero-ui-assets';
 import { OverridableStringUnion } from '@material-ui/types';
 import { ButtonPropsColorOverrides } from '@material-ui/core/Button/Button';
 import { useCallToActionButtonStyles } from './CallToActionButton.styles';
+import { ReactNode } from 'react';
+import { SxProps } from '@material-ui/system';
 
 export interface CallToActionButtonProps {
   onClick?: () => void;
@@ -21,6 +22,10 @@ export interface CallToActionButtonProps {
   translateKey?: string;
   disableRootStyles?: boolean;
   fullWidth?: boolean;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  sx?: SxProps<Theme>;
+  disabled?: boolean;
 }
 
 export const CallToActionButton = ({
@@ -30,6 +35,10 @@ export const CallToActionButton = ({
   fullWidth = false,
   color = 'secondary',
   onClick,
+  startIcon,
+  endIcon,
+  sx,
+  disabled = false
 }: CallToActionButtonProps) => {
   const { t } = useTranslation();
   const styles = useCallToActionButtonStyles();
@@ -40,7 +49,10 @@ export const CallToActionButton = ({
       variant={'contained'}
       color={color}
       className={disableRootStyles ? '' : styles.root}
-      endIcon={<PersonAccept />}
+      startIcon={startIcon}
+      endIcon={endIcon}
+      sx={sx}
+      disabled={disabled}
     >
       {text ?? (translateKey && t(translateKey))}
     </Button>

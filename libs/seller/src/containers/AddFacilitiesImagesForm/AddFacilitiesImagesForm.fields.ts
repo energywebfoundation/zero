@@ -9,7 +9,7 @@ export interface IAddFacilitiesImagesFormFields {
 
 export const addFacilitiesImagesFormFields: TGenericFormFieldList = [
   {
-    label: null,
+    label: '',
     type: GenericFormFieldType.ImageUpload,
     name: 'facilityImageList',
     helpBoxText: `You can add images later. 75% of buyers think images are important

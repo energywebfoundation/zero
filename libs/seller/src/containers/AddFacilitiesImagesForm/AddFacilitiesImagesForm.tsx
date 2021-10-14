@@ -20,24 +20,22 @@ export const AddFacilitiesImagesForm = ({
   initialValues,
   children,
 }: AddFacilitiesImagesFormProps) => (
-  <div>
+  <GenericFormContainer<IAddFacilitiesImagesFormFields>
+    submitHandler={submitHandler}
+    validationSchema={addFacilitiesImagesFormSchema}
+    initialValues={initialValues}
+    fields={addFacilitiesImagesFormFields}
+  >
     <GenericFormCard>
-      <GenericFormContainer<IAddFacilitiesImagesFormFields>
-        submitHandler={submitHandler}
-        validationSchema={addFacilitiesImagesFormSchema}
-        initialValues={initialValues}
-        fields={addFacilitiesImagesFormFields}
-      >
-        <Grid container>
-          <Grid item xs={12}>
-            <GenericFormFieldContainer
-              contentHeight
-              fieldName={'facilityImageList'}
-            />
-          </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <GenericFormFieldContainer
+            contentHeight
+            fieldName={'facilityImageList'}
+          />
         </Grid>
-      </GenericFormContainer>
+      </Grid>
     </GenericFormCard>
     {children}
-  </div>
+  </GenericFormContainer>
 );

@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactElement } from 'react';
 import { Control, Controller } from 'react-hook-form';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { Box, FormControlLabel, Switch } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { GenericFormFieldConfig } from '../../../containers';
 import { Info } from '../../layout';
@@ -27,6 +27,7 @@ export const FormFieldSwitch: TFormFieldSwitch = ({
 }) => {
   const { t } = useTranslation();
   return (
+    <Box minHeight="65px" display="flex" alignItems="flex-end">
     <Controller
       name={field.name as any}
       control={control}
@@ -50,5 +51,6 @@ export const FormFieldSwitch: TFormFieldSwitch = ({
         );
       }}
     />
+    </Box>
   );
 };

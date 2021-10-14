@@ -1,3 +1,4 @@
+import { PersonAccept } from '@energyweb/zero-ui-assets';
 import {
   CallToActionButton,
 } from '@energyweb/zero-ui-core';
@@ -42,6 +43,7 @@ export const SellerLandingPage = () => {
           <CallToActionButton
             onClick={navigateToSignupPageHandler}
             translateKey={'sellerLandingPage.callToAction'}
+            endIcon={<PersonAccept />}
           />
         </Box>
       </Box>

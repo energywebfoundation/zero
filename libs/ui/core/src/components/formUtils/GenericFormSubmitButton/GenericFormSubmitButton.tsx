@@ -3,8 +3,6 @@ import { Button } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { FC, useContext } from 'react';
 import { GenericFormContext } from '../../../providers';
-import { useStyles } from './GenericFormSubmitButton.styles';
-import clsx from 'clsx';
 
 export interface GenericFormSubmitButtonProps {
   name: string;
@@ -13,12 +11,11 @@ export interface GenericFormSubmitButtonProps {
 
 export const GenericFormSubmitButton: FC<GenericFormSubmitButtonProps> = ({ name, className }) => {
   const { t } = useTranslation();
-  const styles = useStyles();
   const context = useContext(GenericFormContext);
 
   return (
     <Button
-      className={clsx(styles.btn, className)}
+      className={className}
       disabled={context?.isSubmitting}
       type="submit"
       variant={'contained'}

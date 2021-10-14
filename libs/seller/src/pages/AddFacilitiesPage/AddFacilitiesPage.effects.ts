@@ -7,6 +7,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { FacilityDraft } from './AddFacilitiesPage.types';
 import { SellerAddFacilitiesSteps } from './AddFacilitiesPage';
+import { BreadcrumbItem } from '@energyweb/zero-ui-core';
+import { EnergyUnitCapacityEnum } from '../../containers';
 
 const initialDraftState: FacilityDraft = [
   {
@@ -17,8 +19,10 @@ const initialDraftState: FacilityDraft = [
     source: null,
     installedCapacity: null,
     deviceOwnership: null,
-    capacityUnit: null,
+    capacityUnit: EnergyUnitCapacityEnum.MWh,
     commercialOperationDate: null,
+    certifiedAmount: null,
+    amountToBeCertified: null,
     projectSupportedFinancially: false,
     typeOfFinancialSupport: null,
   },
@@ -33,12 +37,14 @@ const initialDraftState: FacilityDraft = [
   {
     facilityStory: null,
     impactStory: null,
-    greenLabelList: [],
+    // greenLabelList: [],
     facilityDocumentList: [],
     sustainabilityDocumentList: [],
   },
   { facilityImageList: [] },
 ];
+
+
 
 export const useSellerAddFacilititesEffects = (draftId?: number) => {
   const [activeStep, setActiveStep] = useState(
@@ -131,6 +137,24 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
     }
   }, [isDraftDirty]);
 
+  const breadcrumbsList: BreadcrumbItem[] = [
+    {
+      name: 'Account',
+      url: '/account'
+    },
+    {
+      name: 'Dashboard',
+      url: '/account/dashboard'
+    },
+    {
+      name: 'Add products',
+      url: '/seller/products'
+    },
+    {
+      name: 'Add facilities'
+    }
+  ]
+
   return {
     isLoading,
     handleNavigateToPrevStep: () =>
@@ -149,5 +173,6 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
         draft[facilityFormStep as number] = formData;
       });
     },
+    breadcrumbsList
   };
 };

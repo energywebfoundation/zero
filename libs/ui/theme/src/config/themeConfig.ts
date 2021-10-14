@@ -86,7 +86,13 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
     },
     MuiSelect: {
       styleOverrides: {
-        select: { backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR },
+        select: {
+          backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
+          '&.MuiFilledInput-input': {
+            padding: '14px 32px 14px 12px'
+          }
+        },
+
       },
     },
     MuiFilledInput: {
@@ -97,7 +103,7 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
         root: {
           color: styleConfig.INPUT_TEXT_COLOR,
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
-          borderRadius: '5px 5px',
+          borderRadius: '5px',
           maxHeight: '48px',
           '&.Mui-disabled': {
             backgroundColor: darken(styleConfig.INPUT_BACKGROUND_COLOR, 0.2),
@@ -109,6 +115,12 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           '&.Mui-focused': {
             backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           },
+          '&:before': {
+            borderBottom: 'none'
+          },
+          '& fieldset': {
+            borderRadius: 5
+          }
         },
       },
     },
@@ -147,6 +159,15 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
         },
         contained: {
           color: styleConfig.MAIN_BACKGROUND_COLOR,
+          '& > span > svg': {
+            color: styleConfig.SECONDARY_COLOR,
+          },
+          '&:hover': {
+            backgroundColor: styleConfig.SECONDARY_COLOR,
+            '& > span > svg': {
+              color: styleConfig.PRIMARY_COLOR,
+            }
+          },
           '&.Mui-disabled': {
             color: styleConfig.TEXT_COLOR_DEFAULT,
           },

@@ -3,6 +3,7 @@ import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
 import { GenericFormContext } from '../../../providers';
+import { ImageUploadContainer } from '../../image';
 
 export interface FormFieldImageUploadProps extends BaseTextFieldProps {
   field: Omit<
@@ -26,15 +27,14 @@ export const FormFieldImageUpload: FC<FormFieldImageUploadProps> = memo(
     register(field.name);
     const { setValue, getValues } = useContext(GenericFormContext)!;
     const imageLIst: string[] = getValues(field.name);
-    return (<div></div>
-      // should not be used here or be more generic
-      // <ImageUploadContainer
-      //   disabled={true}
-      //   helpBoxText={field.helpBoxText}
-      //   handleUploadSuccess={(uploaded) => {
-      //     setValue(field.name, [...imageLIst, ...uploaded]);
-      //   }}
-      // />
+    return (
+      <ImageUploadContainer
+        disabled={true}
+        helpBoxText={field.helpBoxText}
+        handleUploadSuccess={(uploaded) => {
+          setValue(field.name, [...imageLIst, ...uploaded]);
+        }}
+      />
     );
   }
 );

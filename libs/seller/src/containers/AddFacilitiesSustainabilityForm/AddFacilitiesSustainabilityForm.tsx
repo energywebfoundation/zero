@@ -4,10 +4,14 @@ import {
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
 import Grid from '@material-ui/core/Grid';
+import { useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
 import { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Divider, Typography } from '@material-ui/core';
 import { addFacilitiesSustainAbilityFormSchema } from './AddFacilitiesSustainabilityForm.schema';
 import { addFacilitiesSustainabilityFormFields, IAddFacilitiesSustainabilityFormFields } from './AddFacilitiesSustainabilityForm.fields';
 import { FormSectionCard } from '../../components';
+
 
 export interface AddFacilitiesSustainabilityFormProps {
   initialValues: IAddFacilitiesSustainabilityFormFields;
@@ -20,6 +24,8 @@ export function AddFacilitiesSustainabilityForm({
   initialValues,
   children,
 }: AddFacilitiesSustainabilityFormProps) {
+  const { mutateAsync, isLoading: isMutating } = useFilesControllerUploadFiles();
+  const { t } = useTranslation();
   return (
       <GenericFormContainer
         submitHandler={submitHandler}
@@ -30,63 +36,46 @@ export function AddFacilitiesSustainabilityForm({
         <Grid container rowGap={'16px'}>
           <Grid item xs={12}>
             <FormSectionCard
-              sectionHeader={'Facility story'}
-              sectionSubHeader={''}
-              helpText={
-                'Some users want to quickly read the story of your facility without having to parse all the numeric information. This is different than the impact story. See an example of a facility story'
-              }
+              sectionHeader={t('forms.SellerAddFacilitiesSustainabilityForm.facilityStory')}
+              helpText={t('forms.SellerAddFacilitiesSustainabilityForm.facilityStoryHelpText')}
             >
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'facilityStory'}
-              />
+              <>
+                <GenericFormFieldContainer
+                  contentHeight
+                  fieldName={'facilityStory'}
+                />
+                <Divider sx={{ width: '100%', my: 4 }} />
+                <GenericFormFieldContainer
+                  contentHeight
+                  fieldName={'facilityDocumentList'}
+                  isLoading={isMutating}
+                  mutateUpload={mutateAsync}
+                />
+              </>
             </FormSectionCard>
           </Grid>
           <Grid item xs={12}>
             <FormSectionCard
-              sectionHeader={'Sustainability'}
-              sectionSubHeader={'Green labels'}
-              helpText={`TIP: 90% of buyers are looking for products that have green labels. Labels represent a choosing shortcut for them.
-              You will have to provide document proofs about each label or it won’t be displayed in the product page.`}
+              sectionHeader={t('forms.SellerAddFacilitiesSustainabilityForm.impactStory')}
+              helpText={t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryHelpText')}
+              rememberText={t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryRememberText')}
             >
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'greenLabelList'}
-              />
-            </FormSectionCard>
-          </Grid>
-          <Grid item xs={12}>
-            <FormSectionCard
-              sectionHeader={'Facility documents'}
-              sectionSubHeader={''}
-            >
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'facilityDocumentList'}
-              />
-            </FormSectionCard>
-          </Grid>
-          <Grid item xs={12}>
-            <FormSectionCard
-              sectionHeader={'Impact story'}
-              sectionSubHeader={''}
-              helpText={`help your users by giving a brief description of the additional impact that you can provide. See an example of an impact story.`}
-              rememberText={
-                'you should upload document proofs of your sustainability claims'
-              }
-            >
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'impactStory'}
-              />
-            </FormSectionCard>
-          </Grid>
-          <Grid item xs={12}>
-            <FormSectionCard sectionHeader={'Sustainability documents'}>
-              <GenericFormFieldContainer
-                contentHeight
-                fieldName={'sustainabilityDocumentList'}
-              />
+              <>
+                <GenericFormFieldContainer
+                  contentHeight
+                  fieldName={'impactStory'}
+                />
+                <Divider sx={{ width: "100%", my: 4 }} />
+                <Typography fontWeight={700} fontSize="20px" color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.sustainabilityDocuments')}
+                </Typography>
+                <GenericFormFieldContainer
+                  contentHeight
+                  fieldName={'sustainabilityDocumentList'}
+                  isLoading={isMutating}
+                  mutateUpload={mutateAsync}
+                />
+              </>
             </FormSectionCard>
           </Grid>
         </Grid>
