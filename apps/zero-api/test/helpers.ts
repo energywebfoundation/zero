@@ -6,10 +6,6 @@ import * as request from 'supertest';
 import { copyFile, readdir, stat, unlink } from 'fs/promises';
 import { basename, resolve } from 'path';
 import { Express } from 'express';
-import { tmpdir } from 'os';
-import { FilesService } from '../src/files/files.service';
-
-const temporaryFolder = tmpdir();
 
 export async function logInUser(app: INestApplication, username: string, password: string): Promise<string> {
   return (await request(app.getHttpServer())
