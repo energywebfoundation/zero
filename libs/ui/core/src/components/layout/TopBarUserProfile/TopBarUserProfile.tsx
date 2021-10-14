@@ -2,9 +2,14 @@ import { Avatar, Box, Menu, MenuItem, Typography } from '@material-ui/core';
 import { useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
+export interface IUserTopBar {
+  firstName: string;
+  lastName: string;
+  [key: string]: any;
+}
+
 export interface TopBarUserProfileProps {
-  // should be either generic or moved out of core lib (prev userDto)
-  user: any;
+  user: IUserTopBar;
   navigateToProfileHandler: () => void;
   navigateToMyAccountHandler: () => void;
   logoutHandler: () => void;
@@ -47,7 +52,7 @@ export const TopBarUserProfile = (props: TopBarUserProfileProps) => {
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={(event) => setAnchorEl(null)}
+        onClose={() => setAnchorEl(null)}
       >
         <MenuItem
           onClick={() => {

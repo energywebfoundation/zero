@@ -30,7 +30,7 @@ export const GenericFormMultiStep = ({
   return (
     <GenericFormMultiStepContextProvider>
       <div className={styles.root}>
-        <Grid container rowSpacing={'17px'} justifyContent={'space-between'}>
+        <Grid container className={styles.container} rowSpacing={'17px'} justifyContent={'space-between'}>
           <Grid
             item
             xs={12}
@@ -38,7 +38,6 @@ export const GenericFormMultiStep = ({
             flexDirection={'row'}
             alignContent={'space-between'}
           >
-            <div>breadcrumbs are here</div>
             <Typography color={'primary'} fontSize={'24px'} fontWeight={700}>
               {activeStep.stepTitle ?? formTitle}
             </Typography>

@@ -14,6 +14,9 @@ import {
   FormFieldDatePickerConfig,
   FormFieldRadioGroupConfig,
   FormFieldSelectConfig,
+  FormFieldDocumentList,
+  UploadFileResponse,
+  UploadFile,
 } from '../../components';
 import { useContext } from 'react';
 import { GenericFormContext } from '../../providers';
@@ -25,6 +28,7 @@ import {
   FormFieldMap,
   FormFieldMapConfig
 } from '../../components';
+import { UseMutateAsyncFunction } from 'react-query';
 
 export interface GenericFormFieldContainerProps {
   fieldName: string;
@@ -32,6 +36,10 @@ export interface GenericFormFieldContainerProps {
   fullWidth?: boolean;
   contentHeight?: boolean;
   disabled?: boolean;
+  isLoading?: boolean;
+  mutateUpload?: UseMutateAsyncFunction<UploadFileResponse, unknown, {
+    data: UploadFile;
+  }, unknown>;
 }
 
 const StyledBox = styled(Box)`
@@ -44,6 +52,8 @@ export const GenericFormFieldContainer = ({
   boxWidth,
   fullWidth,
   disabled,
+  mutateUpload,
+  isLoading
 }: GenericFormFieldContainerProps) => {
   const genericFormContext = useContext<GenericFormContextData | null>(
     GenericFormContext
@@ -61,7 +71,7 @@ export const GenericFormFieldContainer = ({
         width={boxWidth}
         maxWidth={boxWidth}
       >
-        {renderField(genericFormContext, fieldName, disabled)}
+        {renderField(genericFormContext, fieldName, disabled, isLoading, mutateUpload)}
       </StyledBox>
     );
 };
@@ -69,7 +79,9 @@ export const GenericFormFieldContainer = ({
 const renderField = (
   formConfigContextData: GenericFormContextData,
   fieldName: string,
-  disabled?: boolean
+  disabled?: boolean,
+  isLoading?: boolean,
+  mutateUpload?: GenericFormFieldContainerProps['mutateUpload'] | undefined
 ) => {
   const genericFormFieldConfig: GenericFormFieldConfig | undefined =
     formConfigContextData.fields.find(
@@ -134,6 +146,21 @@ const renderField = (
           variant={formConfigContextData.inputsVariant}
         />
       );
+
+    case GenericFormFieldType.DocumentList:
+      return (
+        <FormFieldDocumentList
+          disabled={disabled}
+          field={genericFormFieldConfig}
+          register={formConfigContextData.register}
+          errorExists={isFieldInvalid}
+          errorText={''}
+          isDirty={isFieldDirty}
+          variant={formConfigContextData.inputsVariant}
+          isLoading={isLoading}
+          mutateUpload={mutateUpload}
+        />
+    );
 
     case GenericFormFieldType.ImageUpload:
       return (

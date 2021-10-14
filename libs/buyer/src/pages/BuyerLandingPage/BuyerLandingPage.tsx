@@ -1,10 +1,10 @@
 import { Box, Paper, Typography } from '@material-ui/core';
 import {
   CallToActionButton,
-  LayoutWithTopbarContainer,
 } from '@energyweb/zero-ui-core';
 import { useTranslation } from 'react-i18next';
 import { useBuyerLandingPageEffects } from './BuyerLandingPage.effects';
+import { PersonAccept } from '@energyweb/zero-ui-assets';
 
 export const BuyerLandingPage = () => {
   const {
@@ -12,7 +12,6 @@ export const BuyerLandingPage = () => {
   } = useBuyerLandingPageEffects();
   const { t } = useTranslation();
   return (
-    <LayoutWithTopbarContainer>
       <Box width={'100%'} textAlign={'center'}>
         <Box my={'40px'}>
           <Typography
@@ -38,6 +37,7 @@ export const BuyerLandingPage = () => {
           <CallToActionButton
             onClick={navigateToSignupPageHandler}
             translateKey={'buyerLandingPage.callToAction'}
+            endIcon={<PersonAccept />}
           />
         </Box>
         <Box my={'40px'}>
@@ -46,6 +46,5 @@ export const BuyerLandingPage = () => {
           </Paper>
         </Box>
       </Box>
-    </LayoutWithTopbarContainer>
   );
 };

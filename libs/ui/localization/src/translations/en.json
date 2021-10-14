@@ -82,6 +82,10 @@
       },
       "FileInfo": {
         "loading": "Loading..."
+      },
+      "FileList": {
+        "submitSelection": "Submit selection",
+        "cancel": "Cancel"
       }
     },
     "forms": {
@@ -89,6 +93,9 @@
       "submitBtnText": "Submit",
       "signInBtnText": "Log in",
       "signUpBtnText": "Register",
+      "chooseFromUploadedDocs": "Choose from uploaded documents",
+      "uploadFromComputer": "Upload from your computer",
+      "uploadInProgress": "Upload is in progress",
       "AuthLoginForm": {
         "email": "Email",
         "password": "Password",
@@ -110,16 +117,21 @@
         }
       },
       "SellerAddFacilitiesBasicInformationForm": {
+        "basicFacilityData": "Basic facility data",
         "deviceOwnerCompanyName": "Device owner / Company name",
         "facilityName": "Facility name",
         "registryId": "Registry ID",
-        "eacRegistries": "EAC registries",
+        "facilityId": "Facility ID",
+        "eacRegistries": "EAC Registries",
         "source": "Source",
         "deviceOwnership": "Device ownership",
+        "commercialData": "Commercial data",
         "installedCapacity": "Installed capacity",
         "projectSupportedFinancially": "This project is supported financially",
         "typeOfFinancialSupport": "Type of support",
-        "commercialOperationDate": "Commercial operation date"
+        "commercialOperationDate": "Commercial operation date",
+        "certifiedAmount": "Certified amount",
+        "amountToBeCertified": "Amount to be Certified"
       },
       "SellerAddFacilitiesLocationForm": {
         "location": "Location",
@@ -132,12 +144,13 @@
       },
       "SellerAddFacilitiesSustainabilityForm": {
         "facilityStory": "Facility story",
+        "facilityStoryHelpText": "Some users want to quickly read the story of your facility without having to parse all the numeric information. This is different than the impact story. See an example of a facility story",
+        "facilityStoryPlaceholderText": "Pitch the brands that you've sold to or are affiliated with. Let the Buyers know how you've helped lessen the pollution and made an impact in the environment. Narrate your social contributions as well as your impact to the grassroot community of your Facility. Share your story to make a difference!",
         "impactStory": "Impact story",
-        "impactStoryPlaceholderText": "Briefly describe facility and its story"
-      },
-      "FileList": {
-        "submitSelection": "Submit selection",
-        "cancel": "Cancel"
+        "impactStoryHelpText": "Help your users by giving a brief description of the additional impact that you can provide. See an example of an impact story.",
+        "impactStoryRememberText": "Remember: you should upload document proofs of your sustainability claims",
+        "impactStoryPlaceholderText": "Briefly describe facility and its story",
+        "sustainabilityDocuments": "Sustainability documents"
       },
       "ImageUploadContainer": {
         "uploadErrorMsg": "Error uploading image",
@@ -145,6 +158,10 @@
       }
     },
     "pages": {
+      "SellerAddFacilitiesPage": {
+        "pageTitle": "Seller / Add Facilities",
+        "formTitle": "Add Facilities"
+      },
       "SellerAddFacilitiesImagesPage": {
         "basicInformation": "Basic Information",
         "location": "Location",
@@ -161,6 +178,13 @@
         "back": "Back to Home page",
         "whoops": "Whoops! Something went wrong!"
       }
+    },
+    "file": {
+      "remove": "Remove file"
+    },
+    "images": {
+      "examples": "Examples of pictures",
+      "imagesUploaded": "Images uploaded"
     }
   }
 }

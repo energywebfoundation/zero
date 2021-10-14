@@ -47,8 +47,7 @@ export const FormSectionCard = ({
             </Typography>
             {rememberText && (
               <Typography color={'primary'} fontWeight={700}>
-                {/* should localize */}
-                Remember: {rememberText}
+                {rememberText}
               </Typography>
             )}
           </Box>

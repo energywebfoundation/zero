@@ -21,7 +21,7 @@ export const FormNavigation = ({
           color={'primary'}
           disabled={activeStepIndex === 0}
         >
-          prev
+          Back
         </Button>
         <GenericFormSubmitButtonContainer
           render={({ onSubmit, isValid, isDirty, isSubmitting }) => (
@@ -34,7 +34,7 @@ export const FormNavigation = ({
               variant={'contained'}
               disabled={!isValid || !isDirty || isSubmitting}
             >
-              next
+              Next
             </Button>
           )}
         />

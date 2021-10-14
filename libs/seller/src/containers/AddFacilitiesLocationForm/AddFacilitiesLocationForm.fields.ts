@@ -18,21 +18,25 @@ export const addFacilitiesLocationFormFields: TGenericFormFieldList = [
     type: GenericFormFieldType.TextInput,
     name: 'country',
     required: true,
+    placeholderText: 'Country'
   },
   {
     label: 'forms.SellerAddFacilitiesLocationForm.region',
     type: GenericFormFieldType.TextInput,
     name: 'region',
+    placeholderText: 'Region / Province'
   },
   {
     label: 'forms.SellerAddFacilitiesLocationForm.address',
     type: GenericFormFieldType.TextInput,
     name: 'address',
+    placeholderText: 'Address'
   },
   {
     label: 'forms.SellerAddFacilitiesLocationForm.gridOperator',
     type: GenericFormFieldType.TextInput,
     name: 'gridOperator',
+    placeholderText: 'Grid operator'
   },
   {
     label: 'forms.SellerAddFacilitiesLocationForm.latitude',
@@ -45,7 +49,7 @@ export const addFacilitiesLocationFormFields: TGenericFormFieldList = [
     name: 'longitude',
   },
   {
-    label: 'forms.SellerAddFacilitiesLocationForm.longitude',
+    label: '',
     type: GenericFormFieldType.Map,
     name: 'map',
   },

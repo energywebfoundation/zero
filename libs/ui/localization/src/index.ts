@@ -19,6 +19,5 @@ i18n
       escapeValue: false,
     },
   })
-  .then((r) => console.log('i18n => init'));
 
 export default i18n;

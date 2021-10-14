@@ -48,11 +48,10 @@ export const FormFieldDatePicker: TFormFieldDatePicker = ({
       render={({ field: { value, onChange } }) => (
         <LocalizationProvider dateAdapter={AdapterDayJs}>
           <DatePicker
-            mask={'____/__/__'}
             disabled={disabled}
             onChange={onChange}
             value={value}
-            inputFormat={DateFormatEnum.DATE_FORMAT_ISO}
+            inputFormat={DateFormatEnum.DATE_FORMAT_DMY}
             renderInput={(props) => (
               <TextField
                 {...props}
@@ -60,7 +59,12 @@ export const FormFieldDatePicker: TFormFieldDatePicker = ({
                 margin="normal"
                 error={errorExists ?? false}
                 helperText={errorText ?? ''}
-                variant={variant}
+                variant={variant ?? 'filled'}
+                // should be changed to a proper solution with custom inputs
+                InputLabelProps={{
+                  shrink: true,
+                  style: { marginTop: -30, fontSize: 18, color: '#6a658a' }
+                }}
                 label={field.label}
                 {...field.textFieldProps}
               />

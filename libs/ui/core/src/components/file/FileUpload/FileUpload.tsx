@@ -1,11 +1,12 @@
 import Grid from '@material-ui/core/Grid';
-import { Box, Button, CircularProgress, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import FolderOutlined from '@material-ui/icons/FolderOutlined';
 import UploadSharp from '@material-ui/icons/UploadSharp';
 import { useDropzone } from 'react-dropzone';
-import { useEffect, useState } from 'react';
-// import { FileListContainer } from '../../../containers';
-import { useStyles } from './FileUpload.styles';
+import { useCallback, useEffect, useState } from 'react';
+import { CallToActionButton } from '../../layout';
+import { StoredFile } from '../FileUploadContainer';
+import { FileListContainer } from '../FileListContainer';
 
 const MB = 1024 * 1024;
 
@@ -22,7 +23,7 @@ export enum AcceptedFileTypeEnum {
 
 export interface FileUploadProps {
   handleAcceptedFilesChange: (files: File[]) => void;
-  handleSubmitSelection: (fileIdList: string[]) => void;
+  handleSubmitSelection: (fileIdList: StoredFile[]) => void;
   title?: string;
   disableDrop?: boolean;
   withFileList?: boolean;
@@ -38,7 +39,6 @@ export const FileUpload = ({
   disableDrop = true,
   withFileList,
   handleSubmitSelection,
-  uploadButtonText,
 }: FileUploadProps) => {
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     noDrag: disableDrop,
@@ -54,8 +54,6 @@ export const FileUpload = ({
     }
   }, [acceptedFiles]);
 
-  const styles = useStyles();
-
   return (
     <div>
       <Grid container flexGrow={1}>
@@ -68,8 +66,7 @@ export const FileUpload = ({
         )}
         <Grid item xs={12} sm={8}>
           <Box display={'flex'}>
-            {/* should not be user here */}
-            {/* <FileListContainer
+            <FileListContainer
               handleCancel={useCallback(() => {
                 setIsFileListModalOpen(false);
               }, [setIsFileListModalOpen])}
@@ -78,28 +75,22 @@ export const FileUpload = ({
                 setIsFileListModalOpen(false);
               }}
               open={isFileListModalOpen}
-            /> */}
+            />
             {withFileList && (
-              <Button
+              <CallToActionButton
+                translateKey='forms.chooseFromUploadedDocs'
                 onClick={() => {
                   setIsFileListModalOpen(true);
                 }}
-                className={styles.buttonStyles}
-                startIcon={<FolderOutlined color={'secondary'} />}
-                variant={'contained'}
-              >
-                {/* should be localized */}
-                Choose from uploaded documents
-              </Button>
+                startIcon={<FolderOutlined />}
+              />
             )}
 
             <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
-              <Button
-                disabled={isProcessing}
+              <CallToActionButton
                 sx={{ ml: 2 }}
-                className={styles.buttonStyles}
-                variant={'contained'}
+                disabled={isProcessing}
                 startIcon={
                   !isProcessing ? (
                     <UploadSharp color={'secondary'} />
@@ -107,12 +98,11 @@ export const FileUpload = ({
                     <CircularProgress size={'16px'} color={'secondary'} />
                   )
                 }
-              >
-                {/* should be localized */}
-                {!isProcessing
-                  ? uploadButtonText ?? 'Upload from your computer'
-                  : 'Upload in progress'}
-              </Button>
+                translateKey={!isProcessing
+                  ? 'forms.uploadFromComputer'
+                  : 'forms.uploadInProgress'
+                }
+              />
             </div>
           </Box>
         </Grid>

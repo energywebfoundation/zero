@@ -3,11 +3,10 @@ import styled from '@emotion/styled';
 import Grid from '@material-ui/core/Grid';
 import { Box } from '@material-ui/core';
 import { FileInfo } from '../FileInfo';
+import { FormDocument } from '../../form';
 
 export interface FileListItemProps {
-  // was of type FileMetadataDto
-  // should be handled in a more generic way
-  data: any;
+  data: FormDocument;
   selected?: boolean;
   handleDeleteRequest?: (id: string) => void;
 }
@@ -37,7 +36,7 @@ export const FileListItem: FC<FileListItemProps> = ({
           <FileInfo
             selected
             handleDeleteRequest={handleDeleteRequest}
-            id={data.id}
+            document={data}
           />
         </Box>
       </Grid>

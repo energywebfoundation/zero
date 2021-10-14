@@ -1,4 +1,5 @@
-import { LayoutWithTopbarContainer, NotFoundPage } from "@energyweb/zero-ui-core"
+import { NotFoundPage } from "@energyweb/zero-ui-core"
+import { Container } from "@material-ui/core"
 import { FC } from "react"
 import { Route, Routes } from "react-router"
 import { AddFacilitiesPage, SellerLandingPage } from "./pages"
@@ -9,7 +10,7 @@ interface SellerAppProps {
 
 export const SellerApp: FC<SellerAppProps> = ({ isAuthenticated }) => {
   return (
-    <LayoutWithTopbarContainer bgColor="#F6F3F9">
+    <Container sx={{ marginTop: '25px' }}>
       <Routes>
         <Route path="/" element={<SellerLandingPage />} />
         <Route path="/add-facilities" element={<AddFacilitiesPage />} />
@@ -24,7 +25,6 @@ export const SellerApp: FC<SellerAppProps> = ({ isAuthenticated }) => {
           }
         />
       </Routes>
-    </LayoutWithTopbarContainer>
-
+    </Container>
   )
 }

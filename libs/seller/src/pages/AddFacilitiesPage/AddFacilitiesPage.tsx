@@ -1,8 +1,10 @@
+import styled from '@emotion/styled';
 import {
+  Breadcrumbs,
   FormNavigation,
   GenericFormMultiStep,
 } from '@energyweb/zero-ui-core';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { Box, CircularProgress, Grid } from '@material-ui/core';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,12 +20,16 @@ import {
 import { useSellerAddFacilititesEffects } from './AddFacilitiesPage.effects';
 
 export enum SellerAddFacilitiesSteps {
-  BasicInformation = 0,
-  Location = 1,
-  Sustainability = 2,
-  Images = 3,
-  Products = 4,
+  BasicInformation,
+  Location,
+  Sustainability,
+  Images,
+  Products,
 }
+
+const MbBox = styled(Box)`
+  margin-bottom: 40px;
+`
 
 export const AddFacilitiesPage = () => {
   const {
@@ -34,20 +40,21 @@ export const AddFacilitiesPage = () => {
     showDraftSavedMsg,
     handleNavigateToPrevStep,
     handleNavigateToNextStep,
-    isLoading
+    isLoading,
+    breadcrumbsList
   } = useSellerAddFacilititesEffects();
   const { t } = useTranslation();
 
-  if(isLoading) return <CircularProgress />;
+  if (isLoading) return <CircularProgress />;
 
   return (
       <Grid container justifyContent={'space-between'}>
         <Helmet>
-          <title>Seller / Add Facilities</title>
+          <title>{t('pages.SellerAddFacilitiesPage.pageTitle')}</title>
         </Helmet>
+        <Breadcrumbs breadcrumbsList={breadcrumbsList} />
         <GenericFormMultiStep
-          // should localize
-          formTitle={'Add facilities'}
+          formTitle={t('pages.SellerAddFacilitiesPage.formTitle')}
           isProcessing={isProcessingFacilityDraft}
           showDraftSavedMsg={showDraftSavedMsg}
           processingCompletedSuccessfullyText={'Draft saved ✓'}
@@ -59,6 +66,7 @@ export const AddFacilitiesPage = () => {
                 'pages.SellerAddFacilitiesImagesPage.basicInformation'
               ),
               stepItemNode: (
+               <MbBox>
                 <AddFacilitiesBasicInformationForm
                   initialFormValues={
                     facilityDraft[
@@ -78,12 +86,14 @@ export const AddFacilitiesPage = () => {
                     activeStepIndex={activeStep}
                   />
                 </AddFacilitiesBasicInformationForm>
+               </MbBox>
               ),
               supportCsv: false,
             },
             {
               stepLabel: t('pages.SellerAddFacilitiesImagesPage.location'),
               stepItemNode: (
+              <MbBox>
                 <AddFacilitiesLocationContainer
                   initialValues={
                     facilityDraft[
@@ -103,6 +113,7 @@ export const AddFacilitiesPage = () => {
                     activeStepIndex={activeStep}
                   />
                 </AddFacilitiesLocationContainer>
+               </MbBox>
               ),
             },
             {
@@ -110,30 +121,33 @@ export const AddFacilitiesPage = () => {
                 'pages.SellerAddFacilitiesImagesPage.sustainability'
               ),
               stepItemNode: (
-                <AddFacilitiesSustainabilityForm
-                  initialValues={
-                    facilityDraft[
-                      Number(SellerAddFacilitiesSteps.Sustainability)
-                    ] as IAddFacilitiesSustainabilityFormFields
-                  }
-                  submitHandler={(values) => {
-                    updateFacilityDraft(
-                      SellerAddFacilitiesSteps.Sustainability,
-                      values
-                    );
-                  }}
-                >
-                  <FormNavigation
-                    handleNavigateToPrevStep={handleNavigateToPrevStep}
-                    handleNavigateToNextStep={handleNavigateToNextStep}
-                    activeStepIndex={activeStep}
-                  />
-                </AddFacilitiesSustainabilityForm>
+                <MbBox>
+                  <AddFacilitiesSustainabilityForm
+                    initialValues={
+                      facilityDraft[
+                        Number(SellerAddFacilitiesSteps.Sustainability)
+                      ] as IAddFacilitiesSustainabilityFormFields
+                    }
+                    submitHandler={(values) => {
+                      updateFacilityDraft(
+                        SellerAddFacilitiesSteps.Sustainability,
+                        values
+                      );
+                    }}
+                  >
+                    <FormNavigation
+                      handleNavigateToPrevStep={handleNavigateToPrevStep}
+                      handleNavigateToNextStep={handleNavigateToNextStep}
+                      activeStepIndex={activeStep}
+                    />
+                  </AddFacilitiesSustainabilityForm>
+                </MbBox>
               ),
             },
             {
               stepLabel: t('pages.SellerAddFacilitiesImagesPage.images'),
               stepItemNode: (
+                <MbBox>
                 <AddFacilitiesImagesContainer
                   initialValues={
                     facilityDraft[
@@ -149,10 +163,11 @@ export const AddFacilitiesPage = () => {
                 >
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
-                    handleNavigateToNextStep={handleNavigateToPrevStep}
+                    handleNavigateToNextStep={handleNavigateToNextStep}
                     activeStepIndex={activeStep}
                   />
                 </AddFacilitiesImagesContainer>
+                </MbBox>
               ),
             },
             {

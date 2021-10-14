@@ -6,7 +6,6 @@ import { Box, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { ChevronLeft } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { LayoutWithTopbarContainer } from '../../components/layout';
 
 export interface NotFoundPageProps {
   isAuthenticated: boolean;
@@ -26,7 +25,6 @@ export const NotFoundPage: FC<NotFoundPageProps> = memo(
   ({ isAuthenticated, authenticatedHomeRoute, nonAuthenticatedHomeRoute }) => {
     const { t } = useTranslation();
     return (
-      <LayoutWithTopbarContainer disableTopbar>
         <StyledNotFoundPage>
           <Helmet>
             <title>{t('pages.NotFoundPage.title')}</title>
@@ -73,11 +71,8 @@ export const NotFoundPage: FC<NotFoundPageProps> = memo(
             </Grid>
           </Grid>
         </StyledNotFoundPage>
-      </LayoutWithTopbarContainer>
     );
   }
 );
 
 NotFoundPage.displayName = 'NotFoundPage';
-
-export default NotFoundPage;

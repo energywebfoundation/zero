@@ -49,10 +49,16 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
       helperText={errorText}
       fullWidth
       margin="normal"
-      variant={variant ?? 'standard'}
+      variant={variant ?? 'filled'}
       value={value ?? ''}
       defaultValue={value}
       onChange={onChange}
+      required={field.required}
+      // should be changed to a proper solution with custom inputs
+      InputLabelProps={{
+        shrink: true,
+        style: { marginTop: -30, fontSize: 18, color: '#6a658a' }
+      }}
       {...textFieldProps}
     >
       {map(
