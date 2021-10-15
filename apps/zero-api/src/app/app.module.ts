@@ -42,6 +42,8 @@ import { HealthcheckModule } from '../healthcheck/healthcheck.module';
           .uri({ allowRelative: false, scheme: 'smtp' })
           .default('smtp://localhost:1025'),
 
+        SMTP_FROM: Joi.string().default('"EW Zero" <notification@energyweb.org>'),
+
         UI_BASE_URL: Joi.string()
           .uri({
             allowRelative: false,
