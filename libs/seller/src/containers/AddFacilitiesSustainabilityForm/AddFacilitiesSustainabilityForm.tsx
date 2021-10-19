@@ -1,17 +1,25 @@
 import {
+  FormSectionCard,
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
 import Grid from '@material-ui/core/Grid';
-import { useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
-import { ReactElement } from 'react';
+import { useFilesControllerDeleteFile, useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
+import { ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
 import { Divider, Typography } from '@material-ui/core';
 import { addFacilitiesSustainAbilityFormSchema } from './AddFacilitiesSustainabilityForm.schema';
 import { addFacilitiesSustainabilityFormFields, IAddFacilitiesSustainabilityFormFields } from './AddFacilitiesSustainabilityForm.fields';
-import { FormSectionCard } from '../../components';
 
+const SubHeader = styled(Typography)`
+  font-weight: 700;
+`;
+
+const HelperText = styled(Typography)`
+  font-weight: 500
+`
 
 export interface AddFacilitiesSustainabilityFormProps {
   initialValues: IAddFacilitiesSustainabilityFormFields;
@@ -24,14 +32,22 @@ export function AddFacilitiesSustainabilityForm({
   initialValues,
   children,
 }: AddFacilitiesSustainabilityFormProps) {
-  const { mutateAsync, isLoading: isMutating } = useFilesControllerUploadFiles();
   const { t } = useTranslation();
+
+  const { mutateAsync: addFileAsync, isLoading: isMutating } = useFilesControllerUploadFiles();
+  const { mutate: removeFile } = useFilesControllerDeleteFile();
+
+  const fields = useMemo(
+    () => addFacilitiesSustainabilityFormFields(addFileAsync, removeFile),
+    [addFileAsync, removeFile]
+  );
+
   return (
       <GenericFormContainer
         submitHandler={submitHandler}
         validationSchema={addFacilitiesSustainAbilityFormSchema}
         initialValues={initialValues}
-        fields={addFacilitiesSustainabilityFormFields}
+        fields={fields}
       >
         <Grid container rowGap={'16px'}>
           <Grid item xs={12}>
@@ -44,36 +60,55 @@ export function AddFacilitiesSustainabilityForm({
                   contentHeight
                   fieldName={'facilityStory'}
                 />
-                <Divider sx={{ width: '100%', my: 4 }} />
+                <Divider sx={{ width: '100%', my: 3 }} />
                 <GenericFormFieldContainer
                   contentHeight
                   fieldName={'facilityDocumentList'}
                   isLoading={isMutating}
-                  mutateUpload={mutateAsync}
+                  mutateUpload={addFileAsync}
                 />
               </>
             </FormSectionCard>
           </Grid>
           <Grid item xs={12}>
             <FormSectionCard
-              sectionHeader={t('forms.SellerAddFacilitiesSustainabilityForm.impactStory')}
-              helpText={t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryHelpText')}
-              rememberText={t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryRememberText')}
+              sectionHeader={t('forms.SellerAddFacilitiesSustainabilityForm.sustainability')}
             >
               <>
+                <SubHeader color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.greenLabels')}
+                </SubHeader>
+                <HelperText color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.greenLabelsHelperText1')}
+                </HelperText>
+                <HelperText color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.greenLabelsHelperText2')}
+                </HelperText>
                 <GenericFormFieldContainer
-                  contentHeight
-                  fieldName={'impactStory'}
+                  fieldName="greenLabel"
+                  isLoading={isMutating}
                 />
-                <Divider sx={{ width: "100%", my: 4 }} />
+                <Divider sx={{ width: "100%", my: 3 }} />
+
+                <SubHeader color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.impactStory')}
+                </SubHeader>
+                <HelperText color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryHelpText')}
+                </HelperText>
+                <SubHeader color="primary">
+                  {t('forms.SellerAddFacilitiesSustainabilityForm.impactStoryRememberText')}
+                </SubHeader>
+                <GenericFormFieldContainer fieldName={'impactStory'} />
+                <Divider sx={{ width: "100%", my: 3 }} />
+
                 <Typography fontWeight={700} fontSize="20px" color="primary">
                   {t('forms.SellerAddFacilitiesSustainabilityForm.sustainabilityDocuments')}
                 </Typography>
                 <GenericFormFieldContainer
-                  contentHeight
                   fieldName={'sustainabilityDocumentList'}
                   isLoading={isMutating}
-                  mutateUpload={mutateAsync}
+                  mutateUpload={addFileAsync}
                 />
               </>
             </FormSectionCard>
@@ -83,5 +118,3 @@ export function AddFacilitiesSustainabilityForm({
       </GenericFormContainer>
   );
 }
-
-export default AddFacilitiesSustainabilityForm;

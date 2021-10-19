@@ -7,3 +7,4 @@ export * from './PasswordStrengthInfo';
 export * from './SignInOptions';
 export * from './StepReport';
 export * from './GenericFormSubmitButtonContainer';
+export * from './FormSectionCard';

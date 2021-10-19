@@ -9,6 +9,7 @@ import { FacilityDraft } from './AddFacilitiesPage.types';
 import { SellerAddFacilitiesSteps } from './AddFacilitiesPage';
 import { BreadcrumbItem } from '@energyweb/zero-ui-core';
 import { EnergyUnitCapacityEnum } from '../../containers';
+import { useNavigate } from 'react-router-dom';
 
 const initialDraftState: FacilityDraft = [
   {
@@ -37,7 +38,7 @@ const initialDraftState: FacilityDraft = [
   {
     facilityStory: null,
     impactStory: null,
-    // greenLabelList: [],
+    greenLabel: [],
     facilityDocumentList: [],
     sustainabilityDocumentList: [],
   },
@@ -50,6 +51,7 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
   const [activeStep, setActiveStep] = useState(
     SellerAddFacilitiesSteps.BasicInformation
   );
+  const navigate = useNavigate();
   const [facilityDraftId, setFacilityDraftId] = useState(draftId);
   const [showDraftSavedMsg, setShowDraftSavedMsg] = useState(false);
   const [isDraftDirty, setIsDraftDirty] = useState(false);
@@ -123,6 +125,25 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
     [draftUpdateMutateAsync, authenticatedUserId]
   );
 
+  const handleNavigateToPrevStep = () => {
+    if(activeStep <= 0) {
+      navigate('/account/dashboard');
+      return;
+    }
+    setActiveStep((prev) => prev - 1)
+  };
+
+  const handleNavigateToNextStep = () => setActiveStep((prev) => prev+1);
+
+  const updateFacilityDraft = (
+    facilityFormStep: SellerAddFacilitiesSteps,
+    formData: any
+  ) => {
+    setFacilityDraft((draft) => {
+      draft[facilityFormStep as number] = formData;
+    });
+  };
+
   useEffect(() => {
     if (isDraftDirty) {
       if (!facilityDraftId)
@@ -153,26 +174,19 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
     {
       name: 'Add facilities'
     }
-  ]
+  ];
+
+  const isProcessingFacilityDraft = isProcessingDraftCreate || isProcessingDraftUpdate;
 
   return {
     isLoading,
-    handleNavigateToPrevStep: () =>
-      setActiveStep(activeStep > 0 ? activeStep - 1 : 0),
-    handleNavigateToNextStep: () => setActiveStep(activeStep + 1),
+    handleNavigateToPrevStep,
+    handleNavigateToNextStep,
     activeStep,
     showDraftSavedMsg,
-    isProcessingFacilityDraft:
-      isProcessingDraftCreate || isProcessingDraftUpdate,
+    isProcessingFacilityDraft,
     facilityDraft,
-    updateFacilityDraft: (
-      facilityFormStep: SellerAddFacilitiesSteps,
-      formData: any
-    ) => {
-      setFacilityDraft((draft) => {
-        draft[facilityFormStep as number] = formData;
-      });
-    },
+    updateFacilityDraft,
     breadcrumbsList
   };
 };

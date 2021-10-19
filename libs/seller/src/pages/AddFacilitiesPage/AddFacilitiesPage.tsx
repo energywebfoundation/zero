@@ -9,8 +9,8 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import {
   AddFacilitiesBasicInformationForm,
-  AddFacilitiesImagesContainer,
-  AddFacilitiesLocationContainer,
+  AddFacilitiesImagesForm,
+  AddFacilitiesLocationForm,
   AddFacilitiesSustainabilityForm,
   IAddFacilitiesBasicInformationFormFields,
   IAddFacilitiesImagesFormFields,
@@ -18,6 +18,7 @@ import {
   IAddFacilitiesSustainabilityFormFields
 } from '../../containers';
 import { useSellerAddFacilititesEffects } from './AddFacilitiesPage.effects';
+import { useStyles } from './AddFacilitiesPage.styles';
 
 export enum SellerAddFacilitiesSteps {
   BasicInformation,
@@ -44,6 +45,7 @@ export const AddFacilitiesPage = () => {
     breadcrumbsList
   } = useSellerAddFacilititesEffects();
   const { t } = useTranslation();
+  const classes = useStyles();
 
   if (isLoading) return <CircularProgress />;
 
@@ -83,7 +85,7 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
-                    activeStepIndex={activeStep}
+                    btnClass={classes.button}
                   />
                 </AddFacilitiesBasicInformationForm>
                </MbBox>
@@ -94,7 +96,7 @@ export const AddFacilitiesPage = () => {
               stepLabel: t('pages.SellerAddFacilitiesImagesPage.location'),
               stepItemNode: (
               <MbBox>
-                <AddFacilitiesLocationContainer
+                <AddFacilitiesLocationForm
                   initialValues={
                     facilityDraft[
                       Number(SellerAddFacilitiesSteps.Location)
@@ -110,9 +112,9 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
-                    activeStepIndex={activeStep}
+                    btnClass={classes.button}
                   />
-                </AddFacilitiesLocationContainer>
+                </AddFacilitiesLocationForm>
                </MbBox>
               ),
             },
@@ -138,7 +140,7 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
-                      activeStepIndex={activeStep}
+                      btnClass={classes.button}
                     />
                   </AddFacilitiesSustainabilityForm>
                 </MbBox>
@@ -148,25 +150,25 @@ export const AddFacilitiesPage = () => {
               stepLabel: t('pages.SellerAddFacilitiesImagesPage.images'),
               stepItemNode: (
                 <MbBox>
-                <AddFacilitiesImagesContainer
-                  initialValues={
-                    facilityDraft[
-                      Number(SellerAddFacilitiesSteps.Images)
-                    ] as IAddFacilitiesImagesFormFields
-                  }
-                  submitHandler={(values) => {
-                    updateFacilityDraft(
-                      SellerAddFacilitiesSteps.Images,
-                      values
-                    );
-                  }}
-                >
-                  <FormNavigation
-                    handleNavigateToPrevStep={handleNavigateToPrevStep}
-                    handleNavigateToNextStep={handleNavigateToNextStep}
-                    activeStepIndex={activeStep}
-                  />
-                </AddFacilitiesImagesContainer>
+                  <AddFacilitiesImagesForm
+                    initialValues={
+                      facilityDraft[
+                        Number(SellerAddFacilitiesSteps.Images)
+                      ] as IAddFacilitiesImagesFormFields
+                    }
+                    submitHandler={(values) => {
+                      updateFacilityDraft(
+                        SellerAddFacilitiesSteps.Images,
+                        values
+                      );
+                    }}
+                  >
+                    <FormNavigation
+                      handleNavigateToPrevStep={handleNavigateToPrevStep}
+                      handleNavigateToNextStep={handleNavigateToNextStep}
+                      btnClass={classes.button}
+                    />
+                  </AddFacilitiesImagesForm>
                 </MbBox>
               ),
             },

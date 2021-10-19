@@ -1,15 +1,18 @@
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { Box, Button, Grid } from '@material-ui/core';
 import { GenericFormSubmitButtonContainer } from '../GenericFormSubmitButtonContainer';
+import { FC } from 'react';
 
-export const FormNavigation = ({
-  activeStepIndex,
-  handleNavigateToPrevStep,
-  handleNavigateToNextStep,
-}: {
-  activeStepIndex: number;
+interface FormNavigationProps {
   handleNavigateToPrevStep: () => void;
   handleNavigateToNextStep: () => void;
+  btnClass?: string;
+}
+
+export const FormNavigation: FC<FormNavigationProps> = ({
+  handleNavigateToPrevStep,
+  handleNavigateToNextStep,
+  btnClass
 }) => (
   <Grid container>
     <Grid item xs={12}>
@@ -19,7 +22,7 @@ export const FormNavigation = ({
           startIcon={<ChevronLeft />}
           variant={'contained'}
           color={'primary'}
-          disabled={activeStepIndex === 0}
+          className={btnClass}
         >
           Back
         </Button>
@@ -32,7 +35,8 @@ export const FormNavigation = ({
               }}
               color={'primary'}
               variant={'contained'}
-              disabled={!isValid || !isDirty || isSubmitting}
+              disabled={isSubmitting}
+              className={btnClass}
             >
               Next
             </Button>

@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import Box from '@material-ui/system/Box/Box';
+import { UseMutateAsyncFunction } from 'react-query';
+import { FC, useContext } from 'react';
 import {
   GenericFormContextData,
   GenericFormFieldConfig,
@@ -17,18 +19,16 @@ import {
   FormFieldDocumentList,
   UploadFileResponse,
   UploadFile,
-} from '../../components';
-import { useContext } from 'react';
-import { GenericFormContext } from '../../providers';
-import {
+  FormFieldSelectAndFile,
   FormFieldSwitch,
   FormFieldTextarea,
   FormFieldImageUpload,
-  FormFieldFileList,
   FormFieldMap,
-  FormFieldMapConfig
+  FormFieldMapConfig,
+  FormFieldSelectAndFileConfig
 } from '../../components';
-import { UseMutateAsyncFunction } from 'react-query';
+import { GenericFormContext } from '../../providers';
+
 
 export interface GenericFormFieldContainerProps {
   fieldName: string;
@@ -47,14 +47,14 @@ const StyledBox = styled(Box)`
   margin-top: 24px;
 `;
 
-export const GenericFormFieldContainer = ({
+export const GenericFormFieldContainer: FC<GenericFormFieldContainerProps> = ({
   fieldName,
   boxWidth,
   fullWidth,
   disabled,
   mutateUpload,
   isLoading
-}: GenericFormFieldContainerProps) => {
+}) => {
   const genericFormContext = useContext<GenericFormContextData | null>(
     GenericFormContext
   );
@@ -124,19 +124,6 @@ const renderField = (
     case GenericFormFieldType.Textarea:
       return (
         <FormFieldTextarea
-          disabled={disabled}
-          field={genericFormFieldConfig}
-          register={formConfigContextData.register}
-          errorExists={isFieldInvalid}
-          errorText={''}
-          isDirty={isFieldDirty}
-          variant={formConfigContextData.inputsVariant}
-        />
-      );
-
-    case GenericFormFieldType.FileList:
-      return (
-        <FormFieldFileList
           disabled={disabled}
           field={genericFormFieldConfig}
           register={formConfigContextData.register}
@@ -246,6 +233,19 @@ const renderField = (
           field={genericFormFieldConfig as FormFieldMapConfig}
         />
       );
+
+    case GenericFormFieldType.SelectAndFile:
+      return (
+        <FormFieldSelectAndFile
+          field={(genericFormFieldConfig as FormFieldSelectAndFileConfig)}
+          register={formConfigContextData.register}
+          disabled={disabled}
+          variant={formConfigContextData.inputsVariant}
+          errorExists={isFieldInvalid}
+          errorText={''}
+          isProcessing={isLoading}
+        />
+      )
 
     default:
       throw new Error('Field type not supported!');

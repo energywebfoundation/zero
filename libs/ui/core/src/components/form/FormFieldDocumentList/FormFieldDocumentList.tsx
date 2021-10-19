@@ -1,10 +1,11 @@
-import { FC, useContext } from 'react';
+import { noop } from 'lodash';
+import { FC } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { UseMutateAsyncFunction } from 'react-query';
 import { GenericFormFieldConfig } from '../../../containers';
-import { GenericFormContext } from '../../../providers';
 import { UploadFile, UploadFileResponse } from '../../file';
-import { FormFieldDocumentListContainer } from '../FormFieldDocumentListContainer';
+import { FormDocumentList } from '../FormDocumentList';
+import { useFormFieldDocumentListEffects } from './FormFieldDocumentList.effects';
 
 export interface FormFieldDocumentListProps {
   field: Omit<
@@ -26,20 +27,23 @@ export interface FormFieldDocumentListProps {
 export const FormFieldDocumentList: FC<FormFieldDocumentListProps> =
   ({ field, register, mutateUpload, isLoading }) => {
     register(field.name);
-    const { getValues, setValue } = useContext(GenericFormContext)!;
+    const { list, handleDescriptionChanged, handleRemoveDocument, handleFileSelectionSubmit } = useFormFieldDocumentListEffects(field);
 
     if(!mutateUpload) {
+      console.log('mutateUpload funciton is not provided for FormFieldDocumentList');
       return null
     }
 
     return (
-      <FormFieldDocumentListContainer
-        data={getValues(field.name)}
-        handleFacilityDocumentListChanged={(facilityDocumentList) => {
-          setValue(field.name, facilityDocumentList);
-        }}
-        mutateUpload={mutateUpload}
-        isLoading={isLoading}
-      />
+    <FormDocumentList
+      handleDescriptionChanged={handleDescriptionChanged}
+      handleRemoveDocument={handleRemoveDocument}
+      handleFileSelectionSubmit={handleFileSelectionSubmit}
+      handleFileListChanged={noop}
+      documentList={list}
+      isLoading={isLoading}
+      mutateUpload={mutateUpload}
+      field={field}
+    />
     );
   };
