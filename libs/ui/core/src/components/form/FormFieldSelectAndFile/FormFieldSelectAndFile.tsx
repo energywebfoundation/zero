@@ -41,7 +41,7 @@ export const FormFieldSelectAndFile: FC<FormFieldSelectAndFileProps> = ({
       <Grid item xs={12}>
       {items.length > 0 ?
         items.map((item) => (
-          <Grid container key={`${item.id}`} alignItems="center">
+          <Grid container key={`${item.id}`} alignItems="center" justifyContent="flex-end">
             <Grid item xs={12} md={6}>
               <FormFieldSelectRegular
                 errorExists={errorExists}
@@ -52,7 +52,7 @@ export const FormFieldSelectAndFile: FC<FormFieldSelectAndFileProps> = ({
                 onChange={(event) => handleSelectValueChange(item.id, event)}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ height: '100%' }}>
               <FieldSelectAndFileUpload
                 id={item.id}
                 fileId={item.fileId ?? ''}

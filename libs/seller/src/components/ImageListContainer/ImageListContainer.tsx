@@ -1,26 +1,29 @@
-import { FileMetadataDto } from '@energyweb/zero-api-client';
 import { ImageList } from '@energyweb/zero-ui-core';
+import { Box, Paper } from '@material-ui/core';
+import { FC } from 'react';
 import { useImageListContainerEffects } from './ImageListContainer.effects';
 
 export interface ImageListContainerProps {
-  imageList: string[];
+  fieldName: string;
 }
 
-export const ImageListContainer = ({ imageList }: ImageListContainerProps) => {
-  const { selectors } = useImageListContainerEffects();
+export const ImageListContainer: FC<ImageListContainerProps> = ({ fieldName }) => {
+  const { imagesUrls } = useImageListContainerEffects(fieldName);
+
   return (
-    <ImageList
-      imageList={mapFileIdToImageUrl(imageList, selectors.userFileList)}
-    />
+    <>
+    {imagesUrls.length ?
+      <Box my={2}>
+        <Paper sx={{ p: 3 }}>
+          <ImageList
+            // mock
+            fileDeleteHandler={(fileId) => { console.log(fileId) }}
+            imageList={imagesUrls}
+          />
+        </Paper>
+      </Box>
+      : null
+    }
+    </>
   );
 };
-
-const mapFileIdToImageUrl = (
-  imageIdList: string[],
-  fileMetaList: FileMetadataDto[]
-) =>
-  fileMetaList
-    .filter((el) => imageIdList.includes(el.id))
-    .map((el) => (el as any)?.url);
-
-export default ImageListContainer;

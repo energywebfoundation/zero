@@ -5,7 +5,7 @@ import {
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
 import Grid from '@material-ui/core/Grid';
-import { useFilesControllerDeleteFile, useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
+import { useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
 import { ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
@@ -35,11 +35,10 @@ export function AddFacilitiesSustainabilityForm({
   const { t } = useTranslation();
 
   const { mutateAsync: addFileAsync, isLoading: isMutating } = useFilesControllerUploadFiles();
-  const { mutate: removeFile } = useFilesControllerDeleteFile();
 
   const fields = useMemo(
-    () => addFacilitiesSustainabilityFormFields(addFileAsync, removeFile),
-    [addFileAsync, removeFile]
+    () => addFacilitiesSustainabilityFormFields(addFileAsync),
+    [addFileAsync]
   );
 
   return (

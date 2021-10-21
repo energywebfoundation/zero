@@ -16,7 +16,6 @@ export interface FormFieldSelectAndFileConfig extends Omit<GenericFormFieldConfi
   options: FormSelectOption[];
   acceptedFileTypes: FileTypeEnum[];
   fileUploadHandler: (file: File) => Promise<StoredFile>;
-  fileRemoveHandler: (fileId: string) => void;
   addItemBtnText?: string;
   uploadButtonText?: string;
 }
@@ -65,21 +64,9 @@ export const useFormFieldSelectAndFileEffects = (field: FormFieldSelectAndFileCo
     setValue(field.name, adjustedValues);
   };
 
-  const handleFileRemove = async (id: number, fileId: string) => {
-    await field.fileRemoveHandler(fileId);
+  const handleFileRemove = (id: number) => {
     const oldValues = getValues(field.name) as SelectAndFileFieldItem[];
-    const adjustedValues = [...oldValues].map(item => {
-      if(item.id === id) {
-        return {
-          ...item,
-          fileId: undefined,
-          fileName: undefined,
-          fileType: undefined
-        }
-      } else {
-        return item;
-      }
-    });
+    const adjustedValues = [...oldValues].filter(item => item.id !== id);
     setValue(field.name, adjustedValues);
   }
 

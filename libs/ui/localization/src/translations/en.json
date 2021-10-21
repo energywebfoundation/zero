@@ -86,6 +86,9 @@
       "FileList": {
         "submitSelection": "Submit selection",
         "cancel": "Cancel"
+      },
+      "FormFieldSelectAndFile": {
+        "youAreAboutToDelete": "You are about to delete the file '{{fileName}}' and the corresponding field"
       }
     },
     "forms": {
@@ -157,6 +160,9 @@
         "impactStoryPlaceholderText": "Briefly describe facility and its story",
         "sustainabilityDocuments": "Sustainability documents"
       },
+      "SellerAddFacilitiesImagesForm": {
+        "youCanAddImagesLater": "You can add images later. 75% of buyers think images are important to give credibility and transparency to your facility, products and services"
+      },
       "ImageUploadContainer": {
         "uploadErrorMsg": "Error uploading image",
         "uploadSuccessfullMsg": "Image uploaded successfully"
@@ -190,8 +196,16 @@
       "uploadProof": "Upload proof"
     },
     "images": {
+      "images": "Images",
       "examples": "Examples of pictures",
-      "imagesUploaded": "Images uploaded"
+      "imagesUploaded": "Images uploaded",
+      "youAreAboutToDelete": "You are about to delete the file"
+    },
+    "general": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "yesDelete": "Yes, delete",
+      "warning": "Warning"
     }
   }
 }

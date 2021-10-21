@@ -1,10 +1,11 @@
 import { Box, Button, CircularProgress } from "@material-ui/core";
 import { Check, Clear, PictureAsPdfOutlined } from "@material-ui/icons";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { FileTypeEnum, UPLOAD_SIZE_LIMIT_PDF } from "../../../file";
 import { CallToActionButton } from "../../../layout";
+import { ConfirmDeleteModal } from "../ConfirmDeleteModal";
 import { StyledFileName, useStyles } from "./FieldSelectAndFileUpload.styles";
 
 interface FieldSelectAndFileUploadProps {
@@ -14,7 +15,7 @@ interface FieldSelectAndFileUploadProps {
   fileType: FileTypeEnum | undefined;
   acceptedTypes: FileTypeEnum[];
   handleFileUpload: (id: number, file: File) => Promise<void>;
-  handleFileRemove: (id: number, fileId: string) => void;
+  handleFileRemove: (id: number) => void;
   isProcessing?: boolean;
   uploadButtonText?: string;
 }
@@ -30,6 +31,7 @@ export const FieldSelectAndFileUpload: FC<FieldSelectAndFileUploadProps> = ({
   isProcessing = false,
   uploadButtonText = 'Upload'
 }) => {
+  const [removeModalOpen, setRemoveModalOpen] = useState(false);
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -47,52 +49,53 @@ export const FieldSelectAndFileUpload: FC<FieldSelectAndFileUploadProps> = ({
   }, [acceptedFiles]);
 
   return (
-    <>
-      {fileId && fileName && fileType
-      ? (
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          ml={3}
         >
-          <Box display="flex">
+          {fileId && fileName && fileType ?
+          (<Box display="flex" ml={3}>
             <Check color="secondary" />
             <StyledFileName color="primary">
               {fileName}
             </StyledFileName>
-          </Box>
+          </Box>)
+          :(
+          <div {...getRootProps({ className: 'dropzone' })}>
+            <input {...getInputProps()} />
+            <CallToActionButton
+              sx={{ ml: 2 }}
+              disabled={isProcessing}
+              endIcon={
+                !isProcessing ? (
+                  <PictureAsPdfOutlined color={'secondary'} />
+                ) : (
+                  <CircularProgress size={'16px'} color={'secondary'} />
+                )
+              }
+              text={
+                !isProcessing
+                ? t(uploadButtonText)
+                : t('forms.uploadInProgress')
+              }
+            />
+          </div>)
+          }
+
           <Button
             className={classes.removeBtn}
             variant="contained"
-            onClick={() => handleFileRemove(id, fileId)}
+            onClick={() => setRemoveModalOpen(true)}
           >
             <Clear fontSize="small" color="error" />
           </Button>
-        </Box>
-        )
-      : (
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <CallToActionButton
-            sx={{ ml: 2 }}
-            disabled={isProcessing}
-            endIcon={
-              !isProcessing ? (
-                <PictureAsPdfOutlined color={'secondary'} />
-              ) : (
-                <CircularProgress size={'16px'} color={'secondary'} />
-              )
-            }
-            text={
-              !isProcessing
-              ? t(uploadButtonText)
-              : t('forms.uploadInProgress')
-            }
+          <ConfirmDeleteModal
+            open={removeModalOpen}
+            handleClose={() => setRemoveModalOpen(false)}
+            handleDelete={() => handleFileRemove(id)}
+            fileName={fileName}
           />
-        </div>
-      )
-    }
-    </>
+        </Box>
   )
 }

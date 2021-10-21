@@ -6,8 +6,8 @@ import {
   StoredFile,
   TGenericFormFieldList,
 } from '@energyweb/zero-ui-core';
-import { FileMetadataDto, UploadFileDto, UploadFileResponseDto } from '@energyweb/zero-api-client'
-import { UseMutateAsyncFunction, UseMutateFunction } from 'react-query';
+import { UploadFileDto, UploadFileResponseDto } from '@energyweb/zero-api-client'
+import { UseMutateAsyncFunction } from 'react-query';
 
 export interface IAddFacilitiesSustainabilityFormFields {
   facilityStory: string;
@@ -47,13 +47,8 @@ type SustainabilityMutateUploadFunc = UseMutateAsyncFunction<UploadFileResponseD
   data: UploadFileDto;
 }, unknown>
 
-type SustainabilityMutateDeleteFileFunc = UseMutateFunction<FileMetadataDto, unknown, {
-  id: string;
-}, unknown>
-
 export const addFacilitiesSustainabilityFormFields = (
   mutateUpload: SustainabilityMutateUploadFunc,
-  mutateRemove: SustainabilityMutateDeleteFileFunc
 ): TGenericFormFieldList => {
   const fileUploadHandler = async (file: File) => {
     const storedFile: StoredFile = await mutateUpload({ data: {file} })
@@ -66,8 +61,6 @@ export const addFacilitiesSustainabilityFormFields = (
       ));
     return storedFile;
   };
-
-  const fileRemoveHandler = (fileId: string) => mutateRemove({ id: fileId })
 
   return [
     {
@@ -92,7 +85,6 @@ export const addFacilitiesSustainabilityFormFields = (
       options: greenLabelFormFieldOptionList,
       acceptedFileTypes: [FileTypeEnum.PDF],
       fileUploadHandler: fileUploadHandler,
-      fileRemoveHandler: fileRemoveHandler
     },
     {
       label: '',

@@ -25,7 +25,8 @@ import {
   FormFieldImageUpload,
   FormFieldMap,
   FormFieldMapConfig,
-  FormFieldSelectAndFileConfig
+  FormFieldSelectAndFileConfig,
+  FieldImageUploadConfig
 } from '../../components';
 import { GenericFormContext } from '../../providers';
 
@@ -153,7 +154,7 @@ const renderField = (
       return (
         <FormFieldImageUpload
           disabled={disabled}
-          field={genericFormFieldConfig}
+          field={(genericFormFieldConfig as FieldImageUploadConfig)}
           register={formConfigContextData.register}
           errorExists={isFieldInvalid}
           errorText={''}

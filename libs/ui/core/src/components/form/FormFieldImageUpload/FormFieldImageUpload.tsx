@@ -1,16 +1,20 @@
 import { FC, memo, useContext } from 'react';
-import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { GenericFormFieldConfig } from '../../../containers';
 import { GenericFormContext } from '../../../providers';
 import { ImageUploadContainer } from '../../image';
 
-export interface FormFieldImageUploadProps extends BaseTextFieldProps {
-  field: Omit<
-    GenericFormFieldConfig,
-    'autocomplete' | 'multiple' | 'maxValues'
-  > &
-    BaseTextFieldProps;
+export type FieldImageUploadConfig = Omit<
+  GenericFormFieldConfig,
+  'autocomplete' | 'multiple' | 'maxValues'
+> & {
+  title: string;
+  subtitle: string;
+}
+
+export interface FormFieldImageUploadProps {
+  field: FieldImageUploadConfig;
   register: UseFormRegister<FieldValues>;
   errorExists: boolean;
   errorText: string;
@@ -24,16 +28,20 @@ export const FormFieldImageUpload: FC<FormFieldImageUploadProps> = memo(
     field,
     register,
   }) => {
+    const { t } = useTranslation();
     register(field.name);
-    const { setValue, getValues } = useContext(GenericFormContext)!;
-    const imageLIst: string[] = getValues(field.name);
+    const { setValue, watch } = useContext(GenericFormContext)!;
+    const imageList: string[] = watch(field.name);
+
+    const handleUploadSuccess = (fileList: string[]) => {
+      setValue(field.name, [...imageList, ...fileList]);
+    };
+
     return (
       <ImageUploadContainer
-        disabled={true}
-        helpBoxText={field.helpBoxText}
-        handleUploadSuccess={(uploaded) => {
-          setValue(field.name, [...imageLIst, ...uploaded]);
-        }}
+        title={t(field.title)}
+        subtitle={t(field.subtitle)}
+        handleUploadSuccess={handleUploadSuccess}
       />
     );
   }

@@ -14,7 +14,8 @@ import {
   FormFieldSelectAndFileConfig,
   FormFieldSelectConfig,
   FormFieldTextInputProps,
-  FormFieldMapConfig
+  FormFieldMapConfig,
+  FieldImageUploadConfig
 } from '../../components/form';
 import {
   TGenericFormEffectsReturnType,
@@ -58,11 +59,10 @@ export interface GenericFormFieldConfig {
   textFieldProps?: TextFieldProps;
   infoTooltip?: string;
   characterCountLimit?: number;
-  helpBoxText?: string;
 }
 
 export type TGenericFormFieldList = Array<
-  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig | FormFieldSelectAndFileConfig | FormFieldMapConfig
+  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig | FormFieldSelectAndFileConfig | FormFieldMapConfig | FieldImageUploadConfig
 >;
 
 export type TGenericFormSubmitHandlerFn<

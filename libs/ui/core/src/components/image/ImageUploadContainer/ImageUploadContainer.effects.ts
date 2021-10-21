@@ -8,8 +8,6 @@ import { UploadFile } from '../../file';
 
 export const useImageUploadContainerEffects = (
   handleUploadSuccess: (fileList: string[]) => void,
-  uploadSuccessMsg?: string,
-  uploadErrorMsg?: string
 ) => {
   const [imageList, setImageList] = useImmer<Array<string>>([]);
   const [previewList, setPreviewList] = useState<Array<string>>([]);
@@ -37,37 +35,13 @@ export const useImageUploadContainerEffects = (
             const { id } = res;
             setPreviewList([]);
             setImageList((draft) => [...draft, id]);
-            // dispatch(
-            //   notificationStateActions.addNotification({
-            //     type: NotificationType.Success,
-            //     text: {
-            //       firstLine:
-            //         uploadSuccessMsg ??
-            //         t('components.ImageUploadContainer.uploadSuccessfullMsg'),
-            //     },
-            //   })
-            // );
           })
-          .catch(() => {
-            // dispatch(
-            //   notificationStateActions.addNotification({
-            //     type: NotificationType.Error,
-            //     text: {
-            //       firstLine:
-            //         uploadErrorMsg ??
-            //         t('components.ImageUploadContainer.uploadErrorMsg'),
-            //     },
-            //   })
-            // );
-          });
       });
     },
     []
   );
 
-  /**
-   * Clean up
-   */
+  // Clean up
   useEffect(() => () => {
     previewList.forEach((value) => URL.revokeObjectURL(value));
   });
