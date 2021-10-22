@@ -2,14 +2,18 @@ import {
   useUsersControllerMe,
   useDraftsControllerCreate,
   useDraftsControllerUpdate,
+  useUsersControllerFindAllUserDrafts,
+  DraftDto,
+  UpdateDraftDtoData,
+  getUsersControllerFindAllUserDraftsQueryKey,
 } from '@energyweb/zero-api-client';
-import { useCallback, useEffect, useState } from 'react';
-import { useImmer } from 'use-immer';
-import { FacilityDraft } from './AddFacilitiesPage.types';
-import { SellerAddFacilitiesSteps } from './AddFacilitiesPage';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import { BreadcrumbItem } from '@energyweb/zero-ui-core';
 import { EnergyUnitCapacityEnum } from '../../containers';
-import { useNavigate } from 'react-router-dom';
+import { FacilityDraft, FacilityDraftItem } from './AddFacilitiesPage.types';
+import { SellerAddFacilitiesSteps } from './AddFacilitiesPage';
 
 const initialDraftState: FacilityDraft = [
   {
@@ -45,118 +49,73 @@ const initialDraftState: FacilityDraft = [
   { facilityImageList: [] },
 ];
 
-
-
-export const useSellerAddFacilititesEffects = (draftId?: number) => {
+export const useSellerAddFacilititesEffects = () => {
   const [activeStep, setActiveStep] = useState(
     SellerAddFacilitiesSteps.BasicInformation
   );
+  const { data: user, isLoading: isUserLoading } = useUsersControllerMe();
+  const userId = user?.id ?? 0;
+
   const navigate = useNavigate();
-  const [facilityDraftId, setFacilityDraftId] = useState(draftId);
-  const [showDraftSavedMsg, setShowDraftSavedMsg] = useState(false);
-  const [isDraftDirty, setIsDraftDirty] = useState(false);
-  const [facilityDraft, setFacilityDraft] =
-    useImmer<FacilityDraft>(initialDraftState);
+  const queryClient = useQueryClient();
+  const allUserDraftsQueryKey = getUsersControllerFindAllUserDraftsQueryKey(userId);
 
-  const { data: user, isLoading } = useUsersControllerMe();
-
-  const authenticatedUserId = user?.id;
+  const { data: userDrafts, isLoading: areDraftsLoading } = useUsersControllerFindAllUserDrafts(userId, { query: { enabled: !!userId } });
+  const userFacilityDrafts = userDrafts?.length ?
+    userDrafts.find(draft => draft.draftType === 'facility')
+    : ({} as DraftDto);
+  const facilityDraft = userFacilityDrafts?.data as FacilityDraftItem[] ?? initialDraftState;
 
   const {
-    mutateAsync: draftCreateMutateAsync,
-    isLoading: isProcessingDraftCreate,
+    mutate: createDraft,
+    isLoading: isCreateDraftMutating,
+    isSuccess: isDraftCreateSuccess,
+    isError: isDraftCreateError
   } = useDraftsControllerCreate();
-
   const {
-    mutateAsync: draftUpdateMutateAsync,
-    isLoading: isProcessingDraftUpdate,
+    mutate: updateDraft,
+    isLoading: isUpdateDraftMutating,
+    isSuccess: isDraftUpdateSuccess,
+    isError: isDraftUpdateError
   } = useDraftsControllerUpdate();
 
-  const handleCreateFacility = useCallback(
-    () =>
-      draftCreateMutateAsync({
-        data: { data: facilityDraft, draftType: 'facility' },
-      })
-        .then((res) => {
-          const { id } = res as { id: number };
-          setFacilityDraftId(id);
-          setShowDraftSavedMsg(true);
-          setTimeout((args) => setShowDraftSavedMsg(false), 2000);
-          // notificationStateActions.addNotification({
-          //   text: { firstLine: 'Facility draft created successfully' },
-          //   type: NotificationType.Success,
-          // });
-        })
-        .catch((reason) => {
-          console.log(reason);
-          // notificationStateActions.addNotification({
-          //   text: {
-          //     firstLine: 'Error creating facility draft',
-          //   },
-          //   type: NotificationType.Error,
-          // });
-        }),
-    [draftCreateMutateAsync, authenticatedUserId]
-  );
-
-  const handleUpdateFacility = useCallback(
-    () =>
-      draftUpdateMutateAsync({
-        data: facilityDraft as any,
-        id: facilityDraftId!,
-      })
-        .then((value) => {
-          setShowDraftSavedMsg(true);
-          setTimeout((args) => setShowDraftSavedMsg(false), 2000);
-          // notificationStateActions.addNotification({
-          //   text: { firstLine: 'Facility draft updated successfully' },
-          //   type: NotificationType.Success,
-          // });
-        })
-        .catch((reason) => {
-          console.log(reason);
-          // notificationStateActions.addNotification({
-          //   text: {
-          //     firstLine: 'Error updating facility draft',
-          //   },
-          //   type: NotificationType.Error,
-          // });
-        }),
-    [draftUpdateMutateAsync, authenticatedUserId]
-  );
+  const createOrUpdateDraft = (draftId: number | undefined, draftData: FacilityDraftItem[]) => {
+    if (draftId) {
+      updateDraft(
+        { id: draftId, data: (draftData as UpdateDraftDtoData) },
+        { onSuccess: () => queryClient.refetchQueries(allUserDraftsQueryKey)}
+      );
+    } else {
+      createDraft(
+        { data: { draftType: 'facility', data: draftData } },
+        { onSuccess: () => queryClient.refetchQueries(allUserDraftsQueryKey)}
+      );
+    };
+  }
 
   const handleNavigateToPrevStep = () => {
-    if(activeStep <= 0) {
+    if (activeStep <= 0) {
       navigate('/account/dashboard');
       return;
     }
     setActiveStep((prev) => prev - 1)
   };
 
-  const handleNavigateToNextStep = () => setActiveStep((prev) => prev+1);
-
   const updateFacilityDraft = (
     facilityFormStep: SellerAddFacilitiesSteps,
-    formData: any
+    formData: FacilityDraftItem
   ) => {
-    setFacilityDraft((draft) => {
-      draft[facilityFormStep as number] = formData;
-    });
+    const newDraft = facilityDraft.map((formStepData, index) => {
+      if (index === facilityFormStep) return formData;
+      return formStepData
+    })
+    createOrUpdateDraft(userFacilityDrafts?.id, newDraft);
   };
 
-  useEffect(() => {
-    if (isDraftDirty) {
-      if (!facilityDraftId)
-        handleCreateFacility().then((value) => {
-          setIsDraftDirty(false);
-        });
-      else {
-        handleUpdateFacility().then((value) => {
-          setIsDraftDirty(false);
-        });
-      }
-    }
-  }, [isDraftDirty]);
+  const handleNavigateToNextStep = (formData: FacilityDraftItem) => {
+    updateFacilityDraft(activeStep, formData);
+    setActiveStep(activeStep+1);
+  };
 
   const breadcrumbsList: BreadcrumbItem[] = [
     {
@@ -176,15 +135,17 @@ export const useSellerAddFacilititesEffects = (draftId?: number) => {
     }
   ];
 
-  const isProcessingFacilityDraft = isProcessingDraftCreate || isProcessingDraftUpdate;
+  const isLoading = isUserLoading || areDraftsLoading || facilityDraft.length < 1;
+  const isProcessing = isCreateDraftMutating || isUpdateDraftMutating;
+  const showDraftSavedMsg = (isDraftCreateSuccess || isDraftUpdateSuccess) && (!isDraftUpdateError || !isDraftCreateError);
 
   return {
     isLoading,
+    isProcessing,
+    showDraftSavedMsg,
     handleNavigateToPrevStep,
     handleNavigateToNextStep,
     activeStep,
-    showDraftSavedMsg,
-    isProcessingFacilityDraft,
     facilityDraft,
     updateFacilityDraft,
     breadcrumbsList

@@ -171,7 +171,8 @@
     "pages": {
       "SellerAddFacilitiesPage": {
         "pageTitle": "Seller / Add Facilities",
-        "formTitle": "Add Facilities"
+        "formTitle": "Add Facilities",
+        "draftSaved": "Draft Saved"
       },
       "SellerAddFacilitiesImagesPage": {
         "basicInformation": "Basic Information",

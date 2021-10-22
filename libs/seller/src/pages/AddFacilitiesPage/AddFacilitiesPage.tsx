@@ -4,7 +4,9 @@ import {
   FormNavigation,
   GenericFormMultiStep,
 } from '@energyweb/zero-ui-core';
-import { Box, CircularProgress, Grid } from '@material-ui/core';
+import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
+import { Check } from '@material-ui/icons';
+import { TFunction } from 'i18next';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,18 +32,29 @@ export enum SellerAddFacilitiesSteps {
 
 const MbBox = styled(Box)`
   margin-bottom: 40px;
-`
+`;
+
+const DraftSavedComponent = ({ t }: { t: TFunction }) => (
+  <>
+    <Typography color="secondary" fontWeight={700}>
+      {t('pages.SellerAddFacilitiesPage.draftSaved')}
+    </Typography>
+    <Box>
+      <Check color="secondary" fontSize="small" sx={{ ml: '10px' }} />
+    </Box>
+  </>
+);
 
 export const AddFacilitiesPage = () => {
   const {
     activeStep,
-    isProcessingFacilityDraft,
     updateFacilityDraft,
     facilityDraft,
-    showDraftSavedMsg,
     handleNavigateToPrevStep,
     handleNavigateToNextStep,
     isLoading,
+    isProcessing,
+    showDraftSavedMsg,
     breadcrumbsList
   } = useSellerAddFacilititesEffects();
   const { t } = useTranslation();
@@ -57,11 +70,11 @@ export const AddFacilitiesPage = () => {
         <Breadcrumbs breadcrumbsList={breadcrumbsList} />
         <GenericFormMultiStep
           formTitle={t('pages.SellerAddFacilitiesPage.formTitle')}
-          isProcessing={isProcessingFacilityDraft}
+          isProcessing={isProcessing}
+          // mock
           showDraftSavedMsg={showDraftSavedMsg}
-          processingCompletedSuccessfullyText={'Draft saved ✓'}
-          processingErrorText={'Error saving draft'}
           activeStepIndex={activeStep}
+          draftSavedNode={<DraftSavedComponent t={t} />}
           stepList={[
             {
               stepLabel: t(

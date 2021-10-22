@@ -1,11 +1,12 @@
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { Box, Button, Grid } from '@material-ui/core';
+import { FC, useContext } from 'react';
 import { GenericFormSubmitButtonContainer } from '../GenericFormSubmitButtonContainer';
-import { FC } from 'react';
+import { GenericFormContext } from '../../../providers';
 
 interface FormNavigationProps {
   handleNavigateToPrevStep: () => void;
-  handleNavigateToNextStep: () => void;
+  handleNavigateToNextStep: (formData?: any) => void;
   btnClass?: string;
 }
 
@@ -13,7 +14,10 @@ export const FormNavigation: FC<FormNavigationProps> = ({
   handleNavigateToPrevStep,
   handleNavigateToNextStep,
   btnClass
-}) => (
+}) => {
+  const { getValues } = useContext(GenericFormContext)!;
+
+  return (
   <Grid container>
     <Grid item xs={12}>
       <Box mt={3} display={'flex'} justifyContent={'space-between'}>
@@ -27,12 +31,10 @@ export const FormNavigation: FC<FormNavigationProps> = ({
           Back
         </Button>
         <GenericFormSubmitButtonContainer
-          render={({ onSubmit, isValid, isDirty, isSubmitting }) => (
+          render={({ isSubmitting }) => (
             <Button
               endIcon={<ChevronRight />}
-              onClick={() => {
-                onSubmit().then((value) => handleNavigateToNextStep());
-              }}
+              onClick={() => handleNavigateToNextStep(getValues())}
               color={'primary'}
               variant={'contained'}
               disabled={isSubmitting}
@@ -46,3 +48,4 @@ export const FormNavigation: FC<FormNavigationProps> = ({
     </Grid>
   </Grid>
 );
+}
