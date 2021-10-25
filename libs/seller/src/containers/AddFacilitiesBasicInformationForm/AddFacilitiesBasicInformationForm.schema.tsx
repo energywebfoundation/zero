@@ -31,6 +31,12 @@ export const addFacilitiesBasicInformationFormSchema = yup
         DeviceOwnershipEnum.BROKER,
         DeviceOwnershipEnum.I_REC_MANAGER,
       ]),
+    deviceOwnershipDocs: yup.array().of(
+      yup.object().shape({
+        id: yup.string().required(),
+        description: yup.string().required(),
+      })
+    ),
     projectSupportedFinancially: yup.boolean(),
     installedCapacity: yup.number(),
     capacityUnit: yup

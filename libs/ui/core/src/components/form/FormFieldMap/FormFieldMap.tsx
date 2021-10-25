@@ -1,22 +1,21 @@
 import { FC, memo, useContext } from 'react';
-import { BaseTextFieldProps } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormContextData, GenericFormFieldConfig } from '../../../containers';
 import { GenericFormContext } from '../../../providers';
 import { GenericMap } from '../../layout/GenericMap';
 
-type T = Omit<
+type FormFieldConfig = Omit<
   GenericFormFieldConfig,
   'autocomplete' | 'multiple' | 'maxValues'
-> &
-  BaseTextFieldProps;
+>;
 
-export interface FormFieldMapConfig extends T {
+export interface FormFieldMapConfig extends FormFieldConfig {
   latitudeFieldName?: string;
   longitudeFieldName?: string;
+  disabled?: boolean;
 }
 
-export interface FormFieldMapProps extends BaseTextFieldProps {
+export interface FormFieldMapProps {
   field: FormFieldMapConfig;
   register: UseFormRegister<FieldValues>;
   errorExists: boolean;

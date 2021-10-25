@@ -4,10 +4,10 @@ import {
   GenericFormCard,
   GenericFormFieldContainer,
 } from '@energyweb/zero-ui-core';
-import { Grid } from '@material-ui/core';
 import { ReactElement } from 'react';
 import { addFacilitiesImagesFormSchema } from './AddFacilitiesImagesForm.schema';
 import { addFacilitiesImagesFormFields, IAddFacilitiesImagesFormFields } from './AddFacilitiesImagesForm.fields';
+import { ImageListContainer } from '../../components';
 
 export interface AddFacilitiesImagesFormProps {
   initialValues: IAddFacilitiesImagesFormFields;
@@ -27,15 +27,14 @@ export const AddFacilitiesImagesForm = ({
     fields={addFacilitiesImagesFormFields}
   >
     <GenericFormCard>
-      <Grid container>
-        <Grid item xs={12}>
-          <GenericFormFieldContainer
-            contentHeight
-            fieldName={'facilityImageList'}
-          />
-        </Grid>
-      </Grid>
+      <GenericFormFieldContainer
+        contentHeight
+        fieldName={'facilityImageList'}
+      />
     </GenericFormCard>
-    {children}
+    <>
+      <ImageListContainer fieldName={'facilityImageList'} />
+      {children}
+    </>
   </GenericFormContainer>
 );

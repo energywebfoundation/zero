@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import map from 'lodash/fp/map';
 import { FC } from 'react';
+import { KeyboardArrowDown } from '@material-ui/icons';
 import { FormSelectOption } from '../FormFieldSelect';
 import { GenericFormFieldConfig } from '../../../containers';
 
@@ -18,7 +19,7 @@ export interface SelectRegularProps {
   errorExists: boolean;
   errorText: string;
   value: FormSelectOption['value'];
-  onChange: (...event: any[]) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   variant?: 'standard' | 'outlined' | 'filled';
   textFieldProps?: BaseTextFieldProps;
   alreadySelectedValues?: Array<FormSelectOption['value']>;
@@ -39,7 +40,6 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
   const { options } = field;
   return (
     <TextField
-      placeholder={field.placeholderText}
       disabled={disabled || field.frozen}
       select
       name={field.name}
@@ -54,6 +54,7 @@ export const FormFieldSelectRegular: FC<SelectRegularProps> = ({
       defaultValue={value}
       onChange={onChange}
       required={field.required}
+      SelectProps={{ IconComponent: KeyboardArrowDown }}
       // should be changed to a proper solution with custom inputs
       InputLabelProps={{
         shrink: true,

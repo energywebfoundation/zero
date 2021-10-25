@@ -7,47 +7,39 @@ import exampleImg from './example.png';
 import { useImageUploadContainerEffects } from './ImageUploadContainer.effects';
 
 export interface ImageUploadContainerProps {
-  uploadSuccessMsg?: string;
-  uploadErrorMsg?: string;
-  helpBoxText?: string;
   handleUploadSuccess: (fileList: string[]) => void;
-  disabled?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
 export const ImageUploadContainer = ({
-  uploadSuccessMsg,
-  uploadErrorMsg,
-  helpBoxText,
   handleUploadSuccess,
+  title,
+  subtitle
 }: ImageUploadContainerProps) => {
+  const { t } = useTranslation();
   const {
     isProcessingUpload,
-    imageList,
     fileValidationErrorHandler,
     onDropHandler,
-  } = useImageUploadContainerEffects(
-    handleUploadSuccess,
-    uploadSuccessMsg,
-    uploadErrorMsg
-  );
-  const { t } = useTranslation();
+  } = useImageUploadContainerEffects(handleUploadSuccess);
+
   return (
     <Box width={'100%'}>
       <Grid container width={'100%'} alignItems={'stretch'}>
         <Grid item xs={12} sm={9}>
+          {title &&
           <Typography fontWeight={700} fontSize={20} color={'primary'}>
-            {t('images.imagesUploaded') + ` ( ${imageList.length} / 16 ) `}
+            {title}
           </Typography>
-          {helpBoxText && (
+          }
+          {subtitle && (
             <Typography
-              letterSpacing={'0.09px'}
-              lineHeight={'24px'}
               color={'primary'}
-              mb={2}
-              fontSize={'16px'}
+              my={2}
               fontWeight={500}
             >
-              {helpBoxText}
+              {subtitle}
             </Typography>
           )}
         </Grid>
@@ -90,7 +82,7 @@ export const ImageUploadContainer = ({
             </Typography>
           </Grid>
           <Grid item sm={3}>
-            <ImageItem src={exampleImg} />
+            <ImageItem fileId={exampleImg} src={exampleImg} />
           </Grid>
         </Grid>
       </Grid>

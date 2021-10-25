@@ -86,6 +86,9 @@
       "FileList": {
         "submitSelection": "Submit selection",
         "cancel": "Cancel"
+      },
+      "FormFieldSelectAndFile": {
+        "youAreAboutToDelete": "You are about to delete the file '{{fileName}}' and the corresponding field"
       }
     },
     "forms": {
@@ -146,11 +149,19 @@
         "facilityStory": "Facility story",
         "facilityStoryHelpText": "Some users want to quickly read the story of your facility without having to parse all the numeric information. This is different than the impact story. See an example of a facility story",
         "facilityStoryPlaceholderText": "Pitch the brands that you've sold to or are affiliated with. Let the Buyers know how you've helped lessen the pollution and made an impact in the environment. Narrate your social contributions as well as your impact to the grassroot community of your Facility. Share your story to make a difference!",
+        "sustainability": "Sustainability",
+        "greenLabels": "Green labels",
+        "greenLabelsHelperText1": "TIP: 90% of buyers are looking for products that have green labels. Labels represent a choosing shortcut for them.",
+        "greenLabelsHelperText2": " You will have to provide document proofs about each label or it won’t be displayed in the product page.",
+        "addGreenLabel": "Add green label",
         "impactStory": "Impact story",
         "impactStoryHelpText": "Help your users by giving a brief description of the additional impact that you can provide. See an example of an impact story.",
         "impactStoryRememberText": "Remember: you should upload document proofs of your sustainability claims",
         "impactStoryPlaceholderText": "Briefly describe facility and its story",
         "sustainabilityDocuments": "Sustainability documents"
+      },
+      "SellerAddFacilitiesImagesForm": {
+        "youCanAddImagesLater": "You can add images later. 75% of buyers think images are important to give credibility and transparency to your facility, products and services"
       },
       "ImageUploadContainer": {
         "uploadErrorMsg": "Error uploading image",
@@ -160,7 +171,8 @@
     "pages": {
       "SellerAddFacilitiesPage": {
         "pageTitle": "Seller / Add Facilities",
-        "formTitle": "Add Facilities"
+        "formTitle": "Add Facilities",
+        "draftSaved": "Draft Saved"
       },
       "SellerAddFacilitiesImagesPage": {
         "basicInformation": "Basic Information",
@@ -180,11 +192,21 @@
       }
     },
     "file": {
-      "remove": "Remove file"
+      "remove": "Remove file",
+      "addDocumentProof": "Add document proof",
+      "uploadProof": "Upload proof"
     },
     "images": {
+      "images": "Images",
       "examples": "Examples of pictures",
-      "imagesUploaded": "Images uploaded"
+      "imagesUploaded": "Images uploaded",
+      "youAreAboutToDelete": "You are about to delete the file"
+    },
+    "general": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "yesDelete": "Yes, delete",
+      "warning": "Warning"
     }
   }
 }

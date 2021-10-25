@@ -1,10 +1,12 @@
 import {
+  GenericFormCard,
   GenericFormContainer,
   GenericFormFieldContainer,
   TGenericFormSubmitHandlerFn,
 } from '@energyweb/zero-ui-core';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IAddFacilitiesLocationFormFields, addFacilitiesLocationFormFields } from './AddFacilitiesLocationForm.fields';
 import { addFacilitiesLocationFormSchema } from './AddFacilitiesLocationForm.schema';
 
@@ -18,14 +20,20 @@ export const AddFacilitiesLocationForm = ({
   submitHandler,
   initialValues,
   children,
-}: AddFacilitiesLocationFormProps) => (
+}: AddFacilitiesLocationFormProps) => {
+  const { t } = useTranslation();
+  return (
     <GenericFormContainer<IAddFacilitiesLocationFormFields>
       submitHandler={submitHandler}
       validationSchema={addFacilitiesLocationFormSchema}
       initialValues={initialValues}
       fields={addFacilitiesLocationFormFields}
     >
-      <Grid container spacing={'20px'}>
+    <GenericFormCard>
+    <Typography color={'primary'} fontSize={'20px'} fontWeight={700}>
+      {t('forms.SellerAddFacilitiesLocationForm.location')}
+    </Typography>
+      <Grid container columnSpacing={{ xs: '12px' }}>
         <Grid item xs={12} sm={6}>
           <GenericFormFieldContainer fieldName={'country'} />
         </Grid>
@@ -50,6 +58,7 @@ export const AddFacilitiesLocationForm = ({
           <GenericFormFieldContainer fieldName={'map'} />
         </Grid>
       </Grid>
+    </GenericFormCard>
       {children}
     </GenericFormContainer>
-);
+)};

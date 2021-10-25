@@ -38,7 +38,7 @@ export const CallToActionButton = ({
   startIcon,
   endIcon,
   sx,
-  disabled = false
+  disabled = false,
 }: CallToActionButtonProps) => {
   const { t } = useTranslation();
   const styles = useCallToActionButtonStyles();

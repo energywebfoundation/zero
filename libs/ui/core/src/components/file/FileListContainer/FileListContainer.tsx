@@ -9,7 +9,7 @@ export interface FileListContainerProps {
   open: boolean;
   multiple?: boolean;
   handleCancel: () => void;
-  handleSubmitSelection: (fileIdList: any) => void;
+  handleSubmitSelection: (fileIdList: string) => void;
 }
 
 export const FileListContainer = ({
@@ -35,7 +35,7 @@ export const FileListContainer = ({
         <FileList
           selectable
           handleSubmit={(fileIdList) => {
-            handleSubmitSelection(fileIdList);
+            handleSubmitSelection(fileIdList[0]);
             if (resetAfterSubmit) {
               setSelectedFileIdList([]);
             }

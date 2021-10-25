@@ -1,5 +1,4 @@
 import {
-  CallToActionButton,
   GenericFormCard,
   GenericFormContainer,
   GenericFormFieldContainer,
@@ -7,14 +6,15 @@ import {
 } from '@energyweb/zero-ui-core';
 import { Box, Divider, Grid, Typography } from '@material-ui/core';
 import { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
+import { useFilesControllerUploadFiles } from '@energyweb/zero-api-client';
 import { addFacilitiesBasicInformationFormSchema } from './AddFacilitiesBasicInformationForm.schema';
 import {
   IAddFacilitiesBasicInformationFormFields,
   addFacilitiesBasicInformationFormFields,
 } from './AddFacilitiesBasicInformationForm.fields';
-import { useTranslation } from 'react-i18next';
-import styled from '@emotion/styled';
-import { FileUpload, FolderOpen } from '@material-ui/icons';
+import { FieldTypeOfFinancialSupport } from '../../components';
 
 export interface AddFacilitiesBasicInformationFormProps {
   submitHandler: TGenericFormSubmitHandlerFn<IAddFacilitiesBasicInformationFormFields>;
@@ -36,16 +36,13 @@ const MlBox = styled(Box)`
   margin-left: 8px;
 `
 
-const MbBox = styled(Box)`
-  margin-bottom: 40px;
-`
-
 export const AddFacilitiesBasicInformationForm = ({
   submitHandler,
   initialFormValues,
   children,
 }: AddFacilitiesBasicInformationFormProps) => {
   const { t } = useTranslation();
+  const { mutateAsync, isLoading: isMutating } = useFilesControllerUploadFiles();
   return (
   <GenericFormContainer<IAddFacilitiesBasicInformationFormFields>
     submitHandler={submitHandler}
@@ -69,22 +66,14 @@ export const AddFacilitiesBasicInformationForm = ({
           <GenericFormFieldContainer fieldName={'eacRegistries'} />
           <GenericFormFieldContainer fieldName={'source'} />
         </Grid>
-        <Grid item>
-          <Box display="flex" alignItems="center">
-            <Typography color="primary" fontWeight={700}>
-              Add document proof
-            </Typography>
-            <CallToActionButton
-              sx={{ marginLeft: '27px', marginRight: '16px' }}
-              startIcon={<FolderOpen />}
-              translateKey="forms.chooseFromUploadedDocs"
-            />
-            <CallToActionButton
-              startIcon={<FileUpload />}
-              translateKey="forms.uploadFromComputer"
-            />
-          </Box>
-        </Grid>
+      </Grid>
+      <Grid item>
+        <GenericFormFieldContainer
+          contentHeight
+          fieldName={'deviceOwnershipDocs'}
+          isLoading={isMutating}
+          mutateUpload={mutateAsync}
+        />
       </Grid>
         <StyledDivider />
         <StyledTypography color="primary">
@@ -125,7 +114,7 @@ export const AddFacilitiesBasicInformationForm = ({
         <Grid item sm={6}>
           <GenericFormFieldContainer fieldName={'commercialOperationDate'} />
           <GenericFormFieldContainer fieldName={'amountToBeCertified'} />
-          <GenericFormFieldContainer fieldName={'typeOfFinancialSupport'} />
+          <FieldTypeOfFinancialSupport />
         </Grid>
       </Grid>
   </GenericFormCard>
