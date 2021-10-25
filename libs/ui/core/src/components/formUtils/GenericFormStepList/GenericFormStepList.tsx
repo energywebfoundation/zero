@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { GenericFormMultiStepContextProvider } from '../../../providers';
 import { useStyles } from './GenericFormStepList.styles';
@@ -15,14 +15,16 @@ export interface GenericFormStepListProps {
   activeStepIndex: number;
   isProcessing?: boolean;
   showDraftSavedMsg?: boolean;
-  processingCompletedSuccessfullyText?: string;
-  processingErrorText?: string;
+  draftSavedNode?: ReactNode;
 }
 
 export const GenericFormMultiStep = ({
   stepList,
   activeStepIndex,
   formTitle,
+  isProcessing,
+  showDraftSavedMsg,
+  draftSavedNode
 }: GenericFormStepListProps) => {
   const styles = useStyles();
   const activeStep = stepList[activeStepIndex];
@@ -35,12 +37,26 @@ export const GenericFormMultiStep = ({
             item
             xs={12}
             sm={6}
-            flexDirection={'row'}
-            alignContent={'space-between'}
           >
-            <Typography color={'primary'} fontSize={'24px'} fontWeight={700}>
-              {activeStep.stepTitle ?? formTitle}
-            </Typography>
+            <Grid container>
+              <Grid item xs={3}>
+                <Typography color={'primary'} fontSize={'24px'} fontWeight={700}>
+                  {activeStep.stepTitle ?? formTitle}
+                </Typography>
+              </Grid>
+              {isProcessing && (
+                <Grid item xs={9}>
+                  <CircularProgress />
+                </Grid>
+              )}
+              {showDraftSavedMsg && draftSavedNode && (
+                <Grid item xs={9} alignItems="flex-end">
+                  <Box height="100%" display="flex" alignItems="center">
+                    {draftSavedNode}
+                  </Box>
+                </Grid>
+              )}
+            </Grid>
           </Grid>
           <Grid xs={12} sm={5} item>
             <Box

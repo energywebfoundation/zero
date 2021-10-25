@@ -12,7 +12,6 @@ export interface FormSectionCardProps {
   sectionHeader?: string;
   sectionSubHeader?: string;
   helpText?: string;
-  rememberText?: string;
 }
 
 export const FormSectionCard = ({
@@ -20,7 +19,6 @@ export const FormSectionCard = ({
   sectionHeader,
   children,
   helpText,
-  rememberText,
 }: FormSectionCardProps) => (
   <div>
     <Card>
@@ -34,7 +32,6 @@ export const FormSectionCard = ({
         }}
         subheaderTypographyProps={{
           fontSize: '16px',
-
           fontWeight: 700,
           color: 'primary',
         }}
@@ -45,11 +42,6 @@ export const FormSectionCard = ({
             <Typography color={'primary'} fontWeight={500}>
               {helpText}
             </Typography>
-            {rememberText && (
-              <Typography color={'primary'} fontWeight={700}>
-                {rememberText}
-              </Typography>
-            )}
           </Box>
         )}
         {children}

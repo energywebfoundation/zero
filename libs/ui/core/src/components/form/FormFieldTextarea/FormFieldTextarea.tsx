@@ -1,9 +1,10 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo, useContext } from 'react';
 import { Box, TextField } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { GenericFormFieldConfig } from '../../../containers';
 import { CharacterCountLimit } from '../../layout';
+import { GenericFormContext } from '../../../providers';
 
 export interface FormFieldTextareaProps {
   field: Omit<
@@ -28,17 +29,19 @@ export const FormFieldTextarea: FC<FormFieldTextareaProps> = memo(
     const { label, helperText, placeholderText, characterCountLimit } = field;
     const { t } = useTranslation();
     const { name, onBlur, onChange, ref } = register(field.name);
-    const [fieldValue, setFieldValue] = useState<string | null>(null);
+    const formContext = useContext(GenericFormContext);
+    const fieldValue = formContext && formContext.watch(field.name);
+
+    if (!formContext) {
+      throw new Error('FormFieldTextarea cannot be used outside of GenericFormContext');
+    };
 
     return (
       <Box flexWrap={'nowrap'} minWidth={'100%'}>
         <Box width={'100%'}>
           {helperText && <div>{t(helperText)}</div>}
           <TextField
-            inputRef={(instance) => {
-              ref(instance);
-              setFieldValue(instance?.value);
-            }}
+            inputRef={ref}
             placeholder={t(placeholderText || '')}
             variant={variant || 'outlined'}
             fullWidth

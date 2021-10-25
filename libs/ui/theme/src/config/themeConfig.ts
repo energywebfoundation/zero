@@ -82,17 +82,25 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           lineHeight: '16px',
         },
+        input: {
+          '&:-webkit-autofill': {
+            borderRadius: '5px'
+          }
+        }
       },
     },
     MuiSelect: {
       styleOverrides: {
+        root: {
+          borderRadius: 5
+        },
         select: {
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           '&.MuiFilledInput-input': {
-            padding: '14px 32px 14px 12px'
-          }
+            padding: '14px 0 14px 12px',
+            borderRadius: '5px',
+          },
         },
-
       },
     },
     MuiFilledInput: {
@@ -105,6 +113,9 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
           backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
           borderRadius: '5px',
           maxHeight: '48px',
+          '&.Mui-focused': {
+            backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR
+          },
           '&.Mui-disabled': {
             backgroundColor: darken(styleConfig.INPUT_BACKGROUND_COLOR, 0.2),
           },
@@ -112,14 +123,11 @@ const getThemeConfig = (styleConfig: IStyleConfig): ThemeOptions => ({
             border: '1px solid',
             borderColor: '#DA2042',
           },
-          '&.Mui-focused': {
-            backgroundColor: styleConfig.INPUT_BACKGROUND_COLOR,
-          },
           '&:before': {
             borderBottom: 'none'
           },
           '& fieldset': {
-            borderRadius: 5
+            borderRadius: '5px'
           }
         },
       },

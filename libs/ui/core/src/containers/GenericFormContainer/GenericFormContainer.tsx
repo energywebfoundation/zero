@@ -11,8 +11,11 @@ import { ValidationError } from 'yup';
 import { GenericFormContextProvider } from '../../providers';
 import {
   FormFieldRadioGroupConfig,
+  FormFieldSelectAndFileConfig,
   FormFieldSelectConfig,
-  FormFieldTextInputProps
+  FormFieldTextInputProps,
+  FormFieldMapConfig,
+  FieldImageUploadConfig
 } from '../../components/form';
 import {
   TGenericFormEffectsReturnType,
@@ -34,6 +37,7 @@ export enum GenericFormFieldType {
   DocumentList = 'DocumentList',
   Autocomplete = 'Autocomplete',
   Map = 'Map',
+  SelectAndFile = 'SelectAndFile'
 }
 
 export interface GenericFormFieldConfig {
@@ -55,11 +59,10 @@ export interface GenericFormFieldConfig {
   textFieldProps?: TextFieldProps;
   infoTooltip?: string;
   characterCountLimit?: number;
-  helpBoxText?: string;
 }
 
 export type TGenericFormFieldList = Array<
-  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig
+  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig | FormFieldSelectAndFileConfig | FormFieldMapConfig | FieldImageUploadConfig
 >;
 
 export type TGenericFormSubmitHandlerFn<
@@ -94,10 +97,7 @@ export type TGenericForm = <FormValuesType>(
   props: PropsWithChildren<GenericFormContainerProps<FormValuesType>>
 ) => ReactElement;
 
-export type GenericFormContextData = { readOnlyForm?: boolean } & Omit<
-  TGenericFormEffectsReturnType<any>,
-  'handleValuesChanged$'
-> &
+export type GenericFormContextData = { readOnlyForm?: boolean } & TGenericFormEffectsReturnType<any> &
   Omit<
     GenericFormContainerProps<unknown>,
     | 'submitHandler'
@@ -133,6 +133,7 @@ export const GenericFormContainer: TGenericForm = ({
     isSubmitting,
     getValues,
     setValue,
+    watch
   } = useGenericFormEffects({
     validationSchema,
     submitHandler,
@@ -159,6 +160,7 @@ export const GenericFormContainer: TGenericForm = ({
     onSubmit,
     setValue,
     readOnlyForm,
+    watch,
     fields: fields.map((field) => ({
       ...field,
       // temporary until find out reason

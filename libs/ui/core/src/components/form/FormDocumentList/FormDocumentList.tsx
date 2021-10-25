@@ -1,12 +1,17 @@
 import styled from '@emotion/styled';
 import { UseMutateAsyncFunction } from 'react-query';
-import { FileUploadContainer, StoredFile, UploadFile, UploadFileResponse } from '../../file';
+import { GenericFormFieldConfig } from '../../../containers';
+import { FileUpload, StoredFile, UploadFile, UploadFileResponse } from '../../file';
 import { FormDocument, FormDocumentItem } from '../FormDocumentItem';
 
 export interface FormDocumentListProps {
+  field: Omit<
+    GenericFormFieldConfig,
+    'autocomplete' | 'multiple' | 'maxValues'
+  >;
   documentList: FormDocument[];
   handleFileListChanged: (fileIdList: StoredFile[]) => void;
-  handleFileSelectionSubmit: (fileIdList: StoredFile[]) => void;
+  handleFileSelectionSubmit: (fileIdList: string) => Promise<void>;
   handleRemoveDocument: (fileId: string) => void;
   handleDescriptionChanged: (fileId: string, description: string) => void;
   mutateUpload: UseMutateAsyncFunction<UploadFileResponse, unknown, {
@@ -20,6 +25,7 @@ const StyledDiv = styled.div`
 `;
 
 export const FormDocumentList = ({
+  field,
   documentList = [],
   handleFileListChanged,
   handleFileSelectionSubmit,
@@ -38,14 +44,13 @@ export const FormDocumentList = ({
           document={document}
         />
       ))}
-      <FileUploadContainer
-        fullWidth
+      <FileUpload
         withFileList
         selectOnUploaded
-        title='Add document'
+        title={field.label || 'Add document'}
         handleSubmitSelection={handleFileSelectionSubmit}
         handleFileListChanged={handleFileListChanged}
-        isLoading={isLoading}
+        isProcessing={isLoading}
         mutateUpload={mutateUpload}
       />
     </StyledDiv>

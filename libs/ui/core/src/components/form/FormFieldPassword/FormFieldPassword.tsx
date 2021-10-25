@@ -3,18 +3,16 @@ import VisibilityOutlined from '@material-ui/icons/Visibility';
 import VisibilityOffOutlined from '@material-ui/icons/VisibilityOffOutlined';
 import {
   InputAdornment,
-  BaseTextFieldProps,
   TextField,
 } from '@material-ui/core';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { GenericFormFieldConfig } from '../../../containers';
 
-export interface FormFieldPasswordProps extends BaseTextFieldProps {
+export interface FormFieldPasswordProps {
   field: Omit<
     GenericFormFieldConfig,
     'autocomplete' | 'multiple' | 'maxValues'
-  > &
-    BaseTextFieldProps;
+  >;
   register: UseFormRegister<FieldValues>;
   errorExists: boolean;
   errorText: string;

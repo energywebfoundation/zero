@@ -3,14 +3,13 @@ import { Box, CircularProgress, Typography } from '@material-ui/core';
 import FolderOutlined from '@material-ui/icons/FolderOutlined';
 import UploadSharp from '@material-ui/icons/UploadSharp';
 import { useDropzone } from 'react-dropzone';
-import { useCallback, useEffect, useState } from 'react';
+import { UseMutateAsyncFunction } from 'react-query';
 import { CallToActionButton } from '../../layout';
-import { StoredFile } from '../FileUploadContainer';
 import { FileListContainer } from '../FileListContainer';
+import { StoredFile, UploadFile, UploadFileResponse, useFileUploadEffects } from './FileUpload.effects';
 
 const MB = 1024 * 1024;
-
-const UPLOAD_SIZE_LIMIT_PDF = 128 * MB;
+export const UPLOAD_SIZE_LIMIT_PDF = 128 * MB;
 
 export enum AcceptedFileTypeEnum {
   DOCUMENT_PDF = 'application/pdf',
@@ -22,41 +21,51 @@ export enum AcceptedFileTypeEnum {
 }
 
 export interface FileUploadProps {
-  handleAcceptedFilesChange: (files: File[]) => void;
-  handleSubmitSelection: (fileIdList: StoredFile[]) => void;
+  mutateUpload: UseMutateAsyncFunction<UploadFileResponse, unknown, {
+    data: UploadFile;
+  }, unknown>;
+  handleSubmitSelection: (fileIdList: string) => Promise<void>;
+  handleFileListChanged: (fileIdList: StoredFile[]) => void;
   title?: string;
   disableDrop?: boolean;
   withFileList?: boolean;
   uploadButtonText?: string;
   acceptedFileTypeList?: AcceptedFileTypeEnum[];
   isProcessing?: boolean;
+  selectOnUploaded?: boolean;
 }
 
 export const FileUpload = ({
-  isProcessing = false,
-  handleAcceptedFilesChange,
   title,
-  disableDrop = true,
+  mutateUpload,
+  handleFileListChanged,
+  selectOnUploaded,
   withFileList,
   handleSubmitSelection,
+  disableDrop = true,
+  isProcessing = false,
 }: FileUploadProps) => {
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     noDrag: disableDrop,
     multiple: true,
     maxSize: UPLOAD_SIZE_LIMIT_PDF,
   });
-
-  const [isFileListModalOpen, setIsFileListModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (acceptedFiles?.length) {
-      handleAcceptedFilesChange(acceptedFiles);
-    }
-  }, [acceptedFiles]);
+  const {
+    handleCloseFileListModal,
+    isFileListModalOpen,
+    handleOpenFileListModal,
+    handleSubmitFileSelection
+  } = useFileUploadEffects(
+      handleSubmitSelection,
+      handleFileListChanged,
+      selectOnUploaded,
+      mutateUpload,
+      acceptedFiles
+    );
 
   return (
     <div>
-      <Grid container flexGrow={1}>
+      <Grid container flexGrow={1} alignItems="center">
         {title && (
           <Grid item xs={12} sm={2}>
             <Typography lineHeight={'36px'} color={'primary'} fontWeight={700}>
@@ -67,21 +76,14 @@ export const FileUpload = ({
         <Grid item xs={12} sm={8}>
           <Box display={'flex'}>
             <FileListContainer
-              handleCancel={useCallback(() => {
-                setIsFileListModalOpen(false);
-              }, [setIsFileListModalOpen])}
-              handleSubmitSelection={(fileIdList) => {
-                handleSubmitSelection(fileIdList);
-                setIsFileListModalOpen(false);
-              }}
+              handleCancel={handleCloseFileListModal}
+              handleSubmitSelection={handleSubmitFileSelection}
               open={isFileListModalOpen}
             />
             {withFileList && (
               <CallToActionButton
                 translateKey='forms.chooseFromUploadedDocs'
-                onClick={() => {
-                  setIsFileListModalOpen(true);
-                }}
+                onClick={handleOpenFileListModal}
                 startIcon={<FolderOutlined />}
               />
             )}

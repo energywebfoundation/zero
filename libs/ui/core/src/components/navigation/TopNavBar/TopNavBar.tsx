@@ -52,7 +52,7 @@ export const TopNavBar: FC<TopNavBarProps> = memo(
         className={styles.root}
         position="static"
       >
-        <Container fixed>
+        <Container>
           <Toolbar disableGutters>
             <Box>
               {sideNavToogleEnabled && (

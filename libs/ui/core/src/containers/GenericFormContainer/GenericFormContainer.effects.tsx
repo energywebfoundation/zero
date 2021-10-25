@@ -4,6 +4,7 @@ import {
   Control,
   UseFormSetValue,
   FieldErrors,
+  UseFormWatch,
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { BaseSyntheticEvent, useContext, useEffect } from 'react';
@@ -31,6 +32,7 @@ export type TGenericFormEffectsReturnType<FormValuesType> = {
   isSubmitting: boolean;
   getValues: UseFormGetValues<FormValuesType>;
   setValue: UseFormSetValue<FormValuesType>;
+  watch: UseFormWatch<FormValuesType>;
 };
 
 type TGenericFormEffects = <FormValuesType>(
@@ -51,6 +53,7 @@ export const useGenericFormEffects: TGenericFormEffects = ({
     reset,
     getValues,
     setValue,
+    watch
   } = useForm({
     mode: validationMode,
     resolver: yupResolver(validationSchema),
@@ -85,5 +88,6 @@ export const useGenericFormEffects: TGenericFormEffects = ({
     isSubmitting,
     getValues,
     setValue,
+    watch
   };
 };

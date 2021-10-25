@@ -138,6 +138,11 @@ export const addFacilitiesBasicInformationFormFields: TGenericFormFieldList =
       ],
     },
     {
+      label: 'file.addDocumentProof',
+      type: GenericFormFieldType.DocumentList,
+      name: 'deviceOwnershipDocs',
+    },
+    {
       label: 'forms.SellerAddFacilitiesBasicInformationForm.installedCapacity',
       type: GenericFormFieldType.TextInput,
       name: 'installedCapacity',
