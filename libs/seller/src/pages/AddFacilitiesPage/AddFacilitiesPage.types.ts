@@ -2,7 +2,8 @@ import {
   IAddFacilitiesBasicInformationFormFields,
   IAddFacilitiesImagesFormFields,
   IAddFacilitiesLocationFormFields,
-  IAddFacilitiesSustainabilityFormFields
+  IAddFacilitiesSustainabilityFormFields,
+  IAddFacilitiesProductsFormFields
 } from "../../containers";
 
 
@@ -12,11 +13,13 @@ export type FacilityDraftItem =
   | Nullable<IAddFacilitiesBasicInformationFormFields>
   | Nullable<IAddFacilitiesLocationFormFields>
   | Nullable<IAddFacilitiesSustainabilityFormFields>
-  | Nullable<IAddFacilitiesImagesFormFields>;
+  | Nullable<IAddFacilitiesImagesFormFields>
+  | Nullable<IAddFacilitiesProductsFormFields>;
 
 export type FacilityDraft = [
   Nullable<IAddFacilitiesBasicInformationFormFields>,
   Nullable<IAddFacilitiesLocationFormFields>,
   Nullable<IAddFacilitiesSustainabilityFormFields>,
-  Nullable<IAddFacilitiesImagesFormFields>
+  Nullable<IAddFacilitiesImagesFormFields>,
+  Nullable<IAddFacilitiesProductsFormFields>
 ];
