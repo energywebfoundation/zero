@@ -13,10 +13,12 @@ import {
   AddFacilitiesBasicInformationForm,
   AddFacilitiesImagesForm,
   AddFacilitiesLocationForm,
+  AddFacilitiesProductsForm,
   AddFacilitiesSustainabilityForm,
   IAddFacilitiesBasicInformationFormFields,
   IAddFacilitiesImagesFormFields,
   IAddFacilitiesLocationFormFields,
+  IAddFacilitiesProductsFormFields,
   IAddFacilitiesSustainabilityFormFields
 } from '../../containers';
 import { useSellerAddFacilititesEffects } from './AddFacilitiesPage.effects';
@@ -71,7 +73,6 @@ export const AddFacilitiesPage = () => {
         <GenericFormMultiStep
           formTitle={t('pages.SellerAddFacilitiesPage.formTitle')}
           isProcessing={isProcessing}
-          // mock
           showDraftSavedMsg={showDraftSavedMsg}
           activeStepIndex={activeStep}
           draftSavedNode={<DraftSavedComponent t={t} />}
@@ -98,6 +99,8 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
+                    backButtonText={t('forms.backBtnText')}
+                    nextButtonText={t('forms.nextBtnText')}
                     btnClass={classes.button}
                   />
                 </AddFacilitiesBasicInformationForm>
@@ -125,6 +128,8 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
+                    backButtonText={t('forms.backBtnText')}
+                    nextButtonText={t('forms.nextBtnText')}
                     btnClass={classes.button}
                   />
                 </AddFacilitiesLocationForm>
@@ -153,6 +158,8 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.nextBtnText')}
                       btnClass={classes.button}
                     />
                   </AddFacilitiesSustainabilityForm>
@@ -179,6 +186,8 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.nextBtnText')}
                       btnClass={classes.button}
                     />
                   </AddFacilitiesImagesForm>
@@ -187,7 +196,32 @@ export const AddFacilitiesPage = () => {
             },
             {
               stepLabel: t('pages.SellerAddFacilitiesImagesPage.products'),
-              stepItemNode: null,
+              stepItemNode: (
+                <MbBox>
+                  <AddFacilitiesProductsForm
+                    initialValues={
+                      facilityDraft[
+                        Number(SellerAddFacilitiesSteps.Products)
+                      ] as IAddFacilitiesProductsFormFields
+                    }
+                    submitHandler={(values: any) => {
+                      updateFacilityDraft(
+                        SellerAddFacilitiesSteps.Products,
+                        values
+                      );
+                    }}
+                  >
+                    <FormNavigation
+                      handleNavigateToPrevStep={handleNavigateToPrevStep}
+                      handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.reviewAndSaveBtnText')}
+                      nextButtonProps={{ endIcon: <Check /> }}
+                      btnClass={classes.button}
+                    />
+                  </AddFacilitiesProductsForm>
+                </MbBox>
+              ),
             },
           ]}
         />
