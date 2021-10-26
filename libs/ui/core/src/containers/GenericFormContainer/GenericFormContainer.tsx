@@ -15,7 +15,8 @@ import {
   FormFieldSelectConfig,
   FormFieldTextInputProps,
   FormFieldMapConfig,
-  FieldImageUploadConfig
+  FieldImageUploadConfig,
+  FormFieldNestedFormsConfig
 } from '../../components/form';
 import {
   TGenericFormEffectsReturnType,
@@ -37,7 +38,8 @@ export enum GenericFormFieldType {
   DocumentList = 'DocumentList',
   Autocomplete = 'Autocomplete',
   Map = 'Map',
-  SelectAndFile = 'SelectAndFile'
+  SelectAndFile = 'SelectAndFile',
+  NestedForms = 'NestedForms'
 }
 
 export interface GenericFormFieldConfig {
@@ -61,9 +63,15 @@ export interface GenericFormFieldConfig {
   characterCountLimit?: number;
 }
 
-export type TGenericFormFieldList = Array<
-  GenericFormFieldConfig | FormFieldRadioGroupConfig | FormFieldSelectConfig | FormFieldSelectAndFileConfig | FormFieldMapConfig | FieldImageUploadConfig
->;
+export type FormFieldConfig = GenericFormFieldConfig
+| FormFieldRadioGroupConfig
+| FormFieldSelectConfig
+| FormFieldSelectAndFileConfig
+| FormFieldMapConfig
+| FieldImageUploadConfig
+| FormFieldNestedFormsConfig
+
+export type TGenericFormFieldList = Array<FormFieldConfig>;
 
 export type TGenericFormSubmitHandlerFn<
   FormValuesType,

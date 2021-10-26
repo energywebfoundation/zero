@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Box from '@material-ui/system/Box/Box';
 import { UseMutateAsyncFunction } from 'react-query';
-import { FC, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 import {
   GenericFormContextData,
   GenericFormFieldConfig,
@@ -26,9 +26,11 @@ import {
   FormFieldMap,
   FormFieldMapConfig,
   FormFieldSelectAndFileConfig,
-  FieldImageUploadConfig
+  FieldImageUploadConfig,
+  FormFieldNestedForms,
+  FormFieldNestedFormsConfig
 } from '../../components';
-import { GenericFormContext } from '../../providers';
+import { FieldNestedFormContext, GenericFormContext, NestedFormContextData } from '../../providers';
 
 
 export interface GenericFormFieldContainerProps {
@@ -45,7 +47,7 @@ export interface GenericFormFieldContainerProps {
 
 const StyledBox = styled(Box)`
   display: flex;
-  margin-top: 24px;
+  margin: 12px 0;
 `;
 
 export const GenericFormFieldContainer: FC<GenericFormFieldContainerProps> = ({
@@ -54,12 +56,14 @@ export const GenericFormFieldContainer: FC<GenericFormFieldContainerProps> = ({
   fullWidth,
   disabled,
   mutateUpload,
-  isLoading
+  isLoading,
+  children
 }) => {
-  const genericFormContext = useContext<GenericFormContextData | null>(
-    GenericFormContext
-  );
-  if (!genericFormContext) {
+  const genericFormContext = useContext(GenericFormContext);
+  const nestedFormContext = useContext(FieldNestedFormContext);
+  const selectedContext = nestedFormContext ?? genericFormContext;
+
+  if (!selectedContext) {
     console.error(
       'context not set yet :( for GenericFormFieldContainer => ',
       fieldName
@@ -72,17 +76,18 @@ export const GenericFormFieldContainer: FC<GenericFormFieldContainerProps> = ({
         width={boxWidth}
         maxWidth={boxWidth}
       >
-        {renderField(genericFormContext, fieldName, disabled, isLoading, mutateUpload)}
+        {renderField(selectedContext, fieldName, disabled, isLoading, mutateUpload, children)}
       </StyledBox>
     );
 };
 
 const renderField = (
-  formConfigContextData: GenericFormContextData,
+  formConfigContextData: GenericFormContextData | NestedFormContextData,
   fieldName: string,
   disabled?: boolean,
   isLoading?: boolean,
-  mutateUpload?: GenericFormFieldContainerProps['mutateUpload'] | undefined
+  mutateUpload?: GenericFormFieldContainerProps['mutateUpload'] | undefined,
+  children?: ReactNode
 ) => {
   const genericFormFieldConfig: GenericFormFieldConfig | undefined =
     formConfigContextData.fields.find(
@@ -247,6 +252,16 @@ const renderField = (
           isProcessing={isLoading}
         />
       )
+
+    case GenericFormFieldType.NestedForms:
+        return (
+          <FormFieldNestedForms
+            field={genericFormFieldConfig as FormFieldNestedFormsConfig}
+            register={formConfigContextData.register}
+          >
+            {children ?? <div>Please, supply fields as children</div>}
+          </FormFieldNestedForms>
+        )
 
     default:
       throw new Error('Field type not supported!');
