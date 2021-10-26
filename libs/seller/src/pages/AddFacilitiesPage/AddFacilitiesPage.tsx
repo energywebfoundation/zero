@@ -99,6 +99,8 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
+                    backButtonText={t('forms.backBtnText')}
+                    nextButtonText={t('forms.nextBtnText')}
                     btnClass={classes.button}
                   />
                 </AddFacilitiesBasicInformationForm>
@@ -126,6 +128,8 @@ export const AddFacilitiesPage = () => {
                   <FormNavigation
                     handleNavigateToPrevStep={handleNavigateToPrevStep}
                     handleNavigateToNextStep={handleNavigateToNextStep}
+                    backButtonText={t('forms.backBtnText')}
+                    nextButtonText={t('forms.nextBtnText')}
                     btnClass={classes.button}
                   />
                 </AddFacilitiesLocationForm>
@@ -154,6 +158,8 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.nextBtnText')}
                       btnClass={classes.button}
                     />
                   </AddFacilitiesSustainabilityForm>
@@ -180,6 +186,8 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.nextBtnText')}
                       btnClass={classes.button}
                     />
                   </AddFacilitiesImagesForm>
@@ -206,6 +214,9 @@ export const AddFacilitiesPage = () => {
                     <FormNavigation
                       handleNavigateToPrevStep={handleNavigateToPrevStep}
                       handleNavigateToNextStep={handleNavigateToNextStep}
+                      backButtonText={t('forms.backBtnText')}
+                      nextButtonText={t('forms.reviewAndSaveBtnText')}
+                      nextButtonProps={{ endIcon: <Check /> }}
                       btnClass={classes.button}
                     />
                   </AddFacilitiesProductsForm>
