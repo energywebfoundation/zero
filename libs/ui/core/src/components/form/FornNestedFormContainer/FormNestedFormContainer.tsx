@@ -45,9 +45,8 @@ export const FormNestedFormContainer: TFormNestedFormContainer = ({
     isValid,
     fields: fields.map((field) => ({
       ...field,
-      // temporary until find out reason
-      label: (field as any).label ? t((field as any).label) : null,
-      placeholderText: (field as any).label ? t((field as any).placeholderText) : null
+      label: field.label ? t(field.label) : null,
+      placeholderText: field.label ? t(field.placeholderText ?? '') : null
     })),
     handleFormRemove,
   } as NestedFormContextData;

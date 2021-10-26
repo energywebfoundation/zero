@@ -171,8 +171,7 @@ export const GenericFormContainer: TGenericForm = ({
     watch,
     fields: fields.map((field) => ({
       ...field,
-      // temporary until find out reason
-      label: (field as any).label ? t((field as any).label) : null,
+      label: field.label ? t(field.label) : null,
     })),
   };
 
