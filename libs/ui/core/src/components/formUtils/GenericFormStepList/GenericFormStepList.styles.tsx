@@ -11,7 +11,7 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
     },
     container: {
-      alignItems: 'center'
+      alignItems: 'flex-end'
     },
     circle: {
       height: '40px',

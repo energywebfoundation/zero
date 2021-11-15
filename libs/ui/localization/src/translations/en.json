@@ -96,6 +96,9 @@
       "submitBtnText": "Submit",
       "signInBtnText": "Log in",
       "signUpBtnText": "Register",
+      "backBtnText": "Back",
+      "nextBtnText": "Next",
+      "reviewAndSaveBtnText": "Review & save",
       "chooseFromUploadedDocs": "Choose from uploaded documents",
       "uploadFromComputer": "Upload from your computer",
       "uploadInProgress": "Upload is in progress",
@@ -166,6 +169,18 @@
       "ImageUploadContainer": {
         "uploadErrorMsg": "Error uploading image",
         "uploadSuccessfullMsg": "Image uploaded successfully"
+      },
+      "SellerAddFacilitiesProductsForm": {
+        "addProduct": "Add product / EAC",
+        "addProductsHeading": "Add Products (EACs)",
+        "removeProduct": "Remove product",
+        "generationStartDate": "Generation Start Date",
+        "generationEndDate": "Generation End Date",
+        "eacStatus": "EAC Status",
+        "totalCapacity": "Total Capacity",
+        "price": "Price",
+        "infoAboutPrice": "Information about price",
+        "infoAboutPricePlaceholder": "Example:  Our new facility is now open! To celebrate, we are offering this introductory price at 50% off. BUY NOW"
       }
     },
     "pages": {
