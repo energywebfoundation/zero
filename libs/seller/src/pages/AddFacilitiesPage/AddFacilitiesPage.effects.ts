@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
+import { Dayjs } from 'dayjs';
 import { BreadcrumbItem } from '@energyweb/zero-ui-core';
 import { EnergyUnitCapacityEnum } from '../../containers';
 import { FacilityDraft, FacilityDraftItem } from './AddFacilitiesPage.types';
@@ -47,6 +48,17 @@ const initialDraftState: FacilityDraft = [
     sustainabilityDocumentList: [],
   },
   { facilityImageList: [] },
+  { products: [{
+    id: Date.now(),
+    values: {
+      generationStartDate: {} as Dayjs,
+      generationEndDate: {} as Dayjs,
+      eacStatus: '',
+      totalCapacity: '',
+      price: '',
+      infoAboutPrice: ''
+    }
+  }] }
 ];
 
 export const useSellerAddFacilititesEffects = () => {

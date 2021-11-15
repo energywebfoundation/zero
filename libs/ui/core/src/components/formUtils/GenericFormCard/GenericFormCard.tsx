@@ -9,7 +9,7 @@ export interface GenericFormCardProps {
 
 export const GenericFormCard = ({ children, wrapperProps, paperProps }: GenericFormCardProps) => (
   <div {...wrapperProps}>
-    <Paper sx={{ p: '32px' }} {...paperProps}>
+    <Paper sx={{ p: '20px 32px' }} {...paperProps}>
       {children}
     </Paper>
   </div>

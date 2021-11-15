@@ -39,18 +39,18 @@ export const GenericFormMultiStep = ({
             sm={6}
           >
             <Grid container>
-              <Grid item xs={3}>
+              <Grid item lg={3}>
                 <Typography color={'primary'} fontSize={'24px'} fontWeight={700}>
                   {activeStep.stepTitle ?? formTitle}
                 </Typography>
               </Grid>
               {isProcessing && (
-                <Grid item xs={9}>
+                <Grid item lg={9}>
                   <CircularProgress />
                 </Grid>
               )}
               {showDraftSavedMsg && draftSavedNode && (
-                <Grid item xs={9} alignItems="flex-end">
+                <Grid item lg={9} alignItems="flex-end">
                   <Box height="100%" display="flex" alignItems="center">
                     {draftSavedNode}
                   </Box>
