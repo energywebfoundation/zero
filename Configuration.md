@@ -67,11 +67,31 @@ Expiration time in seconds of email confirmation links.
 
 default: `86400`
 
-### FILES_STORAGE:
+### AWS_BUCKET
+An AWS S3 bucket for user files storage.
 
-Location of the uploaded files storage in the filesystem.
+Required, no default value.
 
-default: `./uploaded-files`
+### AWS_REGION
+An AWS S3 region of a bucket.
+
+Required, no default value.
+
+### AWS_ACCESS_KEY_ID
+An AWS S3 access key with object create and set ACL privileges
+
+Required, no default value.
+
+### AWS_SECRET_ACCESS_KEY
+An AWS secret related to the access key
+
+Required, no default value.
+
+### FILES_BASE_URL
+Base URL for a files. Used to generate files urls. Should poing to the /files backend endpoing,
+for example `http://localhost:3333/api/files`
+
+default: `http://localhost:3333/api/files`
 
 ### UPLOADED_FILE_SIZE_LIMIT:
 

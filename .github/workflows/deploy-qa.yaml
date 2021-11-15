@@ -1,0 +1,166 @@
+name: Deploy QA
+
+on:
+  push:
+    branches:
+      - chore/github-actions-qa-deployment
+
+jobs:
+  cancel-previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+
+  semantic-version:
+    name: Semantic versioning
+    runs-on: ubuntu-latest
+    needs: [cancel-previous]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Create semantic versioning
+        id: semantic-version
+        uses: paulhatch/semantic-version@v4.0.2
+        with:
+          # The prefix to use to identify tags
+          tag_prefix: "v"
+          # A string which, if present in a git commit, indicates that a change represents a
+          # major (breaking) change, supports regular expressions wrapped with '/'
+          major_pattern: "(MAJOR)"
+          # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+          minor_pattern: "(MINOR)"
+          # A string to determine the format of the version output
+          format: "${major}.${minor}.${patch}-prerelease${increment}"
+          # Indicate whether short tags like 'v1' should be supported. If false only full
+          # tags like 'v1.0.0' will be recognized.
+          short_tags: false
+          # If this is set to true, *every* commit will be treated as a new version.
+          bump_each_commit: false
+    outputs:
+      version_tag: ${{ steps.semantic-version.outputs.version_tag }}
+
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    needs: [ cancel-previous, semantic-version]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup app dependencies
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: "./node_modules"
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build Docker images
+        run: yarn build:docker
+        env:
+          JWT_SECRET: "secret"
+          AWS_BUCKET: "ew-zero-uploaded-files-dev"
+          AWS_REGION: "us-west-2"
+          AWS_ACCESS_KEY_ID: "foobar"
+          AWS_SECRET_ACCESS_KEY: "foobar"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push docker images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SEM_VER: ${{ needs.semantic-version.outputs.version_tag }}
+        run: |
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest
+          docker push $ECR_REGISTRY/ew-zero-ui:latest
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest
+          docker push $ECR_REGISTRY/ew-zero-api:latest
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
+
+      - name: Configure AWS credentials Sandbox
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_SANDBOX }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_SANDBOX }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR Sandbox
+        id: login-ecr-sandbox
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push docker images to Sandbox
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-sandbox.outputs.registry }}
+          SEM_VER: ${{ needs.semantic-version.outputs.version_tag }}
+        run: |
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest
+          docker push $ECR_REGISTRY/ew-zero-ui:latest
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest
+          docker push $ECR_REGISTRY/ew-zero-api:latest
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
+
+      - name: Push git tag
+        uses: anothrNick/github-tag-action@1.26.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ needs.semantic-version.outputs.version_tag }}
+          RELEASE_BRANCHES: chore/github-actions-qa-deployment
+
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [cancel-previous, semantic-version, build-and-push-images]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: ArgoCD login
+      uses: clowdhaus/argo-cd-action/@main
+      id: argocd_login
+      with:
+        command: login ${{ secrets.ARGOCD_DEV_URL }}
+        options: --insecure --password ${{ secrets.ARGOCD_DEV_PASS }} --username ${{ secrets.ARGOCD_DEV_USERNAME }}
+
+    - name: ArgoCD overwrite image tag
+      uses: clowdhaus/argo-cd-action/@main
+      id: argocd_image_tag_overwrite
+      with:
+        command: app set zero
+        options: -p zero-api.image.tag=${{needs.semantic-version.outputs.version_tag}} -p zero-ui.image.tag=${{needs.semantic-version.outputs.version_tag}}
