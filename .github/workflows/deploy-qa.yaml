@@ -106,6 +106,31 @@ jobs:
           docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER
           docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
 
+      - name: Configure AWS credentials Sandbox
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_SANDBOX }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_SANDBOX }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR Sandbox
+        id: login-ecr-sandbox
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push docker images to Sandbox
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-sandbox.outputs.registry }}
+          SEM_VER: ${{ needs.semantic-version.outputs.version_tag }}
+        run: |
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:latest
+          docker push $ECR_REGISTRY/ew-zero-ui:latest
+          docker tag zero-ui:latest $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-ui:$SEM_VER
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:latest
+          docker push $ECR_REGISTRY/ew-zero-api:latest
+          docker tag zero-api:latest $ECR_REGISTRY/ew-zero-api:$SEM_VER
+          docker push $ECR_REGISTRY/ew-zero-api:$SEM_VER
+
       - name: Push git tag
         uses: anothrNick/github-tag-action@1.26.0
         env:
